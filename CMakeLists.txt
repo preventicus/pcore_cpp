@@ -31,10 +31,13 @@ set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${COMMON_INCLUDES})
 # Need the protobuf lib
 # TODO: Build Protobuf lib
+
 # TODO: Build Protobuf compiler
 
 # TODO: generate cpp code (./generated/*) with Protobuf compiler
 
+# Add jsoncpp
+ADD_SUBDIRECTORY(./external/jsoncpp)
 # Add source directory
 ADD_SUBDIRECTORY(src)
 
