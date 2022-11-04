@@ -31,13 +31,18 @@ set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${COMMON_INCLUDES})
 # Need the protobuf lib
 # TODO: Build Protobuf lib
-
-# TODO: Build Protobuf compiler
-
+FIND_PACKAGE(Protobuf REQUIRED PATHS ${PROJECT_SOURCE_DIR}/external/google-protobuf)
+#Add custom_command
+ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}
+    DEPENDS "${PROJECT_SOURCE_DIR}/external/google-protobuf"
+    COMMAND cd ${PROJECT_SOURCE_DIR}/bash folder
+    COMMAND chmod +x ./BUILD_PROTOBUF.sh
+    COMMAND ./BUILD_PROTOBUF.sh ${PROJECT_SOURCE_DIR}/external/google-protobuf ${PROJECT_SOURCE_DIR}/build )
 # TODO: generate cpp code (./generated/*) with Protobuf compiler
 
 # Add jsoncpp
 ADD_SUBDIRECTORY(./external/jsoncpp)
+
 # Add source directory
 ADD_SUBDIRECTORY(src)
 
