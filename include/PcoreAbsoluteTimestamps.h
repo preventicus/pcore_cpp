@@ -36,13 +36,14 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 class PcoreAbsolutTimestamps 
 {
-    public:
-        bool isEqual(PcoreAbsolutTimestamps timestamps);
-        PcoreAbsolutTimestamps(std::vector<int64_t>unix) {
-            this->unix = unix;
+    public: 
+        PcoreAbsolutTimestamps(std::vector<int64_t>unix) : unix(unix) {
         }
+        ~PcoreAbsolutTimestamps();
+        bool isEqual(PcoreAbsolutTimestamps timestamps);
+        
     private:
-        std::vector<int64_t> unix;
+        std::vector<int64_t> &unix;
 };
 
 #endif  // PCOREABSOLUTETIMESTAMPS_H
