@@ -33,13 +33,7 @@ INCLUDE_DIRECTORIES(${COMMON_INCLUDES})
 # TODO: Build Protobuf lib
 FIND_PACKAGE(Protobuf REQUIRED PATHS ${PROJECT_SOURCE_DIR}/external/google-protobuf)
 #Add custom_command
-ADD_CUSTOM_COMMAND(
-    DEPENDS ${Protobuf_INCLUDE_DIRS}
-    OUTPUT ${PROJECT_SOURCE_DIR}
-    COMMAND cd ${PROJECT_SOURCE_DIR}/bash folder
-    COMMAND chmod +x ./BUILD_PROTOBUF.sh
-    COMMAND ./BUILD_PROTOBUF.sh ${PROJECT_SOURCE_DIR}/external/google-protobuf ${PROJECT_SOURCE_DIR}/build )
-    #COMMENT "generating protobuf c++ header file: ${GENERATED_HEADER_FILE_PATH}"
+
 # TODO: generate cpp code (./generated/*) with Protobuf compiler
 
 # Add jsoncpp
