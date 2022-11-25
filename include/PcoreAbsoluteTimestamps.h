@@ -34,14 +34,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define PCOREABSOLUTETIMESTAMPS_H
 
 #include <vector>
-class PcoreAbsolutTimestamps {
+class PcoreAbsoluteTimestamps {
  public:
-  PcoreAbsolutTimestamps(std::vector<int64_t> unix) : unix(unix) {}
-  ~PcoreAbsolutTimestamps();
-  bool isEqual(PcoreAbsolutTimestamps timestamps);
+  PcoreAbsoluteTimestamps(std::vector<uint64_t>& unix);
+  ~PcoreAbsoluteTimestamps();
+  bool isEqual(PcoreAbsoluteTimestamps timestamps);
 
  private:
-  std::vector<int64_t>& unix;
+  std::vector<uint64_t>& unix;
 };
 
 #endif  // PCOREABSOLUTETIMESTAMPS_H

@@ -31,7 +31,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 #include "PcoreAbsoluteTimestamps.h"
+PcoreAbsoluteTimestamps::PcoreAbsoluteTimestamps(std::vector<uint64_t>& unix)
+    : unix(unix){};
 
-bool PcoreAbsolutTimestamps::isEqual(PcoreAbsolutTimestamps timestamps) {
+PcoreAbsoluteTimestamps::~PcoreAbsoluteTimestamps(){};
+
+bool PcoreAbsoluteTimestamps::isEqual(PcoreAbsoluteTimestamps timestamps) {
   return this->unix == timestamps.unix;
 }
