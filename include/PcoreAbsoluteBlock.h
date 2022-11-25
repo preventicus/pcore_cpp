@@ -36,12 +36,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class PcoreAbsoluteBlock {
  public:
-  PcoreAbsoluteBlock(std::vector<int64_t> values) : values(values) {}
-  ~PcoreAbsoluteBlock(){};
+  PcoreAbsoluteBlock(std::vector<int32_t>& values);
+  ~PcoreAbsoluteBlock();
   bool isEqual(PcoreAbsoluteBlock block);
 
  private:
-  std::vector<int64_t>& values;
+  std::vector<int32_t>& values;
 };
 
 #endif  // PCOREABSOLUTETIMEBLOCK_H
