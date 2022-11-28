@@ -1,5 +1,11 @@
+make all: format unit build 
 format:
-		find src/ | grep ".*/.*\.\(c\|cpp\|h\)$$"| xargs clang-format -i
+		find src -not -path "*/protobuf*"| grep ".*/.*\.\(c\|cpp\|h\)$$"| xargs clang-format -i
 		find test/ | grep ".*/.*\.\(c\|cpp\|h\)$$"| xargs clang-format -i
-		find include/ | grep ".*/.*\.\(c\|cpp\|h\)$$"| xargs clang-format -i
+		find include -not -path "*/protobuf*"| grep ".*/.*\.\(c\|cpp\|h\)$$"| xargs clang-format -i
 		
+unit:
+		cd build && cmake .. && make && ctest 
+
+build:
+		cd build && cmake .. && make 
