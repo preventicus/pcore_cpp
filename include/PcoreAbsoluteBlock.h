@@ -40,7 +40,6 @@ class PcoreAbsoluteBlock {
   ~PcoreAbsoluteBlock();
   bool isEqual(PcoreAbsoluteBlock block);
 
- private:
   std::vector<int32_t>& values;
 };
 

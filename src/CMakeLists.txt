@@ -1,10 +1,13 @@
 FILE(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
-
-ADD_LIBRARY(libpcore_extern STATIC ${SRC_FILES})
-
+MESSAGE( "SRC_ files : ${SRC_FILES}")
+FILE(GLOB HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*.h)
+MESSAGE("HEADER : ${HEADER_FILES}")
+ADD_LIBRARY(libpcore_extern  ${SRC_FILES} ${HEADER_FILES})
+SET(PROTOBUF_LIB protobuf_lib)
+ADD_LIBRARY(${PROTOBUF_LIB} STATIC ${PROTO_H} ${PROTO_SRC})
 TARGET_LINK_LIBRARIES(libpcore_extern jsoncpp_lib)
-TARGET_LINK_LIBRARIES(libpcore_extern ${Protobuf_LIBRARIES})
-
+TARGET_LINK_LIBRARIES(libpcore_extern ${Protobuf_LIBRARIES} ${PROTOBUF_LIB} absl::synchronization absl::hash absl::raw_hash_set absl::str_format_internal absl::status)
+MESSAGE("protobuf : ${Protobuf_LIBRARIES}")
 #INCLUDE_DIRECTORIES(${Protobuf_INCLUDE_DIRS})
 SET(INCLUDE_FOLDER ${PROJECT_SOURCE_DIR}/include/;${CMAKE_BINARY_DIR}/include/)
 
