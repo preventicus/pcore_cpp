@@ -28,6 +28,7 @@ SET(CMAKE_CXX_FLAGS "-g -Wall")
 SET(CMAKE_CXX_STANDARD 17)
 SET(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
 LIST(APPEND COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/build/google/protobuf/include)
+
 INCLUDE_DIRECTORIES(${COMMON_INCLUDES})
 
 INCLUDE(FetchContent)
@@ -44,7 +45,6 @@ SET(PROTOBUF_ROOT ${PROJECT_BINARY_DIR}/google/protobuf)
 EXECUTE_PROCESS(
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/scripts/
     COMMAND ./INSTALL_PROTOBUF.sh ${PROJECT_SOURCE_DIR}/external/google-protobuf ${PROTOBUF_ROOT})
-
 #Include Protobuf
 LIST(APPEND CMAKE_PREFIX_PATH ${PROTOBUF_ROOT})
 INCLUDE(${PROTOBUF_ROOT}/lib/cmake/protobuf/protobuf-config.cmake)
@@ -63,7 +63,6 @@ if ( Protobuf_FOUND )
 else()
     MESSAGE( WARNING "Protobuf package not found -> specify search path via PROTOBUF_ROOT variable")
 endif()
-
 
 INCLUDE(ExternalProject)
 EXTERNALPROJECT_ADD(Pcore proto definition files
@@ -85,6 +84,7 @@ FILE(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/include/protobuf/ PROTOBINDING_PATH)
 
 FILE(GLOB DATAMODEL_PROTOS ${CMAKE_CURRENT_BINARY_DIR}/pcore-src/*.proto)
 
+
 FOREACH(proto ${DATAMODEL_PROTOS})
    FILE(TO_NATIVE_PATH ${proto} proto_native)
    EXECUTE_PROCESS(COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} --proto_path=${PROTOMODEL_PATH} --cpp_out=${PROTOBINDING_PATH} ${proto_native}
@@ -94,8 +94,10 @@ FOREACH(proto ${DATAMODEL_PROTOS})
    ENDIF()
 ENDFOREACH(proto)
 
+
 FILE(GLOB PROTO_SRC ${PROJECT_SOURCE_DIR}/include/protobuf/*.cc)
 FILE(GLOB PROTO_H ${PROJECT_SOURCE_DIR}/include/protobuf/*.h)
+
 
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
 
@@ -106,10 +108,12 @@ INCLUDE_DIRECTORIES(${Protobuf_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${Pcore_INCLUDE_DIR})
 
 # Add source directory
+
 ADD_SUBDIRECTORY(src)
 
 # Do some unit testing
 
 ENABLE_TESTING()
+
 
 ADD_SUBDIRECTORY(test)

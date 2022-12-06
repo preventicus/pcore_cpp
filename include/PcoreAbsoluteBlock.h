@@ -38,6 +38,7 @@ class PcoreAbsoluteBlock {
  public:
   PcoreAbsoluteBlock(std::vector<int32_t>& values);
   ~PcoreAbsoluteBlock();
+
   bool isEqual(PcoreAbsoluteBlock block);
 
   std::vector<int32_t>& values;
