@@ -30,17 +30,32 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef PCOREABSOLUTETIMESTAMPS_H
-#define PCOREABSOLUTETIMESTAMPS_H
+#ifndef PCOREACCMETADATA_H
+#define PCOREACCMETADATA_H
+#include <iostream>
+#include "protobuf/pcore_coordinate.pb.h"
+#include "protobuf/pcore_external.pb.h"
+#include "protobuf/pcore_norm.pb.h"
 
-#include <vector>
-class PcoreAbsoluteTimestamps {
+using SerializedAccMetaData =
+    com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
+using Coordinate = com::preventicus::pcore::Coordinate;
+using Norm = com::preventicus::pcore::Norm;
+
+class DeserializedAccMetaData {
  public:
-  PcoreAbsoluteTimestamps(std::vector<uint64_t>& unix);
-  ~PcoreAbsoluteTimestamps();
-  bool isEqual(PcoreAbsoluteTimestamps timestamps);
+  DeserializedAccMetaData();
+  void setCoordinate(Coordinate coordinate);
+  void setNorm(Norm norm);
+  Coordinate getCoordinate();
+  Norm getNorm();
+  bool isEqual(DeserializedAccMetaData* deserializedAccMetaData);
+  SerializedAccMetaData serialize();
+  void deserialized(SerializedAccMetaData* serializedAccMetaData);
 
-  std::vector<uint64_t>& unix;
+ private:
+  Coordinate coordinate;
+  Norm norm;
 };
 
-#endif  // PCOREABSOLUTETIMESTAMPS_H
+#endif  // PCOREACCMETADATA_H

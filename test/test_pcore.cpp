@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <../src/pcore_extern.cpp>
+#include <pcore_extern.h>
 
 TEST(PcoreTest, HasVersionStructTheRightValues) {
   Pcore_Version version = coreLibraryVersion();

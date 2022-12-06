@@ -1,4 +1,4 @@
-make all: format unit build 
+make all: format unit 
 format:
 		find src -not -path "*/protobuf*"| grep ".*/.*\.\(c\|cpp\|h\)$$"| xargs clang-format -i
 		find test/ | grep ".*/.*\.\(c\|cpp\|h\)$$"| xargs clang-format -i

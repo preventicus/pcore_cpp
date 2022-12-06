@@ -30,17 +30,48 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef PCOREABSOLUTETIMESTAMPS_H
-#define PCOREABSOLUTETIMESTAMPS_H
+#include "DeserializedAccMetaData.h"
 
-#include <vector>
-class PcoreAbsoluteTimestamps {
- public:
-  PcoreAbsoluteTimestamps(std::vector<uint64_t>& unix);
-  ~PcoreAbsoluteTimestamps();
-  bool isEqual(PcoreAbsoluteTimestamps timestamps);
+DeserializedAccMetaData::DeserializedAccMetaData() {
+  this->coordinate = Coordinate::COORDINATE_NONE;
+  this->norm = Norm::NORM_NONE;
+}
 
-  std::vector<uint64_t>& unix;
-};
+void DeserializedAccMetaData::setCoordinate(Coordinate coordinate) {
+  this->norm = Norm::NORM_NONE;
+  this->coordinate = coordinate;
+}
+void DeserializedAccMetaData::setNorm(Norm norm) {
+  this->coordinate = Coordinate::COORDINATE_NONE;
+  this->norm = norm;
+}
 
-#endif  // PCOREABSOLUTETIMESTAMPS_H
+Coordinate DeserializedAccMetaData::getCoordinate() {
+  return this->coordinate;
+}
+Norm DeserializedAccMetaData::getNorm() {
+  return this->norm;
+}
+
+bool DeserializedAccMetaData::isEqual(
+    DeserializedAccMetaData* deserializedAccMetaData) {
+  return this->coordinate == deserializedAccMetaData->coordinate &&
+         this->norm == deserializedAccMetaData->norm;
+}
+
+SerializedAccMetaData DeserializedAccMetaData::serialize() {
+  SerializedAccMetaData serializedAccMetaData;
+  if (this->coordinate != Coordinate::COORDINATE_NONE) {
+    serializedAccMetaData.set_coordinate(this->coordinate);
+  }
+  if (this->norm != Norm::NORM_NONE) {
+    serializedAccMetaData.set_norm(this->norm);
+  }
+  return serializedAccMetaData;
+}
+
+void DeserializedAccMetaData::deserialized(
+    SerializedAccMetaData* serializedAccMetaData) {
+  this->norm = serializedAccMetaData->norm();
+  this->coordinate = serializedAccMetaData->coordinate();
+}

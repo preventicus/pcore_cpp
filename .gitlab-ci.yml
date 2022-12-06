@@ -3,9 +3,7 @@ image: registry.preventicus.com/research/protobuf/build:1.0
 style-job:
   stage: test
   script:
-    - find src/ | grep ".*/.*\.\(c\|cpp\|h\)$"| xargs clang-format -i
-    - find test/ | grep ".*/.*\.\(c\|cpp\|h\)$"| xargs clang-format -i
-    - find include/ | grep ".*/.*\.\(c\|cpp\|h\)$"| xargs clang-format -i
+    - make format
     - git diff > git.diff
     - |
       if [[ -s git.diff ]]; then
