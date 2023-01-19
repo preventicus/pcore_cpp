@@ -9,8 +9,8 @@ TARGET_LINK_LIBRARIES(libpcore_extern jsoncpp_lib)
 TARGET_LINK_LIBRARIES(libpcore_extern ${Protobuf_LIBRARIES} ${PROTOBUF_LIB} absl::synchronization absl::hash absl::raw_hash_set absl::str_format_internal absl::status)
 MESSAGE("protobuf : ${Protobuf_LIBRARIES}")
 #INCLUDE_DIRECTORIES(${Protobuf_INCLUDE_DIRS})
-SET(INCLUDE_FOLDER ${PROJECT_SOURCE_DIR}/include/;${CMAKE_BINARY_DIR}/include/)
-
+SET(INCLUDE_FOLDER ${PROJECT_SOURCE_DIR}/include/ ;${CMAKE_BINARY_DIR}/include/)
+INCLUDE_DIRECTORIES(${COMMON_INCLUDES})
 TARGET_INCLUDE_DIRECTORIES(libpcore_extern PUBLIC ${INCLUDE_FOLDER})
 
 SET_TARGET_PROPERTIES(libpcore_extern PROPERTIES

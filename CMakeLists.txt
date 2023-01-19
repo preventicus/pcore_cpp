@@ -64,18 +64,18 @@ else()
     MESSAGE( WARNING "Protobuf package not found -> specify search path via PROTOBUF_ROOT variable")
 endif()
 
-INCLUDE(ExternalProject)
-EXTERNALPROJECT_ADD(Pcore proto definition files
+# INCLUDE(ExternalProject)
+# EXTERNALPROJECT_ADD(Pcore proto definition files
 
-  GIT_REPOSITORY    git@gitlab.preventicus.com:research/pcore-proto-definition-files.git
-  GIT_TAG           main
-  SOURCE_DIR        "${CMAKE_BINARY_DIR}/pcore-src"
-  BINARY_DIR        "${CMAKE_BINARY_DIR}/pcore-build"
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND     ""
-  INSTALL_COMMAND   ""
-  TEST_COMMAND      ""
-)
+#   GIT_REPOSITORY    git@gitlab.preventicus.com:research/pcore-proto-definition-files.git
+#   GIT_TAG           main
+#   SOURCE_DIR        "${CMAKE_BINARY_DIR}/pcore-src"
+#   BINARY_DIR        "${CMAKE_BINARY_DIR}/pcore-build"
+#   CONFIGURE_COMMAND ""
+#   BUILD_COMMAND     ""
+#   INSTALL_COMMAND   ""
+#   TEST_COMMAND      ""
+# )
 # compiler ?
 #you probably need to set Protobuf_LIBRARY, Protobuf_PROTOC_LIBRARY and Protobuf_INCLUDE_DIR variables to their proper values using -D CMake flag..
 
