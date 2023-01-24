@@ -32,11 +32,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "PcoreAbsoluteBlock.h"
 
-PcoreAbsoluteBlock::PcoreAbsoluteBlock(std::vector<int32_t>& values)
-    : values(values) {}
+void PcoreAbsoluteBlock::setValues(std::vector<int32_t>& values) {
+  this->values = values;
+}
 
-PcoreAbsoluteBlock::~PcoreAbsoluteBlock(){};
+std::vector<int32_t> PcoreAbsoluteBlock::getValues() {
+  return this->values;
+}
 
-bool PcoreAbsoluteBlock::isEqual(PcoreAbsoluteBlock block) {
+bool PcoreAbsoluteBlock::isEqual(PcoreAbsoluteBlock& block) {
   return this->values == block.values;
 }
