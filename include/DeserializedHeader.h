@@ -30,23 +30,23 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "protobuf/pcore_version.pb.h"
-using SerializedVersion = com::preventicus::pcore::Version;
-class DeserializedVersion {
+#include <iostream>
+#include <stdexcept>
+#include "DeserializedVersion.h"
+#include "pcore_extern.h"
+#include "protobuf/pcore.pb.h"
+using SerializedHeader = com::preventicus::pcore::Data_Header;
+class DeserializedHeader {
  public:
-  DeserializedVersion();
-  void setMajor(uint32_t major);
-  void setMinor(uint32_t minor);
-  void setPatch(uint32_t patch);
-  uint32_t getMajor();
-  uint32_t getMinor();
-  uint32_t getPatch();
-  bool isEqual(DeserializedVersion& deserializedVersion);
-  SerializedVersion serialize();
-  void deserialize(SerializedVersion& serializedVersion);
+  void setVersion(DeserializedVersion version);
+  void setTimeZoneOffset(int32_t& timeZoneOffset_min);
+  int32_t getTimeZoneOffset();
+  DeserializedVersion getVersion();
+  bool isEqual(DeserializedHeader& deserializedHeader);
+  SerializedHeader serialize();
+  void deserialize(SerializedHeader& serializedHeader);
 
  private:
-  uint32_t major;
-  uint32_t minor;
-  uint32_t patch;
+  int32_t timeZoneOffset_min;
+  DeserializedVersion version;
 };
