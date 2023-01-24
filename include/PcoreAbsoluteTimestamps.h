@@ -36,11 +36,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 class PcoreAbsoluteTimestamps {
  public:
-  PcoreAbsoluteTimestamps(std::vector<uint64_t>& unix);
-  ~PcoreAbsoluteTimestamps();
-  bool isEqual(PcoreAbsoluteTimestamps timestamps);
+  void setUnix(std::vector<uint64_t>& unix);
+  std::vector<uint64_t> getUnix();
+  bool isEqual(PcoreAbsoluteTimestamps& timestamps);
 
-  std::vector<uint64_t>& unix;
+ private:
+  std::vector<uint64_t> unix;
 };
 
 #endif  // PCOREABSOLUTETIMESTAMPS_H
