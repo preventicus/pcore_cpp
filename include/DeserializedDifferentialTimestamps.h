@@ -54,8 +54,8 @@ class DeserializedDifferentialTimestamps {
   void deserialize(SerializedTimestampContainer& serializedDifferentialTimestamps);
 
  private:
-  uint64_t first_timestamp_ms;
-  std::vector<uint32_t> block_intervals_ms;
-  std::vector<uint32_t> timestamps_intervals_ms;
+  uint64_t firstTimestamp_ms;
+  std::vector<uint32_t> blockIntervals_ms;
+  std::vector<uint32_t> timestampsIntervals_ms;
   DeserializedDifferentialBlock deserializedDifferentialBlock;
 };
