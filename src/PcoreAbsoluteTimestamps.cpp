@@ -32,14 +32,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "PcoreAbsoluteTimestamps.h"
 
-void PcoreAbsoluteTimestamps::setUnix(std::vector<uint64_t> unix) {
-  this->unix = unix;
+void PcoreAbsoluteTimestamps::setUnix(std::vector<uint64_t> unix_ms) {
+  this->unix_ms = unix_ms;
 }
 
 std::vector<uint64_t> PcoreAbsoluteTimestamps::getUnix() {
-  return this->unix;
+  return this->unix_ms;
 }
 
 bool PcoreAbsoluteTimestamps::isEqual(PcoreAbsoluteTimestamps& timestamps) {
-  return this->unix == timestamps.unix;
+  return this->unix_ms == timestamps.unix_ms;
 }
