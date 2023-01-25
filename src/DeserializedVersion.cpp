@@ -63,9 +63,7 @@ uint32_t DeserializedVersion::getPatch() {
 }
 
 bool DeserializedVersion::isEqual(DeserializedVersion& deserializedVersion) {
-  return this->major == deserializedVersion.major &&
-         this->minor == deserializedVersion.minor &&
-         this->patch == deserializedVersion.patch;
+  return this->major == deserializedVersion.major && this->minor == deserializedVersion.minor && this->patch == deserializedVersion.patch;
 }
 
 SerializedVersion DeserializedVersion::serialize() {

@@ -53,10 +53,8 @@ Norm DeserializedAccMetaData::getNorm() {
   return this->norm;
 }
 
-bool DeserializedAccMetaData::isEqual(
-    DeserializedAccMetaData& deserializedAccMetaData) {
-  return this->coordinate == deserializedAccMetaData.coordinate &&
-         this->norm == deserializedAccMetaData.norm;
+bool DeserializedAccMetaData::isEqual(DeserializedAccMetaData& deserializedAccMetaData) {
+  return this->coordinate == deserializedAccMetaData.coordinate && this->norm == deserializedAccMetaData.norm;
 }
 
 SerializedAccMetaData DeserializedAccMetaData::serialize() {
@@ -70,8 +68,7 @@ SerializedAccMetaData DeserializedAccMetaData::serialize() {
   return serializedAccMetaData;
 }
 
-void DeserializedAccMetaData::deserialized(
-    SerializedAccMetaData& serializedAccMetaData) {
+void DeserializedAccMetaData::deserialized(SerializedAccMetaData& serializedAccMetaData) {
   this->norm = serializedAccMetaData.norm();
   this->coordinate = serializedAccMetaData.coordinate();
 }

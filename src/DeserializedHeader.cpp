@@ -32,8 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "DeserializedHeader.h"
 
-void DeserializedHeader::setTimeZoneOffset(
-    int32_t timeZoneOffset_min) {  // TODO FOR-333
+void DeserializedHeader::setTimeZoneOffset(int32_t timeZoneOffset_min) {  // TODO FOR-333
   if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
     this->timeZoneOffset_min = timeZoneOffset_min;
   } else {

@@ -34,8 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_color.pb.h"
 #include "protobuf/pcore_external.pb.h"
 using Color = com::preventicus::pcore::Color;
-using SerializedPpgMetaData =
-    com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
+using SerializedPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
 class DeserializedPpgMetaData {
  public:
   DeserializedPpgMetaData();
