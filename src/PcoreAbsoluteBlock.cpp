@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "PcoreAbsoluteBlock.h"
 
-void PcoreAbsoluteBlock::setValues(std::vector<int32_t>& values) {
+void PcoreAbsoluteBlock::setValues(std::vector<int32_t> values) {
   this->values = values;
 }
 

@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "PcoreAbsoluteTimestamps.h"
 
-void PcoreAbsoluteTimestamps::setUnix(std::vector<uint64_t>& unix) {
+void PcoreAbsoluteTimestamps::setUnix(std::vector<uint64_t> unix) {
   this->unix = unix;
 }
 

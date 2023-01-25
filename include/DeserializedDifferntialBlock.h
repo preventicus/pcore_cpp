@@ -36,11 +36,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using SerializedBlock = com::preventicus::pcore::Raw_Sensor_Channel_Block;
 class DeserializedDifferentialBlock {
  public:
-  void setDiffValues(std::vector<int32_t>& diffValues);
+  void setDiffValues(std::vector<int32_t> diffValues);
   std::vector<int32_t>& getDiffValues();
-  bool isEqual(DeserializedDifferentialBlock* deserializedDifferentialBlock);
+  bool isEqual(DeserializedDifferentialBlock& deserializedDifferentialBlock);
   SerializedBlock serialize();
-  void deserialized(SerializedBlock* serializedBlock);
+  void deserialized(SerializedBlock& serializedBlock);
 
  private:
   std::vector<int32_t> diffValues;

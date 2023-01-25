@@ -10,7 +10,7 @@ void DeserializedPpgMetaData::setColor(Color color) {
   this->color = color;
 }
 
-void DeserializedPpgMetaData::setWavelength(uint32_t& wavelength) {
+void DeserializedPpgMetaData::setWavelength(uint32_t wavelength) {
   this->color = Color::COLOR_NONE;
   this->wavelength_nm = wavelength;
 }

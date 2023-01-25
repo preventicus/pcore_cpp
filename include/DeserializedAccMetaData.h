@@ -49,9 +49,9 @@ class DeserializedAccMetaData {
   void setNorm(Norm norm);
   Coordinate getCoordinate();
   Norm getNorm();
-  bool isEqual(DeserializedAccMetaData* deserializedAccMetaData);
+  bool isEqual(DeserializedAccMetaData& deserializedAccMetaData);
   SerializedAccMetaData serialize();
-  void deserialized(SerializedAccMetaData* serializedAccMetaData);
+  void deserialized(SerializedAccMetaData& serializedAccMetaData);
 
  private:
   Coordinate coordinate;

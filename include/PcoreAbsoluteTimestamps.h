@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 class PcoreAbsoluteTimestamps {
  public:
-  void setUnix(std::vector<uint64_t>& unix);
+  void setUnix(std::vector<uint64_t> unix);
   std::vector<uint64_t> getUnix();
   bool isEqual(PcoreAbsoluteTimestamps& timestamps);
 

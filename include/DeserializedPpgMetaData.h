@@ -40,7 +40,7 @@ class DeserializedPpgMetaData {
  public:
   DeserializedPpgMetaData();
   void setColor(Color color);
-  void setWavelength(uint32_t& wavelength_nm);
+  void setWavelength(uint32_t wavelength_nm);
   Color getColor();
   uint32_t getWavelength();
   bool isEqual(DeserializedPpgMetaData& deserializedPpgMetaData);
