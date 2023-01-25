@@ -37,8 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_external.pb.h"
 #include "protobuf/pcore_norm.pb.h"
 
-using SerializedAccMetaData =
-    com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
+using SerializedAccMetaData = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
 using Coordinate = com::preventicus::pcore::Coordinate;
 using Norm = com::preventicus::pcore::Norm;
 

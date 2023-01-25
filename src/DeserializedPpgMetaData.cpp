@@ -55,10 +55,8 @@ uint32_t DeserializedPpgMetaData::getWavelength() {
   return this->wavelength_nm;
 }
 
-bool DeserializedPpgMetaData::isEqual(
-    DeserializedPpgMetaData& deserializedPpgMetaData) {
-  return this->color == deserializedPpgMetaData.color &&
-         this->wavelength_nm == deserializedPpgMetaData.wavelength_nm;
+bool DeserializedPpgMetaData::isEqual(DeserializedPpgMetaData& deserializedPpgMetaData) {
+  return this->color == deserializedPpgMetaData.color && this->wavelength_nm == deserializedPpgMetaData.wavelength_nm;
 }
 
 SerializedPpgMetaData DeserializedPpgMetaData::serialize() {
@@ -72,8 +70,7 @@ SerializedPpgMetaData DeserializedPpgMetaData::serialize() {
   return serializedPpgMetaData;
 }
 
-void DeserializedPpgMetaData::deserialize(
-    SerializedPpgMetaData& serializedPpgMetaData) {
+void DeserializedPpgMetaData::deserialize(SerializedPpgMetaData& serializedPpgMetaData) {
   this->color = serializedPpgMetaData.color();
   this->wavelength_nm = serializedPpgMetaData.wavelength();
 }

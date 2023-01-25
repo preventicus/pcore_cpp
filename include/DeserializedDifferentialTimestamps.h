@@ -35,8 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include "DeserializedDifferntialBlock.h"
 #include "protobuf/pcore_external.pb.h"
-using SerializedTimestampContainer =
-    com::preventicus::pcore::Raw_Sensor_TimestampsContainer;
+using SerializedTimestampContainer = com::preventicus::pcore::Raw_Sensor_TimestampsContainer;
 
 class DeserializedDifferentialTimestamps {
  public:
@@ -48,13 +47,11 @@ class DeserializedDifferentialTimestamps {
   std::vector<uint32_t> getTimestampsIntervals();
   bool isEqual(DeserializedDifferentialTimestamps& timestamps);
   uint32_t calculateFirstTimestampInBlock(uint32_t blockIdx);
-  uint32_t calculateLastTimestampInBlock(
-      uint32_t blockIdx,
-      uint32_t firstTimestampInBlock,
-      DeserializedDifferentialBlock deserializedDifferentialBlock);
+  uint32_t calculateLastTimestampInBlock(uint32_t blockIdx,
+                                         uint32_t firstTimestampInBlock,
+                                         DeserializedDifferentialBlock deserializedDifferentialBlock);
   SerializedTimestampContainer serialize();
-  void deserialize(
-      SerializedTimestampContainer& serializedDifferentialTimestamps);
+  void deserialize(SerializedTimestampContainer& serializedDifferentialTimestamps);
 
  private:
   uint64_t first_timestamp_ms;

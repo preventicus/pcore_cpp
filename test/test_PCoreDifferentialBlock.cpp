@@ -95,8 +95,7 @@ TEST(runUnitTests, TestSerializeAndDeserializeWith0) {
   EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
-TEST(runUnitTests,
-     TestSerializeAndDeserializeWithNegativeAndPositiveDiffValues) {
+TEST(runUnitTests, TestSerializeAndDeserializeWithNegativeAndPositiveDiffValues) {
   DeserializedDifferentialBlock dBlock1;
   std::vector<int32_t> diffValues = {-23, 234, -13};
   dBlock1.setDiffValues(diffValues);

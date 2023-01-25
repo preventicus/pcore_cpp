@@ -32,8 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "DeserializedDifferntialBlock.h"
 
-void DeserializedDifferentialBlock::setDiffValues(
-    std::vector<int32_t> diffValues) {
+void DeserializedDifferentialBlock::setDiffValues(std::vector<int32_t> diffValues) {
   this->diffValues = diffValues;
 }
 
@@ -41,8 +40,7 @@ std::vector<int32_t>& DeserializedDifferentialBlock::getDiffValues() {
   return this->diffValues;
 }
 
-bool DeserializedDifferentialBlock::isEqual(
-    DeserializedDifferentialBlock& differentialBlock) {
+bool DeserializedDifferentialBlock::isEqual(DeserializedDifferentialBlock& differentialBlock) {
   return this->diffValues == differentialBlock.diffValues;
 }
 
@@ -54,8 +52,7 @@ SerializedBlock DeserializedDifferentialBlock::serialize() {
   return blocks;
 }
 
-void DeserializedDifferentialBlock::deserialized(
-    SerializedBlock& serializedBlock) {
+void DeserializedDifferentialBlock::deserialized(SerializedBlock& serializedBlock) {
   for (size_t i = 0; i < serializedBlock.diff_values_size(); i++)
     this->diffValues.push_back(serializedBlock.diff_values(i));
 }
