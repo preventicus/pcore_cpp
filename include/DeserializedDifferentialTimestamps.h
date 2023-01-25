@@ -40,9 +40,9 @@ using SerializedTimestampContainer =
 
 class DeserializedDifferentialTimestamps {
  public:
-  void setFirstTimestamp(uint64_t& first_timestamp_ms);
-  void setBlockIntervals(std::vector<uint32_t>& block_intervals_ms);
-  void setTimestampsIntervals(std::vector<uint32_t>& timestamps_intervals_ms);
+  void setFirstTimestamp(uint64_t first_timestamp_ms);
+  void setBlockIntervals(std::vector<uint32_t> block_intervals_ms);
+  void setTimestampsIntervals(std::vector<uint32_t> timestamps_intervals_ms);
   uint64_t getFirstTimestamp();
   std::vector<uint32_t> getBlockIntervals();
   std::vector<uint32_t> getTimestampsIntervals();

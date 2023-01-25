@@ -33,17 +33,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DeserializedDifferentialTimestamps.h"
 
 void DeserializedDifferentialTimestamps::setFirstTimestamp(
-    uint64_t& first_timestamp_ms) {
+    uint64_t first_timestamp_ms) {
   this->first_timestamp_ms = first_timestamp_ms;
 }
 
 void DeserializedDifferentialTimestamps::setBlockIntervals(
-    std::vector<uint32_t>& block_intervals_ms) {
+    std::vector<uint32_t> block_intervals_ms) {
   this->block_intervals_ms = block_intervals_ms;
 }
 
 void DeserializedDifferentialTimestamps::setTimestampsIntervals(
-    std::vector<uint32_t>& timestamps_intervals_ms) {
+    std::vector<uint32_t> timestamps_intervals_ms) {
   this->timestamps_intervals_ms = timestamps_intervals_ms;
 }
 
@@ -69,7 +69,7 @@ bool DeserializedDifferentialTimestamps::isEqual(
 
 uint32_t DeserializedDifferentialTimestamps::calculateFirstTimestampInBlock(
     uint32_t blockIdx) {
-  if (this->block_intervals_ms.size() <= blockIdx) {  // toDo : FOR-325
+  if (this->block_intervals_ms.size() <= blockIdx) {  // // TODO FOR-333
     throw std::invalid_argument(
         "blockIdx is higher than number of block_intervals");
   }

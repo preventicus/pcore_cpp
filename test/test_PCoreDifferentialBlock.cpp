@@ -22,7 +22,7 @@ TEST(runUnitTests, CompareDiffValuesEqual) {
   std::vector<int32_t> diffValues2 = {30, 32, 54};
   DeserializedDifferentialBlock dBlock2;
   dBlock2.setDiffValues(diffValues2);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, CompareDiffValuesDifferent) {
@@ -32,7 +32,7 @@ TEST(runUnitTests, CompareDiffValuesDifferent) {
   std::vector<int32_t> diffValues2 = {33, 32, 54};
   DeserializedDifferentialBlock dBlock2;
   dBlock2.setDiffValues(diffValues2);
-  EXPECT_FALSE(dBlock1.isEqual(&dBlock2));
+  EXPECT_FALSE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, CompareDiffValuesEmpty) {
@@ -42,7 +42,7 @@ TEST(runUnitTests, CompareDiffValuesEmpty) {
   std::vector<int32_t> diffValues2 = {};
   DeserializedDifferentialBlock dBlock2;
   dBlock2.setDiffValues(diffValues2);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, CompareDiffValues0) {
@@ -52,7 +52,7 @@ TEST(runUnitTests, CompareDiffValues0) {
   std::vector<int32_t> diffValues2 = {0};
   DeserializedDifferentialBlock dBlock2;
   dBlock2.setDiffValues(diffValues2);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTest, CompareDiffValuesFullAndEmpty) {
@@ -62,7 +62,7 @@ TEST(runUnitTest, CompareDiffValuesFullAndEmpty) {
   std::vector<int32_t> diffValues2 = {};
   DeserializedDifferentialBlock dBlock2;
   dBlock2.setDiffValues(diffValues2);
-  EXPECT_FALSE(dBlock1.isEqual(&dBlock2));
+  EXPECT_FALSE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, TestSerializeAndDeserialize) {
@@ -71,8 +71,8 @@ TEST(runUnitTests, TestSerializeAndDeserialize) {
   dBlock1.setDiffValues(diffValues);
   SerializedBlock blocks = dBlock1.serialize();
   DeserializedDifferentialBlock dBlock2;
-  dBlock2.deserialized(&blocks);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  dBlock2.deserialized(blocks);
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, TestSerializeAndDeserializeWithEmptyVector) {
@@ -81,8 +81,8 @@ TEST(runUnitTests, TestSerializeAndDeserializeWithEmptyVector) {
   dBlock1.setDiffValues(diffValues);
   SerializedBlock blocks = dBlock1.serialize();
   DeserializedDifferentialBlock dBlock2;
-  dBlock2.deserialized(&blocks);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  dBlock2.deserialized(blocks);
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, TestSerializeAndDeserializeWith0) {
@@ -91,8 +91,8 @@ TEST(runUnitTests, TestSerializeAndDeserializeWith0) {
   dBlock1.setDiffValues(diffValues);
   SerializedBlock blocks = dBlock1.serialize();
   DeserializedDifferentialBlock dBlock2;
-  dBlock2.deserialized(&blocks);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  dBlock2.deserialized(blocks);
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests,
@@ -102,8 +102,8 @@ TEST(runUnitTests,
   dBlock1.setDiffValues(diffValues);
   SerializedBlock blocks = dBlock1.serialize();
   DeserializedDifferentialBlock dBlock2;
-  dBlock2.deserialized(&blocks);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  dBlock2.deserialized(blocks);
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, TestSerializeAndDeserializeWithEmptyVectorOneDiffValues) {
@@ -112,8 +112,8 @@ TEST(runUnitTests, TestSerializeAndDeserializeWithEmptyVectorOneDiffValues) {
   dBlock1.setDiffValues(diffValues);
   SerializedBlock blocks = dBlock1.serialize();
   DeserializedDifferentialBlock dBlock2;
-  dBlock2.deserialized(&blocks);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  dBlock2.deserialized(blocks);
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }
 
 TEST(runUnitTests, TestSerializeAndDeserializeWithOneNegativeDiffValues) {
@@ -122,6 +122,6 @@ TEST(runUnitTests, TestSerializeAndDeserializeWithOneNegativeDiffValues) {
   dBlock1.setDiffValues(diffValues);
   SerializedBlock blocks = dBlock1.serialize();
   DeserializedDifferentialBlock dBlock2;
-  dBlock2.deserialized(&blocks);
-  EXPECT_TRUE(dBlock1.isEqual(&dBlock2));
+  dBlock2.deserialized(blocks);
+  EXPECT_TRUE(dBlock1.isEqual(dBlock2));
 }

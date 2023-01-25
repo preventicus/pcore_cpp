@@ -39,7 +39,7 @@ using SerializedHeader = com::preventicus::pcore::Data_Header;
 class DeserializedHeader {
  public:
   void setVersion(DeserializedVersion version);
-  void setTimeZoneOffset(int32_t& timeZoneOffset_min);
+  void setTimeZoneOffset(int32_t timeZoneOffset_min);
   int32_t getTimeZoneOffset();
   DeserializedVersion getVersion();
   bool isEqual(DeserializedHeader& deserializedHeader);

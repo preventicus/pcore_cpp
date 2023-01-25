@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class PcoreAbsoluteBlock {
  public:
-  void setValues(std::vector<int32_t>& values);
+  void setValues(std::vector<int32_t> values);
   std::vector<int32_t> getValues();
   bool isEqual(PcoreAbsoluteBlock& block);
 
