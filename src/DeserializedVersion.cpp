@@ -1,8 +1,8 @@
 /*
 
-Created by Jakob Glück 2022
+Created by Jakob Glück 2023
 
-Copyright © 2022 PREVENTICUS GmbH
+Copyright © 2023 PREVENTICUS GmbH
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -30,7 +30,6 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-
 #include "DeserializedVersion.h"
 
 DeserializedVersion::DeserializedVersion() {
