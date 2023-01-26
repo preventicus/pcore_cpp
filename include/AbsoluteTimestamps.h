@@ -30,29 +30,18 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "DeserializedDifferntialBlock.h"
+#ifndef ABSOLUTETIMESTAMPS_H
+#define ABSOLUTETIMESTAMPS_H
 
-void DeserializedDifferentialBlock::setDiffValues(std::vector<int32_t> diffValues) {
-  this->diffValues = diffValues;
-}
+#include <vector>
+class AbsoluteTimestamps {
+ public:
+  void setUnix(std::vector<uint64_t> unix_ms);
+  std::vector<uint64_t> getUnix();
+  bool isEqual(AbsoluteTimestamps& timestamps);
 
-std::vector<int32_t>& DeserializedDifferentialBlock::getDiffValues() {
-  return this->diffValues;
-}
+ private:
+  std::vector<uint64_t> unix_ms;
+};
 
-bool DeserializedDifferentialBlock::isEqual(DeserializedDifferentialBlock& differentialBlock) {
-  return this->diffValues == differentialBlock.diffValues;
-}
-
-SerializedBlock DeserializedDifferentialBlock::serialize() {
-  SerializedBlock blocks = SerializedBlock();
-  for (size_t i = 0; i < this->diffValues.size(); i++) {
-    blocks.add_diff_values(this->diffValues[i]);
-  }
-  return blocks;
-}
-
-void DeserializedDifferentialBlock::deserialized(SerializedBlock& serializedBlock) {
-  for (size_t i = 0; i < serializedBlock.diff_values_size(); i++)
-    this->diffValues.push_back(serializedBlock.diff_values(i));
-}
+#endif  // ABSOLUTETIMESTAMPS_H

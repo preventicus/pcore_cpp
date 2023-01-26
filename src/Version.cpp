@@ -30,23 +30,52 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <iostream>
-#include "protobuf/pcore_color.pb.h"
-#include "protobuf/pcore_external.pb.h"
-using Color = com::preventicus::pcore::Color;
-using SerializedPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
-class DeserializedPpgMetaData {
- public:
-  DeserializedPpgMetaData();
-  void setColor(Color color);
-  void setWavelength(uint32_t wavelength_nm);
-  Color getColor();
-  uint32_t getWavelength();
-  bool isEqual(DeserializedPpgMetaData& deserializedPpgMetaData);
-  SerializedPpgMetaData serialize();
-  void deserialize(SerializedPpgMetaData& serializedPpgMetaData);
+#include "Version.h"
 
- private:
-  Color color;
-  uint32_t wavelength_nm;
-};
+Version::Version() {
+  this->major = 0;
+  this->minor = 0;
+  this->patch = 0;
+}
+
+void Version::setMajor(uint32_t major) {
+  this->major = major;
+}
+
+void Version::setMinor(uint32_t minor) {
+  this->minor = minor;
+}
+
+void Version::setPatch(uint32_t patch) {
+  this->patch = patch;
+}
+
+uint32_t Version::getMajor() {
+  return this->major;
+}
+
+uint32_t Version::getMinor() {
+  return this->minor;
+}
+
+uint32_t Version::getPatch() {
+  return this->patch;
+}
+
+bool Version::isEqual(Version& version) {
+  return this->major == version.major && this->minor == version.minor && this->patch == version.patch;
+}
+
+ProtobufVersion Version::serialize() {
+  ProtobufVersion protobufVersion;
+  protobufVersion.set_major(this->major);
+  protobufVersion.set_minor(this->minor);
+  protobufVersion.set_patch(this->patch);
+  return protobufVersion;
+}
+
+void Version::deserialize(ProtobufVersion& protobufVersion) {
+  this->major = protobufVersion.major();
+  this->minor = protobufVersion.minor();
+  this->patch = protobufVersion.patch();
+}

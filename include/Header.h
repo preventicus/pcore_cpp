@@ -30,18 +30,23 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef PCOREABSOLUTETIMEBLOCK_H
-#define PCOREABSOLUTETIMEBLOCK_H
-#include <vector>
-
-class PcoreAbsoluteBlock {
+#include <iostream>
+#include <stdexcept>
+#include "Version.h"
+#include "pcore_extern.h"
+#include "protobuf/pcore.pb.h"
+using ProtobufHeader = com::preventicus::pcore::Data_Header;
+class Header {
  public:
-  void setValues(std::vector<int32_t> values);
-  std::vector<int32_t> getValues();
-  bool isEqual(PcoreAbsoluteBlock& block);
+  void setVersion(Version version);
+  void setTimeZoneOffset(int32_t timeZoneOffset_min);
+  int32_t getTimeZoneOffset();
+  Version getVersion();
+  bool isEqual(Header& header);
+  ProtobufHeader serialize();
+  void deserialize(ProtobufHeader& protobufHeader);
 
  private:
-  std::vector<int32_t> values;
+  int32_t timeZoneOffset_min;
+  Version version;
 };
-
-#endif  // PCOREABSOLUTETIMEBLOCK_H

@@ -30,31 +30,45 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef PCOREACCMETADATA_H
-#define PCOREACCMETADATA_H
-#include <iostream>
-#include "protobuf/pcore_coordinate.pb.h"
-#include "protobuf/pcore_external.pb.h"
-#include "protobuf/pcore_norm.pb.h"
+#include "Header.h"
 
-using SerializedAccMetaData = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
-using Coordinate = com::preventicus::pcore::Coordinate;
-using Norm = com::preventicus::pcore::Norm;
+void Header::setTimeZoneOffset(int32_t timeZoneOffset_min) {  // TODO FOR-333
 
-class DeserializedAccMetaData {
- public:
-  DeserializedAccMetaData();
-  void setCoordinate(Coordinate coordinate);
-  void setNorm(Norm norm);
-  Coordinate getCoordinate();
-  Norm getNorm();
-  bool isEqual(DeserializedAccMetaData& deserializedAccMetaData);
-  SerializedAccMetaData serialize();
-  void deserialized(SerializedAccMetaData& serializedAccMetaData);
+  if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
+    this->timeZoneOffset_min = timeZoneOffset_min;
+  } else {
+    throw std::out_of_range("Out of range");
+  }
+}
 
- private:
-  Coordinate coordinate;
-  Norm norm;
-};
+void Header::setVersion(Version version) {
+  this->version = version;
+}
 
-#endif  // PCOREACCMETADATA_H
+int Header::getTimeZoneOffset() {
+  return this->timeZoneOffset_min;
+}
+
+Version Header::getVersion() {
+  return this->version;
+}
+
+bool Header::isEqual(Header& header) {
+  return this->timeZoneOffset_min == header.timeZoneOffset_min;
+}
+
+ProtobufHeader Header::serialize() {
+  ProtobufHeader protobufHeader;
+  protobufHeader.set_time_zone_offset(this->timeZoneOffset_min);
+  ProtobufVersion protobufVersion = this->version.serialize();
+  protobufHeader.mutable_pcore_version()->CopyFrom(protobufVersion);
+  return protobufHeader;
+}
+
+void Header::deserialize(ProtobufHeader& protobufHeader) {
+  this->timeZoneOffset_min = protobufHeader.time_zone_offset();
+  ProtobufVersion protobufVersion = protobufHeader.pcore_version();
+  this->version.setMajor(protobufVersion.major());
+  this->version.setMinor(protobufVersion.minor());
+  this->version.setPatch(protobufVersion.patch());
+}

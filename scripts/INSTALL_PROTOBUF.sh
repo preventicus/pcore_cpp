@@ -14,3 +14,4 @@ cd ..
 cd src/google/protobuf
 cp ./port_def.inc $2/include/google/protobuf
 cp ./port_undef.inc $2/include/google/protobuf
+/Users/jakobglueck/workspace/protobuf-cpp/build

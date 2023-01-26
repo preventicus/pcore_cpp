@@ -30,32 +30,4 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <iostream>
-#include <stdexcept>
-#include <vector>
-#include "DeserializedDifferntialBlock.h"
-#include "protobuf/pcore_external.pb.h"
-using SerializedTimestampContainer = com::preventicus::pcore::Raw_Sensor_TimestampsContainer;
-
-class DeserializedDifferentialTimestamps {
- public:
-  void setFirstTimestamp(uint64_t first_timestamp_ms);
-  void setBlockIntervals(std::vector<uint32_t> block_intervals_ms);
-  void setTimestampsIntervals(std::vector<uint32_t> timestamps_intervals_ms);
-  uint64_t getFirstTimestamp();
-  std::vector<uint32_t> getBlockIntervals();
-  std::vector<uint32_t> getTimestampsIntervals();
-  bool isEqual(DeserializedDifferentialTimestamps& timestamps);
-  uint32_t calculateFirstTimestampInBlock(uint32_t blockIdx);
-  uint32_t calculateLastTimestampInBlock(uint32_t blockIdx,
-                                         uint32_t firstTimestampInBlock,
-                                         DeserializedDifferentialBlock deserializedDifferentialBlock);
-  SerializedTimestampContainer serialize();
-  void deserialize(SerializedTimestampContainer& serializedDifferentialTimestamps);
-
- private:
-  uint64_t firstTimestamp_ms;
-  std::vector<uint32_t> blockIntervals_ms;
-  std::vector<uint32_t> timestampsIntervals_ms;
-  DeserializedDifferentialBlock deserializedDifferentialBlock;
-};
+enum DataForm { ABSOLUTE, DIFFERENTIAL };

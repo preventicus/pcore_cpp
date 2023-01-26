@@ -33,14 +33,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include "protobuf/pcore_external.pb.h"
 
-using SerializedBlock = com::preventicus::pcore::Raw_Sensor_Channel_Block;
-class DeserializedDifferentialBlock {
+using ProtobufBlock = com::preventicus::pcore::Raw_Sensor_Channel_Block;
+class DifferentialBlock {
  public:
   void setDiffValues(std::vector<int32_t> diffValues);
-  std::vector<int32_t>& getDiffValues();
-  bool isEqual(DeserializedDifferentialBlock& deserializedDifferentialBlock);
-  SerializedBlock serialize();
-  void deserialized(SerializedBlock& serializedBlock);
+  std::vector<int32_t> getDiffValues();
+  bool isEqual(DifferentialBlock& DifferentialBlock);
+  ProtobufBlock serialize();
+  void deserialize(ProtobufBlock& protobufBlock);
 
  private:
   std::vector<int32_t> diffValues;

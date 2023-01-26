@@ -30,16 +30,31 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "PcoreAbsoluteBlock.h"
+#ifndef PCOREACCMETADATA_H
+#define PCOREACCMETADATA_H
+#include <iostream>
+#include "protobuf/pcore_coordinate.pb.h"
+#include "protobuf/pcore_external.pb.h"
+#include "protobuf/pcore_norm.pb.h"
 
-void PcoreAbsoluteBlock::setValues(std::vector<int32_t> values) {
-  this->values = values;
-}
+using ProtobufAccMetaData = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
+using ProtobufCoordinate = com::preventicus::pcore::Coordinate;
+using ProtobufNorm = com::preventicus::pcore::Norm;
 
-std::vector<int32_t> PcoreAbsoluteBlock::getValues() {
-  return this->values;
-}
+class AccMetaData {
+ public:
+  AccMetaData();
+  void setCoordinate(ProtobufCoordinate coordinate);
+  void setNorm(ProtobufNorm norm);
+  ProtobufCoordinate getCoordinate();
+  ProtobufNorm getNorm();
+  bool isEqual(AccMetaData& AccMetaData);
+  ProtobufAccMetaData serialize();
+  void deserialize(ProtobufAccMetaData& protobufAccMetaData);
 
-bool PcoreAbsoluteBlock::isEqual(PcoreAbsoluteBlock& block) {
-  return this->values == block.values;
-}
+ private:
+  ProtobufCoordinate coordinate;
+  ProtobufNorm norm;
+};
+
+#endif  // PCOREACCMETADATA_H

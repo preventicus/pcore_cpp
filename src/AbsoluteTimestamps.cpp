@@ -30,45 +30,16 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "DeserializedAccMetaData.h"
+#include "AbsoluteTimestamps.h"
 
-DeserializedAccMetaData::DeserializedAccMetaData() {
-  this->coordinate = Coordinate::COORDINATE_NONE;
-  this->norm = Norm::NORM_NONE;
-}
-
-void DeserializedAccMetaData::setCoordinate(Coordinate coordinate) {
-  this->norm = Norm::NORM_NONE;
-  this->coordinate = coordinate;
-}
-void DeserializedAccMetaData::setNorm(Norm norm) {
-  this->coordinate = Coordinate::COORDINATE_NONE;
-  this->norm = norm;
+void AbsoluteTimestamps::setUnix(std::vector<uint64_t> unix_ms) {
+  this->unix_ms = unix_ms;
 }
 
-Coordinate DeserializedAccMetaData::getCoordinate() {
-  return this->coordinate;
-}
-Norm DeserializedAccMetaData::getNorm() {
-  return this->norm;
+std::vector<uint64_t> AbsoluteTimestamps::getUnix() {
+  return this->unix_ms;
 }
 
-bool DeserializedAccMetaData::isEqual(DeserializedAccMetaData& deserializedAccMetaData) {
-  return this->coordinate == deserializedAccMetaData.coordinate && this->norm == deserializedAccMetaData.norm;
-}
-
-SerializedAccMetaData DeserializedAccMetaData::serialize() {
-  SerializedAccMetaData serializedAccMetaData;
-  if (this->coordinate != Coordinate::COORDINATE_NONE) {
-    serializedAccMetaData.set_coordinate(this->coordinate);
-  }
-  if (this->norm != Norm::NORM_NONE) {
-    serializedAccMetaData.set_norm(this->norm);
-  }
-  return serializedAccMetaData;
-}
-
-void DeserializedAccMetaData::deserialized(SerializedAccMetaData& serializedAccMetaData) {
-  this->norm = serializedAccMetaData.norm();
-  this->coordinate = serializedAccMetaData.coordinate();
+bool AbsoluteTimestamps::isEqual(AbsoluteTimestamps& timestamps) {
+  return this->unix_ms == timestamps.unix_ms;
 }
