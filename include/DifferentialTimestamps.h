@@ -30,4 +30,31 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-enum PcoreDataForm { ABSOLUTE, DIFFERENTIAL };
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+#include "DifferentialBlock.h"
+#include "protobuf/pcore_external.pb.h"
+
+using ProtobufTimestampContainer = com::preventicus::pcore::Raw_Sensor_TimestampsContainer;
+
+class DifferentialTimestamps {
+ public:
+  void setFirstTimestamp(uint64_t firstTimestamp_ms);
+  void setBlockIntervals(std::vector<uint32_t> blockIntervals_ms);
+  void setTimestampsIntervals(std::vector<uint32_t> timestampsIntervals_ms);
+  uint64_t getFirstTimestamp();
+  std::vector<uint32_t> getBlockIntervals();
+  std::vector<uint32_t> getTimestampsIntervals();
+  bool isEqual(DifferentialTimestamps& timestamps);
+  uint32_t calculateFirstTimestampInBlock(uint32_t blockIdx);
+  uint32_t calculateLastTimestampInBlock(uint32_t blockIdx, uint32_t firstTimestampInBlock, DifferentialBlock deserializedDifferentialBlock);
+  ProtobufTimestampContainer serialize();
+  void deserialize(ProtobufTimestampContainer& protobufDifferentialTimestamps);
+
+ private:
+  uint64_t firstTimestamp_ms;
+  std::vector<uint32_t> blockIntervals_ms;
+  std::vector<uint32_t> timestampsIntervals_ms;
+  DifferentialBlock differentialBlock;
+};

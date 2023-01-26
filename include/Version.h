@@ -30,44 +30,23 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "DeserializedHeader.h"
+#include "protobuf/pcore_version.pb.h"
+using ProtobufVersion = com::preventicus::pcore::Version;
+class Version {
+ public:
+  Version();
+  void setMajor(uint32_t major);
+  void setMinor(uint32_t minor);
+  void setPatch(uint32_t patch);
+  uint32_t getMajor();
+  uint32_t getMinor();
+  uint32_t getPatch();
+  bool isEqual(Version& version);
+  ProtobufVersion serialize();
+  void deserialize(ProtobufVersion& protobufVersion);
 
-void DeserializedHeader::setTimeZoneOffset(int32_t timeZoneOffset_min) {  // TODO FOR-333
-  if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
-    this->timeZoneOffset_min = timeZoneOffset_min;
-  } else {
-    throw std::out_of_range("Out of range");
-  }
-}
-
-void DeserializedHeader::setVersion(DeserializedVersion version) {
-  this->version = version;
-}
-
-int DeserializedHeader::getTimeZoneOffset() {
-  return this->timeZoneOffset_min;
-}
-
-DeserializedVersion DeserializedHeader::getVersion() {
-  return this->version;
-}
-
-bool DeserializedHeader::isEqual(DeserializedHeader& deserializedHeader) {
-  return this->timeZoneOffset_min == deserializedHeader.timeZoneOffset_min;
-}
-
-SerializedHeader DeserializedHeader::serialize() {
-  SerializedHeader serializedHeader;
-  serializedHeader.set_time_zone_offset(this->timeZoneOffset_min);
-  SerializedVersion serializedVersion = this->version.serialize();
-  serializedHeader.mutable_pcore_version()->CopyFrom(serializedVersion);
-  return serializedHeader;
-}
-
-void DeserializedHeader::deserialize(SerializedHeader& serializedHeader) {
-  this->timeZoneOffset_min = serializedHeader.time_zone_offset();
-  SerializedVersion serializedVersion = serializedHeader.pcore_version();
-  this->version.setMajor(serializedVersion.major());
-  this->version.setMinor(serializedVersion.minor());
-  this->version.setPatch(serializedVersion.patch());
-}
+ private:
+  uint32_t major;
+  uint32_t minor;
+  uint32_t patch;
+};

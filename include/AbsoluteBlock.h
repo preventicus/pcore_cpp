@@ -30,16 +30,18 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "PcoreAbsoluteTimestamps.h"
+#ifndef ABSOLUTETIMEBLOCK_H
+#define ABSOLUTETIMEBLOCK_H
+#include <vector>
 
-void PcoreAbsoluteTimestamps::setUnix(std::vector<uint64_t> unix_ms) {
-  this->unix_ms = unix_ms;
-}
+class AbsoluteBlock {
+ public:
+  void setValues(std::vector<int32_t> values);
+  std::vector<int32_t> getValues();
+  bool isEqual(AbsoluteBlock& block);
 
-std::vector<uint64_t> PcoreAbsoluteTimestamps::getUnix() {
-  return this->unix_ms;
-}
+ private:
+  std::vector<int32_t> values;
+};
 
-bool PcoreAbsoluteTimestamps::isEqual(PcoreAbsoluteTimestamps& timestamps) {
-  return this->unix_ms == timestamps.unix_ms;
-}
+#endif  // ABSOLUTETIMEBLOCK_H

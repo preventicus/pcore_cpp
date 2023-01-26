@@ -30,23 +30,16 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include <iostream>
-#include <stdexcept>
-#include "DeserializedVersion.h"
-#include "pcore_extern.h"
-#include "protobuf/pcore.pb.h"
-using SerializedHeader = com::preventicus::pcore::Data_Header;
-class DeserializedHeader {
- public:
-  void setVersion(DeserializedVersion version);
-  void setTimeZoneOffset(int32_t timeZoneOffset_min);
-  int32_t getTimeZoneOffset();
-  DeserializedVersion getVersion();
-  bool isEqual(DeserializedHeader& deserializedHeader);
-  SerializedHeader serialize();
-  void deserialize(SerializedHeader& serializedHeader);
+#include "AbsoluteBlock.h"
 
- private:
-  int32_t timeZoneOffset_min;
-  DeserializedVersion version;
-};
+void AbsoluteBlock::setValues(std::vector<int32_t> values) {
+  this->values = values;
+}
+
+std::vector<int32_t> AbsoluteBlock::getValues() {
+  return this->values;
+}
+
+bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
+  return this->values == block.values;
+}

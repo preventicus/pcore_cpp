@@ -30,52 +30,45 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "DeserializedVersion.h"
+#include "AccMetaData.h"
 
-DeserializedVersion::DeserializedVersion() {
-  this->major = 0;
-  this->minor = 0;
-  this->patch = 0;
+AccMetaData::AccMetaData() {
+  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
+  this->norm = ProtobufNorm::NORM_NONE;
 }
 
-void DeserializedVersion::setMajor(uint32_t major) {
-  this->major = major;
+void AccMetaData::setCoordinate(ProtobufCoordinate coordinate) {
+  this->norm = ProtobufNorm::NORM_NONE;
+  this->coordinate = coordinate;
+}
+void AccMetaData::setNorm(ProtobufNorm norm) {
+  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
+  this->norm = norm;
 }
 
-void DeserializedVersion::setMinor(uint32_t minor) {
-  this->minor = minor;
+ProtobufCoordinate AccMetaData::getCoordinate() {
+  return this->coordinate;
+}
+ProtobufNorm AccMetaData::getNorm() {
+  return this->norm;
 }
 
-void DeserializedVersion::setPatch(uint32_t patch) {
-  this->patch = patch;
+bool AccMetaData::isEqual(AccMetaData& AccMetaData) {
+  return this->coordinate == AccMetaData.coordinate && this->norm == AccMetaData.norm;
 }
 
-uint32_t DeserializedVersion::getMajor() {
-  return this->major;
+ProtobufAccMetaData AccMetaData::serialize() {
+  ProtobufAccMetaData protobufAccMetaData;
+  if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
+    protobufAccMetaData.set_coordinate(this->coordinate);
+  }
+  if (this->norm != ProtobufNorm::NORM_NONE) {
+    protobufAccMetaData.set_norm(this->norm);
+  }
+  return protobufAccMetaData;
 }
 
-uint32_t DeserializedVersion::getMinor() {
-  return this->minor;
-}
-
-uint32_t DeserializedVersion::getPatch() {
-  return this->patch;
-}
-
-bool DeserializedVersion::isEqual(DeserializedVersion& deserializedVersion) {
-  return this->major == deserializedVersion.major && this->minor == deserializedVersion.minor && this->patch == deserializedVersion.patch;
-}
-
-SerializedVersion DeserializedVersion::serialize() {
-  SerializedVersion serializedVersion;
-  serializedVersion.set_major(this->major);
-  serializedVersion.set_minor(this->minor);
-  serializedVersion.set_patch(this->patch);
-  return serializedVersion;
-}
-
-void DeserializedVersion::deserialize(SerializedVersion& serializedVersion) {
-  this->major = serializedVersion.major();
-  this->minor = serializedVersion.minor();
-  this->patch = serializedVersion.patch();
+void AccMetaData::deserialize(ProtobufAccMetaData& protobufAccMetaData) {
+  this->norm = protobufAccMetaData.norm();
+  this->coordinate = protobufAccMetaData.coordinate();
 }

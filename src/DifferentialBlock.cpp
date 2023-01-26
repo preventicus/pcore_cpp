@@ -30,18 +30,29 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef PCOREABSOLUTETIMESTAMPS_H
-#define PCOREABSOLUTETIMESTAMPS_H
+#include "DifferentialBlock.h"
 
-#include <vector>
-class PcoreAbsoluteTimestamps {
- public:
-  void setUnix(std::vector<uint64_t> unix_ms);
-  std::vector<uint64_t> getUnix();
-  bool isEqual(PcoreAbsoluteTimestamps& timestamps);
+void DifferentialBlock::setDiffValues(std::vector<int32_t> diffValues) {
+  this->diffValues = diffValues;
+}
 
- private:
-  std::vector<uint64_t> unix_ms;
-};
+std::vector<int32_t> DifferentialBlock::getDiffValues() {
+  return this->diffValues;
+}
 
-#endif  // PCOREABSOLUTETIMESTAMPS_H
+bool DifferentialBlock::isEqual(DifferentialBlock& differentialBlock) {
+  return this->diffValues == differentialBlock.diffValues;
+}
+
+ProtobufBlock DifferentialBlock::serialize() {
+  ProtobufBlock blocks = ProtobufBlock();
+  for (size_t i = 0; i < this->diffValues.size(); i++) {
+    blocks.add_diff_values(this->diffValues[i]);
+  }
+  return blocks;
+}
+
+void DifferentialBlock::deserialize(ProtobufBlock& protobufBlock) {
+  for (size_t i = 0; i < protobufBlock.diff_values_size(); i++)
+    this->diffValues.push_back(protobufBlock.diff_values(i));
+}
