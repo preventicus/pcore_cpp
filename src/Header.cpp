@@ -32,18 +32,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "Header.h"
 
-void Header::setTimeZoneOffset(int32_t timeZoneOffset_min) {  // TODO FOR-333
-
+Header::Header(Version& version, int32_t timeZoneOffset_min) {
   if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
     this->timeZoneOffset_min = timeZoneOffset_min;
+    this->version = version;
   } else {
     throw std::out_of_range("Out of range");
   }
 }
 
-void Header::setVersion(Version version) {
-  this->version = version;
+Header::Header(const ProtobufHeader& protobufHeader) {
+  this->deserialize(protobufHeader);
 }
+
+Header::Header() {}
 
 int Header::getTimeZoneOffset() {
   return this->timeZoneOffset_min;
@@ -65,10 +67,7 @@ ProtobufHeader Header::serialize() {
   return protobufHeader;
 }
 
-void Header::deserialize(ProtobufHeader& protobufHeader) {
+void Header::deserialize(const ProtobufHeader& protobufHeader) {
   this->timeZoneOffset_min = protobufHeader.time_zone_offset();
   ProtobufVersion protobufVersion = protobufHeader.pcore_version();
-  this->version.setMajor(protobufVersion.major());
-  this->version.setMinor(protobufVersion.minor());
-  this->version.setPatch(protobufVersion.patch());
 }

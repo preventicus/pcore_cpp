@@ -30,8 +30,8 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef PCOREACCMETADATA_H
-#define PCOREACCMETADATA_H
+#ifndef ACCMETADATA_H
+#define ACCMETADATA_H
 #include <iostream>
 #include "protobuf/pcore_coordinate.pb.h"
 #include "protobuf/pcore_external.pb.h"
@@ -43,18 +43,19 @@ using ProtobufNorm = com::preventicus::pcore::Norm;
 
 class AccMetaData {
  public:
+  AccMetaData(ProtobufCoordinate coordinate, ProtobufNorm norm);
+  AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);
   AccMetaData();
-  void setCoordinate(ProtobufCoordinate coordinate);
-  void setNorm(ProtobufNorm norm);
   ProtobufCoordinate getCoordinate();
   ProtobufNorm getNorm();
+  bool isSet();
   bool isEqual(AccMetaData& AccMetaData);
   ProtobufAccMetaData serialize();
-  void deserialize(ProtobufAccMetaData& protobufAccMetaData);
 
  private:
+  void deserialize(const ProtobufAccMetaData& protobufAccMetaData);
   ProtobufCoordinate coordinate;
   ProtobufNorm norm;
 };
 
-#endif  // PCOREACCMETADATA_H
+#endif  // ACCMETADATA_H

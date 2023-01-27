@@ -30,23 +30,28 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#ifndef HEADER_H
+#define HEADER_H
+
 #include <iostream>
 #include <stdexcept>
 #include "Version.h"
-#include "pcore_extern.h"
 #include "protobuf/pcore.pb.h"
 using ProtobufHeader = com::preventicus::pcore::Data_Header;
 class Header {
  public:
-  void setVersion(Version version);
-  void setTimeZoneOffset(int32_t timeZoneOffset_min);
+  Header(Version& version, int32_t timeZoneOffset_min);
+  Header(const ProtobufHeader& protobufHeader);
+  Header();
   int32_t getTimeZoneOffset();
   Version getVersion();
   bool isEqual(Header& header);
   ProtobufHeader serialize();
-  void deserialize(ProtobufHeader& protobufHeader);
 
  private:
+  void deserialize(const ProtobufHeader& protobufHeader);
   int32_t timeZoneOffset_min;
   Version version;
 };
+
+#endif  // HEADER_H

@@ -32,23 +32,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "Version.h"
 
-Version::Version() {
-  this->major = 0;
-  this->minor = 0;
-  this->patch = 0;
+Version::Version(uint32_t major, uint32_t minor, uint32_t patch) : major(major), minor(minor), patch(patch) {}
+
+Version::Version(const ProtobufVersion& protobufVersion) {
+  this->deserialize(protobufVersion);
 }
 
-void Version::setMajor(uint32_t major) {
-  this->major = major;
-}
-
-void Version::setMinor(uint32_t minor) {
-  this->minor = minor;
-}
-
-void Version::setPatch(uint32_t patch) {
-  this->patch = patch;
-}
+Version::Version() {}
 
 uint32_t Version::getMajor() {
   return this->major;
@@ -74,7 +64,7 @@ ProtobufVersion Version::serialize() {
   return protobufVersion;
 }
 
-void Version::deserialize(ProtobufVersion& protobufVersion) {
+void Version::deserialize(const ProtobufVersion& protobufVersion) {
   this->major = protobufVersion.major();
   this->minor = protobufVersion.minor();
   this->patch = protobufVersion.patch();

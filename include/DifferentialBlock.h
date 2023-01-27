@@ -30,18 +30,25 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#ifndef DIFFERENTIALBLOCK_H
+#define DIFFERENTIALBLOCK_H
+
 #include <vector>
 #include "protobuf/pcore_external.pb.h"
 
 using ProtobufBlock = com::preventicus::pcore::Raw_Sensor_Channel_Block;
 class DifferentialBlock {
  public:
-  void setDiffValues(std::vector<int32_t> diffValues);
+  DifferentialBlock(std::vector<int32_t>& diffValues);
+  DifferentialBlock(const ProtobufBlock& protobufBlock);
+  DifferentialBlock();
   std::vector<int32_t> getDiffValues();
-  bool isEqual(DifferentialBlock& DifferentialBlock);
+  bool isEqual(DifferentialBlock& differentialBlock);
   ProtobufBlock serialize();
-  void deserialize(ProtobufBlock& protobufBlock);
 
  private:
+  void deserialize(const ProtobufBlock& protobufBlock);
   std::vector<int32_t> diffValues;
 };
+
+#endif  // DIFFERENTIALBLOCK_H

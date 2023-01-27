@@ -32,25 +32,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "AccMetaData.h"
 
-AccMetaData::AccMetaData() {
-  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
-  this->norm = ProtobufNorm::NORM_NONE;
-}
-
-void AccMetaData::setCoordinate(ProtobufCoordinate coordinate) {
-  this->norm = ProtobufNorm::NORM_NONE;
+AccMetaData::AccMetaData(ProtobufCoordinate coordinate, ProtobufNorm norm) {
+  if (coordinate == ProtobufCoordinate::COORDINATE_NONE && norm == ProtobufNorm::NORM_NONE) {
+    throw std::invalid_argument("just one enum type can be initialized");
+  }
+  if (coordinate != ProtobufCoordinate::COORDINATE_NONE && norm != ProtobufNorm::NORM_NONE) {
+    throw std::invalid_argument("one enum type has to be initialized");
+  }
   this->coordinate = coordinate;
-}
-void AccMetaData::setNorm(ProtobufNorm norm) {
-  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
   this->norm = norm;
 }
+
+AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData) {
+  this->deserialize(protobufAccMetaData);
+}
+
+AccMetaData::AccMetaData(){};
 
 ProtobufCoordinate AccMetaData::getCoordinate() {
   return this->coordinate;
 }
 ProtobufNorm AccMetaData::getNorm() {
   return this->norm;
+}
+
+bool AccMetaData::isSet() {
+  return this->coordinate == ProtobufCoordinate::COORDINATE_NONE && this->norm == ProtobufNorm::NORM_NONE;
 }
 
 bool AccMetaData::isEqual(AccMetaData& AccMetaData) {
@@ -68,7 +75,7 @@ ProtobufAccMetaData AccMetaData::serialize() {
   return protobufAccMetaData;
 }
 
-void AccMetaData::deserialize(ProtobufAccMetaData& protobufAccMetaData) {
+void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {
   this->norm = protobufAccMetaData.norm();
   this->coordinate = protobufAccMetaData.coordinate();
 }

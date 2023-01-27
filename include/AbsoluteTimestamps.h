@@ -36,7 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 class AbsoluteTimestamps {
  public:
-  void setUnix(std::vector<uint64_t> unix_ms);
+  AbsoluteTimestamps(std::vector<uint64_t>& unix_ms);
+  AbsoluteTimestamps();
   std::vector<uint64_t> getUnix();
   bool isEqual(AbsoluteTimestamps& timestamps);
 

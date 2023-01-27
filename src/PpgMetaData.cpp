@@ -32,20 +32,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "PpgMetaData.h"
 
-PpgMetaData::PpgMetaData() {
-  this->color = ProtobufColor::COLOR_NONE;
-  this->wavelength_nm = 0;
-}
-
-void PpgMetaData::setColor(ProtobufColor color) {
-  this->wavelength_nm = 0;
+PpgMetaData::PpgMetaData(ProtobufColor color, uint32_t wavelength_nm) {
+  if (color == ProtobufColor::COLOR_NONE && wavelength_nm == 0) {
+    throw std::invalid_argument("just one parameter can be initialized");
+  }
+  if (color != ProtobufColor::COLOR_NONE && wavelength_nm != 0) {
+    throw std::invalid_argument("one parameter has to be initialized");
+  }
   this->color = color;
+  this->wavelength_nm = wavelength_nm;
 }
 
-void PpgMetaData::setWavelength(uint32_t wavelength) {
-  this->color = ProtobufColor::COLOR_NONE;
-  this->wavelength_nm = wavelength;
+PpgMetaData::PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData) {
+  this->deserialize(protobufPpgMetaData);
 }
+
+PpgMetaData::PpgMetaData() {}
 
 ProtobufColor PpgMetaData::getColor() {
   return this->color;
@@ -53,6 +55,10 @@ ProtobufColor PpgMetaData::getColor() {
 
 uint32_t PpgMetaData::getWavelength() {
   return this->wavelength_nm;
+}
+
+bool PpgMetaData::isSet() {
+  return this->color == ProtobufColor::COLOR_NONE && this->wavelength_nm == 0;
 }
 
 bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
@@ -70,7 +76,7 @@ ProtobufPpgMetaData PpgMetaData::serialize() {
   return protobufPpgMetaData;
 }
 
-void PpgMetaData::deserialize(ProtobufPpgMetaData& protobufPpgMetaData) {
+void PpgMetaData::deserialize(const ProtobufPpgMetaData& protobufPpgMetaData) {
   this->color = protobufPpgMetaData.color();
   this->wavelength_nm = protobufPpgMetaData.wavelength();
 }

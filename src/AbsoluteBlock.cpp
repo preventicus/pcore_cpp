@@ -32,9 +32,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "AbsoluteBlock.h"
 
-void AbsoluteBlock::setValues(std::vector<int32_t> values) {
-  this->values = values;
-}
+AbsoluteBlock::AbsoluteBlock(std::vector<int32_t>& values) : values(values) {}
+
+AbsoluteBlock::AbsoluteBlock() {}
 
 std::vector<int32_t> AbsoluteBlock::getValues() {
   return this->values;

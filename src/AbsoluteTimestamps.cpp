@@ -32,9 +32,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "AbsoluteTimestamps.h"
 
-void AbsoluteTimestamps::setUnix(std::vector<uint64_t> unix_ms) {
-  this->unix_ms = unix_ms;
-}
+AbsoluteTimestamps::AbsoluteTimestamps(std::vector<uint64_t>& unix_ms) : unix_ms(unix_ms) {}
+
+AbsoluteTimestamps::AbsoluteTimestamps(){};
 
 std::vector<uint64_t> AbsoluteTimestamps::getUnix() {
   return this->unix_ms;

@@ -30,23 +30,27 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#ifndef VERSION_H
+#define VERSION_H
+
 #include "protobuf/pcore_version.pb.h"
 using ProtobufVersion = com::preventicus::pcore::Version;
 class Version {
  public:
+  Version(uint32_t major, uint32_t minor, uint32_t patch);
+  Version(const ProtobufVersion& protobufVersion);
   Version();
-  void setMajor(uint32_t major);
-  void setMinor(uint32_t minor);
-  void setPatch(uint32_t patch);
   uint32_t getMajor();
   uint32_t getMinor();
   uint32_t getPatch();
   bool isEqual(Version& version);
   ProtobufVersion serialize();
-  void deserialize(ProtobufVersion& protobufVersion);
 
  private:
+  void deserialize(const ProtobufVersion& protobufVersion);
   uint32_t major;
   uint32_t minor;
   uint32_t patch;
 };
+
+#endif  // VERSION_H
