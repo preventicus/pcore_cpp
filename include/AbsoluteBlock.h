@@ -36,7 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteBlock {
  public:
-  void setValues(std::vector<int32_t> values);
+  AbsoluteBlock(std::vector<int32_t>& values);
+  AbsoluteBlock();
   std::vector<int32_t> getValues();
   bool isEqual(AbsoluteBlock& block);
 

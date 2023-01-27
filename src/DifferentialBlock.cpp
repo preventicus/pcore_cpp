@@ -32,10 +32,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "DifferentialBlock.h"
 
-void DifferentialBlock::setDiffValues(std::vector<int32_t> diffValues) {
-  this->diffValues = diffValues;
+DifferentialBlock::DifferentialBlock(std::vector<int32_t>& diffValues) : diffValues(diffValues) {}
+
+DifferentialBlock::DifferentialBlock(const ProtobufBlock& protobufBlock) {
+  this->deserialize(protobufBlock);
 }
 
+DifferentialBlock::DifferentialBlock(){};
 std::vector<int32_t> DifferentialBlock::getDiffValues() {
   return this->diffValues;
 }
@@ -52,7 +55,7 @@ ProtobufBlock DifferentialBlock::serialize() {
   return blocks;
 }
 
-void DifferentialBlock::deserialize(ProtobufBlock& protobufBlock) {
+void DifferentialBlock::deserialize(const ProtobufBlock& protobufBlock) {
   for (size_t i = 0; i < protobufBlock.diff_values_size(); i++)
     this->diffValues.push_back(protobufBlock.diff_values(i));
 }

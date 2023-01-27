@@ -30,24 +30,29 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#ifndef PPGMETADATA_H
+#define PPGMETADATA_H
+
 #include <iostream>
 #include "protobuf/pcore_color.pb.h"
 #include "protobuf/pcore_external.pb.h"
-
 using ProtobufColor = com::preventicus::pcore::Color;
 using ProtobufPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
 class PpgMetaData {
  public:
+  PpgMetaData(ProtobufColor color, uint32_t wavelength_nm);
+  PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);
   PpgMetaData();
-  void setColor(ProtobufColor color);
-  void setWavelength(uint32_t wavelength_nm);
   ProtobufColor getColor();
   uint32_t getWavelength();
+  bool isSet();
   bool isEqual(PpgMetaData& ppgMetaData);
   ProtobufPpgMetaData serialize();
-  void deserialize(ProtobufPpgMetaData& protobufPpgMetaData);
 
  private:
+  void deserialize(const ProtobufPpgMetaData& protobufPpgMetaData);
   ProtobufColor color;
   uint32_t wavelength_nm;
 };
+
+#endif  // PPGMETADATA_H
