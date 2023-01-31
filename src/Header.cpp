@@ -61,13 +61,13 @@ bool Header::isEqual(Header& header) {
 
 ProtobufHeader Header::serialize() {
   ProtobufHeader protobufHeader;
-  protobufHeader.set_time_zone_offset(this->timeZoneOffset_min);
+  protobufHeader.set_time_zone_offset_min(this->timeZoneOffset_min);
   ProtobufVersion protobufVersion = this->version.serialize();
   protobufHeader.mutable_pcore_version()->CopyFrom(protobufVersion);
   return protobufHeader;
 }
 
 void Header::deserialize(const ProtobufHeader& protobufHeader) {
-  this->timeZoneOffset_min = protobufHeader.time_zone_offset();
+  this->timeZoneOffset_min = protobufHeader.time_zone_offset_min();
   ProtobufVersion protobufVersion = protobufHeader.pcore_version();
 }

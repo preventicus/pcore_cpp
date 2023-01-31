@@ -71,12 +71,12 @@ ProtobufPpgMetaData PpgMetaData::serialize() {
     protobufPpgMetaData.set_color(this->color);
   }
   if (this->wavelength_nm != 0) {
-    protobufPpgMetaData.set_wavelength(this->wavelength_nm);
+    protobufPpgMetaData.set_wavelength_nm(this->wavelength_nm);
   }
   return protobufPpgMetaData;
 }
 
 void PpgMetaData::deserialize(const ProtobufPpgMetaData& protobufPpgMetaData) {
   this->color = protobufPpgMetaData.color();
-  this->wavelength_nm = protobufPpgMetaData.wavelength();
+  this->wavelength_nm = protobufPpgMetaData.wavelength_nm();
 }
