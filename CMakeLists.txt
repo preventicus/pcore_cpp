@@ -44,9 +44,9 @@ FETCHCONTENT_MAKEAVAILABLE(jsoncpp)
 SET(PROTOBUF_ROOT ${PROJECT_BINARY_DIR}/google/protobuf)
 EXECUTE_PROCESS(
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/scripts/
-    COMMAND ./INSTALL_PROTOBUF.sh ${PROJECT_SOURCE_DIR}/external/google-protobuf ${PROTOBUF_ROOT})
+    COMMAND ./INSTALL_PROTOBUF.sh  ${PROJECT_SOURCE_DIR}/external/google-protobuf ${PROTOBUF_ROOT})
 #Include Protobuf
-LIST(APPEND CMAKE_PREFIX_PATH ${PROTOBUF_ROOT})
+LIST(APPEND CMAKE_PREFIX_PATH ${PROTOBUF_ROOT}) 
 INCLUDE(${PROTOBUF_ROOT}/lib/cmake/protobuf/protobuf-config.cmake)
 INCLUDE(${PROTOBUF_ROOT}/lib/cmake/protobuf/protobuf-module.cmake)
 INCLUDE(${PROTOBUF_ROOT}/lib/cmake/protobuf/protobuf-options.cmake)
@@ -64,23 +64,17 @@ else()
     MESSAGE( WARNING "Protobuf package not found -> specify search path via PROTOBUF_ROOT variable")
 endif()
 
-INCLUDE(ExternalProject)
-EXTERNALPROJECT_ADD(Pcore proto definition files
-
-  GIT_REPOSITORY    git@gitlab.preventicus.com:research/pcore-proto-definition-files.git
-  GIT_TAG           main
-  SOURCE_DIR        "${CMAKE_BINARY_DIR}/pcore-src"
-  BINARY_DIR        "${CMAKE_BINARY_DIR}/pcore-build"
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND     ""
-  INSTALL_COMMAND   ""
-  TEST_COMMAND      ""
+FETCHCONTENT_DECLARE(
+        pcore
+        GIT_REPOSITORY https://github.com/preventicus/pcore.git
+        GIT_TAG        main
 )
+FETCHCONTENT_MAKEAVAILABLE(pcore)
 
-FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_BINARY_DIR}/pcore-src/ PROTOMODEL_PATH)
+FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_BINARY_DIR}/_deps/pcore-src/protobuf_definitions/ PROTOMODEL_PATH)
 FILE(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/include/protobuf PROTOBINDING_PATH)
 
-FILE(GLOB DATAMODEL_PROTOS ${CMAKE_CURRENT_BINARY_DIR}/pcore-src/*.proto)
+FILE(GLOB DATAMODEL_PROTOS ${CMAKE_CURRENT_BINARY_DIR}/_deps/pcore-src/protobuf_definitions/*.proto)
 
 
 FOREACH(proto ${DATAMODEL_PROTOS})

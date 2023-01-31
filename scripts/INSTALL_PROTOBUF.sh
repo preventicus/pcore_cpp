@@ -4,14 +4,14 @@ if test -f "$FILE"; then
     echo "$FILE exists."
     exit
 fi
+mkdir -p ../include/protobuf/
 cd $1
 mkdir build
 cd build/
-cmake -DCMAKE_INSTALL_PREFIX=$2 -DNDEBUG .. 
+cmake -DCMAKE_INSTALL_PREFIX=$2 .. 
 make -j8
 make install
 cd ..
 cd src/google/protobuf
 cp ./port_def.inc $2/include/google/protobuf
 cp ./port_undef.inc $2/include/google/protobuf
-/Users/jakobglueck/workspace/protobuf-cpp/build
