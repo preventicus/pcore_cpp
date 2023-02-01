@@ -65,15 +65,16 @@ bool AccMetaData::isEqual(AccMetaData& AccMetaData) {
   return this->coordinate == AccMetaData.coordinate && this->norm == AccMetaData.norm;
 }
 
-ProtobufAccMetaData AccMetaData::serialize() {
-  ProtobufAccMetaData protobufAccMetaData;
+void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
+  if (protobufAccMetaData == nullptr) {
+    throw std::invalid_argument("protobufAccMetaData is a null pointer");
+  }
   if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
-    protobufAccMetaData.set_coordinate(this->coordinate);
+    protobufAccMetaData->set_coordinate(this->coordinate);
   }
   if (this->norm != ProtobufNorm::NORM_NONE) {
-    protobufAccMetaData.set_norm(this->norm);
+    protobufAccMetaData->set_norm(this->norm);
   }
-  return protobufAccMetaData;
 }
 
 void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {

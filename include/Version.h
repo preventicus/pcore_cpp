@@ -44,7 +44,7 @@ class Version {
   uint32_t getMinor();
   uint32_t getPatch();
   bool isEqual(Version& version);
-  ProtobufVersion serialize();
+  void serialize(ProtobufVersion* protobufVersion);
 
  private:
   void deserialize(const ProtobufVersion& protobufVersion);

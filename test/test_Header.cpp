@@ -74,19 +74,22 @@ TEST_F(HeaderTest, CompareSameTimeZoneOffsetWithMinOffSet) {
 }
 
 TEST_F(HeaderTest, SerializeAndDeserialize) {
-  ProtobufHeader protobufHeader = this->normalHeaderWitchPositiveTimeZoneOffset_min1.serialize();
+  ProtobufHeader protobufHeader;
+  this->normalHeaderWitchPositiveTimeZoneOffset_min1.serialize(&protobufHeader);
   Header header2 = Header(protobufHeader);
   EXPECT_TRUE(this->normalHeaderWitchPositiveTimeZoneOffset_min1.isEqual(header2));
 }
 
 TEST_F(HeaderTest, SerializeAndDeserializeWith0) {
-  ProtobufHeader protobufHeader = this->normalHeaderWitchNoTimeZoneOffset_min1.serialize();
+  ProtobufHeader protobufHeader;
+  this->normalHeaderWitchNoTimeZoneOffset_min1.serialize(&protobufHeader);
   Header header2 = Header(protobufHeader);
   EXPECT_TRUE(this->normalHeaderWitchNoTimeZoneOffset_min1.isEqual(header2));
 }
 
 TEST_F(HeaderTest, SerializeAndDeserializeWithNegativeValue) {
-  ProtobufHeader protobufHeader = this->headerWitchMinTimeZoneOffset_min1.serialize();
+  ProtobufHeader protobufHeader;
+  this->headerWitchMinTimeZoneOffset_min1.serialize(&protobufHeader);
   Header header2 = Header(protobufHeader);
   EXPECT_TRUE(this->headerWitchMinTimeZoneOffset_min1.isEqual(header2));
 }
@@ -99,4 +102,19 @@ TEST_F(HeaderTest, TestExecptionPositiveOutOfRange) {
 TEST_F(HeaderTest, TestExecptionNegativeOutOfRange) {
   int32_t invalidNegativeTimeZoneOffset_min = -1000;
   EXPECT_THROW(Header invalidHeaderWitchNegativeTimeZoneOffset_min = Header(this->version, invalidNegativeTimeZoneOffset_min), std::out_of_range);
+}
+
+TEST_F(HeaderTest, CheckHeaderPtr) {
+  ProtobufHeader protobufData;
+  this->normalHeaderWitchPositiveTimeZoneOffset_min1.serialize(&protobufData);
+  Header timestampContainer = Header(protobufData);
+  ProtobufHeader* protobufDataPtr = &protobufData;
+  Header* ptr = &timestampContainer;
+  EXPECT_FALSE(ptr == nullptr);
+  EXPECT_FALSE(protobufDataPtr == nullptr);
+}
+
+TEST_F(HeaderTest, CheckHeaderNullPtr) {
+  ProtobufHeader* protobufData = nullptr;
+  EXPECT_THROW(this->normalHeaderWitchPositiveTimeZoneOffset_min1.serialize(protobufData), std::invalid_argument);
 }

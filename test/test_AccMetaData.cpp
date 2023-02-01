@@ -84,13 +84,30 @@ TEST_F(AccMetaDataTest, TestIsSetMethodeFalse) {
 }
 
 TEST_F(AccMetaDataTest, serializeMethodeCoord) {
-  ProtobufAccMetaData protobufData = this->accMetDataWithCoordinateX1.serialize();
+  ProtobufAccMetaData protobufData;
+  this->accMetDataWithCoordinateX1.serialize(&protobufData);
   AccMetaData acc = AccMetaData(protobufData);
   EXPECT_TRUE(this->accMetDataWithCoordinateX1.isEqual(acc));
 }
 
 TEST_F(AccMetaDataTest, serializeMethodeNorm) {
-  ProtobufAccMetaData protobufData = this->accMetDataWithEuclidianDifferenceNorm1.serialize();
+  ProtobufAccMetaData protobufData;
+  this->accMetDataWithEuclidianDifferenceNorm1.serialize(&protobufData);
   AccMetaData acc = AccMetaData(protobufData);
   EXPECT_TRUE(this->accMetDataWithEuclidianDifferenceNorm1.isEqual(acc));
+}
+
+TEST_F(AccMetaDataTest, CheckAccPtr) {
+  ProtobufAccMetaData protobufData;
+  this->accMetDataWithEuclidianDifferenceNorm1.serialize(&protobufData);
+  AccMetaData acc = AccMetaData(protobufData);
+  ProtobufAccMetaData* protobufDataPtr = &protobufData;
+  AccMetaData* ptr = &acc;
+  EXPECT_FALSE(ptr == nullptr);
+  EXPECT_FALSE(protobufDataPtr == nullptr);
+}
+
+TEST_F(AccMetaDataTest, CheckAccNullPtr) {
+  ProtobufAccMetaData* protobufData = nullptr;
+  EXPECT_THROW(this->accMetDataWithEuclidianDifferenceNorm1.serialize(protobufData), std::invalid_argument);
 }

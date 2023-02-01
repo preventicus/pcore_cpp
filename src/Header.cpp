@@ -62,12 +62,14 @@ bool Header::isEqual(Header& header) {
   return this->timeZoneOffset_min == header.timeZoneOffset_min;
 }
 
-ProtobufHeader Header::serialize() {
-  ProtobufHeader protobufHeader;
-  protobufHeader.set_time_zone_offset_min(this->timeZoneOffset_min);
-  ProtobufVersion protobufVersion = this->version.serialize();
-  protobufHeader.mutable_pcore_version()->CopyFrom(protobufVersion);
-  return protobufHeader;
+void Header::serialize(ProtobufHeader* protobufHeader) {
+  if (protobufHeader == nullptr) {
+    throw std::invalid_argument("Error in serialize: protobufHeader is a null pointer");
+  }
+  protobufHeader->set_time_zone_offset_min(this->timeZoneOffset_min);
+  ProtobufVersion protobufVersion;
+  this->version.serialize(&protobufVersion);
+  protobufHeader->mutable_pcore_version()->CopyFrom(protobufVersion);
 }
 
 void Header::deserialize(const ProtobufHeader& protobufHeader) {

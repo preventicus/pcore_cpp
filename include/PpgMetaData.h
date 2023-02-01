@@ -47,7 +47,7 @@ class PpgMetaData {
   uint32_t getWavelength();
   bool isSet();
   bool isEqual(PpgMetaData& ppgMetaData);
-  ProtobufPpgMetaData serialize();
+  void serialize(ProtobufPpgMetaData* protobufPpgMetaData);
 
  private:
   void deserialize(const ProtobufPpgMetaData& protobufPpgMetaData);

@@ -50,7 +50,7 @@ class DifferentialTimestamps {
   bool isEqual(DifferentialTimestamps& timestamps);
   uint32_t calculateFirstTimestampInBlock(uint32_t blockIdx);
   uint32_t calculateLastTimestampInBlock(uint32_t blockIdx, uint32_t firstTimestampInBlock, DifferentialBlock differentialBlock);
-  ProtobufTimestampContainer serialize();
+  void serialize(ProtobufTimestampContainer* protobufDifferentialTimestamps);
 
  private:
   void deserialize(const ProtobufTimestampContainer& protobufDifferentialTimestamps);

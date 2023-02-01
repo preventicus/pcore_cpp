@@ -60,12 +60,13 @@ bool Version::isEqual(Version& version) {
   return this->major == version.major && this->minor == version.minor && this->patch == version.patch;
 }
 
-ProtobufVersion Version::serialize() {
-  ProtobufVersion protobufVersion;
-  protobufVersion.set_major(this->major);
-  protobufVersion.set_minor(this->minor);
-  protobufVersion.set_patch(this->patch);
-  return protobufVersion;
+void Version::serialize(ProtobufVersion* protobufVersion) {
+  if (protobufVersion == nullptr) {
+    throw std::invalid_argument("Error in serialize: protobufVersion is a null pointer");
+  }
+  protobufVersion->set_major(this->major);
+  protobufVersion->set_minor(this->minor);
+  protobufVersion->set_patch(this->patch);
 }
 
 void Version::deserialize(const ProtobufVersion& protobufVersion) {
