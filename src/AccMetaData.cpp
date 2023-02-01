@@ -33,9 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AccMetaData.h"
 
 AccMetaData::AccMetaData(ProtobufCoordinate coordinate, ProtobufNorm norm) {
-  if (coordinate == ProtobufCoordinate::COORDINATE_NONE && norm == ProtobufNorm::NORM_NONE) {
-    throw std::invalid_argument("just one enum type can be initialized");
-  }
   if (coordinate != ProtobufCoordinate::COORDINATE_NONE && norm != ProtobufNorm::NORM_NONE) {
     throw std::invalid_argument("one enum type has to be initialized");
   }
@@ -57,7 +54,7 @@ ProtobufNorm AccMetaData::getNorm() {
 }
 
 bool AccMetaData::isSet() {
-  return this->coordinate == ProtobufCoordinate::COORDINATE_NONE && this->norm == ProtobufNorm::NORM_NONE;
+  return !(this->coordinate == ProtobufCoordinate::COORDINATE_NONE && this->norm == ProtobufNorm::NORM_NONE);
 }
 
 bool AccMetaData::isEqual(AccMetaData& AccMetaData) {
