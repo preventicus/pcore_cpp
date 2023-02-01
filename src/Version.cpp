@@ -38,7 +38,11 @@ Version::Version(const ProtobufVersion& protobufVersion) {
   this->deserialize(protobufVersion);
 }
 
-Version::Version() {}
+Version::Version() {
+  this->major = 0;
+  this->minor = 0;
+  this->patch = 0;
+}
 
 uint32_t Version::getMajor() {
   return this->major;

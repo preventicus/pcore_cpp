@@ -34,7 +34,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 AbsoluteBlock::AbsoluteBlock(std::vector<int32_t>& values) : values(values) {}
 
-AbsoluteBlock::AbsoluteBlock() {}
+AbsoluteBlock::AbsoluteBlock() {
+  this->values = {};
+}
 
 std::vector<int32_t> AbsoluteBlock::getValues() {
   return this->values;

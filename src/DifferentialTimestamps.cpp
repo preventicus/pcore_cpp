@@ -41,7 +41,11 @@ DifferentialTimestamps::DifferentialTimestamps(const ProtobufTimestampContainer&
   this->deserialize(protobufDifferentialTimestamps);
 }
 
-DifferentialTimestamps::DifferentialTimestamps() {}
+DifferentialTimestamps::DifferentialTimestamps() {
+  this->blockIntervals_ms = {};
+  this->timestampsIntervals_ms = {};
+  this->firstTimestamp_ms = 0;
+}
 
 uint64_t DifferentialTimestamps::getFirstTimestamp() {
   return this->firstTimestamp_ms;

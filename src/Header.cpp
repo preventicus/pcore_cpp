@@ -45,7 +45,10 @@ Header::Header(const ProtobufHeader& protobufHeader) {
   this->deserialize(protobufHeader);
 }
 
-Header::Header() {}
+Header::Header() {
+  this->version = Version();
+  this->timeZoneOffset_min = 0;
+}
 
 int Header::getTimeZoneOffset() {
   return this->timeZoneOffset_min;
