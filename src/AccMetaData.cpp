@@ -44,11 +44,15 @@ AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData) {
   this->deserialize(protobufAccMetaData);
 }
 
-AccMetaData::AccMetaData(){};
+AccMetaData::AccMetaData() {
+  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
+  this->norm = ProtobufNorm::NORM_NONE;
+};
 
 ProtobufCoordinate AccMetaData::getCoordinate() {
   return this->coordinate;
 }
+
 ProtobufNorm AccMetaData::getNorm() {
   return this->norm;
 }

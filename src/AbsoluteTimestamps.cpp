@@ -34,7 +34,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 AbsoluteTimestamps::AbsoluteTimestamps(std::vector<uint64_t>& unix_ms) : unix_ms(unix_ms) {}
 
-AbsoluteTimestamps::AbsoluteTimestamps(){};
+AbsoluteTimestamps::AbsoluteTimestamps() {
+  this->unix_ms = {};
+};
 
 std::vector<uint64_t> AbsoluteTimestamps::getUnix() {
   return this->unix_ms;

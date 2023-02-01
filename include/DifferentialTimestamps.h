@@ -57,7 +57,6 @@ class DifferentialTimestamps {
   uint64_t firstTimestamp_ms;
   std::vector<uint32_t> blockIntervals_ms;
   std::vector<uint32_t> timestampsIntervals_ms;
-  DifferentialBlock differentialBlock;
 };
 
 #endif  // DIFFERENTIALTIMESTAMPS_H

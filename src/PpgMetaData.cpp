@@ -44,7 +44,10 @@ PpgMetaData::PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData) {
   this->deserialize(protobufPpgMetaData);
 }
 
-PpgMetaData::PpgMetaData() {}
+PpgMetaData::PpgMetaData() {
+  this->color = ProtobufColor::COLOR_NONE;
+  this->wavelength_nm = 0;
+}
 
 ProtobufColor PpgMetaData::getColor() {
   return this->color;

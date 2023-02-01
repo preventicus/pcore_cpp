@@ -38,7 +38,10 @@ DifferentialBlock::DifferentialBlock(const ProtobufBlock& protobufBlock) {
   this->deserialize(protobufBlock);
 }
 
-DifferentialBlock::DifferentialBlock(){};
+DifferentialBlock::DifferentialBlock() {
+  this->diffValues = {};
+}
+
 std::vector<int32_t> DifferentialBlock::getDiffValues() {
   return this->diffValues;
 }
