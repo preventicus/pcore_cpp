@@ -1,111 +1,77 @@
 #include <vector>
 #include "AbsoluteBlock.h"
 #include "gtest/gtest.h"
-TEST(runUnitTest, TestGetAndSetValues) {
-  std::vector<int32_t> values = {1, 2, 3};
-  AbsoluteBlock block = AbsoluteBlock(values);
-  EXPECT_EQ(block.getValues(), values);
+class AbsoluteBlockTest : public ::testing::Test {
+ protected:
+  AbsoluteBlock absoluteBlockNormal1;
+  AbsoluteBlock absoluteBlockNormal2;
+  AbsoluteBlock absoluteBlockTwoElement1;
+  AbsoluteBlock absoluteBlockTwoElement2;
+  AbsoluteBlock absoluteBlockOneElement1;
+  AbsoluteBlock absoluteBlockOneElement2;
+  AbsoluteBlock absoluteBlock0Element1;
+  AbsoluteBlock absoluteBlock0Element2;
+  AbsoluteBlock absoluteBlockEmpty1;
+  AbsoluteBlock absoluteBlockEmpty2;
+  std::vector<int32_t> valuesNormal = {1, 2, 3};
+  std::vector<int32_t> valuesTwoElements = {1, 2};
+  std::vector<int32_t> valuesOneElement = {1};
+  std::vector<int32_t> values0Element = {0};
+  std::vector<int32_t> valuesEmpty = {};
+  virtual void SetUp() {
+    this->absoluteBlockNormal1 = AbsoluteBlock(this->valuesNormal);
+    this->absoluteBlockNormal2 = AbsoluteBlock(this->valuesNormal);
+    this->absoluteBlockTwoElement1 = AbsoluteBlock(this->valuesTwoElements);
+    this->absoluteBlockTwoElement2 = AbsoluteBlock(this->valuesTwoElements);
+    this->absoluteBlockOneElement1 = AbsoluteBlock(this->valuesOneElement);
+    this->absoluteBlockOneElement2 = AbsoluteBlock(this->valuesOneElement);
+    this->absoluteBlock0Element1 = AbsoluteBlock(this->values0Element);
+    this->absoluteBlock0Element2 = AbsoluteBlock(this->values0Element);
+    this->absoluteBlockEmpty1 = AbsoluteBlock(this->valuesEmpty);
+    this->absoluteBlockEmpty2 = AbsoluteBlock(this->valuesEmpty);
+  }
+};
+
+TEST_F(AbsoluteBlockTest, TestGetAndSetValues) {
+  EXPECT_EQ(this->absoluteBlockNormal1.getValues(), this->valuesNormal);
 }
 
-TEST(runUnitTest, TestGetAndSetEmptyValues) {
-  std::vector<int32_t> values = {};
-  AbsoluteBlock block = AbsoluteBlock(values);
-
-  EXPECT_EQ(block.getValues(), values);
+TEST_F(AbsoluteBlockTest, TestGetAndSetEmptyValues) {
+  EXPECT_EQ(this->absoluteBlockEmpty1.getValues(), this->valuesEmpty);
 }
 
-TEST(runUnitTest, TestGetAndSet0Values) {
-  std::vector<int32_t> values = {0};
-  AbsoluteBlock block = AbsoluteBlock(values);
-  EXPECT_EQ(block.getValues(), values);
+TEST_F(AbsoluteBlockTest, TestGetAndSet0Values) {
+  EXPECT_EQ(this->absoluteBlock0Element1.getValues(), this->values0Element);
 }
 
-TEST(runUnitTest, CompareEmptyAndFullBlocks) {
-  std::vector<int32_t> values1 = {};
-  std::vector<int32_t> values2 = {1, 2, 3};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_FALSE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareEmptyAndFullBlocks) {
+  EXPECT_FALSE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockEmpty1));
 }
 
-TEST(runUnitTest, CompareShortAndFullBlocks) {
-  std::vector<int32_t> values1 = {1};
-  std::vector<int32_t> values2 = {1, 2, 3};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_FALSE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareShortAndFullBlocks) {
+  EXPECT_FALSE(this->absoluteBlockOneElement1.isEqual(this->absoluteBlockNormal1));
 }
 
-TEST(runUnitTest, CompareSameContentBlocks) {
-  std::vector<int32_t> values1 = {1, 2, 3};
-  std::vector<int32_t> values2 = {1, 2, 3};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_TRUE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareSameContentBlocks) {
+  EXPECT_TRUE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockNormal2));
 }
 
-TEST(runUnitTest, CompareFullandEmptyBlocks) {
-  std::vector<int32_t> values1 = {1, 2, 3};
-  std::vector<int32_t> values2 = {};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_FALSE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareFullandShortBlocks) {
+  EXPECT_FALSE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockOneElement1));
 }
 
-TEST(runUnitTest, CompareFullandShortBlocks) {
-  std::vector<int32_t> values1 = {1, 2, 3};
-  std::vector<int32_t> values2 = {1};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_FALSE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareLongWithMediumBlocks) {
+  EXPECT_FALSE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockTwoElement1));
 }
 
-TEST(runUnitTest, CompareLongWithMediumBlocks) {
-  std::vector<int32_t> values1 = {1, 2, 3};
-  std::vector<int32_t> values2 = {1, 2};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_FALSE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareEmptyWithEmptyBlocks) {
+  EXPECT_TRUE(this->absoluteBlockEmpty1.isEqual(this->absoluteBlockEmpty2));
 }
 
-TEST(runUnitTest, CompareEmptyWithEmptyBlocks) {
-  std::vector<int32_t> values1 = {};
-  std::vector<int32_t> values2 = {};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_TRUE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareZeroWithZeroBlocks) {
+  EXPECT_TRUE(this->absoluteBlock0Element1.isEqual(this->absoluteBlock0Element2));
 }
 
-TEST(runUnitTest, CompareZeroWithZeroBlocks) {
-  std::vector<int32_t> values1 = {0};
-  std::vector<int32_t> values2 = {0};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_TRUE(block1.isEqual(block2));
-}
-
-TEST(runUnitTest, CompareEmptyWithZeroBlocks) {
-  std::vector<int32_t> values1 = {};
-  std::vector<int32_t> values2 = {0};
-
-  AbsoluteBlock block1 = AbsoluteBlock(values1);
-  AbsoluteBlock block2 = AbsoluteBlock(values2);
-
-  EXPECT_FALSE(block1.isEqual(block2));
+TEST_F(AbsoluteBlockTest, CompareEmptyWithZeroBlocks) {
+  EXPECT_FALSE(this->absoluteBlock0Element1.isEqual(this->absoluteBlockEmpty1));
 }

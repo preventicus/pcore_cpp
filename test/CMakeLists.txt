@@ -14,12 +14,11 @@ INCLUDE_DIRECTORIES(${gtest__INCLUDE_DIRS})
 FILE(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 
 ADD_EXECUTABLE(
-    runUnitTests
-    ${TEST_SRC_FILES}
+    runUnitTest ${TEST_SRC_FILES}
 )
 
 INCLUDE(GoogleTest)
-TARGET_LINK_LIBRARIES(runUnitTests gtest gtest_main)
-TARGET_LINK_LIBRARIES(runUnitTests libpcore_extern)
-gtest_DISCOVER_TESTS(runUnitTests)
 
+TARGET_LINK_LIBRARIES(runUnitTest gtest gtest_main)
+TARGET_LINK_LIBRARIES(runUnitTest libpcore_extern)
+gtest_DISCOVER_TESTS(runUnitTest)

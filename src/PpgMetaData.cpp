@@ -33,9 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PpgMetaData.h"
 
 PpgMetaData::PpgMetaData(ProtobufColor color, uint32_t wavelength_nm) {
-  if (color == ProtobufColor::COLOR_NONE && wavelength_nm == 0) {
-    throw std::invalid_argument("just one parameter can be initialized");
-  }
   if (color != ProtobufColor::COLOR_NONE && wavelength_nm != 0) {
     throw std::invalid_argument("one parameter has to be initialized");
   }
@@ -58,7 +55,7 @@ uint32_t PpgMetaData::getWavelength() {
 }
 
 bool PpgMetaData::isSet() {
-  return this->color == ProtobufColor::COLOR_NONE && this->wavelength_nm == 0;
+  return !(this->color == ProtobufColor::COLOR_NONE && this->wavelength_nm == 0);
 }
 
 bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {

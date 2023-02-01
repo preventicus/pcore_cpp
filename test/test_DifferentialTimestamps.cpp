@@ -1,203 +1,135 @@
 #include <gtest/gtest.h>
 #include "DifferentialTimestamps.h"
 
-TEST(runUnitTests, TestGetAndSetFirstTimestamp) {
-  uint64_t firstTimestamp_ms = 1690921;
-  std::vector<uint32_t> blockIntervals_ms = {12, 12, 23, 34};
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getFirstTimestamp(), firstTimestamp_ms);
+class DifferentialTimestampsTest : public ::testing::Test {
+ protected:
+  DifferentialTimestamps differentialTimestampsWithNormalTimestamps1;
+  DifferentialTimestamps differentialTimestampsWithNormalTimestamps2;
+  DifferentialTimestamps differentialTimestampsWith0Timestamps1;
+  DifferentialTimestamps differentialTimestampsWith0Timestamps2;
+  DifferentialTimestamps differentialTimestampsEmptyTimestamps1;
+  DifferentialTimestamps differentialTimestampsEmptyTimestamps2;
+  uint64_t normalFirstTimestamp_ms = 10;
+  uint64_t zeroFirstTimestamp_ms = 0;
+  std::vector<uint32_t> normalBlockIntervals_ms = {0, 113, 23, 34};  // first block_intervall[0] is always null - one loop less is needed
+  std::vector<uint32_t> zeroBlockIntervals_ms = {0};                 // first block_intervall[0] is always null - one loop less is needed
+  std::vector<uint32_t> emptyBlockIntervals_ms = {};
+  std::vector<uint32_t> normalTimestampsIntervals_ms = {134, 31, 124};
+  std::vector<uint32_t> zeroTimestampsIntervals_ms = {0};
+  std::vector<uint32_t> emptyTimestampsIntervals_ms = {};
+
+  virtual void SetUp() {
+    this->differentialTimestampsWithNormalTimestamps1 =
+        DifferentialTimestamps(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
+    this->differentialTimestampsWithNormalTimestamps2 =
+        DifferentialTimestamps(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
+    this->differentialTimestampsWith0Timestamps1 =
+        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
+    this->differentialTimestampsWith0Timestamps2 =
+        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
+    this->differentialTimestampsEmptyTimestamps1 =
+        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
+    this->differentialTimestampsEmptyTimestamps2 =
+        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
+  }
+};
+
+TEST_F(DifferentialTimestampsTest, TestGetAndSetMethodeTimestampsContainer) {
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.getFirstTimestamp(), this->normalFirstTimestamp_ms);
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.getBlockIntervals(), this->normalBlockIntervals_ms);
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.getTimestampsIntervals(), this->normalTimestampsIntervals_ms);
 }
 
-TEST(runUnitTests, TestGetAndSetFirstTimestamp0) {
-  uint64_t firstTimestamp_ms = 0;
-  std::vector<uint32_t> blockIntervals_ms = {12, 12, 23, 34};
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getFirstTimestamp(), firstTimestamp_ms);
+TEST_F(DifferentialTimestampsTest, TestGetAndSetTimestampsContainerFirstTimestamp0) {
+  EXPECT_EQ(this->differentialTimestampsWith0Timestamps1.getFirstTimestamp(), this->zeroFirstTimestamp_ms);
+  EXPECT_EQ(this->differentialTimestampsWith0Timestamps1.getBlockIntervals(), this->zeroBlockIntervals_ms);
+  EXPECT_EQ(this->differentialTimestampsWith0Timestamps1.getTimestampsIntervals(), this->zeroTimestampsIntervals_ms);
 }
 
-TEST(runUnitTests, TestGetAndSetBlockIntervals) {
-  uint64_t firstTimestamp_ms = 0;
-  std::vector<uint32_t> blockIntervals_ms = {12, 12, 23, 34};
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getBlockIntervals(), blockIntervals_ms);
+TEST_F(DifferentialTimestampsTest, TestGetAndSetEmptyTimestampsContainer) {
+  EXPECT_EQ(this->differentialTimestampsEmptyTimestamps1.getFirstTimestamp(), this->zeroFirstTimestamp_ms);
+  EXPECT_EQ(this->differentialTimestampsEmptyTimestamps1.getBlockIntervals(), this->emptyBlockIntervals_ms);
+  EXPECT_EQ(this->differentialTimestampsEmptyTimestamps1.getTimestampsIntervals(), this->emptyTimestampsIntervals_ms);
 }
 
-TEST(runUnitTests, TestGetAndSetBlockIntervals0) {
-  uint64_t firstTimestamp_ms = 0;
-  std::vector<uint32_t> blockIntervals_ms = {0};
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getBlockIntervals(), blockIntervals_ms);
+TEST_F(DifferentialTimestampsTest, CompareEqualTimestamps) {
+  EXPECT_TRUE(this->differentialTimestampsWithNormalTimestamps1.isEqual(this->differentialTimestampsWithNormalTimestamps2));
 }
 
-TEST(runUnitTests, TestGetAndSetBlockIntervalsEmpty) {
-  uint64_t firstTimestamp_ms = 0;
-  std::vector<uint32_t> blockIntervals_ms = {};
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getBlockIntervals(), blockIntervals_ms);
+TEST_F(DifferentialTimestampsTest, CompareEqualZeroTimestamps) {
+  EXPECT_TRUE(this->differentialTimestampsWith0Timestamps1.isEqual(this->differentialTimestampsWith0Timestamps2));
 }
 
-TEST(runUnitTests, TestGetAndSetTimestampsIntervals) {
-  uint64_t firstTimestamp_ms = 0;
-  std::vector<uint32_t> blockIntervals_ms = {12, 12, 23, 34};
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getTimestampsIntervals(), timestampsIntervals_ms);
+TEST_F(DifferentialTimestampsTest, CompareEqualEmptyTimestamps) {
+  EXPECT_TRUE(this->differentialTimestampsEmptyTimestamps1.isEqual(this->differentialTimestampsEmptyTimestamps2));
 }
 
-TEST(runUnitTests, TestGetAndSetTimestampsIntervals0) {
-  uint64_t firstTimestamp_ms = 0;
-  std::vector<uint32_t> blockIntervals_ms = {12, 12, 23, 34};
-  std::vector<uint32_t> timestampsIntervals_ms = {0};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getTimestampsIntervals(), timestampsIntervals_ms);
+TEST_F(DifferentialTimestampsTest, CompareDifferentTimestampsIntervals) {
+  EXPECT_FALSE(this->differentialTimestampsWithNormalTimestamps1.isEqual(this->differentialTimestampsWith0Timestamps1));
 }
 
-TEST(runUnitTests, TestGetAndSetTimestampsIntervalsEmpty) {
-  uint64_t firstTimestamp_ms = 0;
-  std::vector<uint32_t> blockIntervals_ms = {12, 12, 23, 34};
-  std::vector<uint32_t> timestampsIntervals_ms = {};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.getTimestampsIntervals(), timestampsIntervals_ms);
+TEST_F(DifferentialTimestampsTest, TestSerializeandDeserializeEqualTimestamps) {
+  ProtobufTimestampContainer protobufTimestampContainer = this->differentialTimestampsWithNormalTimestamps1.serialize();
+  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(protobufTimestampContainer);
+  EXPECT_TRUE(this->differentialTimestampsWithNormalTimestamps1.isEqual(differentialTimestamps));
 }
 
-TEST(runUnitTests, CompareEqualTimestamps) {
-  uint64_t firstTimestamp_ms1 = 1690921;
-  uint64_t firstTimestamp_ms2 = 1690921;
-  std::vector<uint32_t> timestampsIntervals_ms1 = {134, 31, 124};
-  std::vector<uint32_t> timestampsIntervals_ms2 = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms1 = {12, 12, 23, 34};
-  std::vector<uint32_t> blockIntervals_ms2 = {12, 12, 23, 34};
-  DifferentialTimestamps differentialTimestamps1 = DifferentialTimestamps(firstTimestamp_ms1, blockIntervals_ms2, timestampsIntervals_ms1);
-  DifferentialTimestamps differentialTimestamps2 = DifferentialTimestamps(firstTimestamp_ms2, blockIntervals_ms2, timestampsIntervals_ms2);
-  EXPECT_TRUE(differentialTimestamps1.isEqual(differentialTimestamps2));
+TEST_F(DifferentialTimestampsTest, TestSerializeandDeserializeBetweenTwoDifferentTimestamps) {
+  ProtobufTimestampContainer protobufTimestampContainer1 = this->differentialTimestampsWithNormalTimestamps1.serialize();
+  ProtobufTimestampContainer protobufTimestampContainer2 = this->differentialTimestampsWith0Timestamps1.serialize();
+  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer1);
+  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer2);
+  EXPECT_FALSE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
-TEST(runUnitTests, CompareDifferentFirstTimestamps) {
-  uint64_t firstTimestamp_ms1 = 1690921;
-  uint64_t firstTimestamp_ms2 = 1800123;
-  std::vector<uint32_t> timestampsIntervals_ms1 = {134, 31, 124};
-  std::vector<uint32_t> timestampsIntervals_ms2 = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms1 = {12, 12, 23, 34};
-  std::vector<uint32_t> blockIntervals_ms2 = {12, 12, 23, 34};
-  DifferentialTimestamps differentialTimestamps1 = DifferentialTimestamps(firstTimestamp_ms1, blockIntervals_ms1, timestampsIntervals_ms1);
-  DifferentialTimestamps differentialTimestamps2 = DifferentialTimestamps(firstTimestamp_ms2, blockIntervals_ms2, timestampsIntervals_ms2);
-
-  EXPECT_FALSE(differentialTimestamps1.isEqual(differentialTimestamps2));
+TEST_F(DifferentialTimestampsTest, TestSerializeandDeserializeBetweenTwoTimestamps) {
+  ProtobufTimestampContainer protobufTimestampContainer1 = this->differentialTimestampsWithNormalTimestamps1.serialize();
+  ProtobufTimestampContainer protobufTimestampContainer2 = this->differentialTimestampsWithNormalTimestamps2.serialize();
+  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer1);
+  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer2);
+  EXPECT_TRUE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
-TEST(runUnitTests, CompareDifferentBlockintervals) {
-  uint64_t firstTimestamp_ms1 = 1690921;
-  uint64_t firstTimestamp_ms2 = 1690921;
-  std::vector<uint32_t> timestampsIntervals_ms1 = {134, 31, 124};
-  std::vector<uint32_t> timestampsIntervals_ms2 = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms1 = {12, 12, 23, 34};
-  std::vector<uint32_t> blockIntervals_ms2 = {12, 45, 23, 98};
-  DifferentialTimestamps differentialTimestamps1 = DifferentialTimestamps(firstTimestamp_ms1, blockIntervals_ms1, timestampsIntervals_ms1);
-  DifferentialTimestamps differentialTimestamps2 = DifferentialTimestamps(firstTimestamp_ms2, blockIntervals_ms2, timestampsIntervals_ms2);
-
-  EXPECT_FALSE(differentialTimestamps1.isEqual(differentialTimestamps2));
+TEST_F(DifferentialTimestampsTest, TestSerializeandDeserializeBetweenTwoZeroTimestamps) {
+  ProtobufTimestampContainer protobufTimestampContainer1 = this->differentialTimestampsWith0Timestamps1.serialize();
+  ProtobufTimestampContainer protobufTimestampContainer2 = this->differentialTimestampsWith0Timestamps2.serialize();
+  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer1);
+  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer2);
+  EXPECT_TRUE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
-TEST(runUnitTests, CompareDifferentTimestampsIntervals) {
-  uint64_t firstTimestamp_ms1 = 1690921;
-  uint64_t firstTimestamp_ms2 = 1690921;
-  std::vector<uint32_t> timestampsIntervals_ms1 = {134, 31, 124};
-  std::vector<uint32_t> timestampsIntervals_ms2 = {55, 123, 187};
-  std::vector<uint32_t> blockIntervals_ms1 = {12, 12, 23, 34};
-  std::vector<uint32_t> blockIntervals_ms2 = {12, 12, 23, 34};
-  DifferentialTimestamps differentialTimestamps1 = DifferentialTimestamps(firstTimestamp_ms1, blockIntervals_ms1, timestampsIntervals_ms1);
-  DifferentialTimestamps differentialTimestamps2 = DifferentialTimestamps(firstTimestamp_ms2, blockIntervals_ms1, timestampsIntervals_ms2);
-
-  EXPECT_FALSE(differentialTimestamps1.isEqual(differentialTimestamps2));
+TEST_F(DifferentialTimestampsTest, TestSerializeandDeserializeBetweenTwoEmptyTimestamps) {
+  ProtobufTimestampContainer protobufTimestampContainer1 = this->differentialTimestampsEmptyTimestamps1.serialize();
+  ProtobufTimestampContainer protobufTimestampContainer2 = this->differentialTimestampsEmptyTimestamps2.serialize();
+  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer1);
+  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufTimestampContainer2);
+  EXPECT_TRUE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
-TEST(runUnitTests, TestSerializeandDeserializeEqualTimestamps) {
-  uint64_t firstTimestamp_ms = 1690921;
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms = {12, 113, 23, 34};
-  DifferentialTimestamps differentialTimestamps1 = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  ProtobufTimestampContainer protobufTimestampContainer = differentialTimestamps1.serialize();
-  DifferentialTimestamps differentialTimestamps2 = DifferentialTimestamps(protobufTimestampContainer);
-  EXPECT_TRUE(differentialTimestamps1.isEqual(differentialTimestamps2));
-}
-
-TEST(runUnitTests, TestSerializeandDeserializeBetweenTwoDifferentTimestamps) {
-  uint64_t firstTimestamp_ms1 = 1690921;
-  std::vector<uint32_t> timestampsIntervals_ms1 = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms1 = {12, 12, 23, 34};
-  DifferentialTimestamps differentialTimestamps1 = DifferentialTimestamps(firstTimestamp_ms1, blockIntervals_ms1, timestampsIntervals_ms1);
-  ProtobufTimestampContainer protobufTimestampContainer1 = differentialTimestamps1.serialize();
-  uint64_t firstTimestamp_ms2 = 1690921;
-  std::vector<uint32_t> timestampsIntervals_ms2 = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms2 = {12, 12, 23, 34};
-  DifferentialTimestamps differentialTimestamps2 = DifferentialTimestamps(firstTimestamp_ms2, blockIntervals_ms2, timestampsIntervals_ms2);
-  ProtobufTimestampContainer protobufTimestampContainer2 = differentialTimestamps2.serialize();
-  DifferentialTimestamps differentialTimestamps3 = DifferentialTimestamps(protobufTimestampContainer1);
-  DifferentialTimestamps differentialTimestamps4 = DifferentialTimestamps(protobufTimestampContainer2);
-  EXPECT_TRUE(differentialTimestamps3.isEqual(differentialTimestamps4));
-}
-
-TEST(runUnitTests, TestSerializeandDeserializeBetweenTwoTimestamps) {
-  uint64_t firstTimestamp_ms1 = 0;
-  std::vector<uint32_t> timestampsIntervals_ms1 = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms1 = {12, 12, 23, 34};
-  DifferentialTimestamps differentialTimestamps1 = DifferentialTimestamps(firstTimestamp_ms1, blockIntervals_ms1, timestampsIntervals_ms1);
-  ProtobufTimestampContainer protobufTimestampContainer1 = differentialTimestamps1.serialize();
-  uint64_t firstTimestamp_ms2 = 1690921;
-  std::vector<uint32_t> timestampsIntervals_ms2 = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms2 = {12, 12, 23, 34};
-  DifferentialTimestamps differentialTimestamps2 = DifferentialTimestamps(firstTimestamp_ms2, blockIntervals_ms2, timestampsIntervals_ms2);
-  ProtobufTimestampContainer protobufTimestampContainer2 = differentialTimestamps2.serialize();
-  DifferentialTimestamps differentialTimestamps3 = DifferentialTimestamps(protobufTimestampContainer1);
-  DifferentialTimestamps differentialTimestamps4 = DifferentialTimestamps(protobufTimestampContainer2);
-  EXPECT_FALSE(differentialTimestamps3.isEqual(differentialTimestamps4));
-}
-
-TEST(runUnitTests, TestCalculateFirstTimestampInBlock) {
-  uint64_t firstTimestamp_ms = 10;
-  std::vector<uint32_t> blockIntervals_ms = {0, 113, 23, 34};  // first block_intervall[0] is always null - one loop less is needed
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
+TEST_F(DifferentialTimestampsTest, TestCalculateFirstTimestampInBlock) {
   uint32_t blockIdx = 2;
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  EXPECT_EQ(differentialTimestamps.calculateFirstTimestampInBlock(blockIdx), 146);
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateFirstTimestampInBlock(blockIdx), 146);
 }
 
-TEST(runUnitTests, TestCalculateLastTimestampInBlock) {
-  uint64_t firstTimestamp_ms = 10;
+TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlock) {
   uint32_t blockIdx = 2;
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms = {0, 113, 23, 34};  // first block_intervall[0] is always null - one loop less is needed
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  uint32_t firstTimestampInBlock = 146;
+  uint32_t firstTimestampInBlock = 146;  // reference to the UnitTest before
   std::vector<int32_t> diffValues = {30, 32, 54};
-  DifferentialBlock protobufDifferentialBlock = DifferentialBlock(diffValues);
-  EXPECT_EQ(differentialTimestamps.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, protobufDifferentialBlock), 518);
+  DifferentialBlock differentialBlock = DifferentialBlock(diffValues);
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, differentialBlock), 518);
 }
 
-TEST(runUnitTests, TestCalculateLastTimestampInBlock0) {
-  uint64_t firstTimestamp_ms = 10;
-  std::vector<uint32_t> blockIntervals_ms = {0, 113, 23, 34};
+TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlock0) {
   uint32_t blockIdx = 0;
   uint32_t firstTimestampInBlock = 150;
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
   std::vector<int32_t> diffValues = {30, 32, 54};
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
   DifferentialBlock differentialBlock = DifferentialBlock(diffValues);
-  EXPECT_EQ(differentialTimestamps.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, differentialBlock), 552);
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, differentialBlock), 552);
 }
 
-TEST(runUnitTests, TestCalculateLastTimestampInBlockException) {
-  uint64_t firstTimestamp_ms = 10;
-  std::vector<uint32_t> timestampsIntervals_ms = {134, 31, 124};
-  std::vector<uint32_t> blockIntervals_ms = {0, 113, 23, 34};  // first block_intervall[0] is always null - one loop less is needed
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(firstTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
+TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlockException) {
   uint32_t blockIdx = 10;
   std::vector<int32_t> diffValues = {30, 32, 54};
-  DifferentialBlock protobufDifferentialBlock = DifferentialBlock(diffValues);
-  EXPECT_THROW(differentialTimestamps.calculateFirstTimestampInBlock(blockIdx), std::invalid_argument);
+  DifferentialBlock differentialBlock = DifferentialBlock(diffValues);
+  EXPECT_THROW(this->differentialTimestampsWithNormalTimestamps1.calculateFirstTimestampInBlock(blockIdx), std::invalid_argument);
 }
