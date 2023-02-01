@@ -50,12 +50,13 @@ bool DifferentialBlock::isEqual(DifferentialBlock& differentialBlock) {
   return this->diffValues == differentialBlock.diffValues;
 }
 
-ProtobufBlock DifferentialBlock::serialize() {
-  ProtobufBlock blocks = ProtobufBlock();
-  for (size_t i = 0; i < this->diffValues.size(); i++) {
-    blocks.add_diff_values(this->diffValues[i]);
+void DifferentialBlock::serialize(ProtobufBlock* protobufDifferentialBlock) {
+  if (protobufDifferentialBlock == nullptr) {
+    throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
   }
-  return blocks;
+  for (size_t i = 0; i < this->diffValues.size(); i++) {
+    protobufDifferentialBlock->add_diff_values(this->diffValues[i]);
+  }
 }
 
 void DifferentialBlock::deserialize(const ProtobufBlock& protobufBlock) {

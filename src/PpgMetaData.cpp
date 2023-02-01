@@ -65,15 +65,16 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
   return this->color == ppgMetaData.color && this->wavelength_nm == ppgMetaData.wavelength_nm;
 }
 
-ProtobufPpgMetaData PpgMetaData::serialize() {
-  ProtobufPpgMetaData protobufPpgMetaData = ProtobufPpgMetaData();
+void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) {
+  if (protobufPpgMetaData == nullptr) {
+    throw std::invalid_argument("Error in serialize: protobufPpgMetaData is a null pointer");
+  }
   if (this->color != ProtobufColor::COLOR_NONE) {
-    protobufPpgMetaData.set_color(this->color);
+    protobufPpgMetaData->set_color(this->color);
   }
   if (this->wavelength_nm != 0) {
-    protobufPpgMetaData.set_wavelength_nm(this->wavelength_nm);
+    protobufPpgMetaData->set_wavelength_nm(this->wavelength_nm);
   }
-  return protobufPpgMetaData;
 }
 
 void PpgMetaData::deserialize(const ProtobufPpgMetaData& protobufPpgMetaData) {

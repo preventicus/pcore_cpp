@@ -71,25 +71,44 @@ TEST_F(VersionTest, CompareEqualrandomVersion) {
 }
 
 TEST_F(VersionTest, TestSerializeAndDeprotobufVersion) {
-  ProtobufVersion protobufVersion = this->normalVersion1.serialize();
+  ProtobufVersion protobufVersion;
+  this->normalVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
   EXPECT_TRUE(this->normalVersion1.isEqual(version2));
 }
 
 TEST_F(VersionTest, TestSerializeAndDeserialized0Version) {
-  ProtobufVersion protobufVersion = this->startVersion1.serialize();
+  ProtobufVersion protobufVersion;
+  this->startVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
   EXPECT_TRUE(this->startVersion1.isEqual(version2));
 }
 
 TEST_F(VersionTest, TestSerializeAndDeserializedrandomVersion) {
-  ProtobufVersion protobufVersion = this->randomVersion1.serialize();
+  ProtobufVersion protobufVersion;
+  this->randomVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
   EXPECT_TRUE(this->randomVersion1.isEqual(version2));
 }
 
 TEST_F(VersionTest, TestSerializeAndDeserializedhighVersion) {
-  ProtobufVersion protobufVersion = this->highVersion1.serialize();
+  ProtobufVersion protobufVersion;
+  this->highVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
   EXPECT_TRUE(this->highVersion1.isEqual(version2));
+}
+
+TEST_F(VersionTest, CheckVersionPtr) {
+  ProtobufVersion protobufData;
+  this->normalVersion1.serialize(&protobufData);
+  Version version = Version(protobufData);
+  ProtobufVersion* protobufDataPtr = &protobufData;
+  Version* ptr = &version;
+  EXPECT_FALSE(ptr == nullptr);
+  EXPECT_FALSE(protobufDataPtr == nullptr);
+}
+
+TEST_F(VersionTest, CheckVersionNullPtr) {
+  ProtobufVersion* protobufData = nullptr;
+  EXPECT_THROW(this->normalVersion1.serialize(protobufData), std::invalid_argument);
 }

@@ -46,7 +46,7 @@ class Header {
   int32_t getTimeZoneOffset();
   Version getVersion();
   bool isEqual(Header& header);
-  ProtobufHeader serialize();
+  void serialize(ProtobufHeader* protobufHeader);
 
  private:
   void deserialize(const ProtobufHeader& protobufHeader);

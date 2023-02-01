@@ -50,7 +50,7 @@ class AccMetaData {
   ProtobufNorm getNorm();
   bool isSet();
   bool isEqual(AccMetaData& AccMetaData);
-  ProtobufAccMetaData serialize();
+  void serialize(ProtobufAccMetaData* protobufAccMetaData);
 
  private:
   void deserialize(const ProtobufAccMetaData& protobufAccMetaData);

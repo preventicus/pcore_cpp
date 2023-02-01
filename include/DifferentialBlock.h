@@ -44,7 +44,7 @@ class DifferentialBlock {
   DifferentialBlock();
   std::vector<int32_t> getDiffValues();
   bool isEqual(DifferentialBlock& differentialBlock);
-  ProtobufBlock serialize();
+  void serialize(ProtobufBlock* differentialBlock);
 
  private:
   void deserialize(const ProtobufBlock& protobufBlock);
