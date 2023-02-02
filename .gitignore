@@ -2,4 +2,6 @@
 CMakeLists.txt.user
 build*
 include/protobuf/*
-
+.idea
+cmake-build-debug
+cmake-build-release
