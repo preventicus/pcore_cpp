@@ -32,15 +32,15 @@ class AbsoluteTimestampsTest : public ::testing::Test {
   }
 };
 
-TEST_F(AbsoluteTimestampsTest, TestGetAndSetValues) {
+TEST_F(AbsoluteTimestampsTest, TestGetUnix) {
   EXPECT_EQ(this->absoluteTimestampsNormal1.getUnix(), this->unixNormal_ms);
 }
 
-TEST_F(AbsoluteTimestampsTest, TestGetAndSetEmptyValues) {
+TEST_F(AbsoluteTimestampsTest, TestGetEmptyUnix) {
   EXPECT_EQ(this->absoluteTimestampsEmpty1.getUnix(), this->unixEmpty_ms);
 }
 
-TEST_F(AbsoluteTimestampsTest, TestGetAndSet0Values) {
+TEST_F(AbsoluteTimestampsTest, TestGet0Unix) {
   EXPECT_EQ(this->absoluteTimestamps01.getUnix(), this->unix0_ms);
 }
 
@@ -56,11 +56,11 @@ TEST_F(AbsoluteTimestampsTest, CompareSameContentBlocks) {
   EXPECT_TRUE(this->absoluteTimestampsNormal1.isEqual(this->absoluteTimestampsNormal2));
 }
 
-TEST_F(AbsoluteTimestampsTest, CompareFullandOneBlocks) {
+TEST_F(AbsoluteTimestampsTest, CompareFullAndOneBlocks) {
   EXPECT_FALSE(this->absoluteTimestampsNormal1.isEqual(this->absoluteTimestampsOneElement1));
 }
 
-TEST_F(AbsoluteTimestampsTest, CompareFullandShortBlocks) {
+TEST_F(AbsoluteTimestampsTest, CompareFullAndShortBlocks) {
   EXPECT_FALSE(this->absoluteTimestampsNormal1.isEqual(this->absoluteTimestampsOneElement1));
 }
 

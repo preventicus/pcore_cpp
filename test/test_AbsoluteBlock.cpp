@@ -32,15 +32,15 @@ class AbsoluteBlockTest : public ::testing::Test {
   }
 };
 
-TEST_F(AbsoluteBlockTest, TestGetAndSetValues) {
+TEST_F(AbsoluteBlockTest, TestGetValues) {
   EXPECT_EQ(this->absoluteBlockNormal1.getValues(), this->valuesNormal);
 }
 
-TEST_F(AbsoluteBlockTest, TestGetAndSetEmptyValues) {
+TEST_F(AbsoluteBlockTest, TestGetEmptyValues) {
   EXPECT_EQ(this->absoluteBlockEmpty1.getValues(), this->valuesEmpty);
 }
 
-TEST_F(AbsoluteBlockTest, TestGetAndSet0Values) {
+TEST_F(AbsoluteBlockTest, TestGet0Values) {
   EXPECT_EQ(this->absoluteBlock0Element1.getValues(), this->values0Element);
 }
 
@@ -56,7 +56,7 @@ TEST_F(AbsoluteBlockTest, CompareSameContentBlocks) {
   EXPECT_TRUE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockNormal2));
 }
 
-TEST_F(AbsoluteBlockTest, CompareFullandShortBlocks) {
+TEST_F(AbsoluteBlockTest, CompareFullAndShortBlocks) {
   EXPECT_FALSE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockOneElement1));
 }
 

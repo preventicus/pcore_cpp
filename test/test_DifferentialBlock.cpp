@@ -38,19 +38,19 @@ class DifferentialBlockTest : public ::testing::Test {
   }
 };
 
-TEST_F(DifferentialBlockTest, TestSetAndGetDiffValues) {
+TEST_F(DifferentialBlockTest, TestGetDiffValues) {
   EXPECT_EQ(this->differentialBlockNormal1.getDiffValues(), this->DiffValuesNormal);
 }
 
-TEST_F(DifferentialBlockTest, TestSetAndGetWithEmptyDiffValues) {
+TEST_F(DifferentialBlockTest, TestGetWithEmptyDiffValues) {
   EXPECT_EQ(this->differentialBlockEmptyValue1.getDiffValues(), this->DiffValuesEmpty);
 }
 
-TEST_F(DifferentialBlockTest, TestSetAndGetWithDiffValues0) {
+TEST_F(DifferentialBlockTest, TestGetWithDiffValues0) {
   EXPECT_EQ(this->differentialBlock0Value1.getDiffValues(), this->DiffValues0);
 }
 
-TEST_F(DifferentialBlockTest, TestSetAndGetWithNegativeDiffValues) {
+TEST_F(DifferentialBlockTest, TestGetWithNegativeDiffValues) {
   EXPECT_EQ(this->differentialBlockWithNegativeValues1.getDiffValues(), this->DiffValuesNormalNeagtive);
 }
 
@@ -70,18 +70,18 @@ TEST_F(DifferentialBlockTest, CompareDiffValues0) {
   EXPECT_TRUE(this->differentialBlock0Value1.isEqual(this->differentialBlock0Value2));
 }
 
-TEST_F(DifferentialBlockTest, CompareDiffNegativeValues) {
+TEST_F(DifferentialBlockTest, CompareDiffNegativeDiffValues) {
   EXPECT_TRUE(this->differentialBlockOneNegativeValue1.isEqual(this->differentialBlockOneNegativeValue2));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeAndDeserialize) {
+TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeForNormalDiffvalues) {
   ProtobufBlock protobufBlocks;
   this->differentialBlockNormal1.serialize(&protobufBlocks);
   DifferentialBlock dBlock = DifferentialBlock(protobufBlocks);
   EXPECT_TRUE(this->differentialBlockNormal1.isEqual(dBlock));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithEmptyVector) {
+TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithEmptyDiffValues) {
   ProtobufBlock protobufBlocks;
   this->differentialBlockEmptyValue1.serialize(&protobufBlocks);
   DifferentialBlock dBlock = DifferentialBlock(protobufBlocks);

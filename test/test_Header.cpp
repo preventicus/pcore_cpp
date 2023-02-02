@@ -37,11 +37,11 @@ class HeaderTest : public ::testing::Test {
   }
 };
 
-TEST_F(HeaderTest, GetSetMethodeWithPositiveOffSetValue) {
+TEST_F(HeaderTest, TestGetMethodWithPositiveOffSetValue) {
   EXPECT_EQ(this->normalHeaderWitchPositiveTimeZoneOffset_min1.getTimeZoneOffset(), this->positiveTimeZoneOffset_min);
 }
 
-TEST_F(HeaderTest, GetSetMethodeWithNegativeOffSetValue) {
+TEST_F(HeaderTest, TestGetMethodWithNegativeOffSetValue) {
   EXPECT_EQ(this->normalHeaderWitchNegativeTimeZoneOffset_min1.getTimeZoneOffset(), this->negativeTimeZoneOffset_min);
 }
 
@@ -73,7 +73,7 @@ TEST_F(HeaderTest, CompareSameTimeZoneOffsetWithMinOffSet) {
   EXPECT_TRUE(this->headerWitchMinTimeZoneOffset_min1.isEqual(this->headerWitchMinTimeZoneOffset_min2));
 }
 
-TEST_F(HeaderTest, SerializeAndDeserialize) {
+TEST_F(HeaderTest, SerializeAndDeserializeWithNormalTimeZoneOffset) {
   ProtobufHeader protobufHeader;
   this->normalHeaderWitchPositiveTimeZoneOffset_min1.serialize(&protobufHeader);
   Header header2 = Header(protobufHeader);
