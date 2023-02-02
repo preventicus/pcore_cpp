@@ -30,9 +30,44 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef DATAFORM_H
-#define DATAFORM_H
+#ifndef CHANNEL_H
+#define CHANNEL_H
 
-enum DataForm { NOT_SET, DIFFERENTIAL, ABSOLUTE };
+#include "AbsoluteBlock.h"
+#include "AccMetaData.h"
+#include "DataFormat.h"
+#include "DifferentialBlock.h"
+#include "DifferentialTimestamps.h"
+#include "PpgMetaData.h"
 
-#endif  // DATAFORM_H
+#include "protobuf/pcore_external.pb.h"
+using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
+using ProtobufType = com::preventicus::pcore::SensorType;
+
+class Channel {
+ public:
+  Channel(DataForm dataForm,
+          std::vector<DifferentialBlock>& differentialBlocks,
+          AbsoluteBlock& absoluteBlock,
+          AccMetaData& accMetadata,
+          PpgMetaData& ppgMetaData);
+  Channel(const ProtobufChannel& protobufChannel);
+  Channel();
+  std::vector<DifferentialBlock> getDifferentialBlocks();
+  AbsoluteBlock getAbsoluteBlock();
+  AccMetaData getAccMetaData();
+  PpgMetaData getPpgMetData();
+  bool isEqual(Channel& channel);
+  void serialize(ProtobufChannel* protobufChannel);
+  DataForm getDataform();
+
+ private:
+  void deserialize(const ProtobufChannel& protobufChannel);
+  PpgMetaData ppgMetaData;
+  AccMetaData accMetadata;
+  std::vector<DifferentialBlock> differentialBlocks;
+  AbsoluteBlock absoluteBlock;
+  DataForm dataForm;
+};
+
+#endif  // CHANNEL_H
