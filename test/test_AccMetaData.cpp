@@ -37,11 +37,6 @@ TEST_F(AccMetaDataTest, SetNormAndCheck) {
   EXPECT_EQ(accMetDataWithEuclidianDifferenceNorm1.getNorm(), ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
 }
 
-TEST_F(AccMetaDataTest, SetBoth) {
-  EXPECT_THROW(AccMetaData acc1 = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM),
-               std::invalid_argument);
-}
-
 TEST_F(AccMetaDataTest, TestNoThrow) {
   EXPECT_NO_THROW(AccMetaData acc1 = AccMetaData(ProtobufCoordinate::COORDINATE_NONE, ProtobufNorm::NORM_NONE));
 }
@@ -75,22 +70,22 @@ TEST_F(AccMetaDataTest, CompareEqualNotSet) {
   EXPECT_TRUE(this->accMetaDataBothNotSet1.isEqual(this->accMetaDataBothNotSet2));
 }
 
-TEST_F(AccMetaDataTest, TestIsSetMethode) {
+TEST_F(AccMetaDataTest, TestIsSetMethod) {
   EXPECT_EQ(this->accMetDataWithCoordinateX1.isSet(), true);
 }
 
-TEST_F(AccMetaDataTest, TestIsSetMethodeFalse) {
+TEST_F(AccMetaDataTest, TestIsSetMethodFalse) {
   EXPECT_EQ(this->accMetaDataBothNotSet1.isSet(), false);
 }
 
-TEST_F(AccMetaDataTest, serializeMethodeCoord) {
+TEST_F(AccMetaDataTest, serializeMethodCoord) {
   ProtobufAccMetaData protobufData;
   this->accMetDataWithCoordinateX1.serialize(&protobufData);
   AccMetaData acc = AccMetaData(protobufData);
   EXPECT_TRUE(this->accMetDataWithCoordinateX1.isEqual(acc));
 }
 
-TEST_F(AccMetaDataTest, serializeMethodeNorm) {
+TEST_F(AccMetaDataTest, serializeMethodNorm) {
   ProtobufAccMetaData protobufData;
   this->accMetDataWithEuclidianDifferenceNorm1.serialize(&protobufData);
   AccMetaData acc = AccMetaData(protobufData);

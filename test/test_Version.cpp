@@ -50,48 +50,48 @@ TEST_F(VersionTest, TestGetAll) {
   EXPECT_EQ(this->randomVersion1.getPatch(), this->patchZero);
 }
 
-TEST_F(VersionTest, CompareEqualnormalVersion) {
+TEST_F(VersionTest, CompareEqualNormalVersion) {
   EXPECT_TRUE(this->normalVersion1.isEqual(this->normalVersion2));
 }
 
-TEST_F(VersionTest, CompareDifferentnormalVersion) {
+TEST_F(VersionTest, CompareDifferentNormalVersion) {
   EXPECT_FALSE(this->normalVersion1.isEqual(this->startVersion1));
 }
 
-TEST_F(VersionTest, CompareEqualstartVersion) {
+TEST_F(VersionTest, CompareEqualStartVersion) {
   EXPECT_TRUE(this->startVersion1.isEqual(startVersion2));
 }
 
-TEST_F(VersionTest, CompareRandomAndnormalVersion) {
+TEST_F(VersionTest, CompareRandomAndNormalVersion) {
   EXPECT_FALSE(this->normalVersion1.isEqual(this->randomVersion1));
 }
 
-TEST_F(VersionTest, CompareEqualrandomVersion) {
+TEST_F(VersionTest, CompareEqualRandomVersion) {
   EXPECT_TRUE(this->randomVersion1.isEqual(this->randomVersion2));
 }
 
-TEST_F(VersionTest, TestSerializeAndDeprotobufVersion) {
+TEST_F(VersionTest, TestSerializeAndDeserializeNormalVersion) {
   ProtobufVersion protobufVersion;
   this->normalVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
   EXPECT_TRUE(this->normalVersion1.isEqual(version2));
 }
 
-TEST_F(VersionTest, TestSerializeAndDeserialized0Version) {
+TEST_F(VersionTest, TestSerializeAndDeserialize0Version) {
   ProtobufVersion protobufVersion;
   this->startVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
   EXPECT_TRUE(this->startVersion1.isEqual(version2));
 }
 
-TEST_F(VersionTest, TestSerializeAndDeserializedrandomVersion) {
+TEST_F(VersionTest, TestSerializeAndDeserializerandomVersion) {
   ProtobufVersion protobufVersion;
   this->randomVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
   EXPECT_TRUE(this->randomVersion1.isEqual(version2));
 }
 
-TEST_F(VersionTest, TestSerializeAndDeserializedhighVersion) {
+TEST_F(VersionTest, TestSerializeAndDeserializehighVersion) {
   ProtobufVersion protobufVersion;
   this->highVersion1.serialize(&protobufVersion);
   Version version2 = Version(protobufVersion);
