@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef SENSOR_H
-#define SENSOR_H
-
+#pragma once
 #include "AbsoluteTimestamps.h"
 #include "Channel.h"
 #include "DataFormat.h"
@@ -72,5 +70,3 @@ class Sensor {
   DifferentialTimestamps differentialTimestamps;
   AbsoluteTimestamps absoluteTimestamps;
 };
-
-#endif  // SENSOR_H

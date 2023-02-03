@@ -29,9 +29,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef RAW_H
-#define RAW_H
-
+#pragma once
 #include "Sensor.h"
 #include "protobuf/pcore.pb.h"
 using ProtobufRaw = com::preventicus::pcore::Raw;
@@ -48,5 +46,3 @@ class Raw {
   void deserialize(const ProtobufRaw& protobufRaw);
   std::vector<Sensor> sensor;
 };
-
-#endif  // RAW_H

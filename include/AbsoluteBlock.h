@@ -30,8 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef ABSOLUTETIMEBLOCK_H
-#define ABSOLUTETIMEBLOCK_H
+#pragma once
 #include <vector>
 
 class AbsoluteBlock {
@@ -44,5 +43,3 @@ class AbsoluteBlock {
  private:
   std::vector<int32_t> values;
 };
-
-#endif  // ABSOLUTETIMEBLOCK_H

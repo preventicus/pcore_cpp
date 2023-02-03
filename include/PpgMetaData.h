@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef PPGMETADATA_H
-#define PPGMETADATA_H
-
+#pragma once
 #include <iostream>
 #include "protobuf/pcore_color.pb.h"
 #include "protobuf/pcore_external.pb.h"
@@ -54,5 +52,3 @@ class PpgMetaData {
   ProtobufColor color;
   uint32_t wavelength_nm;
 };
-
-#endif  // PPGMETADATA_H

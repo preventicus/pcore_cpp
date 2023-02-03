@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef ABSOLUTETIMESTAMPS_H
-#define ABSOLUTETIMESTAMPS_H
-
+#pragma once
 #include <vector>
 class AbsoluteTimestamps {
  public:
@@ -44,5 +42,3 @@ class AbsoluteTimestamps {
  private:
   std::vector<uint64_t> unix_ms;
 };
-
-#endif  // ABSOLUTETIMESTAMPS_H

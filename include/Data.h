@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef DATA_H
-#define DATA_H
-
+#pragma once
 #include "Header.h"
 #include "Raw.h"
 #include "protobuf/pcore.pb.h"
@@ -53,5 +51,3 @@ class Data {
   Raw raw;
   Header header;
 };
-
-#endif  // DATA_H

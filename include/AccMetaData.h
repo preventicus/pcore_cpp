@@ -30,8 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef ACCMETADATA_H
-#define ACCMETADATA_H
+#pragma once
 #include <iostream>
 #include "protobuf/pcore_coordinate.pb.h"
 #include "protobuf/pcore_external.pb.h"
@@ -57,5 +56,3 @@ class AccMetaData {
   ProtobufCoordinate coordinate;
   ProtobufNorm norm;
 };
-
-#endif  // ACCMETADATA_H

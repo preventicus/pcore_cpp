@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef DIFFERENTIALBLOCK_H
-#define DIFFERENTIALBLOCK_H
-
+#pragma once
 #include <vector>
 #include "protobuf/pcore_external.pb.h"
 
@@ -50,5 +48,3 @@ class DifferentialBlock {
   void deserialize(const ProtobufBlock& protobufBlock);
   std::vector<int32_t> diffValues;
 };
-
-#endif  // DIFFERENTIALBLOCK_H
