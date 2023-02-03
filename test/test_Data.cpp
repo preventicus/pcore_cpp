@@ -41,8 +41,8 @@ class DataTest : public ::testing::Test {
 
   std::vector<uint64_t> normalUnix_ms = {};
   std::vector<uint64_t> compareUnix_ms = {};
-  AbsoluteTimestamps normalAbsoluteTimestamps = AbsoluteTimestamps(normalUnix_ms);
-  AbsoluteTimestamps compareAbsoluteTimestamps = AbsoluteTimestamps(compareUnix_ms);
+  AbsoluteTimestampsContainer normalAbsoluteTimestamps = AbsoluteTimestampsContainer(normalUnix_ms);
+  AbsoluteTimestampsContainer compareAbsoluteTimestamps = AbsoluteTimestampsContainer(compareUnix_ms);
   ProtobufSensortype normalType = ProtobufSensortype::SENSOR_TYPE_ACC;
   ProtobufSensortype compareType = ProtobufSensortype::SENSOR_TYPE_PPG;
   uint64_t normalFirst_timestamp_ms = 1690921;
@@ -51,14 +51,14 @@ class DataTest : public ::testing::Test {
   std::vector<uint32_t> compareBlock_intervals_ms = {12, 1, 2, 34};
   std::vector<uint32_t> normalTimestamps_intervals_ms = {134, 31, 124};
   std::vector<uint32_t> compareTimestamps_intervals_ms = {14, 31, 124};
-  DifferentialTimestamps normaldifferentialTimestamps =
-      DifferentialTimestamps(this->normalFirst_timestamp_ms,
-                             this->normalBlock_intervals_ms,
-                             this->normalTimestamps_intervals_ms);  // initialize TimestampContainer as standard
-  DifferentialTimestamps comparedifferentialTimestamps =
-      DifferentialTimestamps(this->compareFirst_timestamp_ms,
-                             this->compareBlock_intervals_ms,
-                             this->compareTimestamps_intervals_ms);  // initialize ctimestampContainer as comparison
+  DifferentialTimestampsContainer normaldifferentialTimestamps =
+      DifferentialTimestampsContainer(this->normalFirst_timestamp_ms,
+                                      this->normalBlock_intervals_ms,
+                                      this->normalTimestamps_intervals_ms);  // initialize TimestampContainer as standard
+  DifferentialTimestampsContainer comparedifferentialTimestamps =
+      DifferentialTimestampsContainer(this->compareFirst_timestamp_ms,
+                                      this->compareBlock_intervals_ms,
+                                      this->compareTimestamps_intervals_ms);  // initialize ctimestampContainer as comparison
   Sensor normalSensor1 = Sensor(this->normalVectorChannel, this->normaldifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalType);
   Sensor compareSensor1 = Sensor(this->compareVectorChannel, this->comparedifferentialTimestamps, this->compareAbsoluteTimestamps, this->compareType);
   std::vector<Sensor> compareSensor = {compareSensor1};
@@ -97,7 +97,7 @@ TEST_F(DataTest, TestGetMethodData) {
     EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getTimestampForm(), DataForm::DIFFERENTIAL);
     EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getDifferentialTimestamps().getBlockIntervals(), this->normalBlock_intervals_ms);
     EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getDifferentialTimestamps().getTimestampsIntervals(), this->normalTimestamps_intervals_ms);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getAbsoluteTimestamps().getUnix(), this->normalUnix_ms);
+    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getAbsoluteTimestamps().getUnixTimestamps(), this->normalUnix_ms);
   }
   EXPECT_EQ(this->normalData1.getHeader().getTimeZoneOffset(), this->positiveTimeZoneOffset_min);
   EXPECT_EQ(this->normalData1.getHeader().getVersion().getMajor(), this->version.getMajor());

@@ -31,11 +31,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 #pragma once
-#include "AbsoluteTimestamps.h"
+#include "AbsoluteTimestampsContainer.h"
 #include "Channel.h"
 #include "DataFormat.h"
 #include "DifferentialBlock.h"
-#include "DifferentialTimestamps.h"
+#include "DifferentialTimestampsContainer.h"
 #include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 
@@ -45,16 +45,16 @@ using ProtobufSensortype = com::preventicus::pcore::SensorType;
 class Sensor {
  public:
   Sensor(std::vector<Channel> channels,
-         DifferentialTimestamps differentialTimestamps,
-         AbsoluteTimestamps absoluteTimestamps,
+         DifferentialTimestampsContainer differentialTimestamps,
+         AbsoluteTimestampsContainer absoluteTimestamps,
          ProtobufSensortype sensorType);
   Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
   ProtobufSensortype getSensorType();
   DataForm getTimestampForm();
   std::vector<Channel> getChannels();
-  DifferentialTimestamps getDifferentialTimestamps();
-  AbsoluteTimestamps getAbsoluteTimestamps();
+  DifferentialTimestampsContainer getDifferentialTimestamps();
+  AbsoluteTimestampsContainer getAbsoluteTimestamps();
   uint64_t calculateBlockIntervalsSumFor(size_t idxBlock);
   bool isEqual(Sensor& Sensor);
   void serialize(ProtobufSensor* protobufSensor);
@@ -66,6 +66,6 @@ class Sensor {
   void deserialize(const ProtobufSensor& protobufSensor);
   ProtobufSensortype sensorType;
   std::vector<Channel> channels;
-  DifferentialTimestamps differentialTimestamps;
-  AbsoluteTimestamps absoluteTimestamps;
+  DifferentialTimestampsContainer differentialTimestamps;
+  AbsoluteTimestampsContainer absoluteTimestamps;
 };

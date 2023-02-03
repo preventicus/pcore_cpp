@@ -30,15 +30,18 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#pragma once
-#include <vector>
-class AbsoluteTimestamps {
- public:
-  AbsoluteTimestamps(std::vector<uint64_t>& unix_ms);
-  AbsoluteTimestamps();
-  std::vector<uint64_t> getUnix();
-  bool isEqual(AbsoluteTimestamps& timestamps);
+#include "AbsoluteTimestampsContainer.h"
 
- private:
-  std::vector<uint64_t> unix_ms;
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
+
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() {
+  this->unixTimestamps_ms = {};
 };
+
+std::vector<uint64_t> AbsoluteTimestampsContainer::getUnixTimestamps() {
+  return this->unixTimestamps_ms;
+}
+
+bool AbsoluteTimestampsContainer::isEqual(AbsoluteTimestampsContainer& timestamps) {
+  return this->unixTimestamps_ms == timestamps.unixTimestamps_ms;
+}

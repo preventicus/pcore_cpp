@@ -33,8 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Sensor.h"
 
 Sensor::Sensor(std::vector<Channel> channels,
-               DifferentialTimestamps differentialTimestamps,
-               AbsoluteTimestamps absoluteTimestamps,
+               DifferentialTimestampsContainer differentialTimestamps,
+               AbsoluteTimestampsContainer absoluteTimestamps,
                ProtobufSensortype sensorType)
     : sensorType(sensorType), channels(channels), differentialTimestamps(differentialTimestamps), absoluteTimestamps(absoluteTimestamps) {}
 
@@ -44,8 +44,8 @@ Sensor::Sensor(const ProtobufSensor& protobufSensor) {
 
 Sensor::Sensor() {
   this->channels = std::vector<Channel>{};
-  this->absoluteTimestamps = AbsoluteTimestamps();
-  this->differentialTimestamps = DifferentialTimestamps();
+  this->absoluteTimestamps = AbsoluteTimestampsContainer();
+  this->differentialTimestamps = DifferentialTimestampsContainer();
   this->sensorType = ProtobufType::SENSOR_TYPE_NONE;
 }
 
@@ -61,11 +61,11 @@ DataForm Sensor::getTimestampForm() {
   return DataForm::DIFFERENTIAL;
 }
 
-DifferentialTimestamps Sensor::getDifferentialTimestamps() {
+DifferentialTimestampsContainer Sensor::getDifferentialTimestamps() {
   return this->differentialTimestamps;
 }
 
-AbsoluteTimestamps Sensor::getAbsoluteTimestamps() {
+AbsoluteTimestampsContainer Sensor::getAbsoluteTimestamps() {
   return this->absoluteTimestamps;
 }
 
@@ -113,7 +113,7 @@ void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
   }
   this->channels = channel;
   this->sensorType = protobufSensor.sensor_type();
-  this->differentialTimestamps = DifferentialTimestamps(protobufSensor.differential_timestamps_container());
+  this->differentialTimestamps = DifferentialTimestampsContainer(protobufSensor.differential_timestamps_container());
 }
 
 uint32_t Sensor::firstTimestamp() {

@@ -41,8 +41,8 @@ class SensorTest : public ::testing::Test {
 
   std::vector<uint64_t> normalUnix_ms = {};
   std::vector<uint64_t> comparableUnix_ms = {};
-  AbsoluteTimestamps normalAbsoluteTimestamps = AbsoluteTimestamps(normalUnix_ms);
-  AbsoluteTimestamps comparableAbsoluteTimestamps = AbsoluteTimestamps(comparableUnix_ms);
+  AbsoluteTimestampsContainer normalAbsoluteTimestamps = AbsoluteTimestampsContainer(normalUnix_ms);
+  AbsoluteTimestampsContainer comparableAbsoluteTimestamps = AbsoluteTimestampsContainer(comparableUnix_ms);
   ProtobufSensortype normalSensorType = ProtobufSensortype::SENSOR_TYPE_ACC;
   ProtobufSensortype comparableSensorType = ProtobufSensortype::SENSOR_TYPE_ACC;
   uint64_t normalFirstTimestamp_ms = 1690921;
@@ -51,14 +51,14 @@ class SensorTest : public ::testing::Test {
   std::vector<uint32_t> comparableBlockIntervals_ms = {12, 1, 2, 34};
   std::vector<uint32_t> normalTimestampsIntervals_ms = {134, 31, 124};
   std::vector<uint32_t> comparableTimestampsIntervals_ms = {14, 31, 124};
-  DifferentialTimestamps normalDifferentialTimestamps =
-      DifferentialTimestamps(this->normalFirstTimestamp_ms,
-                             this->normalBlockIntervals_ms,
-                             this->normalTimestampsIntervals_ms);  // initialize TimestampContainer as Standard
-  DifferentialTimestamps comparableDifferentialTimestamps =
-      DifferentialTimestamps(this->comparableFirstTimestamp_ms,
-                             this->comparableBlockIntervals_ms,
-                             this->comparableTimestampsIntervals_ms);  // initialize ctimestampContainer as comparison
+  DifferentialTimestampsContainer normalDifferentialTimestamps =
+      DifferentialTimestampsContainer(this->normalFirstTimestamp_ms,
+                                      this->normalBlockIntervals_ms,
+                                      this->normalTimestampsIntervals_ms);  // initialize TimestampContainer as Standard
+  DifferentialTimestampsContainer comparableDifferentialTimestamps =
+      DifferentialTimestampsContainer(this->comparableFirstTimestamp_ms,
+                                      this->comparableBlockIntervals_ms,
+                                      this->comparableTimestampsIntervals_ms);  // initialize ctimestampContainer as comparison
   virtual void SetUp() {
     this->normalSensor1 =
         Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType);
