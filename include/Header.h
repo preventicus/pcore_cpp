@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef HEADER_H
-#define HEADER_H
-
+#pragma once
 #include <iostream>
 #include <stdexcept>
 #include "Version.h"
@@ -53,5 +51,3 @@ class Header {
   int32_t timeZoneOffset_min;
   Version version;
 };
-
-#endif  // HEADER_H

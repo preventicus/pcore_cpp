@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef CHANNEL_H
-#define CHANNEL_H
-
+#pragma once
 #include "AbsoluteBlock.h"
 #include "AccMetaData.h"
 #include "DataFormat.h"
@@ -69,5 +67,3 @@ class Channel {
   AbsoluteBlock absoluteBlock;
   DataForm dataForm;
 };
-
-#endif  // CHANNEL_H

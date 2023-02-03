@@ -30,8 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef DIFFERENTIALTIMESTAMPS_H
-#define DIFFERENTIALTIMESTAMPS_H
+#pragma once
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -58,5 +57,3 @@ class DifferentialTimestamps {
   std::vector<uint32_t> blockIntervals_ms;
   std::vector<uint32_t> timestampsIntervals_ms;
 };
-
-#endif  // DIFFERENTIALTIMESTAMPS_H

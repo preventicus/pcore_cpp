@@ -30,9 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef VERSION_H
-#define VERSION_H
-
+#pragma once
 #include "protobuf/pcore_version.pb.h"
 using ProtobufVersion = com::preventicus::pcore::Version;
 class Version {
@@ -52,5 +50,3 @@ class Version {
   uint32_t minor;
   uint32_t patch;
 };
-
-#endif  // VERSION_H
