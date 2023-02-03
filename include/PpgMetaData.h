@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <iostream>
 #include "protobuf/pcore_color.pb.h"
-#include "protobuf/pcore_external.pb.h"
+#include "protobuf/pcore_raw.pb.h"
 using ProtobufColor = com::preventicus::pcore::Color;
 using ProtobufPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
 class PpgMetaData {

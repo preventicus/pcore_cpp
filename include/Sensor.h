@@ -36,12 +36,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DataFormat.h"
 #include "DifferentialBlock.h"
 #include "DifferentialTimestamps.h"
-#include "protobuf/pcore_external.pb.h"
+#include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 
 using ProtobufSensor = com::preventicus::pcore::Raw_Sensor;
 using ProtobufSensortype = com::preventicus::pcore::SensorType;
-using ProtobufTimestampContainer = com::preventicus::pcore::Raw_Sensor::TimestampsContainer;
 
 class Sensor {
  public:

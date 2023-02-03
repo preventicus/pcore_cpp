@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialTimestamps.h"
 #include "PpgMetaData.h"
 
-#include "protobuf/pcore_external.pb.h"
+#include "protobuf/pcore_raw.pb.h"
 using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
 using ProtobufType = com::preventicus::pcore::SensorType;
 

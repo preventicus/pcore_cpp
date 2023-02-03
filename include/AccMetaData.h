@@ -33,8 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <iostream>
 #include "protobuf/pcore_coordinate.pb.h"
-#include "protobuf/pcore_external.pb.h"
 #include "protobuf/pcore_norm.pb.h"
+#include "protobuf/pcore_raw.pb.h"
 
 using ProtobufAccMetaData = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
 using ProtobufCoordinate = com::preventicus::pcore::Coordinate;
