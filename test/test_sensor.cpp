@@ -9,18 +9,18 @@ class SensorTest : public ::testing::Test {
   Sensor comparableSensor2;
 
   uint32_t notSetWavelength_nm = 0;
-  AccMetaData setcoordinateAccMetaDataCoordinate = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_NONE);
+  AccMetaData setCoordinateAccMetaDataCoordinate = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_NONE);
   PpgMetaData notSetPpgMetaData1 = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
   std::vector<int32_t> values1 = {};
   AbsoluteBlock normalAbsoluteBlock1 = AbsoluteBlock(values1);
   std::vector<int32_t> diffValues1 = {12, 15, 20};
   DifferentialBlock diffBlock1 = DifferentialBlock(diffValues1);
   std::vector<DifferentialBlock> normalDifferentialBlocks1 = {diffBlock1};
-  DataForm dataform1 = DataForm::DIFFERENTIAL;
-  Channel channelAccMetaDataSetCoordinate = Channel(this->dataform1,
+  DataForm dataForm1 = DataForm::DIFFERENTIAL;
+  Channel channelAccMetaDataSetCoordinate = Channel(this->dataForm1,
                                                     this->normalDifferentialBlocks1,
                                                     this->normalAbsoluteBlock1,
-                                                    this->setcoordinateAccMetaDataCoordinate,
+                                                    this->setCoordinateAccMetaDataCoordinate,
                                                     this->notSetPpgMetaData1);
   std::vector<Channel> normalVectorChannel = {channelAccMetaDataSetCoordinate};  // initialize Standard Channel
 
@@ -51,36 +51,36 @@ class SensorTest : public ::testing::Test {
   std::vector<uint32_t> comparableBlockIntervals_ms = {12, 1, 2, 34};
   std::vector<uint32_t> normalTimestampsIntervals_ms = {134, 31, 124};
   std::vector<uint32_t> comparableTimestampsIntervals_ms = {14, 31, 124};
-  DifferentialTimestamps normaldifferentialTimestamps =
+  DifferentialTimestamps normalDifferentialTimestamps =
       DifferentialTimestamps(this->normalFirstTimestamp_ms,
                              this->normalBlockIntervals_ms,
                              this->normalTimestampsIntervals_ms);  // initialize TimestampContainer as Standard
-  DifferentialTimestamps comparabledifferentialTimestamps =
+  DifferentialTimestamps comparableDifferentialTimestamps =
       DifferentialTimestamps(this->comparableFirstTimestamp_ms,
                              this->comparableBlockIntervals_ms,
                              this->comparableTimestampsIntervals_ms);  // initialize ctimestampContainer as comparison
   virtual void SetUp() {
     this->normalSensor1 =
-        Sensor(this->normalVectorChannel, this->normaldifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType);
+        Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType);
     this->normalSensor2 =
-        Sensor(this->normalVectorChannel, this->normaldifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType);
+        Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType);
     this->comparableSensor1 =
-        Sensor(this->comparableVectorChannel, this->comparabledifferentialTimestamps, this->comparableAbsoluteTimestamps, this->comparableSensorType);
+        Sensor(this->comparableVectorChannel, this->comparableDifferentialTimestamps, this->comparableAbsoluteTimestamps, this->comparableSensorType);
     this->comparableSensor2 =
-        Sensor(this->comparableVectorChannel, this->comparabledifferentialTimestamps, this->comparableAbsoluteTimestamps, this->comparableSensorType);
+        Sensor(this->comparableVectorChannel, this->comparableDifferentialTimestamps, this->comparableAbsoluteTimestamps, this->comparableSensorType);
   }
 };
 
 TEST_F(SensorTest, TestConstruktor) {
   EXPECT_NO_THROW(Sensor normalSensor1 =
-                      Sensor(this->normalVectorChannel, this->normaldifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType));
+                      Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType));
 }
 
 TEST_F(SensorTest, TestGetMethodStandardSensor) {
   for (size_t i = 0; i < this->comparableSensor1.getChannels().size(); i++) {
     EXPECT_TRUE(this->normalSensor1.getChannels()[i].isEqual(this->normalVectorChannel[i]));
   }
-  EXPECT_TRUE(this->normalSensor1.getDifferentialTimestamps().isEqual(this->normaldifferentialTimestamps));
+  EXPECT_TRUE(this->normalSensor1.getDifferentialTimestamps().isEqual(this->normalDifferentialTimestamps));
   EXPECT_TRUE(this->normalSensor1.getAbsoluteTimestamps().isEqual(this->normalAbsoluteTimestamps));
   EXPECT_EQ(this->normalSensor1.getSensorType(), this->normalSensorType);
 }
@@ -89,7 +89,7 @@ TEST_F(SensorTest, TestGetMethodComparableSensor) {
   for (size_t i = 0; i < this->comparableSensor1.getChannels().size(); i++) {
     EXPECT_TRUE(this->comparableSensor1.getChannels()[i].isEqual(this->comparableVectorChannel[i]));
   }
-  EXPECT_TRUE(this->comparableSensor1.getDifferentialTimestamps().isEqual(this->comparabledifferentialTimestamps));
+  EXPECT_TRUE(this->comparableSensor1.getDifferentialTimestamps().isEqual(this->comparableDifferentialTimestamps));
   EXPECT_TRUE(this->comparableSensor1.getAbsoluteTimestamps().isEqual(this->comparableAbsoluteTimestamps));
   EXPECT_EQ(this->comparableSensor1.getSensorType(), this->comparableSensorType);
 }
