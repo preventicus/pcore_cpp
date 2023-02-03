@@ -75,61 +75,61 @@ TEST_F(DifferentialBlockTest, CompareDiffNegativeDiffValues) {
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeForNormalDiffvalues) {
-  ProtobufBlock protobufBlocks;
-  this->differentialBlockNormal1.serialize(&protobufBlocks);
-  DifferentialBlock dBlock = DifferentialBlock(protobufBlocks);
+  ProtobufDifferentialBlock protobufDifferentialBlocks;
+  this->differentialBlockNormal1.serialize(&protobufDifferentialBlocks);
+  DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
   EXPECT_TRUE(this->differentialBlockNormal1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithEmptyDiffValues) {
-  ProtobufBlock protobufBlocks;
-  this->differentialBlockEmptyValue1.serialize(&protobufBlocks);
-  DifferentialBlock dBlock = DifferentialBlock(protobufBlocks);
+  ProtobufDifferentialBlock protobufDifferentialBlocks;
+  this->differentialBlockEmptyValue1.serialize(&protobufDifferentialBlocks);
+  DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
   EXPECT_TRUE(this->differentialBlockEmptyValue1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithNegativeAndPositiveDiffValues) {
-  ProtobufBlock protobufBlocks;
-  this->differentialBlockWithNegativeValues1.serialize(&protobufBlocks);
-  DifferentialBlock dBlock = DifferentialBlock(protobufBlocks);
+  ProtobufDifferentialBlock protobufDifferentialBlocks;
+  this->differentialBlockWithNegativeValues1.serialize(&protobufDifferentialBlocks);
+  DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
   EXPECT_TRUE(this->differentialBlockWithNegativeValues1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithOneNegativeDiffValues) {
-  ProtobufBlock protobufBlocks;
-  this->differentialBlockOneNegativeValue1.serialize(&protobufBlocks);
-  DifferentialBlock dBlock = DifferentialBlock(protobufBlocks);
+  ProtobufDifferentialBlock protobufDifferentialBlocks;
+  this->differentialBlockOneNegativeValue1.serialize(&protobufDifferentialBlocks);
+  DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
   EXPECT_TRUE(this->differentialBlockOneNegativeValue1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithOnePositiveDiffValues) {
-  ProtobufBlock protobufBlocks;
-  this->differentialBlockOnePositiveValue1.serialize(&protobufBlocks);
-  DifferentialBlock dBlock = DifferentialBlock(protobufBlocks);
+  ProtobufDifferentialBlock protobufDifferentialBlocks;
+  this->differentialBlockOnePositiveValue1.serialize(&protobufDifferentialBlocks);
+  DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
   EXPECT_TRUE(this->differentialBlockOnePositiveValue1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, CompareTwoDeserializedDiffValues) {
-  ProtobufBlock protobufBlocks1;
-  this->differentialBlockWithNegativeValues1.serialize(&protobufBlocks1);
-  ProtobufBlock protobufBlocks2;
-  this->differentialBlockWithNegativeValues2.serialize(&protobufBlocks2);
-  DifferentialBlock baseDBlock = DifferentialBlock(protobufBlocks1);
-  DifferentialBlock comparableDBlock = DifferentialBlock(protobufBlocks2);
+  ProtobufDifferentialBlock protobufDifferentialBlocks1;
+  this->differentialBlockWithNegativeValues1.serialize(&protobufDifferentialBlocks1);
+  ProtobufDifferentialBlock protobufDifferentialBlocks2;
+  this->differentialBlockWithNegativeValues2.serialize(&protobufDifferentialBlocks2);
+  DifferentialBlock baseDBlock = DifferentialBlock(protobufDifferentialBlocks1);
+  DifferentialBlock comparableDBlock = DifferentialBlock(protobufDifferentialBlocks2);
   EXPECT_TRUE(baseDBlock.isEqual(comparableDBlock));
 }
 
 TEST_F(DifferentialBlockTest, CheckDifferentialBlockPtr) {
-  ProtobufBlock protobufData;
+  ProtobufDifferentialBlock protobufData;
   this->differentialBlockNormal1.serialize(&protobufData);
   DifferentialBlock differentialBlock = DifferentialBlock(protobufData);
-  ProtobufBlock* protobufDataPtr = &protobufData;
+  ProtobufDifferentialBlock* protobufDataPtr = &protobufData;
   DifferentialBlock* ptr = &differentialBlock;
   EXPECT_FALSE(ptr == nullptr);
   EXPECT_FALSE(protobufDataPtr == nullptr);
 }
 
 TEST_F(DifferentialBlockTest, CheckDifferentialBlockNullPtr) {
-  ProtobufBlock* protobufData = nullptr;
+  ProtobufDifferentialBlock* protobufData = nullptr;
   EXPECT_THROW(this->differentialBlockNormal1.serialize(protobufData), std::invalid_argument);
 }

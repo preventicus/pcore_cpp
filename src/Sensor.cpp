@@ -101,9 +101,9 @@ void Sensor::serialize(ProtobufSensor* protobufSensor) {
     this->channels[i].serialize(protobufChannel);
   }
   protobufSensor->set_sensor_type(this->sensorType);
-  ProtobufTimestampContainer protobufTimestampContainer;
+  ProtobufDifferentialTimestampContainer protobufTimestampContainer;
   this->differentialTimestamps.serialize(&protobufTimestampContainer);
-  protobufSensor->mutable_timestamps_container()->CopyFrom(protobufTimestampContainer);
+  protobufSensor->mutable_differential_timestamps_container()->CopyFrom(protobufTimestampContainer);
 }
 
 void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
@@ -113,7 +113,7 @@ void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
   }
   this->channels = channel;
   this->sensorType = protobufSensor.sensor_type();
-  this->differentialTimestamps = DifferentialTimestamps(protobufSensor.timestamps_container());
+  this->differentialTimestamps = DifferentialTimestamps(protobufSensor.differential_timestamps_container());
 }
 
 uint32_t Sensor::firstTimestamp() {

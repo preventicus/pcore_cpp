@@ -35,13 +35,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdexcept>
 #include <vector>
 #include "DifferentialBlock.h"
-#include "protobuf/pcore_external.pb.h"
-using ProtobufTimestampContainer = com::preventicus::pcore::Raw_Sensor_TimestampsContainer;
+#include "protobuf/pcore_raw.pb.h"
+using ProtobufDifferentialTimestampContainer = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
 
 class DifferentialTimestamps {
  public:
   DifferentialTimestamps(uint64_t firstTimestamp_ms, std::vector<uint32_t>& blockIntervals_ms, std::vector<uint32_t>& timestampsIntervals_ms);
-  DifferentialTimestamps(const ProtobufTimestampContainer& protobufDifferentialTimestamps);
+  DifferentialTimestamps(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
   DifferentialTimestamps();
   uint64_t getFirstTimestamp();
   std::vector<uint32_t> getBlockIntervals();
@@ -49,10 +49,10 @@ class DifferentialTimestamps {
   bool isEqual(DifferentialTimestamps& timestamps);
   uint32_t calculateFirstTimestampInBlock(uint32_t blockIdx);
   uint32_t calculateLastTimestampInBlock(uint32_t blockIdx, uint32_t firstTimestampInBlock, DifferentialBlock differentialBlock);
-  void serialize(ProtobufTimestampContainer* protobufDifferentialTimestamps);
+  void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer);
 
  private:
-  void deserialize(const ProtobufTimestampContainer& protobufDifferentialTimestamps);
+  void deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
   uint64_t firstTimestamp_ms;
   std::vector<uint32_t> blockIntervals_ms;
   std::vector<uint32_t> timestampsIntervals_ms;

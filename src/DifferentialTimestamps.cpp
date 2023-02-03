@@ -37,7 +37,7 @@ DifferentialTimestamps::DifferentialTimestamps(uint64_t firstTimestamp_ms,
                                                std::vector<uint32_t>& timestampsIntervals_ms)
     : firstTimestamp_ms(firstTimestamp_ms), blockIntervals_ms(blockIntervals_ms), timestampsIntervals_ms(timestampsIntervals_ms) {}
 
-DifferentialTimestamps::DifferentialTimestamps(const ProtobufTimestampContainer& protobufDifferentialTimestamps) {
+DifferentialTimestamps::DifferentialTimestamps(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestamps) {
   this->deserialize(protobufDifferentialTimestamps);
 }
 
@@ -83,25 +83,25 @@ uint32_t DifferentialTimestamps::calculateLastTimestampInBlock(uint32_t blockIdx
   return firstTimestampInBlock_ms + differentialBlock.getDiffValues().size() * this->timestampsIntervals_ms[blockIdx];
 }
 
-void DifferentialTimestamps::serialize(ProtobufTimestampContainer* protobufTimestampContainer) {
-  if (protobufTimestampContainer == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufTimestampContainer is a null pointer");
+void DifferentialTimestamps::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) {
+  if (protobufDifferentialTimestampContainer == nullptr) {
+    throw std::invalid_argument("Error in serialize: protobufDifferentialTimestampContainer is a null pointer");
   }
   for (size_t i = 0; i < this->blockIntervals_ms.size(); i++) {
-    protobufTimestampContainer->add_block_intervals_ms(this->blockIntervals_ms[i]);
+    protobufDifferentialTimestampContainer->add_block_intervals_ms(this->blockIntervals_ms[i]);
   }
   for (size_t j = 0; j < this->timestampsIntervals_ms.size(); j++) {
-    protobufTimestampContainer->add_timestamps_intervals_ms(this->timestampsIntervals_ms[j]);
+    protobufDifferentialTimestampContainer->add_timestamps_intervals_ms(this->timestampsIntervals_ms[j]);
   }
-  protobufTimestampContainer->set_first_timestamp_ms(this->firstTimestamp_ms);
+  protobufDifferentialTimestampContainer->set_first_timestamp_ms(this->firstTimestamp_ms);
 }
 
-void DifferentialTimestamps::deserialize(const ProtobufTimestampContainer& protobufTimestampContainer) {
-  this->firstTimestamp_ms = protobufTimestampContainer.first_timestamp_ms();
-  for (size_t i = 0; i < protobufTimestampContainer.block_intervals_ms_size(); i++) {
-    this->blockIntervals_ms.push_back(protobufTimestampContainer.block_intervals_ms(i));
+void DifferentialTimestamps::deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
+  this->firstTimestamp_ms = protobufDifferentialTimestampContainer.first_timestamp_ms();
+  for (size_t i = 0; i < protobufDifferentialTimestampContainer.block_intervals_ms_size(); i++) {
+    this->blockIntervals_ms.push_back(protobufDifferentialTimestampContainer.block_intervals_ms(i));
   }
-  for (size_t j = 0; j < protobufTimestampContainer.timestamps_intervals_ms_size(); j++) {
-    this->timestampsIntervals_ms.push_back(protobufTimestampContainer.timestamps_intervals_ms(j));
+  for (size_t j = 0; j < protobufDifferentialTimestampContainer.timestamps_intervals_ms_size(); j++) {
+    this->timestampsIntervals_ms.push_back(protobufDifferentialTimestampContainer.timestamps_intervals_ms(j));
   }
 }

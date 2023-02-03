@@ -32,19 +32,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #pragma once
 #include <vector>
-#include "protobuf/pcore_external.pb.h"
+#include "protobuf/pcore_raw.pb.h"
 
-using ProtobufBlock = com::preventicus::pcore::Raw_Sensor_Channel_Block;
+using ProtobufDifferentialBlock = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;
 class DifferentialBlock {
  public:
   DifferentialBlock(std::vector<int32_t>& diffValues);
-  DifferentialBlock(const ProtobufBlock& protobufBlock);
+  DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock);
   DifferentialBlock();
   std::vector<int32_t> getDiffValues();
   bool isEqual(DifferentialBlock& differentialBlock);
-  void serialize(ProtobufBlock* differentialBlock);
+  void serialize(ProtobufDifferentialBlock* differentialBlock);
 
  private:
-  void deserialize(const ProtobufBlock& protobufBlock);
+  void deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock);
   std::vector<int32_t> diffValues;
 };
