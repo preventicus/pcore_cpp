@@ -1,14 +1,14 @@
 #include <gtest/gtest.h>
-#include "DifferentialTimestamps.h"
+#include "DifferentialTimestampsContainer.h"
 
 class DifferentialTimestampsTest : public ::testing::Test {
  protected:
-  DifferentialTimestamps differentialTimestampsWithNormalTimestamps1;
-  DifferentialTimestamps differentialTimestampsWithNormalTimestamps2;
-  DifferentialTimestamps differentialTimestampsWith0Timestamps1;
-  DifferentialTimestamps differentialTimestampsWith0Timestamps2;
-  DifferentialTimestamps differentialTimestampsEmptyTimestamps1;
-  DifferentialTimestamps differentialTimestampsEmptyTimestamps2;
+  DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps1;
+  DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps2;
+  DifferentialTimestampsContainer differentialTimestampsWith0Timestamps1;
+  DifferentialTimestampsContainer differentialTimestampsWith0Timestamps2;
+  DifferentialTimestampsContainer differentialTimestampsEmptyTimestamps1;
+  DifferentialTimestampsContainer differentialTimestampsEmptyTimestamps2;
   uint64_t normalFirstTimestamp_ms = 10;
   uint64_t zeroFirstTimestamp_ms = 0;
   std::vector<uint32_t> normalBlockIntervals_ms = {0, 113, 23, 34};  // first block_intervall[0] is always null - one loop less is needed
@@ -20,17 +20,17 @@ class DifferentialTimestampsTest : public ::testing::Test {
 
   virtual void SetUp() {
     this->differentialTimestampsWithNormalTimestamps1 =
-        DifferentialTimestamps(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
+        DifferentialTimestampsContainer(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
     this->differentialTimestampsWithNormalTimestamps2 =
-        DifferentialTimestamps(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
+        DifferentialTimestampsContainer(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
     this->differentialTimestampsWith0Timestamps1 =
-        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
+        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
     this->differentialTimestampsWith0Timestamps2 =
-        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
+        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
     this->differentialTimestampsEmptyTimestamps1 =
-        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
+        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
     this->differentialTimestampsEmptyTimestamps2 =
-        DifferentialTimestamps(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
+        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
   }
 };
 
@@ -71,7 +71,7 @@ TEST_F(DifferentialTimestampsTest, CompareDifferentTimestampsIntervals) {
 TEST_F(DifferentialTimestampsTest, TestSerializeAndDeserializeEqualTimestamps) {
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer;
   this->differentialTimestampsWithNormalTimestamps1.serialize(&protobufDifferentialTimestampContainer);
-  DifferentialTimestamps differentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer);
+  DifferentialTimestampsContainer differentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer);
   EXPECT_TRUE(this->differentialTimestampsWithNormalTimestamps1.isEqual(differentialTimestamps));
 }
 
@@ -80,8 +80,8 @@ TEST_F(DifferentialTimestampsTest, TestSerializeAndDeserializeBetweenTwoDifferen
   this->differentialTimestampsWithNormalTimestamps1.serialize(&protobufDifferentialTimestampContainer1);
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer2;
   this->differentialTimestampsWith0Timestamps1.serialize(&protobufDifferentialTimestampContainer2);
-  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer1);
-  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer2);
+  DifferentialTimestampsContainer baseDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer1);
+  DifferentialTimestampsContainer comparableDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer2);
   EXPECT_FALSE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
@@ -90,8 +90,8 @@ TEST_F(DifferentialTimestampsTest, TestSerializeAndDeserializeBetweenTwoTimestam
   this->differentialTimestampsWithNormalTimestamps1.serialize(&protobufDifferentialTimestampContainer1);
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer2;
   this->differentialTimestampsWithNormalTimestamps2.serialize(&protobufDifferentialTimestampContainer2);
-  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer1);
-  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer2);
+  DifferentialTimestampsContainer baseDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer1);
+  DifferentialTimestampsContainer comparableDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer2);
   EXPECT_TRUE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
@@ -100,8 +100,8 @@ TEST_F(DifferentialTimestampsTest, TestSerializeAndDeserializeBetweenTwoZeroTime
   this->differentialTimestampsWith0Timestamps1.serialize(&protobufDifferentialTimestampContainer1);
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer2;
   this->differentialTimestampsWith0Timestamps2.serialize(&protobufDifferentialTimestampContainer2);
-  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer1);
-  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer2);
+  DifferentialTimestampsContainer baseDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer1);
+  DifferentialTimestampsContainer comparableDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer2);
   EXPECT_TRUE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
@@ -110,8 +110,8 @@ TEST_F(DifferentialTimestampsTest, TestSerializeAndDeserializeBetweenTwoEmptyTim
   this->differentialTimestampsEmptyTimestamps1.serialize(&protobufDifferentialTimestampContainer1);
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer2;
   this->differentialTimestampsEmptyTimestamps2.serialize(&protobufDifferentialTimestampContainer2);
-  DifferentialTimestamps baseDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer1);
-  DifferentialTimestamps comparableDifferentialTimestamps = DifferentialTimestamps(protobufDifferentialTimestampContainer2);
+  DifferentialTimestampsContainer baseDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer1);
+  DifferentialTimestampsContainer comparableDifferentialTimestamps = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer2);
   EXPECT_TRUE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
@@ -146,9 +146,9 @@ TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlockException) {
 TEST_F(DifferentialTimestampsTest, CheckDifferentialTimestampsPtr) {
   ProtobufDifferentialTimestampContainer protobufData;
   this->differentialTimestampsWithNormalTimestamps1.serialize(&protobufData);
-  DifferentialTimestamps timestampContainer = DifferentialTimestamps(protobufData);
+  DifferentialTimestampsContainer timestampContainer = DifferentialTimestampsContainer(protobufData);
   ProtobufDifferentialTimestampContainer* protobufDataPtr = &protobufData;
-  DifferentialTimestamps* ptr = &timestampContainer;
+  DifferentialTimestampsContainer* ptr = &timestampContainer;
   EXPECT_FALSE(ptr == nullptr);
   EXPECT_FALSE(protobufDataPtr == nullptr);
 }

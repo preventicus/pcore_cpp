@@ -38,15 +38,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 using ProtobufDifferentialTimestampContainer = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
 
-class DifferentialTimestamps {
+class DifferentialTimestampsContainer {
  public:
-  DifferentialTimestamps(uint64_t firstTimestamp_ms, std::vector<uint32_t>& blockIntervals_ms, std::vector<uint32_t>& timestampsIntervals_ms);
-  DifferentialTimestamps(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
-  DifferentialTimestamps();
+  DifferentialTimestampsContainer(uint64_t firstTimestamp_ms,
+                                  std::vector<uint32_t>& blockIntervals_ms,
+                                  std::vector<uint32_t>& timestampsIntervals_ms);
+  DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
+  DifferentialTimestampsContainer();
   uint64_t getFirstTimestamp();
   std::vector<uint32_t> getBlockIntervals();
   std::vector<uint32_t> getTimestampsIntervals();
-  bool isEqual(DifferentialTimestamps& timestamps);
+  bool isEqual(DifferentialTimestampsContainer& timestamps);
   uint32_t calculateFirstTimestampInBlock(uint32_t blockIdx);
   uint32_t calculateLastTimestampInBlock(uint32_t blockIdx, uint32_t firstTimestampInBlock, DifferentialBlock differentialBlock);
   void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer);

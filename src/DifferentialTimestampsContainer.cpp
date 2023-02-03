@@ -30,41 +30,41 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#include "DifferentialTimestamps.h"
+#include "DifferentialTimestampsContainer.h"
 
-DifferentialTimestamps::DifferentialTimestamps(uint64_t firstTimestamp_ms,
-                                               std::vector<uint32_t>& blockIntervals_ms,
-                                               std::vector<uint32_t>& timestampsIntervals_ms)
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(uint64_t firstTimestamp_ms,
+                                                                 std::vector<uint32_t>& blockIntervals_ms,
+                                                                 std::vector<uint32_t>& timestampsIntervals_ms)
     : firstTimestamp_ms(firstTimestamp_ms), blockIntervals_ms(blockIntervals_ms), timestampsIntervals_ms(timestampsIntervals_ms) {}
 
-DifferentialTimestamps::DifferentialTimestamps(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestamps) {
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestamps) {
   this->deserialize(protobufDifferentialTimestamps);
 }
 
-DifferentialTimestamps::DifferentialTimestamps() {
+DifferentialTimestampsContainer::DifferentialTimestampsContainer() {
   this->blockIntervals_ms = {};
   this->timestampsIntervals_ms = {};
   this->firstTimestamp_ms = 0;
 }
 
-uint64_t DifferentialTimestamps::getFirstTimestamp() {
+uint64_t DifferentialTimestampsContainer::getFirstTimestamp() {
   return this->firstTimestamp_ms;
 }
 
-std::vector<uint32_t> DifferentialTimestamps::getBlockIntervals() {
+std::vector<uint32_t> DifferentialTimestampsContainer::getBlockIntervals() {
   return this->blockIntervals_ms;
 }
 
-std::vector<uint32_t> DifferentialTimestamps::getTimestampsIntervals() {
+std::vector<uint32_t> DifferentialTimestampsContainer::getTimestampsIntervals() {
   return this->timestampsIntervals_ms;
 }
 
-bool DifferentialTimestamps::isEqual(DifferentialTimestamps& differentialTimestamps) {
+bool DifferentialTimestampsContainer::isEqual(DifferentialTimestampsContainer& differentialTimestamps) {
   return this->firstTimestamp_ms == differentialTimestamps.firstTimestamp_ms && this->blockIntervals_ms == differentialTimestamps.blockIntervals_ms &&
          this->timestampsIntervals_ms == differentialTimestamps.timestampsIntervals_ms;
 }
 
-uint32_t DifferentialTimestamps::calculateFirstTimestampInBlock(uint32_t blockIdx) {
+uint32_t DifferentialTimestampsContainer::calculateFirstTimestampInBlock(uint32_t blockIdx) {
   if (this->blockIntervals_ms.size() <= blockIdx) {  // toDo : FOR-325
     throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
   }
@@ -77,13 +77,13 @@ uint32_t DifferentialTimestamps::calculateFirstTimestampInBlock(uint32_t blockId
   return firstTimestamp;
 }
 
-uint32_t DifferentialTimestamps::calculateLastTimestampInBlock(uint32_t blockIdx,
-                                                               uint32_t firstTimestampInBlock_ms,
-                                                               DifferentialBlock differentialBlock) {
+uint32_t DifferentialTimestampsContainer::calculateLastTimestampInBlock(uint32_t blockIdx,
+                                                                        uint32_t firstTimestampInBlock_ms,
+                                                                        DifferentialBlock differentialBlock) {
   return firstTimestampInBlock_ms + differentialBlock.getDiffValues().size() * this->timestampsIntervals_ms[blockIdx];
 }
 
-void DifferentialTimestamps::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) {
+void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) {
   if (protobufDifferentialTimestampContainer == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialTimestampContainer is a null pointer");
   }
@@ -96,7 +96,7 @@ void DifferentialTimestamps::serialize(ProtobufDifferentialTimestampContainer* p
   protobufDifferentialTimestampContainer->set_first_timestamp_ms(this->firstTimestamp_ms);
 }
 
-void DifferentialTimestamps::deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
+void DifferentialTimestampsContainer::deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
   this->firstTimestamp_ms = protobufDifferentialTimestampContainer.first_timestamp_ms();
   for (size_t i = 0; i < protobufDifferentialTimestampContainer.block_intervals_ms_size(); i++) {
     this->blockIntervals_ms.push_back(protobufDifferentialTimestampContainer.block_intervals_ms(i));

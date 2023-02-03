@@ -35,7 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AccMetaData.h"
 #include "DataFormat.h"
 #include "DifferentialBlock.h"
-#include "DifferentialTimestamps.h"
+#include "DifferentialTimestampsContainer.h"
 #include "PpgMetaData.h"
 
 #include "protobuf/pcore_raw.pb.h"
