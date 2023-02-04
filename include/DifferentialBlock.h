@@ -35,7 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 
 using ProtobufDifferentialBlock = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;
-class DifferentialBlock {
+class DifferentialBlock final {
  public:
   DifferentialBlock(std::vector<int32_t>& diffValues);
   DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock);

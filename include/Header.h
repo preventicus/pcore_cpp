@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Version.h"
 #include "protobuf/pcore.pb.h"
 using ProtobufHeader = com::preventicus::pcore::Data_Header;
-class Header {
+class Header final {
  public:
   Header(Version& version, int32_t timeZoneOffset_min);
   Header(const ProtobufHeader& protobufHeader);

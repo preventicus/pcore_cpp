@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "protobuf/pcore_version.pb.h"
 using ProtobufVersion = com::preventicus::pcore::Version;
-class Version {
+class Version final {
  public:
   Version(uint32_t major, uint32_t minor, uint32_t patch);
   Version(const ProtobufVersion& protobufVersion);

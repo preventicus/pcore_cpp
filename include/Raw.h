@@ -34,7 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Sensor.h"
 #include "protobuf/pcore.pb.h"
 using ProtobufRaw = com::preventicus::pcore::Raw;
-class Raw {
+class Raw final {
  public:
   Raw(std::vector<Sensor> sensor);
   Raw(const ProtobufRaw& protobufRaw);
