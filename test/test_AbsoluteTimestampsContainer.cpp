@@ -35,33 +35,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteTimestampsContainer.h"
 class AbsoluteTimestampsTest : public ::testing::Test {
  protected:
-  AbsoluteTimestampsContainer absoluteTimestampsNormal1;
-  AbsoluteTimestampsContainer absoluteTimestampsNormal2;
-  AbsoluteTimestampsContainer absoluteTimestampsTwoElement1;
-  AbsoluteTimestampsContainer absoluteTimestampsTwoElement2;
-  AbsoluteTimestampsContainer absoluteTimestampsOneElement1;
-  AbsoluteTimestampsContainer absoluteTimestampsOneElement2;
-  AbsoluteTimestampsContainer absoluteTimestamps01;
-  AbsoluteTimestampsContainer absoluteTimestamps02;
-  AbsoluteTimestampsContainer absoluteTimestampsEmpty1;
-  AbsoluteTimestampsContainer absoluteTimestampsEmpty2;
   std::vector<uint64_t> unixTimestampsNormal_ms = {1, 2, 3};
   std::vector<uint64_t> unixTimestampsTwoElements_ms = {1, 2};
   std::vector<uint64_t> unixTimestampsOneElement_ms = {1};
   std::vector<uint64_t> unixTimestamps0_ms = {0};
   std::vector<uint64_t> unixTimestampsEmpty_ms = {};
-  virtual void SetUp() {
-    this->absoluteTimestampsNormal1 = AbsoluteTimestampsContainer(this->unixTimestampsNormal_ms);
-    this->absoluteTimestampsNormal2 = AbsoluteTimestampsContainer(this->unixTimestampsNormal_ms);
-    this->absoluteTimestampsTwoElement1 = AbsoluteTimestampsContainer(this->unixTimestampsTwoElements_ms);
-    this->absoluteTimestampsTwoElement2 = AbsoluteTimestampsContainer(this->unixTimestampsTwoElements_ms);
-    this->absoluteTimestampsOneElement1 = AbsoluteTimestampsContainer(this->unixTimestampsOneElement_ms);
-    this->absoluteTimestampsOneElement2 = AbsoluteTimestampsContainer(this->unixTimestampsOneElement_ms);
-    this->absoluteTimestamps01 = AbsoluteTimestampsContainer(this->unixTimestamps0_ms);
-    this->absoluteTimestamps02 = AbsoluteTimestampsContainer(this->unixTimestamps0_ms);
-    this->absoluteTimestampsEmpty1 = AbsoluteTimestampsContainer(this->unixTimestampsEmpty_ms);
-    this->absoluteTimestampsEmpty2 = AbsoluteTimestampsContainer(this->unixTimestampsEmpty_ms);
-  }
+  AbsoluteTimestampsContainer absoluteTimestampsNormal1 = AbsoluteTimestampsContainer(unixTimestampsNormal_ms);
+  AbsoluteTimestampsContainer absoluteTimestampsNormal2 = AbsoluteTimestampsContainer(unixTimestampsNormal_ms);
+  AbsoluteTimestampsContainer absoluteTimestampsTwoElement1 = AbsoluteTimestampsContainer(unixTimestampsTwoElements_ms);
+  AbsoluteTimestampsContainer absoluteTimestampsTwoElement2 = AbsoluteTimestampsContainer(unixTimestampsTwoElements_ms);
+  AbsoluteTimestampsContainer absoluteTimestampsOneElement1 = AbsoluteTimestampsContainer(unixTimestampsOneElement_ms);
+  AbsoluteTimestampsContainer absoluteTimestampsOneElement2 = AbsoluteTimestampsContainer(unixTimestampsOneElement_ms);
+  AbsoluteTimestampsContainer absoluteTimestamps01 = AbsoluteTimestampsContainer(unixTimestamps0_ms);
+  AbsoluteTimestampsContainer absoluteTimestamps02 = AbsoluteTimestampsContainer(unixTimestamps0_ms);
+  AbsoluteTimestampsContainer absoluteTimestampsEmpty1 = AbsoluteTimestampsContainer(unixTimestampsEmpty_ms);
+  AbsoluteTimestampsContainer absoluteTimestampsEmpty2 = AbsoluteTimestampsContainer(unixTimestampsEmpty_ms);
 };
 
 TEST_F(AbsoluteTimestampsTest, TestGetUnixTimestamps) {

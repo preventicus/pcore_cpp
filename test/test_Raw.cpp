@@ -35,11 +35,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class RawTest : public ::testing::Test {
  protected:
-  Raw normalRaw1;
-  Raw normalRaw2;
-  Raw comparableRaw1;
-  Raw comparableRaw2;
-
   uint32_t notSetWavelength_nm = 0;
   AccMetaData setcoordinateAccMetaDataCoordinate = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_NONE);
   PpgMetaData notSetPpgMetaData1 = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
@@ -95,12 +90,11 @@ class RawTest : public ::testing::Test {
   Sensor compareSensor1 = Sensor(this->compareVectorChannel, this->comparedifferentialTimestamps, this->compareAbsoluteTimestamps, this->compareType);
   std::vector<Sensor> compareSensor = {compareSensor1};
   std::vector<Sensor> normalSensor = {normalSensor1};
-  virtual void SetUp() {
-    this->normalRaw1 = (this->normalSensor);
-    this->normalRaw2 = (this->normalSensor);
-    this->comparableRaw1 = (this->compareSensor);
-    this->comparableRaw2 = (this->compareSensor);
-  }
+
+  Raw normalRaw1 = Raw(normalSensor);
+  Raw normalRaw2 = Raw(normalSensor);
+  Raw comparableRaw1 = Raw(compareSensor);
+  Raw comparableRaw2 = Raw(compareSensor);
 };
 
 TEST_F(RawTest, TestGetMethodeRaw) {
