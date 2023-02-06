@@ -35,33 +35,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "gtest/gtest.h"
 class AbsoluteBlockTest : public ::testing::Test {
  protected:
-  AbsoluteBlock absoluteBlockNormal1;
-  AbsoluteBlock absoluteBlockNormal2;
-  AbsoluteBlock absoluteBlockTwoElement1;
-  AbsoluteBlock absoluteBlockTwoElement2;
-  AbsoluteBlock absoluteBlockOneElement1;
-  AbsoluteBlock absoluteBlockOneElement2;
-  AbsoluteBlock absoluteBlock0Element1;
-  AbsoluteBlock absoluteBlock0Element2;
-  AbsoluteBlock absoluteBlockEmpty1;
-  AbsoluteBlock absoluteBlockEmpty2;
   std::vector<int32_t> valuesNormal = {1, 2, 3};
   std::vector<int32_t> valuesTwoElements = {1, 2};
   std::vector<int32_t> valuesOneElement = {1};
   std::vector<int32_t> values0Element = {0};
   std::vector<int32_t> valuesEmpty = {};
-  virtual void SetUp() {
-    this->absoluteBlockNormal1 = AbsoluteBlock(this->valuesNormal);
-    this->absoluteBlockNormal2 = AbsoluteBlock(this->valuesNormal);
-    this->absoluteBlockTwoElement1 = AbsoluteBlock(this->valuesTwoElements);
-    this->absoluteBlockTwoElement2 = AbsoluteBlock(this->valuesTwoElements);
-    this->absoluteBlockOneElement1 = AbsoluteBlock(this->valuesOneElement);
-    this->absoluteBlockOneElement2 = AbsoluteBlock(this->valuesOneElement);
-    this->absoluteBlock0Element1 = AbsoluteBlock(this->values0Element);
-    this->absoluteBlock0Element2 = AbsoluteBlock(this->values0Element);
-    this->absoluteBlockEmpty1 = AbsoluteBlock(this->valuesEmpty);
-    this->absoluteBlockEmpty2 = AbsoluteBlock(this->valuesEmpty);
-  }
+  AbsoluteBlock absoluteBlockNormal1 = AbsoluteBlock(valuesNormal);
+  AbsoluteBlock absoluteBlockNormal2 = AbsoluteBlock(valuesNormal);
+  AbsoluteBlock absoluteBlockTwoElement1 = AbsoluteBlock(valuesTwoElements);
+  AbsoluteBlock absoluteBlockTwoElement2 = AbsoluteBlock(valuesTwoElements);
+  AbsoluteBlock absoluteBlockOneElement1 = AbsoluteBlock(valuesOneElement);
+  AbsoluteBlock absoluteBlockOneElement2 = AbsoluteBlock(valuesOneElement);
+  AbsoluteBlock absoluteBlock0Element1 = AbsoluteBlock(values0Element);
+  AbsoluteBlock absoluteBlock0Element2 = AbsoluteBlock(values0Element);
+  AbsoluteBlock absoluteBlockEmpty1 = AbsoluteBlock(valuesEmpty);
+  AbsoluteBlock absoluteBlockEmpty2 = AbsoluteBlock(valuesEmpty);
 };
 
 TEST_F(AbsoluteBlockTest, TestGetValues) {

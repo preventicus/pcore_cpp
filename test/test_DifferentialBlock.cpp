@@ -35,55 +35,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DifferentialBlockTest : public ::testing::Test {
  protected:
-  DifferentialBlock differentialBlockNormal1;
-  DifferentialBlock differentialBlockNormal2;
-  DifferentialBlock differentialBlockWithNegativeValues1;
-  DifferentialBlock differentialBlockWithNegativeValues2;
-  DifferentialBlock differentialBlockOneNegativeValue1;
-  DifferentialBlock differentialBlockOneNegativeValue2;
-  DifferentialBlock differentialBlockOnePositiveValue1;
-  DifferentialBlock differentialBlockOnePositiveValue2;
-  DifferentialBlock differentialBlock0Value1;
-  DifferentialBlock differentialBlock0Value2;
-  DifferentialBlock differentialBlockEmptyValue1;
-  DifferentialBlock differentialBlockEmptyValue2;
-  std::vector<int32_t> DiffValuesNormal = {30, 32, 54};
-  std::vector<int32_t> DiffValuesNormalNeagtive = {-23, -234, -13};
-  std::vector<int32_t> DiffValuesOneNegative = {-123};
-  std::vector<int32_t> DiffValuesOnePositive = {123};
-  std::vector<int32_t> DiffValues0 = {0};
-  std::vector<int32_t> DiffValuesEmpty = {};
-
-  virtual void SetUp() {
-    this->differentialBlockNormal1 = DifferentialBlock(this->DiffValuesNormal);
-    this->differentialBlockNormal2 = DifferentialBlock(this->DiffValuesNormal);
-    this->differentialBlockWithNegativeValues1 = DifferentialBlock(this->DiffValuesNormalNeagtive);
-    this->differentialBlockWithNegativeValues2 = DifferentialBlock(this->DiffValuesNormalNeagtive);
-    this->differentialBlockOneNegativeValue1 = DifferentialBlock(this->DiffValuesOneNegative);
-    this->differentialBlockOneNegativeValue2 = DifferentialBlock(this->DiffValuesOneNegative);
-    this->differentialBlockOnePositiveValue1 = DifferentialBlock(this->DiffValuesOnePositive);
-    this->differentialBlockOnePositiveValue2 = DifferentialBlock(this->DiffValuesOnePositive);
-    this->differentialBlock0Value1 = DifferentialBlock(this->DiffValues0);
-    this->differentialBlock0Value2 = DifferentialBlock(this->DiffValues0);
-    this->differentialBlockEmptyValue1 = DifferentialBlock(this->DiffValuesEmpty);
-    this->differentialBlockEmptyValue2 = DifferentialBlock(this->DiffValuesEmpty);
-  }
+  std::vector<int32_t> diffValuesNormal = {30, 32, 54};
+  std::vector<int32_t> diffValuesNormalNeagtive = {-23, -234, -13};
+  std::vector<int32_t> diffValuesOneNegative = {-123};
+  std::vector<int32_t> diffValuesOnePositive = {123};
+  std::vector<int32_t> diffValues0 = {0};
+  std::vector<int32_t> diffValuesEmpty = {};
+  DifferentialBlock differentialBlockNormal1 = DifferentialBlock(diffValuesNormal);
+  DifferentialBlock differentialBlockNormal2 = DifferentialBlock(diffValuesNormal);
+  DifferentialBlock differentialBlockWithNegativeValues1 = DifferentialBlock(diffValuesNormalNeagtive);
+  DifferentialBlock differentialBlockWithNegativeValues2 = DifferentialBlock(diffValuesNormalNeagtive);
+  DifferentialBlock differentialBlockOneNegativeValue1 = DifferentialBlock(diffValuesOneNegative);
+  DifferentialBlock differentialBlockOneNegativeValue2 = DifferentialBlock(diffValuesOneNegative);
+  DifferentialBlock differentialBlockOnePositiveValue1 = DifferentialBlock(diffValuesOnePositive);
+  DifferentialBlock differentialBlockOnePositiveValue2 = DifferentialBlock(diffValuesOnePositive);
+  DifferentialBlock differentialBlock0Value1 = DifferentialBlock(diffValues0);
+  DifferentialBlock differentialBlock0Value2 = DifferentialBlock(diffValues0);
+  DifferentialBlock differentialBlockEmptyValue1 = DifferentialBlock(diffValuesEmpty);
+  DifferentialBlock differentialBlockEmptyValue2 = DifferentialBlock(diffValuesEmpty);
 };
 
 TEST_F(DifferentialBlockTest, TestGetDiffValues) {
-  EXPECT_EQ(this->differentialBlockNormal1.getDiffValues(), this->DiffValuesNormal);
+  EXPECT_EQ(this->differentialBlockNormal1.getDiffValues(), this->diffValuesNormal);
 }
 
 TEST_F(DifferentialBlockTest, TestGetWithEmptyDiffValues) {
-  EXPECT_EQ(this->differentialBlockEmptyValue1.getDiffValues(), this->DiffValuesEmpty);
+  EXPECT_EQ(this->differentialBlockEmptyValue1.getDiffValues(), this->diffValuesEmpty);
 }
 
 TEST_F(DifferentialBlockTest, TestGetWithDiffValues0) {
-  EXPECT_EQ(this->differentialBlock0Value1.getDiffValues(), this->DiffValues0);
+  EXPECT_EQ(this->differentialBlock0Value1.getDiffValues(), this->diffValues0);
 }
 
 TEST_F(DifferentialBlockTest, TestGetWithNegativeDiffValues) {
-  EXPECT_EQ(this->differentialBlockWithNegativeValues1.getDiffValues(), this->DiffValuesNormalNeagtive);
+  EXPECT_EQ(this->differentialBlockWithNegativeValues1.getDiffValues(), this->diffValuesNormalNeagtive);
 }
 
 TEST_F(DifferentialBlockTest, CompareDiffValuesEqual) {

@@ -35,14 +35,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class VersionTest : public ::testing::Test {
  protected:
-  Version normalVersion1;
-  Version normalVersion2;
-  Version startVersion1;
-  Version startVersion2;
-  Version highVersion1;
-  Version highVersion2;
-  Version randomVersion1;
-  Version randomVersion2;
   uint32_t majorOne = 1;
   uint32_t minorOne = 1;
   uint32_t patchOne = 1;
@@ -52,16 +44,14 @@ class VersionTest : public ::testing::Test {
   uint32_t majorZero = 0;
   uint32_t minorZero = 0;
   uint32_t patchZero = 0;
-  virtual void SetUp() {
-    this->normalVersion1 = Version(this->majorOne, this->minorOne, this->patchOne);
-    this->normalVersion2 = Version(this->majorOne, this->minorOne, this->patchOne);
-    this->startVersion1 = Version(this->majorZero, this->minorZero, this->patchZero);
-    this->startVersion2 = Version(this->majorZero, this->minorZero, this->patchZero);
-    this->highVersion1 = Version(this->majorTwo, this->minorTwo, this->patchTwo);
-    this->highVersion2 = Version(this->majorTwo, this->minorTwo, this->patchTwo);
-    this->randomVersion1 = Version(this->majorTwo, this->minorOne, this->patchZero);
-    this->randomVersion2 = Version(this->majorTwo, this->minorOne, this->patchZero);
-  }
+  Version normalVersion1 = Version(majorOne, minorOne, patchOne);
+  Version normalVersion2 = Version(majorOne, minorOne, patchOne);
+  Version startVersion1 = Version(majorZero, minorZero, patchZero);
+  Version startVersion2 = Version(majorZero, minorZero, patchZero);
+  Version highVersion1 = Version(majorTwo, minorTwo, patchTwo);
+  Version highVersion2 = Version(majorTwo, minorTwo, patchTwo);
+  Version randomVersion1 = Version(majorTwo, minorOne, patchZero);
+  Version randomVersion2 = Version(majorTwo, minorOne, patchZero);
 };
 
 TEST_F(VersionTest, TestGetMajor) {

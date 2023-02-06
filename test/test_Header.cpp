@@ -34,18 +34,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Header.h"
 class HeaderTest : public ::testing::Test {
  protected:
-  Header normalHeaderWitchPositiveTimeZoneOffset_min1;
-  Header normalHeaderWitchPositiveTimeZoneOffset_min2;
-  Header normalHeaderWitchNegativeTimeZoneOffset_min1;
-  Header normalHeaderWitchNegativeTimeZoneOffset_min2;
-  Header normalHeaderWitchNoTimeZoneOffset_min1;
-  Header normalHeaderWitchNoTimeZoneOffset_min2;
-  Header invalidHeaderWitchPositiveTimeZoneOffset_min;
-  Header invalidHeaderWitchNegativeTimeZoneOffset_min;
-  Header headerWitchMaxTimeZoneOffset_min1;
-  Header headerWitchMaxTimeZoneOffset_min2;
-  Header headerWitchMinTimeZoneOffset_min1;
-  Header headerWitchMinTimeZoneOffset_min2;
   uint32_t majorOne = 1;
   uint32_t minorTwo = 2;
   uint32_t patchZero = 0;
@@ -55,18 +43,16 @@ class HeaderTest : public ::testing::Test {
   int32_t noTimeZoneOffset_min = 0;
   int32_t maxTimeZoneOffset_min = 840;
   int32_t minTimeZoneOffset_min = -720;
-  virtual void SetUp() {
-    this->normalHeaderWitchPositiveTimeZoneOffset_min1 = Header(this->version, this->positiveTimeZoneOffset_min);
-    this->normalHeaderWitchPositiveTimeZoneOffset_min2 = Header(this->version, this->positiveTimeZoneOffset_min);
-    this->normalHeaderWitchNegativeTimeZoneOffset_min1 = Header(this->version, this->negativeTimeZoneOffset_min);
-    this->normalHeaderWitchNegativeTimeZoneOffset_min2 = Header(this->version, this->negativeTimeZoneOffset_min);
-    this->normalHeaderWitchNoTimeZoneOffset_min1 = Header(this->version, this->noTimeZoneOffset_min);
-    this->normalHeaderWitchNoTimeZoneOffset_min2 = Header(this->version, this->noTimeZoneOffset_min);
-    this->headerWitchMaxTimeZoneOffset_min1 = Header(this->version, this->maxTimeZoneOffset_min);
-    this->headerWitchMaxTimeZoneOffset_min2 = Header(this->version, this->maxTimeZoneOffset_min);
-    this->headerWitchMinTimeZoneOffset_min1 = Header(this->version, this->minTimeZoneOffset_min);
-    this->headerWitchMinTimeZoneOffset_min2 = Header(this->version, this->minTimeZoneOffset_min);
-  }
+  Header normalHeaderWitchPositiveTimeZoneOffset_min1 = Header(version, positiveTimeZoneOffset_min);
+  Header normalHeaderWitchPositiveTimeZoneOffset_min2 = Header(version, positiveTimeZoneOffset_min);
+  Header normalHeaderWitchNegativeTimeZoneOffset_min1 = Header(version, negativeTimeZoneOffset_min);
+  Header normalHeaderWitchNegativeTimeZoneOffset_min2 = Header(version, negativeTimeZoneOffset_min);
+  Header normalHeaderWitchNoTimeZoneOffset_min1 = Header(version, noTimeZoneOffset_min);
+  Header normalHeaderWitchNoTimeZoneOffset_min2 = Header(version, noTimeZoneOffset_min);
+  Header headerWitchMaxTimeZoneOffset_min1 = Header(version, maxTimeZoneOffset_min);
+  Header headerWitchMaxTimeZoneOffset_min2 = Header(version, maxTimeZoneOffset_min);
+  Header headerWitchMinTimeZoneOffset_min1 = Header(version, minTimeZoneOffset_min);
+  Header headerWitchMinTimeZoneOffset_min2 = Header(version, minTimeZoneOffset_min);
 };
 
 TEST_F(HeaderTest, TestGetMethodWithPositiveOffSetValue) {

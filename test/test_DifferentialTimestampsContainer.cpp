@@ -35,12 +35,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DifferentialTimestampsTest : public ::testing::Test {
  protected:
-  DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps1;
-  DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps2;
-  DifferentialTimestampsContainer differentialTimestampsWith0Timestamps1;
-  DifferentialTimestampsContainer differentialTimestampsWith0Timestamps2;
-  DifferentialTimestampsContainer differentialTimestampsEmptyTimestamps1;
-  DifferentialTimestampsContainer differentialTimestampsEmptyTimestamps2;
   uint64_t normalFirstTimestamp_ms = 10;
   uint64_t zeroFirstTimestamp_ms = 0;
   std::vector<uint32_t> normalBlockIntervals_ms = {0, 113, 23, 34};  // first block_intervall[0] is always null - one loop less is needed
@@ -49,21 +43,18 @@ class DifferentialTimestampsTest : public ::testing::Test {
   std::vector<uint32_t> normalTimestampsIntervals_ms = {134, 31, 124};
   std::vector<uint32_t> zeroTimestampsIntervals_ms = {0};
   std::vector<uint32_t> emptyTimestampsIntervals_ms = {};
-
-  virtual void SetUp() {
-    this->differentialTimestampsWithNormalTimestamps1 =
-        DifferentialTimestampsContainer(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
-    this->differentialTimestampsWithNormalTimestamps2 =
-        DifferentialTimestampsContainer(this->normalFirstTimestamp_ms, this->normalBlockIntervals_ms, this->normalTimestampsIntervals_ms);
-    this->differentialTimestampsWith0Timestamps1 =
-        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
-    this->differentialTimestampsWith0Timestamps2 =
-        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->zeroBlockIntervals_ms, this->zeroTimestampsIntervals_ms);
-    this->differentialTimestampsEmptyTimestamps1 =
-        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
-    this->differentialTimestampsEmptyTimestamps2 =
-        DifferentialTimestampsContainer(this->zeroFirstTimestamp_ms, this->emptyBlockIntervals_ms, this->emptyTimestampsIntervals_ms);
-  }
+  DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps1 =
+      DifferentialTimestampsContainer(normalFirstTimestamp_ms, normalBlockIntervals_ms, normalTimestampsIntervals_ms);
+  DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps2 =
+      DifferentialTimestampsContainer(normalFirstTimestamp_ms, normalBlockIntervals_ms, normalTimestampsIntervals_ms);
+  DifferentialTimestampsContainer differentialTimestampsWith0Timestamps1 =
+      DifferentialTimestampsContainer(zeroFirstTimestamp_ms, zeroBlockIntervals_ms, zeroTimestampsIntervals_ms);
+  DifferentialTimestampsContainer differentialTimestampsWith0Timestamps2 =
+      DifferentialTimestampsContainer(zeroFirstTimestamp_ms, zeroBlockIntervals_ms, zeroTimestampsIntervals_ms);
+  DifferentialTimestampsContainer differentialTimestampsEmptyTimestamps1 =
+      DifferentialTimestampsContainer(zeroFirstTimestamp_ms, emptyBlockIntervals_ms, emptyTimestampsIntervals_ms);
+  DifferentialTimestampsContainer differentialTimestampsEmptyTimestamps2 =
+      DifferentialTimestampsContainer(zeroFirstTimestamp_ms, emptyBlockIntervals_ms, emptyTimestampsIntervals_ms);
 };
 
 TEST_F(DifferentialTimestampsTest, TestGetMethodTimestampsContainer) {

@@ -35,17 +35,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class ChannelTest : public ::testing::Test {
  protected:
-  Channel channelAccMetaDataSetCoordinateX1;
-  Channel channelAccMetaDataSetCoordinateX2;
-  Channel channelAccMetaDataSetCoordinateY;
-  Channel channelAccMetaDataSetNorm1;
-  Channel channelAccMetaDataSetNorm2;
-  Channel channelPpgMetaDataSetWavelength1;
-  Channel channelPpgMetaDataSetWavelength2;
-  Channel channelPpgMetaDataSetColor1;
-  Channel channelPpgMetaDataSetColor2;
-  Channel channelPpgMetaDataSetComparableWavelength;
-
   uint32_t comparableWavelength_nm = 100;
   uint32_t normalWavelength_nm = 255;
   uint32_t notSetWavelength_nm = 0;
@@ -63,28 +52,17 @@ class ChannelTest : public ::testing::Test {
   DifferentialBlock diffBlock = DifferentialBlock(diffValues);
   std::vector<DifferentialBlock> differentialBlocks = {diffBlock};
   DataForm dataform = DataForm::DIFFERENTIAL;
-  virtual void SetUp() {
-    this->channelAccMetaDataSetCoordinateX1 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->setCoordinateXAccMetaData, this->notSetPpgMetaData);
-    this->channelAccMetaDataSetCoordinateX2 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->setCoordinateXAccMetaData, this->notSetPpgMetaData);
-    this->channelAccMetaDataSetCoordinateY =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->setCoordinateYAccMetaData, this->notSetPpgMetaData);
-    this->channelAccMetaDataSetNorm1 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->setNormAccMetaData, this->notSetPpgMetaData);
-    this->channelAccMetaDataSetNorm2 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->setNormAccMetaData, this->notSetPpgMetaData);
-    this->channelPpgMetaDataSetWavelength1 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->notSetAccMetaData, this->setWavelengthPpgMetaData);
-    this->channelPpgMetaDataSetWavelength2 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->notSetAccMetaData, this->setWavelengthPpgMetaData);
-    this->channelPpgMetaDataSetColor1 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->notSetAccMetaData, this->setColorPpgMetaData);
-    this->channelPpgMetaDataSetColor2 =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->notSetAccMetaData, this->setColorPpgMetaData);
-    this->channelPpgMetaDataSetComparableWavelength =
-        Channel(this->dataform, this->differentialBlocks, this->absoluteBlock, this->notSetAccMetaData, this->setCompareableWavelengthPpgMetaData);
-  }
+  Channel channelAccMetaDataSetCoordinateX1 = Channel(dataform, differentialBlocks, absoluteBlock, setCoordinateXAccMetaData, notSetPpgMetaData);
+  Channel channelAccMetaDataSetCoordinateX2 = Channel(dataform, differentialBlocks, absoluteBlock, setCoordinateXAccMetaData, notSetPpgMetaData);
+  Channel channelAccMetaDataSetCoordinateY = Channel(dataform, differentialBlocks, absoluteBlock, setCoordinateYAccMetaData, notSetPpgMetaData);
+  Channel channelAccMetaDataSetNorm1 = Channel(dataform, differentialBlocks, absoluteBlock, setNormAccMetaData, notSetPpgMetaData);
+  Channel channelAccMetaDataSetNorm2 = Channel(dataform, differentialBlocks, absoluteBlock, setNormAccMetaData, notSetPpgMetaData);
+  Channel channelPpgMetaDataSetWavelength1 = Channel(dataform, differentialBlocks, absoluteBlock, notSetAccMetaData, setWavelengthPpgMetaData);
+  Channel channelPpgMetaDataSetWavelength2 = Channel(dataform, differentialBlocks, absoluteBlock, notSetAccMetaData, setWavelengthPpgMetaData);
+  Channel channelPpgMetaDataSetColor1 = Channel(dataform, differentialBlocks, absoluteBlock, notSetAccMetaData, setColorPpgMetaData);
+  Channel channelPpgMetaDataSetColor2 = Channel(dataform, differentialBlocks, absoluteBlock, notSetAccMetaData, setColorPpgMetaData);
+  Channel channelPpgMetaDataSetComparableWavelength =
+      Channel(dataform, differentialBlocks, absoluteBlock, notSetAccMetaData, setCompareableWavelengthPpgMetaData);
 };
 
 TEST_F(ChannelTest, CheckIfExceptionIsThrownWhenBothMetadataAreSet) {

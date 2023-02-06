@@ -35,11 +35,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class SensorTest : public ::testing::Test {
  protected:
-  Sensor normalSensor1;
-  Sensor normalSensor2;
-  Sensor comparableSensor1;
-  Sensor comparableSensor2;
-
   uint32_t notSetWavelength_nm = 0;
   AccMetaData setCoordinateAccMetaDataCoordinate = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_NONE);
   PpgMetaData notSetPpgMetaData1 = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
@@ -91,16 +86,10 @@ class SensorTest : public ::testing::Test {
       DifferentialTimestampsContainer(this->comparableFirstTimestamp_ms,
                                       this->comparableBlockIntervals_ms,
                                       this->comparableTimestampsIntervals_ms);  // initialize ctimestampContainer as comparison
-  virtual void SetUp() {
-    this->normalSensor1 =
-        Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType);
-    this->normalSensor2 =
-        Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType);
-    this->comparableSensor1 =
-        Sensor(this->comparableVectorChannel, this->comparableDifferentialTimestamps, this->comparableAbsoluteTimestamps, this->comparableSensorType);
-    this->comparableSensor2 =
-        Sensor(this->comparableVectorChannel, this->comparableDifferentialTimestamps, this->comparableAbsoluteTimestamps, this->comparableSensorType);
-  }
+  Sensor normalSensor1 = Sensor(normalVectorChannel, normalDifferentialTimestamps, normalAbsoluteTimestamps, normalSensorType);
+  Sensor normalSensor2 = Sensor(normalVectorChannel, normalDifferentialTimestamps, normalAbsoluteTimestamps, normalSensorType);
+  Sensor comparableSensor1 = Sensor(comparableVectorChannel, comparableDifferentialTimestamps, comparableAbsoluteTimestamps, comparableSensorType);
+  Sensor comparableSensor2 = Sensor(comparableVectorChannel, comparableDifferentialTimestamps, comparableAbsoluteTimestamps, comparableSensorType);
 };
 
 TEST_F(SensorTest, TestConstruktor) {

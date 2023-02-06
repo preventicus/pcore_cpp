@@ -35,11 +35,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DataTest : public ::testing::Test {
  protected:
-  Data normalData1;
-  Data normalData2;
-  Data comparableData1;
-  Data comparableData2;
-
   uint32_t notSetWavelength_nm = 0;
   AccMetaData setcoordinateAccMetaDataCoordinate = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_NONE);
   PpgMetaData notSetPpgMetaData1 = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
@@ -107,12 +102,11 @@ class DataTest : public ::testing::Test {
   int32_t invalidTimeZoneOffset_min = 1000;
   Header normalHeaderWitchPositiveTimeZoneOffset_min1 = Header(this->version, this->positiveTimeZoneOffset_min);  // initialize Header
   Header normalHeaderWitchNegativeTimeZoneOffset_min1 = Header(this->version, this->negativeTimeZoneOffset_min);
-  virtual void SetUp() {
-    this->normalData1 = Data(this->normalRaw1, this->normalHeaderWitchPositiveTimeZoneOffset_min1);
-    this->normalData2 = Data(this->normalRaw1, this->normalHeaderWitchPositiveTimeZoneOffset_min1);
-    this->comparableData1 = Data(this->compareRaw1, this->normalHeaderWitchNegativeTimeZoneOffset_min1);
-    this->comparableData2 = Data(this->compareRaw1, this->normalHeaderWitchNegativeTimeZoneOffset_min1);
-  }
+
+  Data normalData1 = Data(normalRaw1, normalHeaderWitchPositiveTimeZoneOffset_min1);
+  Data normalData2 = Data(normalRaw1, normalHeaderWitchPositiveTimeZoneOffset_min1);
+  Data comparableData1 = Data(compareRaw1, normalHeaderWitchNegativeTimeZoneOffset_min1);
+  Data comparableData2 = Data(compareRaw1, normalHeaderWitchNegativeTimeZoneOffset_min1);
 };
 
 TEST_F(DataTest, TestExceptionIsNotThrownForKonstruktor) {
