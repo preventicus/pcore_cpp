@@ -42,7 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
 using ProtobufType = com::preventicus::pcore::SensorType;
 
-class Channel {
+class Channel final {
  public:
   Channel(DataForm dataForm,
           std::vector<DifferentialBlock>& differentialBlocks,

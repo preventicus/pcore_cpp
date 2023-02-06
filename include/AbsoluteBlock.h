@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <vector>
 
-class AbsoluteBlock {
+class AbsoluteBlock final {
  public:
   AbsoluteBlock(std::vector<int32_t>& values);
   AbsoluteBlock();

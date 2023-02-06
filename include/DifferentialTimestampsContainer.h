@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 using ProtobufDifferentialTimestampContainer = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
 
-class DifferentialTimestampsContainer {
+class DifferentialTimestampsContainer final {
  public:
   DifferentialTimestampsContainer(uint64_t firstTimestamp_ms,
                                   std::vector<uint32_t>& blockIntervals_ms,

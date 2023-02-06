@@ -40,7 +40,7 @@ using ProtobufAccMetaData = com::preventicus::pcore::Raw_Sensor_Channel_AccMetad
 using ProtobufCoordinate = com::preventicus::pcore::Coordinate;
 using ProtobufNorm = com::preventicus::pcore::Norm;
 
-class AccMetaData {
+class AccMetaData final {
  public:
   AccMetaData(ProtobufCoordinate coordinate, ProtobufNorm norm);
   AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);

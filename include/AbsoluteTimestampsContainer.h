@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #pragma once
 #include <vector>
-class AbsoluteTimestampsContainer {
+class AbsoluteTimestampsContainer final {
  public:
   AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms);
   AbsoluteTimestampsContainer();

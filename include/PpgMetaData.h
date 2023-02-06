@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 using ProtobufColor = com::preventicus::pcore::Color;
 using ProtobufPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
-class PpgMetaData {
+class PpgMetaData final {
  public:
   PpgMetaData(ProtobufColor color, uint32_t wavelength_nm);
   PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);

@@ -42,7 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using ProtobufSensor = com::preventicus::pcore::Raw_Sensor;
 using ProtobufSensortype = com::preventicus::pcore::SensorType;
 
-class Sensor {
+class Sensor final {
  public:
   Sensor(std::vector<Channel> channels,
          DifferentialTimestampsContainer differentialTimestamps,

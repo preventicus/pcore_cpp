@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore.pb.h"
 
 using ProtobufData = com::preventicus::pcore::Data;
-class Data {
+class Data final {
  public:
   Data(Raw raw, Header header);
   Data(const ProtobufData& protobufData);
