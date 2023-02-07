@@ -132,7 +132,7 @@ uint32_t Sensor::lastTimestamp() {
   const std::vector<uint32_t> timestampIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
   const std::vector<uint32_t> blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
   std::vector<DifferentialBlock> firstChannelBlocks = this->channels[0].getDifferentialBlocks();
-  const size_t nLastBlock = firstChannelBlocks[firstChannelBlocks.size() - 1].getDiffValues().size();
+  const size_t nLastBlock = firstChannelBlocks[firstChannelBlocks.size() - 1].getDifferentialValues().size();
   long h = 0;
   for (auto& BlockIntervals : blockIntervals_ms) {
     h += BlockIntervals;
@@ -182,7 +182,7 @@ AbsoluteTimestampsContainer Sensor::calcAbsoluteTimestampsFrom() {
   uint32_t sumBlockInterval = 0;
   for (size_t i = 0; i < differentialTimestampsInterval.size(); i++) {
     sumBlockInterval += differentialBlockInterval[i];
-    for (size_t j = 0; j < firstChannelBlocks[i].getDiffValues().size(); j++) {
+    for (size_t j = 0; j < firstChannelBlocks[i].getDifferentialValues().size(); j++) {
       unixTimestamps_ms.push_back(firstTimestamp_ms + sumBlockInterval + j * differentialTimestampsInterval[i]);
     }
   }

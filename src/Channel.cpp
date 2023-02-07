@@ -165,7 +165,7 @@ AbsoluteBlock Channel::calculateAbsoluteForm() {
   std::vector<int32_t> absoluteValues = {};
   for (auto& differentialBlock : this->differentialBlocks) {
     int32_t sumValue = 0;
-    for (auto& differentialValue : differentialBlock.getDiffValues()) {
+    for (auto& differentialValue : differentialBlock.getDifferentialValues()) {
       sumValue += differentialValue;
       absoluteValues.push_back(sumValue);
     }

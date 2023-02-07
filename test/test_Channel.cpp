@@ -48,9 +48,9 @@ class ChannelTest : public ::testing::Test {
   PpgMetaData setCompareableWavelengthPpgMetaData = PpgMetaData(ProtobufColor::COLOR_NONE, comparableWavelength_nm);
   std::vector<int32_t> values = {};
   AbsoluteBlock absoluteBlock = AbsoluteBlock(values);
-  std::vector<int32_t> diffValues = {12, 15, 20};
-  DifferentialBlock diffBlock = DifferentialBlock(diffValues);
-  std::vector<DifferentialBlock> differentialBlocks = {diffBlock};
+  std::vector<int32_t> differentialValues = {12, 15, 20};
+  DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
+  std::vector<DifferentialBlock> differentialBlocks = {differentialBlock};
   DataForm dataform = DataForm::DIFFERENTIAL;
   Channel channelAccMetaDataSetCoordinateX1 = Channel(dataform, differentialBlocks, setCoordinateXAccMetaData, notSetPpgMetaData);
   Channel channelAccMetaDataSetCoordinateX2 = Channel(dataform, differentialBlocks, setCoordinateXAccMetaData, notSetPpgMetaData);
@@ -97,7 +97,8 @@ TEST_F(ChannelTest, TestGetMethodPpg) {
   EXPECT_EQ(this->channelPpgMetaDataSetColor1.getAbsoluteBlock().getValues(), this->absoluteBlock.getValues());
   EXPECT_EQ(this->channelPpgMetaDataSetColor1.getDataform(), this->dataform);
   for (size_t i = 0; i < this->channelPpgMetaDataSetColor1.getDifferentialBlocks().size(); i++) {
-    EXPECT_EQ(this->channelPpgMetaDataSetColor1.getDifferentialBlocks()[i].getDiffValues(), this->differentialBlocks[i].getDiffValues());
+    EXPECT_EQ(this->channelPpgMetaDataSetColor1.getDifferentialBlocks()[i].getDifferentialValues(),
+              this->differentialBlocks[i].getDifferentialValues());
   }
 }
 
@@ -109,7 +110,8 @@ TEST_F(ChannelTest, TestGetMethodAcc) {
   EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getAbsoluteBlock().getValues(), this->absoluteBlock.getValues());
   EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getDataform(), this->dataform);
   for (size_t i = 0; i < this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks().size(); i++) {
-    EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks()[i].getDiffValues(), this->differentialBlocks[i].getDiffValues());
+    EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks()[i].getDifferentialValues(),
+              this->differentialBlocks[i].getDifferentialValues());
   }
 }
 

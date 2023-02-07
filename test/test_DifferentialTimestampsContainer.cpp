@@ -146,23 +146,23 @@ TEST_F(DifferentialTimestampsTest, TestCalculateFirstTimestampInBlock) {
 TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlock) {
   uint32_t blockIdx = 2;
   uint32_t firstTimestampInBlock = 146;  // reference to the UnitTest before
-  std::vector<int32_t> diffValues = {30, 32, 54};
-  DifferentialBlock differentialBlock = DifferentialBlock(diffValues);
+  std::vector<int32_t> differentialValues = {30, 32, 54};
+  DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
   EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, differentialBlock), 518);
 }
 
 TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlock0) {
   uint32_t blockIdx = 0;
   uint32_t firstTimestampInBlock = 150;
-  std::vector<int32_t> diffValues = {30, 32, 54};
-  DifferentialBlock differentialBlock = DifferentialBlock(diffValues);
+  std::vector<int32_t> differentialValues = {30, 32, 54};
+  DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
   EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, differentialBlock), 552);
 }
 
 TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlockException) {
   uint32_t blockIdx = 10;
-  std::vector<int32_t> diffValues = {30, 32, 54};
-  DifferentialBlock differentialBlock = DifferentialBlock(diffValues);
+  std::vector<int32_t> differentialValues = {30, 32, 54};
+  DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
   EXPECT_THROW(this->differentialTimestampsWithNormalTimestamps1.calculateFirstTimestampInBlock(blockIdx), std::invalid_argument);
 }
 
