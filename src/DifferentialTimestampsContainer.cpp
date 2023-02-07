@@ -80,7 +80,7 @@ uint32_t DifferentialTimestampsContainer::calculateFirstTimestampInBlock(uint32_
 uint32_t DifferentialTimestampsContainer::calculateLastTimestampInBlock(uint32_t blockIdx,
                                                                         uint32_t firstTimestampInBlock_ms,
                                                                         DifferentialBlock differentialBlock) {
-  return firstTimestampInBlock_ms + differentialBlock.getDiffValues().size() * this->timestampsIntervals_ms[blockIdx];
+  return firstTimestampInBlock_ms + differentialBlock.getDifferentialValues().size() * this->timestampsIntervals_ms[blockIdx];
 }
 
 void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) {

@@ -32,34 +32,34 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "DifferentialBlock.h"
 
-DifferentialBlock::DifferentialBlock(std::vector<int32_t>& diffValues) : diffValues(diffValues) {}
+DifferentialBlock::DifferentialBlock(std::vector<int32_t>& differentialValues) : differentialValues(differentialValues) {}
 
 DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
   this->deserialize(protobufDifferentialBlock);
 }
 
 DifferentialBlock::DifferentialBlock() {
-  this->diffValues = {};
+  this->differentialValues = {};
 }
 
-std::vector<int32_t> DifferentialBlock::getDiffValues() {
-  return this->diffValues;
+std::vector<int32_t> DifferentialBlock::getDifferentialValues() {
+  return this->differentialValues;
 }
 
 bool DifferentialBlock::isEqual(DifferentialBlock& differentialBlock) {
-  return this->diffValues == differentialBlock.diffValues;
+  return this->differentialValues == differentialBlock.differentialValues;
 }
 
 void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentialBlock) {
   if (protobufDifferentialBlock == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
   }
-  for (auto& differentialValues : this->diffValues) {
-    protobufDifferentialBlock->add_diff_values(differentialValues);
+  for (auto& differentialValues : this->differentialValues) {
+    protobufDifferentialBlock->add_differential_values(differentialValues);
   }
 }
 
 void DifferentialBlock::deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
-  for (auto& protobufDiffValues : protobufDifferentialBlock.diff_values())
-    this->diffValues.push_back(protobufDiffValues);
+  for (auto& protobufDifferentialValues : protobufDifferentialBlock.differential_values())
+    this->differentialValues.push_back(protobufDifferentialValues);
 }

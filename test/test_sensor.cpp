@@ -42,9 +42,9 @@ class SensorTest : public ::testing::Test {
   DataForm dataForm2 = DataForm::ABSOLUTE;
   std::vector<int32_t> values1 = {};
   AbsoluteBlock normalAbsoluteBlock1 = AbsoluteBlock(values1);
-  std::vector<int32_t> diffValues1 = {12, 15, 20};
-  DifferentialBlock diffBlock1 = DifferentialBlock(diffValues1);
-  std::vector<DifferentialBlock> normalDifferentialBlocks1 = {diffBlock1};
+  std::vector<int32_t> differentialValues1 = {12, 15, 20};
+  DifferentialBlock differentialBlock1 = DifferentialBlock(differentialValues1);
+  std::vector<DifferentialBlock> normalDifferentialBlocks1 = {differentialBlock1};
   Channel channelAccMetaDataSetCoordinate =
       Channel(this->dataForm1, this->normalDifferentialBlocks1, this->setCoordinateAccMetaDataCoordinate, this->notSetPpgMetaData1);
   std::vector<Channel> normalVectorChannel = {channelAccMetaDataSetCoordinate};  // initialize Standard Channel
@@ -52,9 +52,9 @@ class SensorTest : public ::testing::Test {
   AccMetaData setcoordinateAccMetaDataNorm = AccMetaData(ProtobufCoordinate::COORDINATE_NONE, ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
   PpgMetaData notSetPpgMetaData2 = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
   AbsoluteBlock normalAbsoluteBlock2 = AbsoluteBlock(values1);
-  std::vector<int32_t> diffValues2 = {15, 25, 20};
-  DifferentialBlock diffBlock2 = DifferentialBlock(diffValues2);
-  std::vector<DifferentialBlock> comparableDifferentialBlocks = {diffBlock2};
+  std::vector<int32_t> differentialValues2 = {15, 25, 20};
+  DifferentialBlock differentialBlock2 = DifferentialBlock(differentialValues2);
+  std::vector<DifferentialBlock> comparableDifferentialBlocks = {differentialBlock2};
   DataForm dataform2 = DataForm::DIFFERENTIAL;
   Channel channelAccMetaDataSetNorm =
       Channel(this->dataform2, this->comparableDifferentialBlocks, this->setcoordinateAccMetaDataNorm, this->notSetPpgMetaData2);
