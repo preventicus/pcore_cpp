@@ -120,16 +120,15 @@ TEST_F(DataTest, TestExceptionIsNotThrownForKonstruktor) {
 }
 
 TEST_F(DataTest, TestGetMethodData) {
-  for (int i = 0; i < this->normalData1.getRaw().getSensor().size(); i++) {
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].calculateBlockIntervalsSumFor(2), 125);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].firstTimestamp(), 1690921);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].duration(), 554);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].lastTimestamp(), 1691475);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getSensorType(), ProtobufSensortype::SENSOR_TYPE_ACC);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getTimestampForm(), DataForm::DIFFERENTIAL);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getDifferentialTimestamps().getBlockIntervals(), this->normalBlock_intervals_ms);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getDifferentialTimestamps().getTimestampsIntervals(), this->normalTimestamps_intervals_ms);
-    EXPECT_EQ(this->normalData1.getRaw().getSensor()[i].getAbsoluteTimestamps().getUnixTimestamps(), this->normalUnix_ms);
+  for (auto& sensor : this->normalData1.getRaw().getSensor()) {
+    EXPECT_EQ(sensor.firstTimestamp(), 1690921);
+    EXPECT_EQ(sensor.duration(), 554);
+    EXPECT_EQ(sensor.lastTimestamp(), 1691475);
+    EXPECT_EQ(sensor.getSensorType(), ProtobufSensortype::SENSOR_TYPE_ACC);
+    EXPECT_EQ(sensor.getTimestampForm(), DataForm::DIFFERENTIAL);
+    EXPECT_EQ(sensor.getDifferentialTimestamps().getBlockIntervals(), this->normalBlock_intervals_ms);
+    EXPECT_EQ(sensor.getDifferentialTimestamps().getTimestampsIntervals(), this->normalTimestamps_intervals_ms);
+    EXPECT_EQ(sensor.getAbsoluteTimestamps().getUnixTimestamps(), this->normalUnix_ms);
   }
   EXPECT_EQ(this->normalData1.getHeader().getTimeZoneOffset(), this->positiveTimeZoneOffset_min);
   EXPECT_EQ(this->normalData1.getHeader().getVersion().getMajor(), this->version.getMajor());

@@ -142,10 +142,6 @@ TEST_F(SensorTest, ComparableDifferentComparableSensor) {
   EXPECT_FALSE(this->comparableSensor2.isEqual(this->normalSensor1));
 }
 
-TEST_F(SensorTest, TestCalculateBlockIntervalsSumFor) {
-  EXPECT_EQ(this->normalSensor1.calculateBlockIntervalsSumFor(2), 125);
-}
-
 TEST_F(SensorTest, TestSerializeAndDeserializeMethodStandardSensor) {
   ProtobufSensor protobufSensor;
   this->normalSensor1.serialize(&protobufSensor);

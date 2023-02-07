@@ -104,22 +104,22 @@ class RawTest : public ::testing::Test {
 };
 
 TEST_F(RawTest, TestGetMethodeRaw) {
-  for (size_t i = 0; i < this->normalRaw1.getSensor().size(); i++) {
-    EXPECT_EQ(this->normalRaw1.getSensor()[i].getAbsoluteTimestamps().getUnixTimestamps(), this->normalAbsoluteTimestamps.getUnixTimestamps());
-    EXPECT_EQ(this->normalRaw1.getSensor()[i].getSensorType(), this->normalType);
-    EXPECT_EQ(this->normalRaw1.getSensor()[i].getTimestampForm(), DataForm::DIFFERENTIAL);
-    EXPECT_EQ(this->normalRaw1.getSensor()[i].getDifferentialTimestamps().getBlockIntervals(), this->normalBlock_intervals_ms);
-    EXPECT_EQ(this->normalRaw1.getSensor()[i].getDifferentialTimestamps().getFirstTimestamp(), this->normalFirst_timestamp_ms);
-    EXPECT_EQ(this->normalRaw1.getSensor()[i].getDifferentialTimestamps().getTimestampsIntervals(), this->normalTimestamps_intervals_ms);
-    for (size_t j = 0; j < this->normalRaw1.getSensor()[i].getChannels().size(); j++) {
-      EXPECT_EQ(this->normalRaw1.getSensor()[i].getChannels()[j].getAbsoluteBlock().getValues(), this->normalAbsoluteBlock1.getValues());
-      EXPECT_EQ(this->normalRaw1.getSensor()[i].getChannels()[j].getDataform(), this->dataform1);
-      EXPECT_EQ(this->normalRaw1.getSensor()[i].getChannels()[j].getAccMetaData().getCoordinate(), ProtobufCoordinate::COORDINATE_X);
-      EXPECT_EQ(this->normalRaw1.getSensor()[i].getChannels()[j].getAccMetaData().getNorm(), ProtobufNorm::NORM_NONE);
-      EXPECT_EQ(this->normalRaw1.getSensor()[i].getChannels()[j].getPpgMetData().getColor(), ProtobufColor::COLOR_NONE);
-      EXPECT_EQ(this->normalRaw1.getSensor()[i].getChannels()[j].getPpgMetData().getWavelength(), this->notSetWavelength_nm);
-      for (size_t k = 0; k < this->normalRaw1.getSensor()[i].getChannels()[j].getDifferentialBlocks().size(); k++) {
-        EXPECT_EQ(this->normalRaw1.getSensor()[i].getChannels()[j].getDifferentialBlocks()[k].getDiffValues(), this->diffValues1);
+  for (auto& sensor : this->normalRaw1.getSensor()) {
+    EXPECT_EQ(sensor.getAbsoluteTimestamps().getUnixTimestamps(), this->normalAbsoluteTimestamps.getUnixTimestamps());
+    EXPECT_EQ(sensor.getSensorType(), this->normalType);
+    EXPECT_EQ(sensor.getTimestampForm(), DataForm::DIFFERENTIAL);
+    EXPECT_EQ(sensor.getDifferentialTimestamps().getBlockIntervals(), this->normalBlock_intervals_ms);
+    EXPECT_EQ(sensor.getDifferentialTimestamps().getFirstTimestamp(), this->normalFirst_timestamp_ms);
+    EXPECT_EQ(sensor.getDifferentialTimestamps().getTimestampsIntervals(), this->normalTimestamps_intervals_ms);
+    for (auto& channels : sensor.getChannels()) {
+      EXPECT_EQ(channels.getAbsoluteBlock().getValues(), this->normalAbsoluteBlock1.getValues());
+      EXPECT_EQ(channels.getDataform(), this->dataform1);
+      EXPECT_EQ(channels.getAccMetaData().getCoordinate(), ProtobufCoordinate::COORDINATE_X);
+      EXPECT_EQ(channels.getAccMetaData().getNorm(), ProtobufNorm::NORM_NONE);
+      EXPECT_EQ(channels.getPpgMetData().getColor(), ProtobufColor::COLOR_NONE);
+      EXPECT_EQ(channels.getPpgMetData().getWavelength(), this->notSetWavelength_nm);
+      for (auto& differentialBlocks : channels.getDifferentialBlocks()) {
+        EXPECT_EQ(differentialBlocks.getDiffValues(), this->diffValues1);
       }
     }
   }

@@ -55,7 +55,6 @@ class Sensor final {
   std::vector<Channel> getChannels();
   DifferentialTimestampsContainer getDifferentialTimestamps();
   AbsoluteTimestampsContainer getAbsoluteTimestamps();
-  uint64_t calculateBlockIntervalsSumFor(size_t idxBlock);
   bool isEqual(Sensor& Sensor);
   void serialize(ProtobufSensor* protobufSensor);
   uint32_t firstTimestamp();

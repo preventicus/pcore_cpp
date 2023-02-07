@@ -82,23 +82,13 @@ bool Sensor::isEqual(Sensor& sensor) {
          this->absoluteTimestamps.isEqual(sensor.absoluteTimestamps);
 }
 
-uint64_t Sensor::calculateBlockIntervalsSumFor(size_t idxBlock) {
-  size_t idxBlockStart = 0;
-  uint64_t blockIntervalsSum = 0;
-  const std::vector<uint32_t> blockIntervals_ms = this->differentialTimestamps.getBlockIntervals();
-  for (size_t i = idxBlockStart; i < idxBlock; i++) {
-    blockIntervalsSum += blockIntervals_ms[i];
-  }
-  return blockIntervalsSum;
-}
-
 void Sensor::serialize(ProtobufSensor* protobufSensor) {
   if (protobufSensor == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufSensor is a null pointer");
   }
-  for (size_t i = 0; i < this->channels.size(); i++) {
+  for (auto& channel : this->channels) {
     ProtobufChannel* protobufChannel = protobufSensor->add_channels();
-    this->channels[i].serialize(protobufChannel);
+    channel.serialize(protobufChannel);
   }
   protobufSensor->set_sensor_type(this->sensorType);
   ProtobufDifferentialTimestampContainer protobufTimestampContainer;
@@ -107,11 +97,11 @@ void Sensor::serialize(ProtobufSensor* protobufSensor) {
 }
 
 void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
-  std::vector<Channel> channel{};
-  for (size_t i = 0; i < protobufSensor.channels().size(); i++) {
-    channel.push_back(Channel(protobufSensor.channels(i)));
+  std::vector<Channel> channels{};
+  for (auto& channel : protobufSensor.channels()) {
+    channels.push_back(Channel(channel));
   }
-  this->channels = channel;
+  this->channels = channels;
   this->sensorType = protobufSensor.sensor_type();
   this->differentialTimestamps = DifferentialTimestampsContainer(protobufSensor.differential_timestamps_container());
 }
@@ -126,8 +116,8 @@ uint32_t Sensor::lastTimestamp() {
   std::vector<DifferentialBlock> firstChannelBlocks = this->channels[0].getDifferentialBlocks();
   const size_t nLastBlock = firstChannelBlocks[firstChannelBlocks.size() - 1].getDiffValues().size();
   long h = 0;
-  for (size_t i = 0; i < blockIntervals_ms.size(); i++) {
-    h += blockIntervals_ms[i];
+  for (auto& BlockIntervals : blockIntervals_ms) {
+    h += BlockIntervals;
   }
   return Sensor::firstTimestamp() + h + timestampIntervals_ms[timestampIntervals_ms.size() - 1] * nLastBlock;
 }

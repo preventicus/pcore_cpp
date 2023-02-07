@@ -54,12 +54,12 @@ void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentia
   if (protobufDifferentialBlock == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
   }
-  for (size_t i = 0; i < this->diffValues.size(); i++) {
-    protobufDifferentialBlock->add_diff_values(this->diffValues[i]);
+  for (auto& differentialValues : this->diffValues) {
+    protobufDifferentialBlock->add_diff_values(differentialValues);
   }
 }
 
 void DifferentialBlock::deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
-  for (size_t i = 0; i < protobufDifferentialBlock.diff_values_size(); i++)
-    this->diffValues.push_back(protobufDifferentialBlock.diff_values(i));
+  for (auto& protobufDiffValues : protobufDifferentialBlock.diff_values())
+    this->diffValues.push_back(protobufDiffValues);
 }

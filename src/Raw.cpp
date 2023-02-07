@@ -62,16 +62,16 @@ void Raw::serialize(ProtobufRaw* protobufRaw) {
   if (protobufRaw == nullptr) {
     throw std::invalid_argument("protobufRaw is a null pointer");
   }
-  for (size_t i = 0; i < this->sensor.size(); i++) {
+  for (auto& sensors : this->sensor) {
     ProtobufSensor* protobufSensor = protobufRaw->add_sensors();
-    this->sensor[i].serialize(protobufSensor);
+    sensors.serialize(protobufSensor);
   }
 }
 
 void Raw::deserialize(const ProtobufRaw& protobufRaw) {
   std::vector<Sensor> sensor{};
-  for (size_t i = 0; i < protobufRaw.sensors().size(); i++) {
-    sensor.push_back(Sensor(protobufRaw.sensors(i)));
+  for (auto& protobufSensor : protobufRaw.sensors()) {
+    sensor.push_back(Sensor(protobufSensor));
   }
   this->sensor = sensor;
 }
