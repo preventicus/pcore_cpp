@@ -36,14 +36,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using ProtobufRaw = com::preventicus::pcore::Raw;
 class Raw final {
  public:
-  Raw(std::vector<Sensor> sensor);
+  Raw(std::vector<Sensor> sensors);
   Raw(const ProtobufRaw& protobufRaw);
   Raw();
-  std::vector<Sensor> getSensor();
+  std::vector<Sensor> getSensors();
   bool isEqual(Raw& protobufRaw);
+  void switchToDifferentialForm();
+  void switchInAbsoluteFrom();
   void serialize(ProtobufRaw* protobufRaw);
 
  private:
   void deserialize(const ProtobufRaw& protobufRaw);
-  std::vector<Sensor> sensor;
+  std::vector<Sensor> sensors;
 };

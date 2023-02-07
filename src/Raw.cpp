@@ -32,46 +32,56 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "Raw.h"
 
-Raw::Raw(std::vector<Sensor> sensor) : sensor(sensor) {}
+Raw::Raw(std::vector<Sensor> sensors) : sensors(sensors) {}
 
 Raw::Raw(const ProtobufRaw& protobufRaw) {
   this->deserialize(protobufRaw);
 }
 
 Raw::Raw() {
-  this->sensor = std::vector<Sensor>{};
+  this->sensors = std::vector<Sensor>{};
 }
 
-std::vector<Sensor> Raw::getSensor() {
-  return this->sensor;
+std::vector<Sensor> Raw::getSensors() {
+  return this->sensors;
 }
 
 bool Raw::isEqual(Raw& raw) {
-  if (this->sensor.size() != raw.sensor.size()) {
+  if (this->sensors.size() != raw.sensors.size()) {
     return false;
   }
-  for (size_t i = 0; i < this->sensor.size(); i++) {
-    if (!this->sensor[i].isEqual(raw.sensor[i])) {
+  for (size_t i = 0; i < this->sensors.size(); i++) {
+    if (!this->sensors[i].isEqual(raw.sensors[i])) {
       return false;
     }
   }
   return true;
 }
+void Raw::switchToDifferentialForm() {
+  for (auto& sensor : this->sensors) {
+    sensor.switchToDifferentialForm();
+  }
+}
 
+void Raw::switchInAbsoluteFrom() {
+  for (auto& sensor : this->sensors) {
+    sensor.switchInAbsoluteFrom();
+  }
+}
 void Raw::serialize(ProtobufRaw* protobufRaw) {
   if (protobufRaw == nullptr) {
     throw std::invalid_argument("protobufRaw is a null pointer");
   }
-  for (auto& sensors : this->sensor) {
+  for (auto& sensor : this->sensors) {
     ProtobufSensor* protobufSensor = protobufRaw->add_sensors();
-    sensors.serialize(protobufSensor);
+    sensor.serialize(protobufSensor);
   }
 }
 
 void Raw::deserialize(const ProtobufRaw& protobufRaw) {
-  std::vector<Sensor> sensor{};
+  std::vector<Sensor> sensors{};
   for (auto& protobufSensor : protobufRaw.sensors()) {
-    sensor.push_back(Sensor(protobufSensor));
+    sensors.push_back(Sensor(protobufSensor));
   }
-  this->sensor = sensor;
+  this->sensors = sensors;
 }

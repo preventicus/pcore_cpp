@@ -44,6 +44,8 @@ class Data final {
   Raw getRaw();
   Header getHeader();
   bool isEqual(Data& data);
+  void switchInDifferentialForm();
+  void switchInAbsoluteFrom();
   void serialize(ProtobufData* protobufData);
 
  private:

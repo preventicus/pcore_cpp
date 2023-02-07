@@ -44,10 +44,8 @@ using ProtobufSensortype = com::preventicus::pcore::SensorType;
 
 class Sensor final {
  public:
-  Sensor(std::vector<Channel> channels,
-         DifferentialTimestampsContainer differentialTimestamps,
-         AbsoluteTimestampsContainer absoluteTimestamps,
-         ProtobufSensortype sensorType);
+  Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensortype sensorType);
+  Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensortype sensorType);
   Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
   ProtobufSensortype getSensorType();
@@ -56,15 +54,20 @@ class Sensor final {
   DifferentialTimestampsContainer getDifferentialTimestamps();
   AbsoluteTimestampsContainer getAbsoluteTimestamps();
   bool isEqual(Sensor& Sensor);
-  void serialize(ProtobufSensor* protobufSensor);
   uint32_t firstTimestamp();
   uint32_t lastTimestamp();
   uint32_t duration();
+  void switchToDifferentialForm();
+  void switchInAbsoluteFrom();
+  void serialize(ProtobufSensor* protobufSensor);
 
  private:
+  AbsoluteTimestampsContainer calcAbsoluteTimestampsFrom();
+  DifferentialTimestampsContainer cutUnixInDifferentialTimestamps(std::vector<size_t> blocksIdxs);
+  std::vector<size_t> findBlocksIdxs();
   void deserialize(const ProtobufSensor& protobufSensor);
   ProtobufSensortype sensorType;
   std::vector<Channel> channels;
-  DifferentialTimestampsContainer differentialTimestamps;
-  AbsoluteTimestampsContainer absoluteTimestamps;
+  DifferentialTimestampsContainer differentialTimestampsContainer;
+  AbsoluteTimestampsContainer absoluteTimestampsContainer;
 };
