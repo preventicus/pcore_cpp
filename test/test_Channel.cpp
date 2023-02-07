@@ -98,7 +98,7 @@ TEST_F(ChannelTest, TestGetMethodPpg) {
   EXPECT_EQ(this->channelPpgMetaDataSetColor1.getAccMetaData().getNorm(), this->notSetAccMetaData.getNorm());
   EXPECT_EQ(this->channelPpgMetaDataSetColor1.getAbsoluteBlock().getValues(), this->absoluteBlock.getValues());
   EXPECT_EQ(this->channelPpgMetaDataSetColor1.getDataform(), this->dataform);
-  for (int i = 0; i < this->channelPpgMetaDataSetColor1.getDifferentialBlocks().size(); i++) {
+  for (size_t i = 0; i < this->channelPpgMetaDataSetColor1.getDifferentialBlocks().size(); i++) {
     EXPECT_EQ(this->channelPpgMetaDataSetColor1.getDifferentialBlocks()[i].getDiffValues(), this->differentialBlocks[i].getDiffValues());
   }
 }
@@ -110,7 +110,7 @@ TEST_F(ChannelTest, TestGetMethodAcc) {
   EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getPpgMetData().getWavelength(), this->notSetPpgMetaData.getWavelength());
   EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getAbsoluteBlock().getValues(), this->absoluteBlock.getValues());
   EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getDataform(), this->dataform);
-  for (int i = 0; i < this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks().size(); i++) {
+  for (size_t i = 0; i < this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks().size(); i++) {
     EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks()[i].getDiffValues(), this->differentialBlocks[i].getDiffValues());
   }
 }

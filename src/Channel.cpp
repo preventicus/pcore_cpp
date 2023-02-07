@@ -106,16 +106,16 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
     this->ppgMetaData.serialize(&protobufPpgMetaData);
     protobufChannel->mutable_ppg_metadata()->CopyFrom(protobufPpgMetaData);
   }
-  for (size_t i = 0; i < this->differentialBlocks.size(); i++) {
+  for (auto& differentialBlock : this->differentialBlocks) {
     ProtobufDifferentialBlock* protobufDifferentialBlock = protobufChannel->add_differential_blocks();
-    this->differentialBlocks[i].serialize(protobufDifferentialBlock);
+    differentialBlock.serialize(protobufDifferentialBlock);
   }
 }
 
 void Channel::deserialize(const ProtobufChannel& protobufChannel) {
   std::vector<DifferentialBlock> differentialBlocks{};
-  for (size_t i = 0; i < protobufChannel.differential_blocks_size(); i++) {
-    differentialBlocks.push_back(DifferentialBlock(protobufChannel.differential_blocks(i)));
+  for (auto& protobufDifferentialBlock : protobufChannel.differential_blocks()) {
+    differentialBlocks.push_back(DifferentialBlock(protobufDifferentialBlock));
   }
   this->differentialBlocks = differentialBlocks;
   this->accMetadata = AccMetaData(protobufChannel.acc_metadata());

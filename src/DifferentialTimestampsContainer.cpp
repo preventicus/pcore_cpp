@@ -68,11 +68,11 @@ uint32_t DifferentialTimestampsContainer::calculateFirstTimestampInBlock(uint32_
   if (this->blockIntervals_ms.size() <= blockIdx) {  // toDo : FOR-325
     throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
   }
-  uint64_t firstTimestamp = this->firstTimestamp_ms;
-  std::vector<uint32_t> const blockIntervals = this->blockIntervals_ms;
 
+  uint64_t firstTimestamp = this->firstTimestamp_ms;
+  std::vector<uint32_t> blockinterval = this->blockIntervals_ms;
   for (size_t i = 1; i <= blockIdx; i++) {
-    firstTimestamp += blockIntervals[i];
+    firstTimestamp += blockinterval[i];
   }
   return firstTimestamp;
 }
@@ -87,21 +87,21 @@ void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampCon
   if (protobufDifferentialTimestampContainer == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialTimestampContainer is a null pointer");
   }
-  for (size_t i = 0; i < this->blockIntervals_ms.size(); i++) {
-    protobufDifferentialTimestampContainer->add_block_intervals_ms(this->blockIntervals_ms[i]);
+  for (auto& blockInterval : this->blockIntervals_ms) {
+    protobufDifferentialTimestampContainer->add_block_intervals_ms(blockInterval);
   }
-  for (size_t j = 0; j < this->timestampsIntervals_ms.size(); j++) {
-    protobufDifferentialTimestampContainer->add_timestamps_intervals_ms(this->timestampsIntervals_ms[j]);
+  for (auto& timestampsInterval : this->timestampsIntervals_ms) {
+    protobufDifferentialTimestampContainer->add_timestamps_intervals_ms(timestampsInterval);
   }
   protobufDifferentialTimestampContainer->set_first_timestamp_ms(this->firstTimestamp_ms);
 }
 
 void DifferentialTimestampsContainer::deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
   this->firstTimestamp_ms = protobufDifferentialTimestampContainer.first_timestamp_ms();
-  for (size_t i = 0; i < protobufDifferentialTimestampContainer.block_intervals_ms_size(); i++) {
-    this->blockIntervals_ms.push_back(protobufDifferentialTimestampContainer.block_intervals_ms(i));
+  for (auto& protobufBlockInterval : protobufDifferentialTimestampContainer.block_intervals_ms()) {
+    this->blockIntervals_ms.push_back(protobufBlockInterval);
   }
-  for (size_t j = 0; j < protobufDifferentialTimestampContainer.timestamps_intervals_ms_size(); j++) {
-    this->timestampsIntervals_ms.push_back(protobufDifferentialTimestampContainer.timestamps_intervals_ms(j));
+  for (auto& protobufTimestampsInterval : protobufDifferentialTimestampContainer.timestamps_intervals_ms()) {
+    this->timestampsIntervals_ms.push_back(protobufTimestampsInterval);
   }
 }
