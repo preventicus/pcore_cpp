@@ -44,11 +44,8 @@ using ProtobufType = com::preventicus::pcore::SensorType;
 
 class Channel final {
  public:
-  Channel(DataForm dataForm,
-          std::vector<DifferentialBlock>& differentialBlocks,
-          AbsoluteBlock& absoluteBlock,
-          AccMetaData& accMetadata,
-          PpgMetaData& ppgMetaData);
+  Channel(DataForm dataForm, AbsoluteBlock& absoluteBlock, AccMetaData& accMetadata, PpgMetaData& ppgMetaData);
+  Channel(DataForm dataForm, std::vector<DifferentialBlock>& differentialBlocks, AccMetaData& accMetadata, PpgMetaData& ppgMetaData);
   Channel(const ProtobufChannel& protobufChannel);
   Channel();
   std::vector<DifferentialBlock> getDifferentialBlocks();
@@ -56,10 +53,15 @@ class Channel final {
   AccMetaData getAccMetaData();
   PpgMetaData getPpgMetData();
   bool isEqual(Channel& channel);
-  void serialize(ProtobufChannel* protobufChannel);
   DataForm getDataform();
+  void switchInAbsoluteFrom();
+  void switchInDifferentialFrom(std::vector<size_t> blocksIdxs);
+  void serialize(ProtobufChannel* protobufChannel);
 
  private:
+  std::vector<DifferentialBlock> cutValuesInDifferentialBlocks(std::vector<size_t> blocksIdxs);
+  DifferentialBlock createDifferentialBlock(size_t fromIdx, size_t toIdx);
+  AbsoluteBlock calculateAbsoluteForm();
   void deserialize(const ProtobufChannel& protobufChannel);
   PpgMetaData ppgMetaData;
   AccMetaData accMetadata;

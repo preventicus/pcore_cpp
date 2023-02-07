@@ -44,11 +44,8 @@ class RawTest : public ::testing::Test {
   DifferentialBlock diffBlock1 = DifferentialBlock(diffValues1);
   std::vector<DifferentialBlock> normalDifferentialBlocks = {diffBlock1};
   DataForm dataform1 = DataForm::DIFFERENTIAL;
-  Channel channelAccMetaDataSetCoordinate = Channel(this->dataform1,
-                                                    this->normalDifferentialBlocks,
-                                                    this->normalAbsoluteBlock1,
-                                                    this->setcoordinateAccMetaDataCoordinate,
-                                                    this->notSetPpgMetaData1);
+  Channel channelAccMetaDataSetCoordinate =
+      Channel(this->dataform1, this->normalDifferentialBlocks, this->setcoordinateAccMetaDataCoordinate, this->notSetPpgMetaData1);
   std::vector<Channel> normalVectorChannel = {channelAccMetaDataSetCoordinate};  // initialize base Channel
 
   AccMetaData setcoordinateAccMetaDataNorm = AccMetaData(ProtobufCoordinate::COORDINATE_NONE, ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
@@ -59,11 +56,8 @@ class RawTest : public ::testing::Test {
   DifferentialBlock diffBlock2 = DifferentialBlock(diffValues2);
   std::vector<DifferentialBlock> compareDifferentialBlocks = {diffBlock2};
   DataForm dataform2 = DataForm::DIFFERENTIAL;
-  Channel channelAccMetaDataSetNorm = Channel(this->dataform2,
-                                              this->compareDifferentialBlocks,
-                                              this->normalAbsoluteBlock2,
-                                              this->setcoordinateAccMetaDataNorm,
-                                              this->notSetPpgMetaData2);
+  Channel channelAccMetaDataSetNorm =
+      Channel(this->dataform2, this->compareDifferentialBlocks, this->setcoordinateAccMetaDataNorm, this->notSetPpgMetaData2);
   std::vector<Channel> compareVectorChannel = {channelAccMetaDataSetNorm};  // initialize compare channel
 
   std::vector<uint64_t> normalUnixTimestamps_ms = {};
@@ -86,8 +80,8 @@ class RawTest : public ::testing::Test {
       DifferentialTimestampsContainer(this->compareFirst_timestamp_ms,
                                       this->compareBlock_intervals_ms,
                                       this->compareTimestamps_intervals_ms);  // initialize ctimestampContainer as comparison
-  Sensor normalSensor1 = Sensor(this->normalVectorChannel, this->normaldifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalType);
-  Sensor compareSensor1 = Sensor(this->compareVectorChannel, this->comparedifferentialTimestamps, this->compareAbsoluteTimestamps, this->compareType);
+  Sensor normalSensor1 = Sensor(this->normalVectorChannel, this->normaldifferentialTimestamps, this->normalType);
+  Sensor compareSensor1 = Sensor(this->compareVectorChannel, this->comparedifferentialTimestamps, this->compareType);
   std::vector<Sensor> compareSensor = {compareSensor1};
   std::vector<Sensor> normalSensor = {normalSensor1};
 
@@ -98,7 +92,7 @@ class RawTest : public ::testing::Test {
 };
 
 TEST_F(RawTest, TestGetMethodeRaw) {
-  for (auto& sensor : this->normalRaw1.getSensor()) {
+  for (auto& sensor : this->normalRaw1.getSensors()) {
     EXPECT_EQ(sensor.getAbsoluteTimestamps().getUnixTimestamps(), this->normalAbsoluteTimestamps.getUnixTimestamps());
     EXPECT_EQ(sensor.getSensorType(), this->normalType);
     EXPECT_EQ(sensor.getTimestampForm(), DataForm::DIFFERENTIAL);

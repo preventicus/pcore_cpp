@@ -38,32 +38,26 @@ class SensorTest : public ::testing::Test {
   uint32_t notSetWavelength_nm = 0;
   AccMetaData setCoordinateAccMetaDataCoordinate = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_NONE);
   PpgMetaData notSetPpgMetaData1 = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
+  DataForm dataForm1 = DataForm::DIFFERENTIAL;
+  DataForm dataForm2 = DataForm::ABSOLUTE;
   std::vector<int32_t> values1 = {};
   AbsoluteBlock normalAbsoluteBlock1 = AbsoluteBlock(values1);
   std::vector<int32_t> diffValues1 = {12, 15, 20};
   DifferentialBlock diffBlock1 = DifferentialBlock(diffValues1);
   std::vector<DifferentialBlock> normalDifferentialBlocks1 = {diffBlock1};
-  DataForm dataForm1 = DataForm::DIFFERENTIAL;
-  Channel channelAccMetaDataSetCoordinate = Channel(this->dataForm1,
-                                                    this->normalDifferentialBlocks1,
-                                                    this->normalAbsoluteBlock1,
-                                                    this->setCoordinateAccMetaDataCoordinate,
-                                                    this->notSetPpgMetaData1);
+  Channel channelAccMetaDataSetCoordinate =
+      Channel(this->dataForm1, this->normalDifferentialBlocks1, this->setCoordinateAccMetaDataCoordinate, this->notSetPpgMetaData1);
   std::vector<Channel> normalVectorChannel = {channelAccMetaDataSetCoordinate};  // initialize Standard Channel
 
   AccMetaData setcoordinateAccMetaDataNorm = AccMetaData(ProtobufCoordinate::COORDINATE_NONE, ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
   PpgMetaData notSetPpgMetaData2 = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
-  std::vector<int32_t> values2 = {};
-  AbsoluteBlock normalAbsoluteBlock2 = AbsoluteBlock(values2);
+  AbsoluteBlock normalAbsoluteBlock2 = AbsoluteBlock(values1);
   std::vector<int32_t> diffValues2 = {15, 25, 20};
   DifferentialBlock diffBlock2 = DifferentialBlock(diffValues2);
   std::vector<DifferentialBlock> comparableDifferentialBlocks = {diffBlock2};
   DataForm dataform2 = DataForm::DIFFERENTIAL;
-  Channel channelAccMetaDataSetNorm = Channel(this->dataform2,
-                                              this->comparableDifferentialBlocks,
-                                              this->normalAbsoluteBlock2,
-                                              this->setcoordinateAccMetaDataNorm,
-                                              this->notSetPpgMetaData2);
+  Channel channelAccMetaDataSetNorm =
+      Channel(this->dataform2, this->comparableDifferentialBlocks, this->setcoordinateAccMetaDataNorm, this->notSetPpgMetaData2);
   std::vector<Channel> comparableVectorChannel = {channelAccMetaDataSetNorm};  // initialize comparable channel
 
   std::vector<uint64_t> normalUnix_ms = {};
@@ -85,16 +79,15 @@ class SensorTest : public ::testing::Test {
   DifferentialTimestampsContainer comparableDifferentialTimestamps =
       DifferentialTimestampsContainer(this->comparableFirstTimestamp_ms,
                                       this->comparableBlockIntervals_ms,
-                                      this->comparableTimestampsIntervals_ms);  // initialize ctimestampContainer as comparison
-  Sensor normalSensor1 = Sensor(normalVectorChannel, normalDifferentialTimestamps, normalAbsoluteTimestamps, normalSensorType);
-  Sensor normalSensor2 = Sensor(normalVectorChannel, normalDifferentialTimestamps, normalAbsoluteTimestamps, normalSensorType);
-  Sensor comparableSensor1 = Sensor(comparableVectorChannel, comparableDifferentialTimestamps, comparableAbsoluteTimestamps, comparableSensorType);
-  Sensor comparableSensor2 = Sensor(comparableVectorChannel, comparableDifferentialTimestamps, comparableAbsoluteTimestamps, comparableSensorType);
+                                      this->comparableTimestampsIntervals_ms);  // initialize TimestampContainer as comparison
+  Sensor normalSensor1 = Sensor(normalVectorChannel, normalDifferentialTimestamps, normalSensorType);
+  Sensor normalSensor2 = Sensor(normalVectorChannel, normalDifferentialTimestamps, normalSensorType);
+  Sensor comparableSensor1 = Sensor(comparableVectorChannel, comparableDifferentialTimestamps, comparableSensorType);
+  Sensor comparableSensor2 = Sensor(comparableVectorChannel, comparableDifferentialTimestamps, comparableSensorType);
 };
 
 TEST_F(SensorTest, TestConstruktor) {
-  EXPECT_NO_THROW(Sensor normalSensor1 =
-                      Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalAbsoluteTimestamps, this->normalSensorType));
+  EXPECT_NO_THROW(Sensor normalSensor1 = Sensor(this->normalVectorChannel, this->normalDifferentialTimestamps, this->normalSensorType));
 }
 
 TEST_F(SensorTest, TestGetMethodStandardSensor) {

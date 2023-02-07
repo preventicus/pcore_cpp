@@ -55,6 +55,14 @@ bool Data::isEqual(Data& data) {
   return this->header.isEqual(data.header) && this->raw.isEqual(data.raw);
 }
 
+void Data::switchInDifferentialForm() {
+  this->raw.switchToDifferentialForm();
+}
+
+void Data::switchInAbsoluteFrom() {
+  this->raw.switchInAbsoluteFrom();
+}
+
 void Data::serialize(ProtobufData* protobufData) {
   if (protobufData == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufData is a null pointer");

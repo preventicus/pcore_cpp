@@ -5,3 +5,5 @@ include/protobuf/*
 .idea
 cmake-build-debug
 cmake-build-release
+cmake-build-debug-coverage
+cmake-build-default
