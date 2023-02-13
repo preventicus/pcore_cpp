@@ -30,42 +30,43 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #pragma once
 #include "AbsoluteBlock.h"
 #include "AccMetaData.h"
-#include "DataFormat.h"
 #include "DifferentialBlock.h"
-#include "DifferentialTimestampsContainer.h"
 #include "PpgMetaData.h"
 
 #include "protobuf/pcore_raw.pb.h"
+
 using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
 using ProtobufType = com::preventicus::pcore::SensorType;
 
 class Channel final {
  public:
-  Channel(DataForm dataForm, AbsoluteBlock& absoluteBlock, AccMetaData& accMetadata, PpgMetaData& ppgMetaData);
-  Channel(DataForm dataForm, std::vector<DifferentialBlock>& differentialBlocks, AccMetaData& accMetadata, PpgMetaData& ppgMetaData);
+  Channel(AccMetaData& accMetadata, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdx);
+  Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdx);
+  Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& differentialBlocks);
+  Channel(AccMetaData& accMetadata, std::vector<DifferentialBlock>& differentialBlocks);
   Channel(const ProtobufChannel& protobufChannel);
   Channel();
+
   std::vector<DifferentialBlock> getDifferentialBlocks();
   AbsoluteBlock getAbsoluteBlock();
   AccMetaData getAccMetaData();
   PpgMetaData getPpgMetData();
   bool isEqual(Channel& channel);
-  DataForm getDataform();
-  void switchInAbsoluteFrom();
-  void switchInDifferentialFrom(std::vector<size_t> blocksIdxs);
   void serialize(ProtobufChannel* protobufChannel);
 
  private:
-  std::vector<DifferentialBlock> cutValuesInDifferentialBlocks(std::vector<size_t> blocksIdxs);
+  std::vector<DifferentialBlock> calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blocksIdxs);
   DifferentialBlock createDifferentialBlock(size_t fromIdx, size_t toIdx);
-  AbsoluteBlock calculateAbsoluteForm();
+  AbsoluteBlock calculateAbsoluteBlock(std::vector<DifferentialBlock> differentialBlocks);
+
   void deserialize(const ProtobufChannel& protobufChannel);
+
   PpgMetaData ppgMetaData;
   AccMetaData accMetadata;
   std::vector<DifferentialBlock> differentialBlocks;
   AbsoluteBlock absoluteBlock;
-  DataForm dataForm;
 };

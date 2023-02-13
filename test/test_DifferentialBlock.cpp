@@ -30,45 +30,40 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include <gtest/gtest.h>
-#include "DifferentialBlock.h"
+#include "DifferentialBlockExampleFactory.h"
 
 class DifferentialBlockTest : public ::testing::Test {
  protected:
-  std::vector<int32_t> differentialValuesNormal = {30, 32, 54};
-  std::vector<int32_t> differentialValuesNormalNeagtive = {-23, -234, -13};
-  std::vector<int32_t> differentialValuesOneNegative = {-123};
-  std::vector<int32_t> differentialValuesOnePositive = {123};
-  std::vector<int32_t> differentialValues0 = {0};
-  std::vector<int32_t> differentialValuesEmpty = {};
-  DifferentialBlock differentialBlockNormal1 = DifferentialBlock(differentialValuesNormal);
-  DifferentialBlock differentialBlockNormal2 = DifferentialBlock(differentialValuesNormal);
-  DifferentialBlock differentialBlockWithNegativeValues1 = DifferentialBlock(differentialValuesNormalNeagtive);
-  DifferentialBlock differentialBlockWithNegativeValues2 = DifferentialBlock(differentialValuesNormalNeagtive);
-  DifferentialBlock differentialBlockOneNegativeValue1 = DifferentialBlock(differentialValuesOneNegative);
-  DifferentialBlock differentialBlockOneNegativeValue2 = DifferentialBlock(differentialValuesOneNegative);
-  DifferentialBlock differentialBlockOnePositiveValue1 = DifferentialBlock(differentialValuesOnePositive);
-  DifferentialBlock differentialBlockOnePositiveValue2 = DifferentialBlock(differentialValuesOnePositive);
-  DifferentialBlock differentialBlock0Value1 = DifferentialBlock(differentialValues0);
-  DifferentialBlock differentialBlock0Value2 = DifferentialBlock(differentialValues0);
-  DifferentialBlock differentialBlockEmptyValue1 = DifferentialBlock(differentialValuesEmpty);
-  DifferentialBlock differentialBlockEmptyValue2 = DifferentialBlock(differentialValuesEmpty);
+  DifferentialBlock differentialBlockNormal1 = DifferentialBlockExampleFactory::differentialBlockNormal();
+  DifferentialBlock differentialBlockNormal2 = DifferentialBlockExampleFactory::differentialBlockNormal();
+  DifferentialBlock differentialBlockWithNegativeValues1 = DifferentialBlockExampleFactory::differentialBlockWithNegativeValues();
+  DifferentialBlock differentialBlockWithNegativeValues2 = DifferentialBlockExampleFactory::differentialBlockWithNegativeValues();
+  DifferentialBlock differentialBlockWithOneNegativeValue1 = DifferentialBlockExampleFactory::differentialBlockOneNegativeValue();
+  DifferentialBlock differentialBlockWithOneNegativeValue2 = DifferentialBlockExampleFactory::differentialBlockOneNegativeValue();
+  DifferentialBlock differentialBlockWithOnePositiveValue1 = DifferentialBlockExampleFactory::differentialBlockOnePositiveValue();
+  DifferentialBlock differentialBlockWithOnePositiveValue2 = DifferentialBlockExampleFactory::differentialBlockOnePositiveValue();
+  DifferentialBlock differentialBlockWith0Value1 = DifferentialBlockExampleFactory::differentialBlock0Value();
+  DifferentialBlock differentialBlockWith0Value2 = DifferentialBlockExampleFactory::differentialBlock0Value();
+  DifferentialBlock differentialBlockEmpty1 = DifferentialBlockExampleFactory::differentialBlockEmptyValue();
+  DifferentialBlock differentialBlockEmpty2 = DifferentialBlockExampleFactory::differentialBlockEmptyValue();
 };
 
 TEST_F(DifferentialBlockTest, TestGetDifferentialValues) {
-  EXPECT_EQ(this->differentialBlockNormal1.getDifferentialValues(), this->differentialValuesNormal);
+  EXPECT_EQ(this->differentialBlockNormal1.getDifferentialValues(), DifferentialBlockExampleFactory::differentialValuesNormal());
 }
 
 TEST_F(DifferentialBlockTest, TestGetWithEmptyDifferentialValues) {
-  EXPECT_EQ(this->differentialBlockEmptyValue1.getDifferentialValues(), this->differentialValuesEmpty);
+  EXPECT_EQ(this->differentialBlockEmpty1.getDifferentialValues(), DifferentialBlockExampleFactory::differentialValuesEmpty());
 }
 
 TEST_F(DifferentialBlockTest, TestGetWithDifferentialValues0) {
-  EXPECT_EQ(this->differentialBlock0Value1.getDifferentialValues(), this->differentialValues0);
+  EXPECT_EQ(this->differentialBlockWith0Value1.getDifferentialValues(), DifferentialBlockExampleFactory::differentialValues0());
 }
 
 TEST_F(DifferentialBlockTest, TestGetWithNegativeDifferentialValues) {
-  EXPECT_EQ(this->differentialBlockWithNegativeValues1.getDifferentialValues(), this->differentialValuesNormalNeagtive);
+  EXPECT_EQ(this->differentialBlockWithNegativeValues1.getDifferentialValues(), DifferentialBlockExampleFactory::differentialValuesNormalNeagtive());
 }
 
 TEST_F(DifferentialBlockTest, CompareDifferentialValuesEqual) {
@@ -76,19 +71,19 @@ TEST_F(DifferentialBlockTest, CompareDifferentialValuesEqual) {
 }
 
 TEST_F(DifferentialBlockTest, CompareDifferentialValuesDifferent) {
-  EXPECT_FALSE(this->differentialBlockOnePositiveValue1.isEqual(this->differentialBlock0Value1));
+  EXPECT_FALSE(this->differentialBlockWithOnePositiveValue1.isEqual(this->differentialBlockWith0Value1));
 }
 
 TEST_F(DifferentialBlockTest, CompareDifferentialValuesEmpty) {
-  EXPECT_TRUE(this->differentialBlockEmptyValue1.isEqual(this->differentialBlockEmptyValue2));
+  EXPECT_TRUE(this->differentialBlockEmpty1.isEqual(this->differentialBlockEmpty2));
 }
 
 TEST_F(DifferentialBlockTest, CompareDifferentialValues0) {
-  EXPECT_TRUE(this->differentialBlock0Value1.isEqual(this->differentialBlock0Value2));
+  EXPECT_TRUE(this->differentialBlockWith0Value1.isEqual(this->differentialBlockWith0Value2));
 }
 
 TEST_F(DifferentialBlockTest, CompareDiffNegativeDifferentialValues) {
-  EXPECT_TRUE(this->differentialBlockOneNegativeValue1.isEqual(this->differentialBlockOneNegativeValue2));
+  EXPECT_TRUE(this->differentialBlockWithOneNegativeValue1.isEqual(this->differentialBlockWithOneNegativeValue2));
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeForNormalDifferentialvalues) {
@@ -100,9 +95,9 @@ TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeForNormalDifferentialva
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithEmptyDifferentialValues) {
   ProtobufDifferentialBlock protobufDifferentialBlocks;
-  this->differentialBlockEmptyValue1.serialize(&protobufDifferentialBlocks);
+  this->differentialBlockEmpty1.serialize(&protobufDifferentialBlocks);
   DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
-  EXPECT_TRUE(this->differentialBlockEmptyValue1.isEqual(dBlock));
+  EXPECT_TRUE(this->differentialBlockEmpty1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithNegativeAndPositiveDifferentialValues) {
@@ -114,16 +109,16 @@ TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithNegativeAndPositive
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithOneNegativeDifferentialValues) {
   ProtobufDifferentialBlock protobufDifferentialBlocks;
-  this->differentialBlockOneNegativeValue1.serialize(&protobufDifferentialBlocks);
+  this->differentialBlockWithOneNegativeValue1.serialize(&protobufDifferentialBlocks);
   DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
-  EXPECT_TRUE(this->differentialBlockOneNegativeValue1.isEqual(dBlock));
+  EXPECT_TRUE(this->differentialBlockWithOneNegativeValue1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, TestSerializeAndDeserializeWithOnePositiveDifferentialValues) {
   ProtobufDifferentialBlock protobufDifferentialBlocks;
-  this->differentialBlockOnePositiveValue1.serialize(&protobufDifferentialBlocks);
+  this->differentialBlockWithOnePositiveValue1.serialize(&protobufDifferentialBlocks);
   DifferentialBlock dBlock = DifferentialBlock(protobufDifferentialBlocks);
-  EXPECT_TRUE(this->differentialBlockOnePositiveValue1.isEqual(dBlock));
+  EXPECT_TRUE(this->differentialBlockWithOnePositiveValue1.isEqual(dBlock));
 }
 
 TEST_F(DifferentialBlockTest, CompareTwoDeserializedDifferentialValues) {

@@ -30,6 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "Header.h"
 
 Header::Header(Version& version, int32_t timeZoneOffset_min) {
@@ -50,7 +51,7 @@ Header::Header() {
   this->timeZoneOffset_min = 0;
 }
 
-int Header::getTimeZoneOffset() {
+int32_t Header::getTimeZoneOffset() {
   return this->timeZoneOffset_min;
 }
 
@@ -74,5 +75,5 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
 
 void Header::deserialize(const ProtobufHeader& protobufHeader) {
   this->timeZoneOffset_min = protobufHeader.time_zone_offset_min();
-  ProtobufVersion protobufVersion = protobufHeader.pcore_version();
+  this->version = Version(protobufHeader.pcore_version());
 }

@@ -68,7 +68,6 @@ uint32_t DifferentialTimestampsContainer::calculateFirstTimestampInBlock(uint32_
   if (this->blockIntervals_ms.size() <= blockIdx) {  // toDo : FOR-325
     throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
   }
-
   uint64_t firstTimestamp = this->firstTimestamp_ms;
   std::vector<uint32_t> blockinterval = this->blockIntervals_ms;
   for (size_t i = 1; i <= blockIdx; i++) {

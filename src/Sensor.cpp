@@ -30,23 +30,20 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "Sensor.h"
 
 Sensor::Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensortype sensorType)
     : sensorType(sensorType), channels(channels), differentialTimestampsContainer(differentialTimestampsContainer) {
-  this->channels = channels;
-  this->sensorType = sensorType;
-  this->absoluteTimestampsContainer = {};
-  this->differentialTimestampsContainer = differentialTimestampsContainer;
+  this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(differentialTimestampsContainer);
 }
 
 Sensor::Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensortype sensorType)
     : sensorType(sensorType), channels(channels), absoluteTimestampsContainer(absoluteTimestampsContainer) {
-  this->channels = channels;
-  this->sensorType = sensorType;
-  this->absoluteTimestampsContainer = absoluteTimestampsContainer;
-  this->differentialTimestampsContainer = {};
+  std::vector<size_t> blockIdx = this->findBlocksIdxs();
+  this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdx);
 }
+
 Sensor::Sensor(const ProtobufSensor& protobufSensor) {
   this->deserialize(protobufSensor);
 }
@@ -64,14 +61,6 @@ ProtobufSensortype Sensor::getSensorType() {
 
 std::vector<Channel> Sensor::getChannels() {
   return this->channels;
-}
-
-DataForm Sensor::getTimestampForm() {
-  DataForm dataForm = NOT_SET;
-  for (auto& channel : this->getChannels()) {
-    dataForm = channel.getDataform();
-  }
-  return dataForm;
 }
 
 DifferentialTimestampsContainer Sensor::getDifferentialTimestamps() {
@@ -95,21 +84,6 @@ bool Sensor::isEqual(Sensor& sensor) {
          this->absoluteTimestampsContainer.isEqual(sensor.absoluteTimestampsContainer);
 }
 
-void Sensor::switchToDifferentialForm() {
-  std::vector<size_t> blockIdx = this->findBlocksIdxs();
-  this->differentialTimestampsContainer = this->cutUnixInDifferentialTimestamps(blockIdx);
-  for (auto& channel : this->channels) {
-    channel.switchInDifferentialFrom(blockIdx);
-  }
-}
-
-void Sensor::switchInAbsoluteFrom() {
-  this->absoluteTimestampsContainer = this->calcAbsoluteTimestampsFrom();
-  for (auto& channel : this->channels) {
-    channel.switchInAbsoluteFrom();
-  }
-}
-
 void Sensor::serialize(ProtobufSensor* protobufSensor) {
   if (protobufSensor == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufSensor is a null pointer");
@@ -124,11 +98,11 @@ void Sensor::serialize(ProtobufSensor* protobufSensor) {
   protobufSensor->mutable_differential_timestamps_container()->CopyFrom(protobufTimestampContainer);
 }
 
-uint32_t Sensor::firstTimestamp() {
+uint64_t Sensor::getFirstTimestamp() {
   return this->differentialTimestampsContainer.getFirstTimestamp();
 }
 
-uint32_t Sensor::lastTimestamp() {
+uint64_t Sensor::getLastTimestamp() {
   const std::vector<uint32_t> timestampIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
   const std::vector<uint32_t> blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
   std::vector<DifferentialBlock> firstChannelBlocks = this->channels[0].getDifferentialBlocks();
@@ -137,21 +111,11 @@ uint32_t Sensor::lastTimestamp() {
   for (auto& BlockIntervals : blockIntervals_ms) {
     h += BlockIntervals;
   }
-  return Sensor::firstTimestamp() + h + timestampIntervals_ms[timestampIntervals_ms.size() - 1] * nLastBlock;
+  return this->getFirstTimestamp() + h + timestampIntervals_ms[timestampIntervals_ms.size() - 1] * (nLastBlock - 1);
 }
 
-uint32_t Sensor::duration() {
-  return Sensor::lastTimestamp() - Sensor::firstTimestamp();
-}
-
-void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
-  std::vector<Channel> channels{};
-  for (auto& channel : protobufSensor.channels()) {
-    channels.push_back(Channel(channel));
-  }
-  this->channels = channels;
-  this->sensorType = protobufSensor.sensor_type();
-  this->differentialTimestampsContainer = DifferentialTimestampsContainer(protobufSensor.differential_timestamps_container());
+uint64_t Sensor::getDuration() {
+  return this->getLastTimestamp() - this->getFirstTimestamp();
 }
 
 std::vector<size_t> Sensor::findBlocksIdxs() {
@@ -173,34 +137,49 @@ std::vector<size_t> Sensor::findBlocksIdxs() {
   return blocksIdxs;
 }
 
-AbsoluteTimestampsContainer Sensor::calcAbsoluteTimestampsFrom() {
-  std::vector<DifferentialBlock> firstChannelBlocks = this->channels[0].getDifferentialBlocks();
+AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(DifferentialTimestampsContainer differentialTimestamps) {
   std::vector<uint64_t> unixTimestamps_ms = {};
-  std::vector<uint32_t> differentialTimestampsInterval = this->differentialTimestampsContainer.getTimestampsIntervals();
-  std::vector<uint32_t> differentialBlockInterval = this->differentialTimestampsContainer.getBlockIntervals();
-  const uint64_t firstTimestamp_ms = this->differentialTimestampsContainer.getFirstTimestamp();
-  uint32_t sumBlockInterval = 0;
-  for (size_t i = 0; i < differentialTimestampsInterval.size(); i++) {
-    sumBlockInterval += differentialBlockInterval[i];
+
+  std::vector<DifferentialBlock> firstChannelBlocks = this->channels[0].getDifferentialBlocks();
+  uint64_t firstTimestamp_ms = differentialTimestamps.getFirstTimestamp();
+  std::vector<uint32_t> timestamps_intervals_ms = differentialTimestamps.getTimestampsIntervals();
+  std::vector<uint32_t> blockIntervals_ms = differentialTimestamps.getBlockIntervals();
+
+  uint64_t sumTimeStampIntervals = 0;
+
+  for (size_t i = 0; i < timestamps_intervals_ms.size(); i++) {
+    sumTimeStampIntervals += blockIntervals_ms[i];
     for (size_t j = 0; j < firstChannelBlocks[i].getDifferentialValues().size(); j++) {
-      unixTimestamps_ms.push_back(firstTimestamp_ms + sumBlockInterval + j * differentialTimestampsInterval[i]);
+      unixTimestamps_ms.push_back(firstTimestamp_ms + sumTimeStampIntervals + j * timestamps_intervals_ms[i]);
     }
   }
   return AbsoluteTimestampsContainer(unixTimestamps_ms);
 }
 
-DifferentialTimestampsContainer Sensor::cutUnixInDifferentialTimestamps(std::vector<size_t> blocksIdxs) {
-  std::vector<uint64_t> absoluteUnixtimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
-  uint64_t firstTimestamp_ms = this->absoluteTimestampsContainer.getUnixTimestamps()[0];
+DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(AbsoluteTimestampsContainer absoluteTimestamps,
+                                                                        std::vector<size_t> blocksIdxs) {
+  std::vector<uint64_t> absoluteUnixTimestamps = absoluteTimestamps.getUnixTimestamps();
+  uint64_t firstTimestamp_ms = absoluteTimestamps.getUnixTimestamps()[0];
   std::vector<uint32_t> blockIntervals_ms = {};
   std::vector<uint32_t> timestampIntervals_ms = {};
   blockIntervals_ms.push_back(0);
-  timestampIntervals_ms.push_back(absoluteUnixtimestamps[1] - firstTimestamp_ms);
+  timestampIntervals_ms.push_back(absoluteUnixTimestamps[1] - firstTimestamp_ms);
   for (size_t i = 1; i < blocksIdxs.size(); i++) {
     const size_t prevIdx = blocksIdxs[i - 1];
     const size_t idx = blocksIdxs[i];
-    timestampIntervals_ms.push_back(absoluteUnixtimestamps[idx + 1] - absoluteUnixtimestamps[idx]);
-    blockIntervals_ms.push_back(absoluteUnixtimestamps[idx] - absoluteUnixtimestamps[prevIdx]);
+    timestampIntervals_ms.push_back(absoluteUnixTimestamps[idx + 1] - absoluteUnixTimestamps[idx]);
+    blockIntervals_ms.push_back(absoluteUnixTimestamps[idx] - absoluteUnixTimestamps[prevIdx]);
   }
   return DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
+}
+
+void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
+  std::vector<Channel> channels{};
+  for (auto& channel : protobufSensor.channels()) {
+    channels.push_back(Channel(channel));
+  }
+  this->channels = channels;
+  this->sensorType = protobufSensor.sensor_type();
+  this->differentialTimestampsContainer = DifferentialTimestampsContainer(protobufSensor.differential_timestamps_container());
+  this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(this->differentialTimestampsContainer);
 }

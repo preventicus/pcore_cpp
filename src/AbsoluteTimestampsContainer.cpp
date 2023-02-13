@@ -30,13 +30,14 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "AbsoluteTimestampsContainer.h"
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() {
   this->unixTimestamps_ms = {};
-};
+}
 
 std::vector<uint64_t> AbsoluteTimestampsContainer::getUnixTimestamps() {
   return this->unixTimestamps_ms;

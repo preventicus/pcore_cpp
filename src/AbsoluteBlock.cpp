@@ -30,18 +30,19 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "AbsoluteBlock.h"
 
-AbsoluteBlock::AbsoluteBlock(std::vector<int32_t>& values) : values(values) {}
+AbsoluteBlock::AbsoluteBlock(std::vector<int32_t>& absoluteValues) : absoluteValues(absoluteValues) {}
 
 AbsoluteBlock::AbsoluteBlock() {
-  this->values = {};
+  this->absoluteValues = {};
 }
 
-std::vector<int32_t> AbsoluteBlock::getValues() {
-  return this->values;
+std::vector<int32_t> AbsoluteBlock::getAbsoluteValues() {
+  return this->absoluteValues;
 }
 
 bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
-  return this->values == block.values;
+  return this->absoluteValues == block.absoluteValues;
 }

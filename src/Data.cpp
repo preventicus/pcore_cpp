@@ -30,6 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "Data.h"
 
 Data::Data(Raw raw, Header header) : raw(raw), header(header) {}
@@ -53,14 +54,6 @@ Header Data::getHeader() {
 
 bool Data::isEqual(Data& data) {
   return this->header.isEqual(data.header) && this->raw.isEqual(data.raw);
-}
-
-void Data::switchInDifferentialForm() {
-  this->raw.switchToDifferentialForm();
-}
-
-void Data::switchInAbsoluteFrom() {
-  this->raw.switchInAbsoluteFrom();
 }
 
 void Data::serialize(ProtobufData* protobufData) {

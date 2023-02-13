@@ -30,14 +30,17 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "PpgMetaData.h"
 
-PpgMetaData::PpgMetaData(ProtobufColor color, uint32_t wavelength_nm) {
-  if (color != ProtobufColor::COLOR_NONE && wavelength_nm != 0) {
-    throw std::invalid_argument("one parameter has to be initialized");
-  }
+PpgMetaData::PpgMetaData(ProtobufColor color) {
   this->color = color;
+  this->wavelength_nm = 0;
+}
+
+PpgMetaData::PpgMetaData(uint32_t wavelength_nm) {
   this->wavelength_nm = wavelength_nm;
+  this->color = ProtobufColor::COLOR_NONE;
 }
 
 PpgMetaData::PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData) {
@@ -68,6 +71,9 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
 void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) {
   if (protobufPpgMetaData == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufPpgMetaData is a null pointer");
+  }
+  if (this->color != ProtobufColor::COLOR_NONE && this->wavelength_nm != 0) {
+    throw std::invalid_argument("one parameter has to be initialized");
   }
   if (this->color != ProtobufColor::COLOR_NONE) {
     protobufPpgMetaData->set_color(this->color);

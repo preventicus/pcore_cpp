@@ -30,22 +30,26 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #pragma once
 #include "Sensor.h"
+
 #include "protobuf/pcore.pb.h"
+
 using ProtobufRaw = com::preventicus::pcore::Raw;
+
 class Raw final {
  public:
   Raw(std::vector<Sensor> sensors);
   Raw(const ProtobufRaw& protobufRaw);
   Raw();
+
   std::vector<Sensor> getSensors();
   bool isEqual(Raw& protobufRaw);
-  void switchToDifferentialForm();
-  void switchInAbsoluteFrom();
   void serialize(ProtobufRaw* protobufRaw);
 
  private:
   void deserialize(const ProtobufRaw& protobufRaw);
+
   std::vector<Sensor> sensors;
 };

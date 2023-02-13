@@ -30,157 +30,119 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include <gtest/gtest.h>
 #include "Channel.h"
+#include "ChannelExampleFactory.h"
 
 class ChannelTest : public ::testing::Test {
  protected:
-  uint32_t comparableWavelength_nm = 100;
-  uint32_t normalWavelength_nm = 255;
-  uint32_t notSetWavelength_nm = 0;
-  AccMetaData setCoordinateYAccMetaData = AccMetaData(ProtobufCoordinate::COORDINATE_Y, ProtobufNorm::NORM_NONE);
-  AccMetaData setCoordinateXAccMetaData = AccMetaData(ProtobufCoordinate::COORDINATE_X, ProtobufNorm::NORM_NONE);
-  AccMetaData setNormAccMetaData = AccMetaData(ProtobufCoordinate::COORDINATE_NONE, ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
-  AccMetaData notSetAccMetaData = AccMetaData(ProtobufCoordinate::COORDINATE_NONE, ProtobufNorm::NORM_NONE);
-  PpgMetaData setColorPpgMetaData = PpgMetaData(ProtobufColor::COLOR_BLUE, notSetWavelength_nm);
-  PpgMetaData notSetPpgMetaData = PpgMetaData(ProtobufColor::COLOR_NONE, notSetWavelength_nm);
-  PpgMetaData setWavelengthPpgMetaData = PpgMetaData(ProtobufColor::COLOR_NONE, normalWavelength_nm);
-  PpgMetaData setCompareableWavelengthPpgMetaData = PpgMetaData(ProtobufColor::COLOR_NONE, comparableWavelength_nm);
-  std::vector<int32_t> values = {};
-  AbsoluteBlock absoluteBlock = AbsoluteBlock(values);
-  std::vector<int32_t> differentialValues = {12, 15, 20};
-  DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
-  std::vector<DifferentialBlock> differentialBlocks = {differentialBlock};
-  DataForm dataform = DataForm::DIFFERENTIAL;
-  Channel channelAccMetaDataSetCoordinateX1 = Channel(dataform, differentialBlocks, setCoordinateXAccMetaData, notSetPpgMetaData);
-  Channel channelAccMetaDataSetCoordinateX2 = Channel(dataform, differentialBlocks, setCoordinateXAccMetaData, notSetPpgMetaData);
-  Channel channelAccMetaDataSetCoordinateY = Channel(dataform, differentialBlocks, setCoordinateYAccMetaData, notSetPpgMetaData);
-  Channel channelAccMetaDataSetNorm1 = Channel(dataform, differentialBlocks, setNormAccMetaData, notSetPpgMetaData);
-  Channel channelAccMetaDataSetNorm2 = Channel(dataform, differentialBlocks, setNormAccMetaData, notSetPpgMetaData);
-  Channel channelPpgMetaDataSetWavelength1 = Channel(dataform, differentialBlocks, notSetAccMetaData, setWavelengthPpgMetaData);
-  Channel channelPpgMetaDataSetWavelength2 = Channel(dataform, differentialBlocks, notSetAccMetaData, setWavelengthPpgMetaData);
-  Channel channelPpgMetaDataSetColor1 = Channel(dataform, differentialBlocks, notSetAccMetaData, setColorPpgMetaData);
-  Channel channelPpgMetaDataSetColor2 = Channel(dataform, differentialBlocks, notSetAccMetaData, setColorPpgMetaData);
-  Channel channelPpgMetaDataSetComparableWavelength = Channel(dataform, differentialBlocks, notSetAccMetaData, setCompareableWavelengthPpgMetaData);
+  AbsoluteBlock comparableAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
+  std::vector<DifferentialBlock> comparableDifferentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
+
+  Channel channelAccMetaDataWithCoordinateX1 = ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX();
+  Channel channelAccMetaDataWithCoordinateX2 = ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX();
+  Channel channelAccMetaDataWithCoordinateY = ChannelExampleFactory::channelWithAccMetaDataWithCoordinateY();
+  Channel channelAccMetaDataWithNorm1 = ChannelExampleFactory::channelWithAccMetaDataWithNorm();
+  Channel channelAccMetaDataWithNorm2 = ChannelExampleFactory::channelWithAccMetaDataWithNorm();
+  Channel channelPpgMetaDataWithWavelength1 = ChannelExampleFactory::channelWithPpgMetaDataWithWavelength();
+  Channel channelPpgMetaDataWithWavelength2 = ChannelExampleFactory::channelWithPpgMetaDataWithWavelength();
+  Channel channelPpgMetaDataWithColor1 = ChannelExampleFactory::channelWithPpgMetaDataWithColor();
+  Channel channelPpgMetaDataWithColor2 = ChannelExampleFactory::channelWithPpgMetaDataWithColor();
+  Channel channelPpgMetaDataWithComparableWavelength = ChannelExampleFactory::channelWithPpgMetaDataWithComparableWavelength();
 };
 
-TEST_F(ChannelTest, CheckIfExceptionIsThrownWhenBothMetadataAreSet) {
-  EXPECT_THROW(Channel channel = Channel(this->dataform, this->differentialBlocks, this->setCoordinateXAccMetaData, this->setColorPpgMetaData),
-               std::invalid_argument);
-}
-
-TEST_F(ChannelTest, CheckIfExepectionIsNotThrownForAccCoordinate) {
-  EXPECT_NO_THROW(Channel channelAccMetaDataSetCoordinate1 =
-                      Channel(this->dataform, this->differentialBlocks, this->setCoordinateXAccMetaData, this->notSetPpgMetaData););
-}
-
-TEST_F(ChannelTest, CheckIfExpectionIsNotThrownForAccNorm) {
-  EXPECT_NO_THROW(Channel channelAccMetaDataSetNorm1 =
-                      Channel(this->dataform, this->differentialBlocks, this->setNormAccMetaData, this->notSetPpgMetaData););
-}
-
-TEST_F(ChannelTest, CheckIfExpectionIsNotThrownForPpgColor) {
-  EXPECT_NO_THROW(Channel channelPpgMetaDataSetColor1 =
-                      Channel(this->dataform, this->differentialBlocks, this->notSetAccMetaData, this->setColorPpgMetaData););
-}
-
-TEST_F(ChannelTest, CheckIfExpectionIsNotThrownForPpgWavelength) {
-  EXPECT_NO_THROW(Channel channelPpgMetaDataSetWavelength1 =
-                      Channel(this->dataform, this->differentialBlocks, this->notSetAccMetaData, this->setWavelengthPpgMetaData););
-}
-
 TEST_F(ChannelTest, TestGetMethodPpg) {
-  EXPECT_EQ(this->channelPpgMetaDataSetColor1.getPpgMetData().getColor(), this->setColorPpgMetaData.getColor());
-  EXPECT_EQ(this->channelPpgMetaDataSetColor1.getPpgMetData().getWavelength(), this->setColorPpgMetaData.getWavelength());
-  EXPECT_EQ(this->channelPpgMetaDataSetColor1.getAccMetaData().getCoordinate(), this->notSetAccMetaData.getCoordinate());
-  EXPECT_EQ(this->channelPpgMetaDataSetColor1.getAccMetaData().getNorm(), this->notSetAccMetaData.getNorm());
-  EXPECT_EQ(this->channelPpgMetaDataSetColor1.getAbsoluteBlock().getValues(), this->absoluteBlock.getValues());
-  EXPECT_EQ(this->channelPpgMetaDataSetColor1.getDataform(), this->dataform);
-  for (size_t i = 0; i < this->channelPpgMetaDataSetColor1.getDifferentialBlocks().size(); i++) {
-    EXPECT_EQ(this->channelPpgMetaDataSetColor1.getDifferentialBlocks()[i].getDifferentialValues(),
-              this->differentialBlocks[i].getDifferentialValues());
+  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getPpgMetData().isEqual(ppgMetaData));
+  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
+  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAccMetaData().isEqual(accMetaData));
+  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAbsoluteBlock().isEqual(this->comparableAbsoluteBlock));
+  std::vector<DifferentialBlock> differentialBlocks = this->channelPpgMetaDataWithColor1.getDifferentialBlocks();
+  for (size_t i = 0; i < differentialBlocks.size(); i++) {
+    EXPECT_TRUE(differentialBlocks[i].isEqual(this->comparableDifferentialBlocks[i]));
   }
 }
 
 TEST_F(ChannelTest, TestGetMethodAcc) {
-  EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getAccMetaData().getCoordinate(), this->setCoordinateXAccMetaData.getCoordinate());
-  EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getAccMetaData().getNorm(), this->setCoordinateXAccMetaData.getNorm());
-  EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getPpgMetData().getColor(), this->notSetPpgMetaData.getColor());
-  EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getPpgMetData().getWavelength(), this->notSetPpgMetaData.getWavelength());
-  EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getAbsoluteBlock().getValues(), this->absoluteBlock.getValues());
-  EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getDataform(), this->dataform);
-  for (size_t i = 0; i < this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks().size(); i++) {
-    EXPECT_EQ(this->channelAccMetaDataSetCoordinateX1.getDifferentialBlocks()[i].getDifferentialValues(),
-              this->differentialBlocks[i].getDifferentialValues());
+  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getAccMetaData().isEqual(accMetaData));
+  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getPpgMetData().isEqual(ppgMetaData));
+  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
+  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getAbsoluteBlock().isEqual(this->comparableAbsoluteBlock));
+  std::vector<DifferentialBlock> differentialBlocks = this->channelAccMetaDataWithCoordinateX1.getDifferentialBlocks();
+  for (size_t i = 0; i < differentialBlocks.size(); i++) {
+    EXPECT_TRUE(differentialBlocks[i].isEqual(this->comparableDifferentialBlocks[i]));
   }
 }
 
 TEST_F(ChannelTest, CompareEqualChannelWithAccCoordinate) {
-  EXPECT_TRUE(this->channelAccMetaDataSetCoordinateX1.isEqual(this->channelAccMetaDataSetCoordinateX2));
+  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.isEqual(this->channelAccMetaDataWithCoordinateX2));
 }
 
 TEST_F(ChannelTest, CompareEqualChannelWithAccNorm) {
-  EXPECT_TRUE(this->channelAccMetaDataSetNorm1.isEqual(this->channelAccMetaDataSetNorm2));
+  EXPECT_TRUE(this->channelAccMetaDataWithNorm1.isEqual(this->channelAccMetaDataWithNorm2));
 }
 
 TEST_F(ChannelTest, CompareEqualChannelWithPpgWavelength) {
-  EXPECT_TRUE(this->channelPpgMetaDataSetWavelength1.isEqual(this->channelPpgMetaDataSetWavelength2));
+  EXPECT_TRUE(this->channelPpgMetaDataWithWavelength1.isEqual(this->channelPpgMetaDataWithWavelength2));
 }
 
 TEST_F(ChannelTest, CompareEqualChannelWithPpgColor) {
-  EXPECT_TRUE(this->channelPpgMetaDataSetColor1.isEqual(this->channelPpgMetaDataSetColor2));
+  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.isEqual(this->channelPpgMetaDataWithColor2));
 }
 
 TEST_F(ChannelTest, CompareDifferentChannelWithAccNormAndCoordinate) {
-  EXPECT_FALSE(this->channelAccMetaDataSetCoordinateX1.isEqual(this->channelAccMetaDataSetNorm1));
+  EXPECT_FALSE(this->channelAccMetaDataWithCoordinateX1.isEqual(this->channelAccMetaDataWithNorm1));
 }
 
 TEST_F(ChannelTest, CompareDifferentChannelWithPpgColorAndWavelength) {
-  EXPECT_FALSE(this->channelPpgMetaDataSetColor1.isEqual(this->channelPpgMetaDataSetWavelength1));
+  EXPECT_FALSE(this->channelPpgMetaDataWithColor1.isEqual(this->channelPpgMetaDataWithWavelength1));
 }
 
 TEST_F(ChannelTest, CompareDifferentChannelWithWavelength) {
-  EXPECT_FALSE(this->channelPpgMetaDataSetComparableWavelength.isEqual(this->channelPpgMetaDataSetWavelength1));
+  EXPECT_FALSE(this->channelPpgMetaDataWithComparableWavelength.isEqual(this->channelPpgMetaDataWithWavelength1));
 }
 
 TEST_F(ChannelTest, CompareDifferentChannelWithCoordinate) {
-  EXPECT_FALSE(this->channelAccMetaDataSetCoordinateX1.isEqual(this->channelAccMetaDataSetCoordinateY));
+  EXPECT_FALSE(this->channelAccMetaDataWithCoordinateX1.isEqual(this->channelAccMetaDataWithCoordinateY));
 }
 
 TEST_F(ChannelTest, TestSerializeAndDeserializeMethodPpgColor) {
   ProtobufChannel protobufChannel;
-  this->channelPpgMetaDataSetColor1.serialize(&protobufChannel);
+  this->channelPpgMetaDataWithColor1.serialize(&protobufChannel);
   Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelPpgMetaDataSetColor1.isEqual(channel2));
+  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.isEqual(channel2));
 }
 
 TEST_F(ChannelTest, TestSerializeAndDeserializeMethodPpgWavelength) {
   ProtobufChannel protobufChannel;
-  this->channelPpgMetaDataSetWavelength1.serialize(&protobufChannel);
+  this->channelPpgMetaDataWithWavelength1.serialize(&protobufChannel);
   Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelPpgMetaDataSetWavelength1.isEqual(channel2));
+  EXPECT_TRUE(this->channelPpgMetaDataWithWavelength1.isEqual(channel2));
 }
 
 TEST_F(ChannelTest, TestSerializeAndDeserializeMethodAccNorm) {
   ProtobufChannel protobufChannel;
-  this->channelAccMetaDataSetNorm1.serialize(&protobufChannel);
+  this->channelAccMetaDataWithNorm1.serialize(&protobufChannel);
   Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelAccMetaDataSetNorm1.isEqual(channel2));
+  EXPECT_TRUE(this->channelAccMetaDataWithNorm1.isEqual(channel2));
 }
 
 TEST_F(ChannelTest, TestSerializeAndDeserializeMethodCoordinate) {
   ProtobufChannel protobufChannel;
-  this->channelAccMetaDataSetCoordinateX1.serialize(&protobufChannel);
+  this->channelAccMetaDataWithCoordinateX1.serialize(&protobufChannel);
   Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelAccMetaDataSetCoordinateX1.isEqual(channel2));
+  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.isEqual(channel2));
 }
 
 TEST_F(ChannelTest, CheckChannelPtr) {
   ProtobufChannel protobufChannel;
-  EXPECT_NO_THROW(this->channelAccMetaDataSetNorm1.serialize(&protobufChannel));
+  EXPECT_NO_THROW(this->channelAccMetaDataWithNorm1.serialize(&protobufChannel));
 }
 
 TEST_F(ChannelTest, CheckChannelNullPtr) {
   ProtobufChannel* protobufChannel = nullptr;
-  EXPECT_THROW(this->channelAccMetaDataSetNorm1.serialize(protobufChannel), std::invalid_argument);
+  EXPECT_THROW(this->channelAccMetaDataWithNorm1.serialize(protobufChannel), std::invalid_argument);
 }

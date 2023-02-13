@@ -30,6 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "Raw.h"
 
 Raw::Raw(std::vector<Sensor> sensors) : sensors(sensors) {}
@@ -57,17 +58,7 @@ bool Raw::isEqual(Raw& raw) {
   }
   return true;
 }
-void Raw::switchToDifferentialForm() {
-  for (auto& sensor : this->sensors) {
-    sensor.switchToDifferentialForm();
-  }
-}
 
-void Raw::switchInAbsoluteFrom() {
-  for (auto& sensor : this->sensors) {
-    sensor.switchInAbsoluteFrom();
-  }
-}
 void Raw::serialize(ProtobufRaw* protobufRaw) {
   if (protobufRaw == nullptr) {
     throw std::invalid_argument("protobufRaw is a null pointer");

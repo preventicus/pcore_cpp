@@ -30,16 +30,18 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #pragma once
 #include <vector>
 
 class AbsoluteBlock final {
  public:
-  AbsoluteBlock(std::vector<int32_t>& values);
+  AbsoluteBlock(std::vector<int32_t>& absoluteValues);
   AbsoluteBlock();
-  std::vector<int32_t> getValues();
+
+  std::vector<int32_t> getAbsoluteValues();
   bool isEqual(AbsoluteBlock& block);
 
  private:
-  std::vector<int32_t> values;
+  std::vector<int32_t> absoluteValues;
 };

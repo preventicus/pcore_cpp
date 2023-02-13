@@ -30,46 +30,38 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include <gtest/gtest.h>
-#include "Version.h"
+#include "VersionExampleFactory.h"
 
 class VersionTest : public ::testing::Test {
  protected:
-  uint32_t majorOne = 1;
-  uint32_t minorOne = 1;
-  uint32_t patchOne = 1;
-  uint32_t majorTwo = 2;
-  uint32_t minorTwo = 2;
-  uint32_t patchTwo = 2;
-  uint32_t majorZero = 0;
-  uint32_t minorZero = 0;
-  uint32_t patchZero = 0;
-  Version normalVersion1 = Version(majorOne, minorOne, patchOne);
-  Version normalVersion2 = Version(majorOne, minorOne, patchOne);
-  Version startVersion1 = Version(majorZero, minorZero, patchZero);
-  Version startVersion2 = Version(majorZero, minorZero, patchZero);
-  Version highVersion1 = Version(majorTwo, minorTwo, patchTwo);
-  Version highVersion2 = Version(majorTwo, minorTwo, patchTwo);
-  Version randomVersion1 = Version(majorTwo, minorOne, patchZero);
-  Version randomVersion2 = Version(majorTwo, minorOne, patchZero);
+  Version normalVersion1 = VersionExampleFactory::normalVersion();
+  Version normalVersion2 = VersionExampleFactory::normalVersion();
+  Version startVersion1 = VersionExampleFactory::startVersion();
+  Version startVersion2 = VersionExampleFactory::startVersion();
+  Version highVersion1 = VersionExampleFactory::highVersion();
+  Version highVersion2 = VersionExampleFactory::highVersion();
+  Version randomVersion1 = VersionExampleFactory::randomVersion();
+  Version randomVersion2 = VersionExampleFactory::randomVersion();
 };
 
 TEST_F(VersionTest, TestGetMajor) {
-  EXPECT_EQ(this->normalVersion1.getMajor(), this->majorOne);
+  EXPECT_EQ(this->normalVersion1.getMajor(), VersionExampleFactory::majorOne());
 }
 
 TEST_F(VersionTest, TestGetMinor) {
-  EXPECT_EQ(this->normalVersion1.getMinor(), this->minorOne);
+  EXPECT_EQ(this->normalVersion1.getMinor(), VersionExampleFactory::minorOne());
 }
 
 TEST_F(VersionTest, TestGetPatch) {
-  EXPECT_EQ(this->normalVersion1.getPatch(), this->patchOne);
+  EXPECT_EQ(this->normalVersion1.getPatch(), VersionExampleFactory::patchOne());
 }
 
 TEST_F(VersionTest, TestGetAll) {
-  EXPECT_EQ(this->randomVersion1.getMajor(), this->majorTwo);
-  EXPECT_EQ(this->randomVersion1.getMinor(), this->minorOne);
-  EXPECT_EQ(this->randomVersion1.getPatch(), this->patchZero);
+  EXPECT_EQ(this->randomVersion1.getMajor(), VersionExampleFactory::majorTwo());
+  EXPECT_EQ(this->randomVersion1.getMinor(), VersionExampleFactory::minorOne());
+  EXPECT_EQ(this->randomVersion1.getPatch(), VersionExampleFactory::patchZero());
 }
 
 TEST_F(VersionTest, CompareEqualNormalVersion) {
@@ -90,6 +82,10 @@ TEST_F(VersionTest, CompareRandomAndNormalVersion) {
 
 TEST_F(VersionTest, CompareEqualRandomVersion) {
   EXPECT_TRUE(this->randomVersion1.isEqual(this->randomVersion2));
+}
+
+TEST_F(VersionTest, CompareEqualHighVersion) {
+  EXPECT_TRUE(this->highVersion1.isEqual(this->highVersion2));
 }
 
 TEST_F(VersionTest, TestSerializeAndDeserializeNormalVersion) {

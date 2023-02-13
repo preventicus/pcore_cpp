@@ -33,25 +33,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Channel.h"
 
-Channel::Channel(DataForm dataForm, AbsoluteBlock& absoluteBlock, AccMetaData& accMetadata, PpgMetaData& ppgMetaData) {
-  if (accMetadata.isSet() == ppgMetaData.isSet()) {
-    throw std::invalid_argument("just one type of MetaData can be initialized");
-  }
+Channel::Channel(AccMetaData& accMetadata, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdx) {
   this->absoluteBlock = absoluteBlock;
-  this->differentialBlocks = {};
+  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
   this->accMetadata = accMetadata;
-  this->ppgMetaData = ppgMetaData;
-  this->dataForm = dataForm;
+  this->ppgMetaData = PpgMetaData();
 }
-Channel::Channel(DataForm dataForm, std::vector<DifferentialBlock>& differentialBlocks, AccMetaData& accMetadata, PpgMetaData& ppgMetaData) {
-  if (accMetadata.isSet() == ppgMetaData.isSet()) {
-    throw std::invalid_argument("just one type of MetaData can be initialized");
-  }
-  this->absoluteBlock = {};
-  this->differentialBlocks = differentialBlocks;
-  this->accMetadata = accMetadata;
+
+Channel::Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdx) {
+  this->absoluteBlock = absoluteBlock;
+  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
   this->ppgMetaData = ppgMetaData;
-  this->dataForm = dataForm;
+  this->accMetadata = AccMetaData();
+}
+
+Channel::Channel(AccMetaData& accMetadata, std::vector<DifferentialBlock>& differentialBlocks) {
+  this->differentialBlocks = differentialBlocks;
+  this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
+  this->accMetadata = accMetadata;
+  this->ppgMetaData = PpgMetaData();
+}
+
+Channel::Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& differentialBlocks) {
+  this->differentialBlocks = differentialBlocks;
+  this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
+  this->ppgMetaData = ppgMetaData;
+  this->accMetadata = AccMetaData();
 }
 
 Channel::Channel(const ProtobufChannel& protobufChannel) {
@@ -62,7 +69,6 @@ Channel::Channel() {
   this->accMetadata = AccMetaData();
   this->ppgMetaData = PpgMetaData();
   this->absoluteBlock = AbsoluteBlock();
-  this->dataForm = DataForm::NOT_SET;
   this->differentialBlocks = std::vector<DifferentialBlock>{};
 };
 
@@ -95,21 +101,12 @@ bool Channel::isEqual(Channel& channel) {
          this->absoluteBlock.isEqual(channel.absoluteBlock);
 }
 
-DataForm Channel::getDataform() {
-  return this->dataForm;
-}
-
-void Channel::switchInDifferentialFrom(std::vector<size_t> blocksIdxs) {
-  this->differentialBlocks = this->cutValuesInDifferentialBlocks(blocksIdxs);
-}
-
-void Channel::switchInAbsoluteFrom() {
-  this->absoluteBlock = this->calculateAbsoluteForm();
-}
-
 void Channel::serialize(ProtobufChannel* protobufChannel) {
   if (protobufChannel == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
+  }
+  if (accMetadata.isSet() == ppgMetaData.isSet()) {
+    throw std::invalid_argument("just one type of MetaData can be initialized");
   }
   if (this->accMetadata.isSet()) {
     ProtobufAccMetaData protobufAccMetadata;
@@ -126,18 +123,7 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
   }
 }
 
-void Channel::deserialize(const ProtobufChannel& protobufChannel) {
-  std::vector<DifferentialBlock> differentialBlocks{};
-  for (auto& protobufDifferentialBlock : protobufChannel.differential_blocks()) {
-    differentialBlocks.push_back(DifferentialBlock(protobufDifferentialBlock));
-  }
-  this->differentialBlocks = differentialBlocks;
-  this->accMetadata = AccMetaData(protobufChannel.acc_metadata());
-  this->ppgMetaData = PpgMetaData(protobufChannel.ppg_metadata());
-  this->dataForm = DataForm::DIFFERENTIAL;
-}
-
-std::vector<DifferentialBlock> Channel::cutValuesInDifferentialBlocks(std::vector<size_t> blocksIdxs) {
+std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blocksIdxs) {
   const size_t n = blocksIdxs.size() - 1;
   std::vector<DifferentialBlock> differentialBlocks = {};
   for (size_t i = 0; i < n; i++) {
@@ -146,14 +132,14 @@ std::vector<DifferentialBlock> Channel::cutValuesInDifferentialBlocks(std::vecto
     differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   }
   const size_t fromIdx = blocksIdxs[n];
-  const size_t toIdx = this->absoluteBlock.getValues().size() - 1;
+  const size_t toIdx = absoluteBlock.getAbsoluteValues().size() - 1;
   differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   return differentialBlocks;
 }
 
 DifferentialBlock Channel::createDifferentialBlock(size_t fromIdx, size_t toIdx) {
   std::vector<int32_t> differentialValues = {};
-  std::vector<int32_t> absoluteValues = this->absoluteBlock.getValues();
+  std::vector<int32_t> absoluteValues = this->absoluteBlock.getAbsoluteValues();
   differentialValues.push_back(absoluteValues[fromIdx]);
   for (size_t i = fromIdx + 1; i <= toIdx; i++) {
     differentialValues.push_back(absoluteValues[i] - absoluteValues[i - 1]);
@@ -161,9 +147,9 @@ DifferentialBlock Channel::createDifferentialBlock(size_t fromIdx, size_t toIdx)
   return DifferentialBlock(differentialValues);
 }
 
-AbsoluteBlock Channel::calculateAbsoluteForm() {
+AbsoluteBlock Channel::calculateAbsoluteBlock(std::vector<DifferentialBlock> differentialBlocks) {
   std::vector<int32_t> absoluteValues = {};
-  for (auto& differentialBlock : this->differentialBlocks) {
+  for (auto& differentialBlock : differentialBlocks) {
     int32_t sumValue = 0;
     for (auto& differentialValue : differentialBlock.getDifferentialValues()) {
       sumValue += differentialValue;
@@ -171,4 +157,15 @@ AbsoluteBlock Channel::calculateAbsoluteForm() {
     }
   }
   return AbsoluteBlock(absoluteValues);
+}
+
+void Channel::deserialize(const ProtobufChannel& protobufChannel) {
+  std::vector<DifferentialBlock> differentialBlocks{};
+  for (auto& protobufDifferentialBlock : protobufChannel.differential_blocks()) {
+    differentialBlocks.push_back(DifferentialBlock(protobufDifferentialBlock));
+  }
+  this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
+  this->differentialBlocks = differentialBlocks;
+  this->accMetadata = AccMetaData(protobufChannel.acc_metadata());
+  this->ppgMetaData = PpgMetaData(protobufChannel.ppg_metadata());
 }
