@@ -30,14 +30,17 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "AccMetaData.h"
 
-AccMetaData::AccMetaData(ProtobufCoordinate coordinate, ProtobufNorm norm) {
-  if (coordinate != ProtobufCoordinate::COORDINATE_NONE && norm != ProtobufNorm::NORM_NONE) {
-    throw std::invalid_argument("one enum type has to be initialized");
-  }
+AccMetaData::AccMetaData(ProtobufCoordinate coordinate) {
   this->coordinate = coordinate;
+  this->norm = ProtobufNorm::NORM_NONE;
+}
+
+AccMetaData::AccMetaData(ProtobufNorm norm) {
   this->norm = norm;
+  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
 }
 
 AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData) {
@@ -68,6 +71,9 @@ bool AccMetaData::isEqual(AccMetaData& AccMetaData) {
 void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
   if (protobufAccMetaData == nullptr) {
     throw std::invalid_argument("protobufAccMetaData is a null pointer");
+  }
+  if (coordinate != ProtobufCoordinate::COORDINATE_NONE && norm != ProtobufNorm::NORM_NONE) {
+    throw std::invalid_argument("one enum type has to be initialized");
   }
   if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
     protobufAccMetaData->set_coordinate(this->coordinate);

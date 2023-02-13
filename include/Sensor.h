@@ -30,12 +30,12 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #pragma once
 #include "AbsoluteTimestampsContainer.h"
 #include "Channel.h"
-#include "DataFormat.h"
-#include "DifferentialBlock.h"
 #include "DifferentialTimestampsContainer.h"
+
 #include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 
@@ -48,24 +48,25 @@ class Sensor final {
   Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensortype sensorType);
   Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
+
   ProtobufSensortype getSensorType();
-  DataForm getTimestampForm();
   std::vector<Channel> getChannels();
   DifferentialTimestampsContainer getDifferentialTimestamps();
   AbsoluteTimestampsContainer getAbsoluteTimestamps();
+  uint64_t getFirstTimestamp();
+  uint64_t getLastTimestamp();
+  uint64_t getDuration();
+
   bool isEqual(Sensor& Sensor);
-  uint32_t firstTimestamp();
-  uint32_t lastTimestamp();
-  uint32_t duration();
-  void switchToDifferentialForm();
-  void switchInAbsoluteFrom();
   void serialize(ProtobufSensor* protobufSensor);
 
  private:
-  AbsoluteTimestampsContainer calcAbsoluteTimestampsFrom();
-  DifferentialTimestampsContainer cutUnixInDifferentialTimestamps(std::vector<size_t> blocksIdxs);
+  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer differentialTimestamps);
+  DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer absoluteTimestamps, std::vector<size_t> blocksIdxs);
   std::vector<size_t> findBlocksIdxs();
+
   void deserialize(const ProtobufSensor& protobufSensor);
+
   ProtobufSensortype sensorType;
   std::vector<Channel> channels;
   DifferentialTimestampsContainer differentialTimestampsContainer;

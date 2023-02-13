@@ -30,6 +30,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "DifferentialBlock.h"
 
 DifferentialBlock::DifferentialBlock(std::vector<int32_t>& differentialValues) : differentialValues(differentialValues) {}
@@ -60,6 +61,7 @@ void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentia
 }
 
 void DifferentialBlock::deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
-  for (auto& protobufDifferentialValues : protobufDifferentialBlock.differential_values())
+  for (auto& protobufDifferentialValues : protobufDifferentialBlock.differential_values()) {
     this->differentialValues.push_back(protobufDifferentialValues);
+  }
 }
