@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "json/json.h"
 #include "protobuf/pcore_coordinate.pb.h"
 #include "protobuf/pcore_norm.pb.h"
 #include "protobuf/pcore_raw.pb.h"
@@ -45,12 +46,14 @@ class AccMetaData final {
   AccMetaData(ProtobufNorm norm);
   AccMetaData(ProtobufCoordinate coordinate);
   AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);
+  AccMetaData(Json::Value& accMetadata);
   AccMetaData();
 
   ProtobufCoordinate getCoordinate();
   ProtobufNorm getNorm();
   bool isSet();
   bool isEqual(AccMetaData& AccMetaData);
+  Json::Value toJson();
   void serialize(ProtobufAccMetaData* protobufAccMetaData);
 
  private:

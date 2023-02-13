@@ -39,6 +39,11 @@ Data::Data(const ProtobufData& protobufData) {
   this->deserialize(protobufData);
 }
 
+Data::Data(Json::Value& data) {
+  this->raw = Raw(data["raw"], data["Header"]["data_form"]);
+  this->header = Header(data["header"]);
+}
+
 Data::Data() {
   this->raw = Raw();
   this->header = Header();

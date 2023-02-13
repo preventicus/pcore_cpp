@@ -36,11 +36,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AccMetaData.h"
 #include "DifferentialBlock.h"
 #include "PpgMetaData.h"
+#include "DataFormat.h"
 
 #include "protobuf/pcore_raw.pb.h"
 
 using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
 using ProtobufType = com::preventicus::pcore::SensorType;
+
 
 class Channel final {
  public:
@@ -48,6 +50,7 @@ class Channel final {
   Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdx);
   Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& differentialBlocks);
   Channel(AccMetaData& accMetadata, std::vector<DifferentialBlock>& differentialBlocks);
+  Channel(Json::Value& channel,Json::Value& dataForm, std::vector<size_t> blockIdx);
   Channel(const ProtobufChannel& protobufChannel);
   Channel();
 
@@ -55,7 +58,9 @@ class Channel final {
   AbsoluteBlock getAbsoluteBlock();
   AccMetaData getAccMetaData();
   PpgMetaData getPpgMetData();
+
   bool isEqual(Channel& channel);
+  Json::Value toJson();
   void serialize(ProtobufChannel* protobufChannel);
 
  private:

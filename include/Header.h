@@ -42,11 +42,13 @@ class Header final {
  public:
   Header(Version& version, int32_t timeZoneOffset_min);
   Header(const ProtobufHeader& protobufHeader);
+  Header(Json::Value& header);
   Header();
 
   int32_t getTimeZoneOffset();
   Version getVersion();
   bool isEqual(Header& header);
+  Json::Value toJson();
   void serialize(ProtobufHeader* protobufHeader);
 
  private:

@@ -45,6 +45,7 @@ class DifferentialTimestampsContainer final {
                                   std::vector<uint32_t>& blockIntervals_ms,
                                   std::vector<uint32_t>& timestampsIntervals_ms);
   DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
+  DifferentialTimestampsContainer(Json::Value& differentialTimestampsContainer);
   DifferentialTimestampsContainer();
 
   uint64_t getFirstTimestamp();
@@ -52,6 +53,7 @@ class DifferentialTimestampsContainer final {
   std::vector<uint32_t> getTimestampsIntervals();
 
   bool isEqual(DifferentialTimestampsContainer& timestamps);
+  Json::Value toJson();
   uint32_t calculateFirstTimestampInBlock(uint32_t blockIdx);
   uint32_t calculateLastTimestampInBlock(uint32_t blockIdx, uint32_t firstTimestampInBlock, DifferentialBlock differentialBlock);
 

@@ -61,6 +61,27 @@ Channel::Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& diffe
   this->accMetadata = AccMetaData();
 }
 
+Channel::Channel(Json::Value& channel,Json::Value& dataForm, std::vector<size_t> blockIdx) {
+  if (channel["ppg_metadata"]!= ""){
+    this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
+  }
+  if (channel["acc_metadata"]!= ""){
+    this->accMetadata = AccMetaData(channel["acc_metadata"]);
+  }
+  if(dataForm.asString() == "ABSOLUTE") {
+    this->absoluteBlock = AbsoluteBlock(channel["absolute_block"]);
+    this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
+  }
+  if(dataForm.asString() == "DIFFERENTIAL"){
+    std::vector<DifferentialBlock> differentialBlocks;
+    for (Json::Value::ArrayIndex i = 0; i < channel["differential_blocks"].size(); i++) {
+      differentialBlocks.push_back(DifferentialBlock(channel["differential_blocks"][i]));
+    }
+    this->differentialBlocks = differentialBlocks;
+    this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
+  }
+}
+
 Channel::Channel(const ProtobufChannel& protobufChannel) {
   this->deserialize(protobufChannel);
 }

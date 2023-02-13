@@ -35,6 +35,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
 
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(Json::Value& absoluteTimestampsContainer) {
+  std::vector<uint64_t> absoluteUnixTimestamps = {};
+  absoluteUnixTimestamps.reserve(absoluteTimestampsContainer.size());
+  for (Json::Value::ArrayIndex i = 0; i < absoluteTimestampsContainer.size(); i++) {
+    absoluteUnixTimestamps.push_back(absoluteTimestampsContainer[i].asUInt64());
+  }
+  this->unixTimestamps_ms = absoluteUnixTimestamps;
+}
+
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() {
   this->unixTimestamps_ms = {};
 }
@@ -45,4 +54,13 @@ std::vector<uint64_t> AbsoluteTimestampsContainer::getUnixTimestamps() {
 
 bool AbsoluteTimestampsContainer::isEqual(AbsoluteTimestampsContainer& timestamps) {
   return this->unixTimestamps_ms == timestamps.unixTimestamps_ms;
+}
+
+Json::Value AbsoluteTimestampsContainer::toJson() {
+
+  Json::Value absoluteUnixTimestamps(Json::arrayValue);
+  for (auto &i : this->unixTimestamps_ms) {
+    absoluteUnixTimestamps.append(i);
+  }
+  return absoluteUnixTimestamps;
 }

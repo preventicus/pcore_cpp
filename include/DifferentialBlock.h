@@ -33,6 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <vector>
+#include <json/json.h>
+
 #include "protobuf/pcore_raw.pb.h"
 
 using ProtobufDifferentialBlock = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;
@@ -41,10 +43,12 @@ class DifferentialBlock final {
  public:
   DifferentialBlock(std::vector<int32_t>& differentialValues);
   DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock);
+  DifferentialBlock(Json::Value& differentialBlock);
   DifferentialBlock();
 
   std::vector<int32_t> getDifferentialValues();
   bool isEqual(DifferentialBlock& differentialBlock);
+  Json::Value toJson();
   void serialize(ProtobufDifferentialBlock* differentialBlock);
 
  private:

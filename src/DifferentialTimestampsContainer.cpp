@@ -41,6 +41,23 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufD
   this->deserialize(protobufDifferentialTimestamps);
 }
 
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(Json::Value& differentialTimestampsContainer) {
+  std::vector<uint32_t> blockInterval = {};
+  std::vector<uint32_t> timestampInterval = {};
+  blockInterval.reserve(differentialTimestampsContainer["block_intervals_ms"].size());
+  for (Json::Value::ArrayIndex i = 0; i < differentialTimestampsContainer["block_intervals_ms"].size(); i++) {
+    blockInterval.push_back(differentialTimestampsContainer["block_intervals_ms"][i].asUInt());
+  }
+
+  timestampInterval.reserve(differentialTimestampsContainer["timestamps_intervals_ms"].size());
+  for (Json::Value::ArrayIndex i = 0; i < differentialTimestampsContainer["timestamps_intervals_ms"].size(); i++) {
+    timestampInterval.push_back(differentialTimestampsContainer["timestamps_intervals_ms"][i].asUInt());
+  }
+  this->blockIntervals_ms = blockInterval;
+  this->timestampsIntervals_ms = timestampInterval;
+  this->firstTimestamp_ms = differentialTimestampsContainer["first_timestamp_ms"].asUInt64();
+}
+
 DifferentialTimestampsContainer::DifferentialTimestampsContainer() {
   this->blockIntervals_ms = {};
   this->timestampsIntervals_ms = {};

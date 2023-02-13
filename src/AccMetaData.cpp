@@ -30,7 +30,6 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-
 #include "AccMetaData.h"
 
 AccMetaData::AccMetaData(ProtobufCoordinate coordinate) {
@@ -41,6 +40,28 @@ AccMetaData::AccMetaData(ProtobufCoordinate coordinate) {
 AccMetaData::AccMetaData(ProtobufNorm norm) {
   this->norm = norm;
   this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
+}
+
+AccMetaData::AccMetaData(Json::Value& accMetadata) {
+  if(accMetadata["norm"] == "NORM_EUCLIDEAN_DIFFERENCES_NORM"){
+    this->norm = ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
+    this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
+  }
+  if(accMetadata["coordinate"] != ProtobufCoordinate::COORDINATE_NONE){
+    Json::Value coordinate = accMetadata["coordinate"];
+    if(coordinate.asString() == "COORDINATE_X"){
+      this->coordinate = ProtobufCoordinate::COORDINATE_X;
+      this->norm = ProtobufNorm::NORM_NONE;
+    }
+    if(coordinate.asString() == "COORDINATE_Y"){
+      this->coordinate = ProtobufCoordinate::COORDINATE_Y;
+      this->norm = ProtobufNorm::NORM_NONE;
+    }
+    if(coordinate.asString() == "COORDINATE_Z"){
+      this->coordinate = ProtobufCoordinate::COORDINATE_Z;
+      this->norm = ProtobufNorm::NORM_NONE;
+    }
+  }
 }
 
 AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData) {
@@ -81,6 +102,26 @@ void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
   if (this->norm != ProtobufNorm::NORM_NONE) {
     protobufAccMetaData->set_norm(this->norm);
   }
+}
+
+Json::Value AccMetaData::toJson(){
+  Json::Value accMetadata(Json::stringValue);
+  if(this->norm != ProtobufNorm::NORM_NONE){
+  Json::Value norm(Json::stringValue);
+  accMetadata = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
+  }
+  if(this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
+    if (this->coordinate == ProtobufCoordinate::COORDINATE_X) {
+        accMetadata = "COORDINATE_X";
+    }
+    if (this->coordinate == ProtobufCoordinate::COORDINATE_Y) {
+        accMetadata = "COORDINATE_Y";
+    }
+    if (this->coordinate == ProtobufCoordinate::COORDINATE_Z) {
+        accMetadata = "COORDINATE_Z";
+    }
+  }
+  return accMetadata;
 }
 
 void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {

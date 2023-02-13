@@ -43,11 +43,13 @@ class Data final {
  public:
   Data(Raw raw, Header header);
   Data(const ProtobufData& protobufData);
+  Data(Json::Value& data);
   Data();
 
   Raw getRaw();
   Header getHeader();
   bool isEqual(Data& data);
+  Json::Value toJson();
   void serialize(ProtobufData* protobufData);
 
  private:

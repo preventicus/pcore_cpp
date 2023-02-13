@@ -46,6 +46,14 @@ Header::Header(const ProtobufHeader& protobufHeader) {
   this->deserialize(protobufHeader);
 }
 
+Header::Header(Json::Value& header) {
+  int32_t timeZoneOffset_min = header["time_zone_offset_min"].asInt();
+  if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
+    this->version = Version(header["pcore_version"]);
+    this->timeZoneOffset_min = timeZoneOffset_min;
+  }
+}
+
 Header::Header() {
   this->version = Version();
   this->timeZoneOffset_min = 0;

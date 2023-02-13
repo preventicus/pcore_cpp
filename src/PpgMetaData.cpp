@@ -43,6 +43,28 @@ PpgMetaData::PpgMetaData(uint32_t wavelength_nm) {
   this->color = ProtobufColor::COLOR_NONE;
 }
 
+PpgMetaData::PpgMetaData(Json::Value& ppgMetaData) {
+  if (ppgMetaData["wavelength_nm"] != 0) {
+    Json::Value wavelength = ppgMetaData["wavelength_nm"];
+    this->wavelength_nm = wavelength.asInt();
+    this->color = ProtobufColor::COLOR_NONE;
+  }
+  if (ppgMetaData["color"] != "COLOR_NONE") {
+    if (ppgMetaData["color"] == "COLOR_GREEN") {
+      this->color = ProtobufColor::COLOR_GREEN;
+      this->wavelength_nm = 0;
+    }
+    if (ppgMetaData["color"] == "COLOR_RED") {
+      this->color = ProtobufColor::COLOR_RED;
+      this->wavelength_nm = 0;
+    }
+    if (ppgMetaData["color"] == "COLOR_BLUE") {
+      this->color = ProtobufColor::COLOR_BLUE;
+      this->wavelength_nm = 0;
+    }
+  }
+}
+
 PpgMetaData::PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData) {
   this->deserialize(protobufPpgMetaData);
 }
@@ -66,6 +88,29 @@ bool PpgMetaData::isSet() {
 
 bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
   return this->color == ppgMetaData.color && this->wavelength_nm == ppgMetaData.wavelength_nm;
+}
+
+Json::Value PpgMetaData::toJson() {
+  Json::Value wavelength_nm(Json::intValue);
+  Json::Value color(Json::stringValue);
+  if (this->wavelength_nm != 0) {
+    wavelength_nm = this->wavelength_nm;
+    return wavelength_nm;
+  }
+  if (this->color != ProtobufColor::COLOR_NONE) {
+    if (this->color == ProtobufColor::COLOR_RED) {
+      color = "COLOR_RED";
+    }
+    if (this->color == ProtobufColor::COLOR_BLUE) {
+      color = "COLOR_BLUE";
+    }
+    if (this->color == ProtobufColor::COLOR_GREEN) {
+      color = "COLOR_GREEN";
+    }
+    return color;
+  }
+  Json::Value empty(Json::nullValue);
+  return empty;
 }
 
 void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) {

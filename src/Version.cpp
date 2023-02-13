@@ -35,6 +35,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Version::Version(uint32_t major, uint32_t minor, uint32_t patch) : major(major), minor(minor), patch(patch) {}
 
+Version::Version(Json::Value& pcoreVersion) {
+  this->major = pcoreVersion["major"].asUInt();
+  this->minor = pcoreVersion["minor"].asUInt();
+  this->patch = pcoreVersion["patch"].asUInt();
+}
+
 Version::Version(const ProtobufVersion& protobufVersion) {
   this->deserialize(protobufVersion);
 }

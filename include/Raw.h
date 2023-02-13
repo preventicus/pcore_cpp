@@ -42,10 +42,12 @@ class Raw final {
  public:
   Raw(std::vector<Sensor> sensors);
   Raw(const ProtobufRaw& protobufRaw);
+  Raw(Json::Value& raw, Json::Value& dataForm);
   Raw();
 
   std::vector<Sensor> getSensors();
   bool isEqual(Raw& protobufRaw);
+  Json::Value toJson();
   void serialize(ProtobufRaw* protobufRaw);
 
  private:
