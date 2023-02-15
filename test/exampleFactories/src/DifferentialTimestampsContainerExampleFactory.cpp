@@ -112,3 +112,17 @@ DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::n
   std::vector<uint32_t> timestampsInterval = DifferentialTimestampsContainerExampleFactory::expectedTimestampInterval();
   return DifferentialTimestampsContainer(firstTimestamp, blockInterval, timestampsInterval);
 }
+
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerPpg() {
+  uint64_t firstTimestamp = 1675416424341;
+  std::vector<uint32_t> blockInterval = {30, 30, 30, 30};
+  std::vector<uint32_t> timestampsInterval = {28, 30, 22, 30};
+  return DifferentialTimestampsContainer(firstTimestamp, blockInterval, timestampsInterval);
+}
+
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerAcc() {
+  uint64_t firstTimestamp = 1675416424301;
+  std::vector<uint32_t> blockInterval = {30, 31, 30};
+  std::vector<uint32_t> timestampsInterval = {31, 30, 30};
+  return DifferentialTimestampsContainer(firstTimestamp, blockInterval, timestampsInterval);
+}

@@ -85,3 +85,8 @@ Header HeaderExampleFactory::headerWithMinTimeZoneOffset_min() {
   Version version = VersionExampleFactory::randomVersion();
   return Header(version, HeaderExampleFactory::minTimeZoneOffset_min());
 }
+
+Header HeaderExampleFactory::absoluteJsonDataHeader() {
+  Version version = VersionExampleFactory::absoluteJsonDataVersion();
+  return Header(version, HeaderExampleFactory::noTimeZoneOffset_min());
+}

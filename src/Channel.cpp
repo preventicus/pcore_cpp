@@ -61,25 +61,37 @@ Channel::Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& diffe
   this->accMetadata = AccMetaData();
 }
 
-Channel::Channel(Json::Value& channel,Json::Value& dataForm, std::vector<size_t> blockIdx) {
-  if (channel["ppg_metadata"]!= ""){
+Channel::Channel(Json::Value& channel, Json::Value& sensor_type, std::vector<size_t> blockIdx) {
+  if (sensor_type.asString() == "SENSOR_TYPE_PPG") {
     this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
+    this->accMetadata = AccMetaData();
   }
-  if (channel["acc_metadata"]!= ""){
+  if (sensor_type.asString() == "SENSOR_TYPE_ACC") {
     this->accMetadata = AccMetaData(channel["acc_metadata"]);
+    this->ppgMetaData = PpgMetaData();
   }
-  if(dataForm.asString() == "ABSOLUTE") {
-    this->absoluteBlock = AbsoluteBlock(channel["absolute_block"]);
-    this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(channel["absolute_block"]);
+  this->absoluteBlock = absoluteBlock;
+  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
+}
+
+Channel::Channel(Json::Value& channel, Json::Value& sensor_type) {
+  if (sensor_type.asString() == "SENSOR_TYPE_PPG") {
+    this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
+    this->accMetadata = AccMetaData();
   }
-  if(dataForm.asString() == "DIFFERENTIAL"){
-    std::vector<DifferentialBlock> differentialBlocks;
-    for (Json::Value::ArrayIndex i = 0; i < channel["differential_blocks"].size(); i++) {
-      differentialBlocks.push_back(DifferentialBlock(channel["differential_blocks"][i]));
-    }
-    this->differentialBlocks = differentialBlocks;
-    this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
+  if (sensor_type.asString() == "SENSOR_TYPE_ACC") {
+    this->accMetadata = AccMetaData(channel["acc_metadata"]);
+    this->ppgMetaData = PpgMetaData();
   }
+  Json::Value jsonDifferentialBlock = channel["differential_blocks"];
+  std::vector<DifferentialBlock> differentialBlocks;
+  differentialBlocks.reserve(jsonDifferentialBlock.size());
+  for (Json::Value::ArrayIndex i = 0; i < jsonDifferentialBlock.size(); i++) {
+    differentialBlocks.push_back(DifferentialBlock(jsonDifferentialBlock[i]));
+  }
+  this->differentialBlocks = differentialBlocks;
+  this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
 }
 
 Channel::Channel(const ProtobufChannel& protobufChannel) {
@@ -105,7 +117,7 @@ AccMetaData Channel::getAccMetaData() {
   return this->accMetadata;
 }
 
-PpgMetaData Channel::getPpgMetData() {
+PpgMetaData Channel::getPpgMetaData() {
   return this->ppgMetaData;
 }
 
@@ -178,6 +190,43 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(std::vector<DifferentialBlock> dif
     }
   }
   return AbsoluteBlock(absoluteValues);
+}
+
+Json::Value Channel::toJson(DataForm dataForm, ProtobufType dataType) {
+  Json::Value channel(Json::stringValue);
+  Json::Value differentialBlocks(Json::arrayValue);
+  if(dataType == ProtobufType::SENSOR_TYPE_PPG ){
+    Json::Value ppgMetdata = this->ppgMetaData.toJson();
+    if(dataForm == DataForm::ABSOLUTE){
+      Json::Value absoluteBlock = this->absoluteBlock.toJson();
+      channel.append(ppgMetdata);
+      channel.append(absoluteBlock);
+    }
+
+    if(dataForm == DataForm::DIFFERENTIAL) {
+      for (auto& differenitalBlock : this->differentialBlocks) {
+        differentialBlocks.append(differenitalBlock.toJson());
+      }
+      channel.append(ppgMetdata);
+      channel.append(differentialBlocks);
+    }
+  }
+  if(dataType == ProtobufType::SENSOR_TYPE_ACC) {
+    Json::Value accMetdata = this->accMetadata.toJson();
+    if(dataForm == DataForm::ABSOLUTE){
+      Json::Value absoluteBlock = this->absoluteBlock.toJson();
+      channel.append(accMetdata);
+      channel.append(absoluteBlock);
+    }
+    if(dataForm == DataForm::DIFFERENTIAL) {
+      for (auto& differenitalBlock : this->differentialBlocks) {
+        differentialBlocks.append(differenitalBlock.toJson());
+        channel.append(accMetdata);
+        channel.append(differentialBlocks);
+      }
+    }
+  }
+  return channel;
 }
 
 void Channel::deserialize(const ProtobufChannel& protobufChannel) {

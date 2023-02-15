@@ -42,8 +42,14 @@ class AbsoluteBlockExampleFactory {
   static std::vector<int32_t> absoluteValues0Element();
   static std::vector<int32_t> absoluteValuesEmpty();
   static std::vector<int32_t> absoluteValues();
+  static std::vector<int32_t> absoluteJsonDataValuesPpg1();
+  static std::vector<int32_t> absoluteJsonDataValuesPpg2();
+  static std::vector<int32_t> absoluteJsonDataValuesAcc();
 
   static AbsoluteBlock absoluteBlock();
+  static AbsoluteBlock absoluteJsonDataBlockAcc();
+  static AbsoluteBlock absoluteJsonDataBlockPpg1();
+  static AbsoluteBlock absoluteJsonDataBlockPpg2();
   static AbsoluteBlock absoluteBlockNormal();
   static AbsoluteBlock absoluteBlockTwoElement();
   static AbsoluteBlock absoluteBlockOneElement();

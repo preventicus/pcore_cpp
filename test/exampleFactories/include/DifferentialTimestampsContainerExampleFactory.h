@@ -56,4 +56,6 @@ class DifferentialTimestampsContainerExampleFactory {
   static DifferentialTimestampsContainer differentialTimestampsWith0Timestamps();
   static DifferentialTimestampsContainer differentialTimestampsWithEmptyTimestamps();
   static DifferentialTimestampsContainer normalDifferentialTimestamps();
+  static DifferentialTimestampsContainer differentiaJsonDataTimestampsContainerPpg();
+  static DifferentialTimestampsContainer differentiaJsonDataTimestampsContainerAcc();
 };

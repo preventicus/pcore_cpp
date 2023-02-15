@@ -43,21 +43,21 @@ AccMetaData::AccMetaData(ProtobufNorm norm) {
 }
 
 AccMetaData::AccMetaData(Json::Value& accMetadata) {
-  if(accMetadata["norm"] == "NORM_EUCLIDEAN_DIFFERENCES_NORM"){
+  if (accMetadata["norm"] == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
     this->norm = ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
     this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
   }
-  if(accMetadata["coordinate"] != ProtobufCoordinate::COORDINATE_NONE){
+  if (accMetadata["coordinate"] != ProtobufCoordinate::COORDINATE_NONE) {
     Json::Value coordinate = accMetadata["coordinate"];
-    if(coordinate.asString() == "COORDINATE_X"){
+    if (coordinate.asString() == "COORDINATE_X") {
       this->coordinate = ProtobufCoordinate::COORDINATE_X;
       this->norm = ProtobufNorm::NORM_NONE;
     }
-    if(coordinate.asString() == "COORDINATE_Y"){
+    if (coordinate.asString() == "COORDINATE_Y") {
       this->coordinate = ProtobufCoordinate::COORDINATE_Y;
       this->norm = ProtobufNorm::NORM_NONE;
     }
-    if(coordinate.asString() == "COORDINATE_Z"){
+    if (coordinate.asString() == "COORDINATE_Z") {
       this->coordinate = ProtobufCoordinate::COORDINATE_Z;
       this->norm = ProtobufNorm::NORM_NONE;
     }
@@ -104,21 +104,21 @@ void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
   }
 }
 
-Json::Value AccMetaData::toJson(){
+Json::Value AccMetaData::toJson() {
   Json::Value accMetadata(Json::stringValue);
-  if(this->norm != ProtobufNorm::NORM_NONE){
-  Json::Value norm(Json::stringValue);
-  accMetadata = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
+  if (this->norm != ProtobufNorm::NORM_NONE) {
+    Json::Value norm(Json::stringValue);
+    accMetadata = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
   }
-  if(this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
+  if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
     if (this->coordinate == ProtobufCoordinate::COORDINATE_X) {
-        accMetadata = "COORDINATE_X";
+      accMetadata = "COORDINATE_X";
     }
     if (this->coordinate == ProtobufCoordinate::COORDINATE_Y) {
-        accMetadata = "COORDINATE_Y";
+      accMetadata = "COORDINATE_Y";
     }
     if (this->coordinate == ProtobufCoordinate::COORDINATE_Z) {
-        accMetadata = "COORDINATE_Z";
+      accMetadata = "COORDINATE_Z";
     }
   }
   return accMetadata;

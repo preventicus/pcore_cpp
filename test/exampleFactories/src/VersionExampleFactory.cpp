@@ -84,3 +84,7 @@ Version VersionExampleFactory::highVersion() {
 Version VersionExampleFactory::randomVersion() {
   return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
 }
+
+Version VersionExampleFactory::absoluteJsonDataVersion() {
+  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
+}

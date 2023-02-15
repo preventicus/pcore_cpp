@@ -93,10 +93,12 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
 Json::Value PpgMetaData::toJson() {
   Json::Value wavelength_nm(Json::intValue);
   Json::Value color(Json::stringValue);
+  Json::Value ppgMetaData(Json::stringValue);
   if (this->wavelength_nm != 0) {
     wavelength_nm = this->wavelength_nm;
-    return wavelength_nm;
+    ppgMetaData.append(wavelength_nm);
   }
+
   if (this->color != ProtobufColor::COLOR_NONE) {
     if (this->color == ProtobufColor::COLOR_RED) {
       color = "COLOR_RED";
@@ -107,10 +109,9 @@ Json::Value PpgMetaData::toJson() {
     if (this->color == ProtobufColor::COLOR_GREEN) {
       color = "COLOR_GREEN";
     }
-    return color;
+    ppgMetaData.append(color);
   }
-  Json::Value empty(Json::nullValue);
-  return empty;
+  return ppgMetaData;
 }
 
 void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) {

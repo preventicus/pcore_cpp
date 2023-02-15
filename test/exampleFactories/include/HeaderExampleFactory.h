@@ -50,4 +50,5 @@ class HeaderExampleFactory {
   static Header normalHeaderWithNoTimeZoneOffset_min();
   static Header headerWithMaxTimeZoneOffset_min();
   static Header headerWithMinTimeZoneOffset_min();
+  static Header absoluteJsonDataHeader();
 };

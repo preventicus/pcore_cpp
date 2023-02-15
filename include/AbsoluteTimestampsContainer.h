@@ -32,8 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <vector>
 #include <json/json.h>
+#include <vector>
 
 class AbsoluteTimestampsContainer final {
  public:
@@ -44,6 +44,7 @@ class AbsoluteTimestampsContainer final {
   std::vector<uint64_t> getUnixTimestamps();
   bool isEqual(AbsoluteTimestampsContainer& timestamps);
   Json::Value toJson();
+
  private:
   std::vector<uint64_t> unixTimestamps_ms;
 };

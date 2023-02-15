@@ -36,10 +36,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 AbsoluteBlock::AbsoluteBlock(std::vector<int32_t>& absoluteValues) : absoluteValues(absoluteValues) {}
 
 AbsoluteBlock::AbsoluteBlock(Json::Value& absoluteBlock) {
-  std::vector<int32_t> absoluteValues = {};
-  absoluteValues.reserve(absoluteBlock.size());
-  for (Json::Value::ArrayIndex i = 0; i < absoluteBlock.size(); i++) {
-    absoluteValues.push_back(absoluteBlock[i].asUInt64());
+  std::vector<int32_t> absoluteValues;
+  absoluteValues.reserve(absoluteBlock["absolute_values"].size());
+  for (Json::Value::ArrayIndex i = 0; i < absoluteBlock["absolute_values"].size(); i++) {
+    absoluteValues.push_back(absoluteBlock["absolute_values"][i].asUInt64());
   }
   this->absoluteValues = absoluteValues;
 }
@@ -58,7 +58,7 @@ bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
 
 Json::Value AbsoluteBlock::toJson() {
   Json::Value absoluteValues(Json::arrayValue);
-  for (auto &i : this->absoluteValues) {
+  for (auto& i : this->absoluteValues) {
     absoluteValues.append(i);
   }
   return absoluteValues;

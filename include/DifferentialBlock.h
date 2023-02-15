@@ -32,8 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <vector>
 #include <json/json.h>
+#include <vector>
 
 #include "protobuf/pcore_raw.pb.h"
 

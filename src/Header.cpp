@@ -81,6 +81,23 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
   protobufHeader->mutable_pcore_version()->CopyFrom(protobufVersion);
 }
 
+Json::Value Header::toJson(DataForm dataForm) {
+  Json::Value header(Json::stringValue);
+  Json::Value timeZoneOffset(Json::intValue);
+  Json::Value expectedDataForm(Json::stringValue);
+  if (dataForm == DataForm::ABSOLUTE){
+    header.append(timeZoneOffset = this->timeZoneOffset_min);
+  header.append(this->version.toJson());
+  header.append(expectedDataForm = "Absolute");
+  }
+  if (dataForm == DataForm::DIFFERENTIAL){
+  header.append(timeZoneOffset = this->timeZoneOffset_min);
+  header.append(this->version.toJson());
+  header.append(expectedDataForm = "DIFFERENTIAL");
+  }
+  return header;
+}
+
 void Header::deserialize(const ProtobufHeader& protobufHeader) {
   this->timeZoneOffset_min = protobufHeader.time_zone_offset_min();
   this->version = Version(protobufHeader.pcore_version());

@@ -53,6 +53,14 @@ std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::unixTimestampsE
   return {};
 }
 
+std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsPpg() {
+  return {1675423476214, 1675423484760, 1675423490027, 1675423494521, 1675423500121, 1675423506321, 1675423513156};
+}
+
+std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsAcc() {
+  return {1675423476210, 1675423484770, 1675423490028, 1675423494520, 1675423500131, 1675423506381, 1675423513160};
+}
+
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsNormal() {
   std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestampsNormal_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
@@ -86,5 +94,15 @@ std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::normalUnixTimes
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps() {
   std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::normalUnixTimestamps_ms();
+  return AbsoluteTimestampsContainer(unixTimestamps);
+}
+
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerPgg() {
+  std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsPpg();
+  return AbsoluteTimestampsContainer(unixTimestamps);
+}
+
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerAcc() {
+  std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsAcc();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }

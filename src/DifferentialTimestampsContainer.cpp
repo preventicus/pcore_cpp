@@ -42,16 +42,17 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufD
 }
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(Json::Value& differentialTimestampsContainer) {
+  Json::Value jsonBlockInterval = differentialTimestampsContainer["block_intervals_ms"];
+  Json::Value jsonTimestampInterval = differentialTimestampsContainer["timestamps_intervals_ms"];
   std::vector<uint32_t> blockInterval = {};
   std::vector<uint32_t> timestampInterval = {};
-  blockInterval.reserve(differentialTimestampsContainer["block_intervals_ms"].size());
-  for (Json::Value::ArrayIndex i = 0; i < differentialTimestampsContainer["block_intervals_ms"].size(); i++) {
-    blockInterval.push_back(differentialTimestampsContainer["block_intervals_ms"][i].asUInt());
+  blockInterval.reserve(jsonBlockInterval.size());
+  timestampInterval.reserve(jsonTimestampInterval.size());
+  for (Json::Value::ArrayIndex i = 0; i < jsonBlockInterval.size(); i++) {
+    blockInterval.push_back(jsonBlockInterval[i].asUInt());
   }
-
-  timestampInterval.reserve(differentialTimestampsContainer["timestamps_intervals_ms"].size());
-  for (Json::Value::ArrayIndex i = 0; i < differentialTimestampsContainer["timestamps_intervals_ms"].size(); i++) {
-    timestampInterval.push_back(differentialTimestampsContainer["timestamps_intervals_ms"][i].asUInt());
+  for (Json::Value::ArrayIndex i = 0; i < jsonTimestampInterval.size(); i++) {
+    timestampInterval.push_back(jsonTimestampInterval[i].asUInt());
   }
   this->blockIntervals_ms = blockInterval;
   this->timestampsIntervals_ms = timestampInterval;
@@ -97,6 +98,24 @@ uint32_t DifferentialTimestampsContainer::calculateLastTimestampInBlock(uint32_t
                                                                         uint32_t firstTimestampInBlock_ms,
                                                                         DifferentialBlock differentialBlock) {
   return firstTimestampInBlock_ms + differentialBlock.getDifferentialValues().size() * this->timestampsIntervals_ms[blockIdx];
+}
+
+Json::Value DifferentialTimestampsContainer::toJson() {
+  Json::Value differentialTimestampsContainer(Json::stringValue);
+  Json::Value firstTimestamp(Json::intValue);
+  Json::Value blockIntervals(Json::arrayValue);
+  Json::Value timestampsIntervals(Json::arrayValue);
+  firstTimestamp = this->firstTimestamp_ms;
+  for(auto &blockInterval : this->blockIntervals_ms){
+    blockIntervals.append(blockInterval);
+  }
+  for(auto &timestampsInterval : this->timestampsIntervals_ms){
+    timestampsIntervals.append(timestampsInterval);
+  }
+  differentialTimestampsContainer.append(firstTimestamp);
+  differentialTimestampsContainer.append(blockIntervals);
+  differentialTimestampsContainer.append(timestampsIntervals);
+  return differentialTimestampsContainer;
 }
 
 void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) {

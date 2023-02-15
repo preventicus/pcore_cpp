@@ -40,3 +40,11 @@ Raw RawExampleFactory::normalRaw() {
 Raw RawExampleFactory::comparableRaw() {
   return Raw(SensorExampleFactory::comparableVectorWithSensors());
 }
+
+Raw RawExampleFactory::absoluteJsonDataRaw() {
+  return Raw(SensorExampleFactory::vectorWithAbsoluteJsonDataSensor());
+}
+
+Raw RawExampleFactory::differentialJsonDataRaw() {
+  return Raw(SensorExampleFactory::vectorWithDifferentialJsonDataSensor());
+}

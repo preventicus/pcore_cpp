@@ -88,3 +88,35 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlock() {
   AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
   return absoluteBlock;
 }
+
+// -------------------------------------JSON-----------------------
+
+std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg1() {
+  return {30021, 30023, 30027, 30022, 30020, 30020, 30030};
+}
+
+std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg2() {
+  return {54834, 54830, 54836, 54842, 54841, 54841, 54830};
+}
+
+std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteJsonDataValuesAcc() {
+  return {548, 34, 234, 3435, 433, 454};
+}
+
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg1() {
+  std::vector<int32_t> absoluteValues = AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg1();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return absoluteBlock;
+}
+
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg2() {
+  std::vector<int32_t> absoluteValues = AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg2();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return absoluteBlock;
+}
+
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteJsonDataBlockAcc() {
+  std::vector<int32_t> absoluteValues = AbsoluteBlockExampleFactory::absoluteJsonDataValuesAcc();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return absoluteBlock;
+}

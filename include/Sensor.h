@@ -46,7 +46,7 @@ class Sensor final {
  public:
   Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensortype sensorType);
   Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensortype sensorType);
-  Sensor(Json::Value& sensor, Json::Value& dataForm);
+  Sensor(Json::Value& sensor, DataForm dataForm);
   Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
 
@@ -59,7 +59,7 @@ class Sensor final {
   uint64_t getDuration();
 
   bool isEqual(Sensor& Sensor);
-  Json::Value toJson();
+  Json::Value toJson(DataForm dataForm);
   void serialize(ProtobufSensor* protobufSensor);
 
  private:

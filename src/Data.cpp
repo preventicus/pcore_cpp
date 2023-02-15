@@ -40,8 +40,17 @@ Data::Data(const ProtobufData& protobufData) {
 }
 
 Data::Data(Json::Value& data) {
-  this->raw = Raw(data["raw"], data["Header"]["data_form"]);
-  this->header = Header(data["header"]);
+  Json::Value jsonDataForm = data["header"]["data_form"];
+  if (jsonDataForm.asString() == "ABSOLUTE") {
+    DataForm dataForm = DataForm::ABSOLUTE;
+    this->raw = Raw(data["raw"], dataForm);
+    this->header = Header(data["header"]);
+  }
+  if (jsonDataForm.asString() == "DIFFERENTIAL") {
+    DataForm dataForm = DataForm::DIFFERENTIAL;
+    this->raw = Raw(data["raw"], dataForm);
+    this->header = Header(data["header"]);
+  }
 }
 
 Data::Data() {
@@ -71,6 +80,13 @@ void Data::serialize(ProtobufData* protobufData) {
   ProtobufRaw protobufRaw;
   this->raw.serialize(&protobufRaw);
   protobufData->mutable_raw()->CopyFrom(protobufRaw);
+}
+
+Json::Value Data::toJson(DataForm dataform) {
+  Json::Value data(Json::stringValue);
+  data.append(this->header.toJson(dataform));
+  data.append(this->raw.toJson(dataform));
+  return data;
 }
 
 void Data::deserialize(const ProtobufData& protobufData) {

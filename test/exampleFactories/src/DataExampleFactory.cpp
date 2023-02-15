@@ -40,3 +40,11 @@ Data DataExampleFactory::normalData() {
 Data DataExampleFactory::comparableData() {
   return Data(RawExampleFactory::comparableRaw(), HeaderExampleFactory::normalHeaderWithNegativeTimeZoneOffset_min());
 }
+
+Data DataExampleFactory::absoluteJsonData() {
+  return Data(RawExampleFactory::absoluteJsonDataRaw(), HeaderExampleFactory::absoluteJsonDataHeader());
+}
+
+Data DataExampleFactory::differentialJsonData() {
+  return Data(RawExampleFactory::differentialJsonDataRaw(), HeaderExampleFactory::absoluteJsonDataHeader());
+}

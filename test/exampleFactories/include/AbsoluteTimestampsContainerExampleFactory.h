@@ -42,7 +42,11 @@ class AbsoluteTimestampsContainerExampleFactory {
   static std::vector<uint64_t> unixTimestamps0_ms();
   static std::vector<uint64_t> unixTimestampsEmpty_ms();
   static std::vector<uint64_t> normalUnixTimestamps_ms();
+  static std::vector<uint64_t> absoluteJsonDataUNixTimestampsPpg();
+  static std::vector<uint64_t> absoluteJsonDataUNixTimestampsAcc();
 
+  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerPgg();
+  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerAcc();
   static AbsoluteTimestampsContainer absoluteTimestampsNormal();
   static AbsoluteTimestampsContainer absoluteTimestampsTwoElement();
   static AbsoluteTimestampsContainer absoluteTimestampsOneElement();

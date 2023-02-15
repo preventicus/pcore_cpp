@@ -41,7 +41,13 @@ class SensorExampleFactory {
  public:
   static Sensor normalSensor();
   static Sensor comparableSensor();
+  static Sensor absoluteJsonDataPpgSensor();
+  static Sensor absoluteJsonDataAccSensor();
+  static Sensor differentialJsonDataPpgSensor();
+  static Sensor differentialJsonDataAccSensor();
 
   static std::vector<Sensor> normalVectorWithSensors();
   static std::vector<Sensor> comparableVectorWithSensors();
+  static std::vector<Sensor> vectorWithAbsoluteJsonDataSensor();
+  static std::vector<Sensor> vectorWithDifferentialJsonDataSensor();
 };
