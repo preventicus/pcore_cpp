@@ -2,7 +2,7 @@
     "data": {
         "header": {
             "time_zone_offset_min": 0,
-            "pcore_version": {
+            "version": {
                 "major": 1,
                 "minor": 1,
                 "patch": 0

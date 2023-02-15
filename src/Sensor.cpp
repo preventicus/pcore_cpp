@@ -202,46 +202,43 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   for (size_t i = 1; i < blocksIdxs.size(); i++) {
     const size_t prevIdx = blocksIdxs[i - 1];
     const size_t idx = blocksIdxs[i];
-    timestampIntervals_ms.push_back(absoluteUnixTimestamps[idx + 1] - absoluteUnixTimestamps[idx]);
+    timestampIntervals_ms.push_back(absoluteUnixTimestamps[idx] - absoluteUnixTimestamps[idx - 1]);
     blockIntervals_ms.push_back(absoluteUnixTimestamps[idx] - absoluteUnixTimestamps[prevIdx]);
   }
   return DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
 }
 
 Json::Value Sensor::toJson(DataForm dataForm) {
-  Json::Value sensors(Json::stringValue);
-  Json::Value channels(Json::arrayValue);
-  Json::Value sensorType(Json::stringValue);
-  Json::Value timestampsContainer;
+  Json::Value sensors;
+  Json::Value channels;
+  Json::Value sensorType;
   if(dataForm == DataForm::ABSOLUTE){
     for(auto  &channel : this->channels){
-      channels.append(channel.toJson(dataForm,this->sensorType));
+      channels.append(channel.toJson(dataForm, this->sensorType));
     }
-    timestampsContainer.append(this->absoluteTimestampsContainer.toJson());
     if(this->sensorType == ProtobufSensortype::SENSOR_TYPE_ACC){
-      sensorType.append("SENSOR_TYPE_ACC");
+      sensorType = "SENSOR_TYPE_ACC";
     }
     if(this->sensorType == ProtobufSensortype::SENSOR_TYPE_PPG){
-      sensorType.append("SENSOR_TYPE_PPG");
+      sensorType = "SENSOR_TYPE_PPG";
     }
-    sensors.append(channels);
-    sensors.append(timestampsContainer);
-    sensors.append(sensorType);
+    sensors["channels"] = channels;
+    sensors["absolute_timestamps_container"] = this->absoluteTimestampsContainer.toJson();
+    sensors["sensor_type"] = sensorType;
   }
   if(dataForm == DataForm::DIFFERENTIAL){
     for(auto  &channel : this->channels){
       channels.append(channel.toJson(dataForm,this->sensorType));
     }
-    timestampsContainer.append(this->differentialTimestampsContainer.toJson());
     if(this->sensorType == ProtobufSensortype::SENSOR_TYPE_ACC){
-      sensorType.append("SENSOR_TYPE_ACC");
+      sensorType ="SENSOR_TYPE_ACC";
     }
     if(this->sensorType == ProtobufSensortype::SENSOR_TYPE_PPG){
-      sensorType.append("SENSOR_TYPE_PPG");
+      sensorType = "SENSOR_TYPE_PPG";
     }
-    sensors.append(channels);
-    sensors.append(timestampsContainer);
-    sensors.append(sensorType);
+    sensors["channels"] = channels;
+    sensors["differential_timestamps_container"] = this->differentialTimestampsContainer.toJson();
+    sensors["sensor_type"] = sensorType;
   }
   return sensors;
 }

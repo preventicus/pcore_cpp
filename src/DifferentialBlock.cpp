@@ -71,11 +71,13 @@ void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentia
 }
 
 Json::Value DifferentialBlock::toJson() {
+  Json::Value differentialBlock;
   Json::Value differentialValues(Json::arrayValue);
   for (auto& i : this->differentialValues) {
     differentialValues.append(i);
   }
-  return differentialValues;
+  differentialBlock["differential_blocks"] = differentialValues;
+  return differentialBlock;
 }
 
 void DifferentialBlock::deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock) {

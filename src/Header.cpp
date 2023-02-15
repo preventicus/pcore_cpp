@@ -49,7 +49,7 @@ Header::Header(const ProtobufHeader& protobufHeader) {
 Header::Header(Json::Value& header) {
   int32_t timeZoneOffset_min = header["time_zone_offset_min"].asInt();
   if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
-    this->version = Version(header["pcore_version"]);
+    this->version = Version(header["version"]);
     this->timeZoneOffset_min = timeZoneOffset_min;
   }
 }
@@ -82,18 +82,18 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
 }
 
 Json::Value Header::toJson(DataForm dataForm) {
-  Json::Value header(Json::stringValue);
-  Json::Value timeZoneOffset(Json::intValue);
-  Json::Value expectedDataForm(Json::stringValue);
+  Json::Value header;
+  Json::Value timeZoneOffset(this->timeZoneOffset_min);
+
   if (dataForm == DataForm::ABSOLUTE){
-    header.append(timeZoneOffset = this->timeZoneOffset_min);
-  header.append(this->version.toJson());
-  header.append(expectedDataForm = "Absolute");
+    header["timeZoneOffset_min"] = timeZoneOffset;
+    header["version"] = this->version.toJson();
+    header["data_form"] = "ABSOLUTE";
   }
   if (dataForm == DataForm::DIFFERENTIAL){
-  header.append(timeZoneOffset = this->timeZoneOffset_min);
-  header.append(this->version.toJson());
-  header.append(expectedDataForm = "DIFFERENTIAL");
+    header["timeZoneOffset_min"] = timeZoneOffset;
+    header["version"] = this->version.toJson();
+    header["data_form"] = "DIFFERENTIAL";
   }
   return header;
 }

@@ -79,10 +79,12 @@ void Raw::serialize(ProtobufRaw* protobufRaw) {
 }
 
 Json::Value Raw::toJson(DataForm dataForm){
-  Json::Value raw(Json::stringValue);
+  Json::Value sensors(Json::arrayValue);
+  Json::Value raw;
   for(auto &sensor : this->sensors){
-    raw.append(sensor.toJson(dataForm));
+    sensors.append(sensor.toJson(dataForm));
   }
+  raw["sensors"] = sensors;
   return raw;
 }
 

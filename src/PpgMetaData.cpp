@@ -91,25 +91,21 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
 }
 
 Json::Value PpgMetaData::toJson() {
-  Json::Value wavelength_nm(Json::intValue);
-  Json::Value color(Json::stringValue);
-  Json::Value ppgMetaData(Json::stringValue);
+  Json::Value ppgMetaData;
   if (this->wavelength_nm != 0) {
-    wavelength_nm = this->wavelength_nm;
-    ppgMetaData.append(wavelength_nm);
+    ppgMetaData["wavelength_nm"] = this->wavelength_nm;
   }
 
   if (this->color != ProtobufColor::COLOR_NONE) {
     if (this->color == ProtobufColor::COLOR_RED) {
-      color = "COLOR_RED";
+      ppgMetaData["color"] = "COLOR_RED";
     }
     if (this->color == ProtobufColor::COLOR_BLUE) {
-      color = "COLOR_BLUE";
+      ppgMetaData["color"] = "COLOR_BLUE";
     }
     if (this->color == ProtobufColor::COLOR_GREEN) {
-      color = "COLOR_GREEN";
+      ppgMetaData["color"] = "COLOR_GREEN";
     }
-    ppgMetaData.append(color);
   }
   return ppgMetaData;
 }

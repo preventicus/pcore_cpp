@@ -96,7 +96,7 @@ Channel ChannelExampleFactory::channelWithAbsoluteJsonDataPpg2() {
 }
 
 Channel ChannelExampleFactory::channelWithAbsoluteJsonDataAcc() {
-  std::vector<size_t> blockIdx = {0, 2, 4, 6};
+  std::vector<size_t> blockIdx = {0, 2, 4};
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockAcc();
   AccMetaData accMetadata = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
   return Channel(accMetadata, absoluteBlock, blockIdx);

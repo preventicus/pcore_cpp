@@ -193,37 +193,37 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(std::vector<DifferentialBlock> dif
 }
 
 Json::Value Channel::toJson(DataForm dataForm, ProtobufType dataType) {
-  Json::Value channel(Json::stringValue);
+  Json::Value channel;
   Json::Value differentialBlocks(Json::arrayValue);
+  Json::Value absoluteBlocks(this->absoluteBlock.toJson());
+  Json::Value metData;
   if(dataType == ProtobufType::SENSOR_TYPE_PPG ){
-    Json::Value ppgMetdata = this->ppgMetaData.toJson();
+    metData = this->ppgMetaData.toJson();
     if(dataForm == DataForm::ABSOLUTE){
-      Json::Value absoluteBlock = this->absoluteBlock.toJson();
-      channel.append(ppgMetdata);
-      channel.append(absoluteBlock);
+      channel["ppg_metadata"] = metData;
+      channel["absolute_block"] =  absoluteBlocks;
     }
 
     if(dataForm == DataForm::DIFFERENTIAL) {
-      for (auto& differenitalBlock : this->differentialBlocks) {
-        differentialBlocks.append(differenitalBlock.toJson());
+      for (auto& differentialBlock : this->differentialBlocks) {
+        differentialBlocks.append(differentialBlock.toJson());
       }
-      channel.append(ppgMetdata);
-      channel.append(differentialBlocks);
+     channel["ppg_metadata"] = metData;
+     channel["differential_blocks"] = differentialBlocks;
     }
   }
   if(dataType == ProtobufType::SENSOR_TYPE_ACC) {
-    Json::Value accMetdata = this->accMetadata.toJson();
+    metData = this->accMetadata.toJson();
     if(dataForm == DataForm::ABSOLUTE){
-      Json::Value absoluteBlock = this->absoluteBlock.toJson();
-      channel.append(accMetdata);
-      channel.append(absoluteBlock);
+     channel["acc_metadata"] = metData;
+     channel["absolute_block"] =  absoluteBlocks;
     }
     if(dataForm == DataForm::DIFFERENTIAL) {
-      for (auto& differenitalBlock : this->differentialBlocks) {
-        differentialBlocks.append(differenitalBlock.toJson());
-        channel.append(accMetdata);
-        channel.append(differentialBlocks);
+      for (auto& differentialBlock : this->differentialBlocks) {
+        differentialBlocks.append(differentialBlock.toJson());
       }
+      channel["acc_metadata"] = metData;
+      channel["differential_blocks"] = differentialBlocks;
     }
   }
   return channel;

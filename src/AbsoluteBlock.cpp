@@ -57,9 +57,11 @@ bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
 }
 
 Json::Value AbsoluteBlock::toJson() {
+  Json::Value absoluteBlock;
   Json::Value absoluteValues(Json::arrayValue);
-  for (auto& i : this->absoluteValues) {
-    absoluteValues.append(i);
+  for (auto& absoluteValue : this->absoluteValues) {
+    absoluteValues.append(absoluteValue);
   }
-  return absoluteValues;
+  absoluteBlock["absolute_values"]= absoluteValues;
+  return absoluteBlock;
 }

@@ -82,10 +82,10 @@ void Data::serialize(ProtobufData* protobufData) {
   protobufData->mutable_raw()->CopyFrom(protobufRaw);
 }
 
-Json::Value Data::toJson(DataForm dataform) {
-  Json::Value data(Json::stringValue);
-  data.append(this->header.toJson(dataform));
-  data.append(this->raw.toJson(dataform));
+Json::Value Data::toJson(DataForm dataForm) {
+  Json::Value data;
+  data["header"] = this->header.toJson(dataForm);
+  data["raw"] = this->raw.toJson(dataForm);
   return data;
 }
 

@@ -105,20 +105,19 @@ void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
 }
 
 Json::Value AccMetaData::toJson() {
-  Json::Value accMetadata(Json::stringValue);
+  Json::Value accMetadata;
   if (this->norm != ProtobufNorm::NORM_NONE) {
-    Json::Value norm(Json::stringValue);
-    accMetadata = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
+    accMetadata["norm"] = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
   }
   if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
     if (this->coordinate == ProtobufCoordinate::COORDINATE_X) {
-      accMetadata = "COORDINATE_X";
+      accMetadata["coordinate"]  = "COORDINATE_X";
     }
     if (this->coordinate == ProtobufCoordinate::COORDINATE_Y) {
-      accMetadata = "COORDINATE_Y";
+      accMetadata["coordinate"]  = "COORDINATE_Y";
     }
     if (this->coordinate == ProtobufCoordinate::COORDINATE_Z) {
-      accMetadata = "COORDINATE_Z";
+      accMetadata["coordinate"]  = "COORDINATE_Z";
     }
   }
   return accMetadata;

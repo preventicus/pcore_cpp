@@ -58,7 +58,7 @@ std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::absoluteJsonDat
 }
 
 std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsAcc() {
-  return {1675423476210, 1675423484770, 1675423490028, 1675423494520, 1675423500131, 1675423506381, 1675423513160};
+  return {1675423476210, 1675423484770, 1675423490028, 1675423494520, 1675423500131, 1675423506381};
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsNormal() {

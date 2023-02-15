@@ -77,14 +77,14 @@ void Version::serialize(ProtobufVersion* protobufVersion) {
 }
 
 Json::Value Version::toJson() {
-  Json::Value version(Json::stringValue);
-  Json::Value major(Json::intValue);
-  Json::Value minor(Json::intValue);
-  Json::Value patch(Json::intValue);
-  major = this->major;
-  version.append(major = this->major);
-  version.append(minor = this->minor);
-  version.append(patch = this->patch);
+  Json::Value version;
+  Json::Value major(this->major);
+  Json::Value minor(this->minor);
+  Json::Value patch(this->patch);
+
+  version["major"] = major;
+  version["minor"] = minor ;
+  version["patch"] = patch;
   return version;
 }
 

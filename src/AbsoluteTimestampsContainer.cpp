@@ -57,9 +57,11 @@ bool AbsoluteTimestampsContainer::isEqual(AbsoluteTimestampsContainer& timestamp
 }
 
 Json::Value AbsoluteTimestampsContainer::toJson() {
+  Json::Value absoluteTimestampsContainer;
   Json::Value absoluteUnixTimestamps(Json::arrayValue);
   for (auto& i : this->unixTimestamps_ms) {
     absoluteUnixTimestamps.append(i);
   }
-  return absoluteUnixTimestamps;
+  absoluteTimestampsContainer["unix_timestamps_ms"] = absoluteUnixTimestamps;
+  return absoluteTimestampsContainer;
 }
