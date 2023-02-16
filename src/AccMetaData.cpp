@@ -106,6 +106,7 @@ void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
 
 Json::Value AccMetaData::toJson() {
   Json::Value accMetadata;
+
   if (this->norm != ProtobufNorm::NORM_NONE) {
     if (this->norm == ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM) {
       accMetadata["norm"] = "NORM_EUCLIDEAN_DIFFERENCES_NORM";

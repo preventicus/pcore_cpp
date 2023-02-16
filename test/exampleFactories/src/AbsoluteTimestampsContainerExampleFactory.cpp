@@ -42,7 +42,7 @@ std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::unixTimestampsT
 }
 
 std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms() {
-  return {1};
+  return {1675732790147};
 }
 
 std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::unixTimestamps0_ms() {
@@ -72,7 +72,7 @@ AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteT
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsOneElement() {
-  std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestampsTwoElements_ms();
+  std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
@@ -92,8 +92,22 @@ std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::normalUnixTimes
           1675732790867, 1675732790947, 1675732791027, 1675732791107, 1675732791187, 1675732791347, 1675732791387, 1675732791427};
 }
 
+std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock() {
+  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790287};
+}
+
+std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals() {
+  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790227};
+}
+
+
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps() {
   std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::normalUnixTimestamps_ms();
+  return AbsoluteTimestampsContainer(unixTimestamps);
+}
+
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteUNixTimestampBlockWithOneUnixInLastBlock() {
+  std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
@@ -104,5 +118,10 @@ AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteJ
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerAcc() {
   std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsAcc();
+  return AbsoluteTimestampsContainer(unixTimestamps);
+}
+
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsBlockWithEqualTimestampIntervals() {
+  std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }

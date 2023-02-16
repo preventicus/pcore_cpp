@@ -45,8 +45,10 @@ class AbsoluteBlockExampleFactory {
   static std::vector<int32_t> absoluteJsonDataValuesPpg1();
   static std::vector<int32_t> absoluteJsonDataValuesPpg2();
   static std::vector<int32_t> absoluteJsonDataValuesAcc();
+  static std::vector<int32_t> absoluteValuesWithOneValueInLastBlock();
 
   static AbsoluteBlock absoluteBlock();
+  static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
   static AbsoluteBlock absoluteJsonDataBlockAcc();
   static AbsoluteBlock absoluteJsonDataBlockPpg1();
   static AbsoluteBlock absoluteJsonDataBlockPpg2();

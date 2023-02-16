@@ -44,10 +44,13 @@ class DifferentialTimestampsContainerExampleFactory {
 
   static std::vector<uint32_t> normalBlockIntervals_ms();
   static std::vector<uint32_t> zeroBlockIntervals_ms();
+  static std::vector<uint32_t> normalBlockIntervals_msWithOneUnixInLastBlock();
   static std::vector<uint32_t> emptyBlockIntervals_ms();
   static std::vector<uint32_t> expectedBlockInterval();
 
   static std::vector<uint32_t> normalTimestampsIntervals_ms();
+  static std::vector<uint32_t> normalTimestampsIntervals_msWithOneUnixInLastBlock();
+  static std::vector<uint32_t> normalTimestampsIntervals_msWithEqualDifferences();
   static std::vector<uint32_t> zeroTimestampsIntervals_ms();
   static std::vector<uint32_t> emptyTimestampsIntervals_ms();
   static std::vector<uint32_t> expectedTimestampInterval();

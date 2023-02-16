@@ -49,6 +49,10 @@ class ChannelExampleFactory {
   static Channel channelWithPpgMetaDataWithComparableWavelength();
 
   static Channel channelWithAbsoluteBlocks();
+  static Channel channelWithOneValueBlock();
+  static Channel channelWithNUllValueBlock();
+  static Channel channelWithOneValueInLastBlock();
+  static Channel channelWithEqualTimestampIntervals();
   static Channel channelWithAbsoluteJsonDataPpg1();
   static Channel channelWithAbsoluteJsonDataPpg2();
   static Channel channelWithAbsoluteJsonDataAcc();
@@ -62,4 +66,8 @@ class ChannelExampleFactory {
   static std::vector<Channel> normalVectorWithAbsoluteJsonDataAccChannel();
   static std::vector<Channel> normalVectorWithDifferentialJsonDataPpgChannel();
   static std::vector<Channel> normalVectorWithDifferentialJsonDataAccChannel();
+  static std::vector<Channel> normalVectorWithOneValueBlock();
+  static std::vector<Channel> normalVectorWithNUllValueBlock();
+  static std::vector<Channel> normalVectorWithOneValueInLastBlock();
+  static std::vector<Channel> normalVectorWithEqualTimestampIntervals();
 };

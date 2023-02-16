@@ -40,6 +40,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 class SensorExampleFactory {
  public:
   static Sensor normalSensor();
+  static Sensor sensorWithOneUnixAndOneValue();
+  static Sensor sensorWithNUllUnixAndNUllValue();
+  static Sensor sensorWithOneUnixAndOneValueInLastBlock();
+  static Sensor sensorWithEqualTimestampsInterval();
   static Sensor comparableSensor();
   static Sensor absoluteJsonDataPpgSensor();
   static Sensor absoluteJsonDataAccSensor();

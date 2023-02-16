@@ -42,7 +42,7 @@ std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteValuesTwoElements() {
 }
 
 std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteValuesOneElement() {
-  return {1};
+  return {12};
 }
 
 std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteValues0Element() {
@@ -83,8 +83,18 @@ std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteValues() {
           46316, 46313, 46313, 46313, 46336, 58772, 58774, 58775, 58776, 58773, 19982, 19982, 19978};
 }
 
+std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteValuesWithOneValueInLastBlock() {
+  return {38763, 38771, 38780, 38793, 38784, 38780, 38780};
+}
+
+
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlock() {
   std::vector<int32_t> absoluteValues = AbsoluteBlockExampleFactory::absoluteValues();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return absoluteBlock;
+}
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock() {
+  std::vector<int32_t> absoluteValues = AbsoluteBlockExampleFactory::absoluteValuesWithOneValueInLastBlock();
   AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
   return absoluteBlock;
 }

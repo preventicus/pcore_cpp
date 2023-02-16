@@ -4,11 +4,11 @@
 #include "DataExampleFactory.h"
 class JsonTest : public ::testing::Test {
  protected:
-  std::string getJsonPath(std::string nameFromJson) { return "./../../test/JsonTestData/" + nameFromJson + ".json"; }
+  std::string static getJsonPath(std::string nameFromJson) { return "./../../test/JsonTestData/" + nameFromJson; }
 };
 
 TEST_F(JsonTest, JsonObjectWithAbsoluteDataForm) {
-  std::ifstream file("/Users/jakobglueck/workspace/protobuf-cpp/test/JsonTestData/absolute_pcore.json");
+  std::ifstream file(JsonTest::getJsonPath("absolute_pcore.json"));
   Json::Value json;
   file >> json;
   Data pcoreAbsoluteData = Data(json["data"]);
@@ -17,7 +17,7 @@ TEST_F(JsonTest, JsonObjectWithAbsoluteDataForm) {
 }
 
 TEST_F(JsonTest, JsonObjectWithDifferentialDataForm) {
-  std::ifstream file("/Users/jakobglueck/workspace/protobuf-cpp/test/JsonTestData/differential_pcore.json");
+  std::ifstream file(JsonTest::getJsonPath("differential_pcore.json"));
   Json::Value json;
   file >> json;
   Data pcoreDifferentialData = Data(json["data"]);
@@ -26,11 +26,18 @@ TEST_F(JsonTest, JsonObjectWithDifferentialDataForm) {
 }
 
 TEST_F(JsonTest, TestToJsonAbsoluteForm) {
-  std::ifstream file("/Users/jakobglueck/workspace/protobuf-cpp/test/JsonTestData/absolute_pcore.json");
+  std::ifstream file(JsonTest::getJsonPath("absolute_pcore.json"));
   Json::Value json;
   file >> json;
-  Data comparableAbsoluteData = Data(json["data"]);
-  Json::Value data = comparableAbsoluteData.toJson(DataForm::ABSOLUTE);
+  Data absoluteData = Data(json["data"]);
+  Json::Value data = absoluteData.toJson(DataForm::ABSOLUTE);
+
+  std::ofstream file_id;
+  file_id.open(JsonTest::getJsonPath("absolute_example.json"));
+  Json::StyledWriter styledWriter;
+  file_id << styledWriter.write(data);
+  file_id.close();
+
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
   EXPECT_EQ(json["data"]["header"]["time_zone_offset_min"].asUInt(), data["data"]["header"]["time_zone_offset_min"].asUInt());
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
@@ -82,12 +89,17 @@ TEST_F(JsonTest, TestToJsonAbsoluteForm) {
 }
 
 TEST_F(JsonTest, TestToJsonDifferentialForm) {
-  std::ifstream file("/Users/jakobglueck/workspace/protobuf-cpp/test/JsonTestData/differential_pcore.json");
+  std::ifstream file(JsonTest::getJsonPath("differential_pcore.json"));
   Json::Value json;
   file >> json;
   Data differentialJsonData = Data(json["data"]);
-  Data comparableDifferentialJsonData = Data(json["data"]);
-  Json::Value data = comparableDifferentialJsonData.toJson(DataForm::DIFFERENTIAL);
+  Json::Value data = differentialJsonData.toJson(DataForm::DIFFERENTIAL);
+
+  std::ofstream file_id;
+  file_id.open(JsonTest::getJsonPath("differential_example.json"));
+  Json::StyledWriter styledWriter;
+  file_id << styledWriter.write(data);
+  file_id.close();
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
   EXPECT_EQ(json["data"]["header"]["time_zone_offset_min"].asUInt(), data["data"]["header"]["time_zone_offset_min"].asUInt());
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
@@ -97,7 +109,6 @@ TEST_F(JsonTest, TestToJsonDifferentialForm) {
   EXPECT_EQ(json["data"]["raw"]["sensors"].size(), data["data"]["raw"]["sensors"].size());
   for (Json::Value::ArrayIndex i = 0; i < json["data"]["raw"]["sensors"].size(); i++) {
     for (Json::Value::ArrayIndex j = 0; j < json["data"]["raw"]["sensors"][i]["channels"].size(); j++) {
-      for (Json::Value::ArrayIndex j = 0; j < json["data"]["raw"]["sensors"][i]["channels"].size(); j++) {
         EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["color"].asString(),
                   data["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["color"].asString());
         EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["wavelength_nm"].asInt(),
@@ -117,7 +128,6 @@ TEST_F(JsonTest, TestToJsonDifferentialForm) {
                       data["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"][l]["differential_values"][m].asInt());
           }
         }
-      }
       EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString(),
                 data["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString());
       EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["coordinate"].asString(),

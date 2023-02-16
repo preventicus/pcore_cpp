@@ -45,6 +45,30 @@ Sensor SensorExampleFactory::comparableSensor() {
   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensortype::SENSOR_TYPE_PPG);
 }
 
+Sensor SensorExampleFactory::sensorWithOneUnixAndOneValue() {
+  std::vector<Channel> comparableVectorChannel = ChannelExampleFactory::normalVectorWithOneValueBlock();
+  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsOneElement();
+  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensortype::SENSOR_TYPE_PPG);
+}
+
+Sensor SensorExampleFactory::sensorWithNUllUnixAndNUllValue() {
+  std::vector<Channel> comparableVectorChannel = ChannelExampleFactory::normalVectorWithNUllValueBlock();
+  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsEmpty();
+  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensortype::SENSOR_TYPE_PPG);
+}
+
+Sensor SensorExampleFactory::sensorWithOneUnixAndOneValueInLastBlock() {
+  std::vector<Channel> comparableVectorChannel = ChannelExampleFactory::normalVectorWithOneValueInLastBlock();
+  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteUNixTimestampBlockWithOneUnixInLastBlock();
+  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensortype::SENSOR_TYPE_PPG);
+}
+
+Sensor SensorExampleFactory::sensorWithEqualTimestampsInterval() {
+  std::vector<Channel> comparableVectorChannel = ChannelExampleFactory::normalVectorWithEqualTimestampIntervals();
+  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsBlockWithEqualTimestampIntervals();
+  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensortype::SENSOR_TYPE_PPG);
+}
+
 Sensor SensorExampleFactory::absoluteJsonDataPpgSensor() {
   std::vector<Channel> comparableVectorChannel = ChannelExampleFactory::normalVectorWithAbsoluteJsonDataPpgChannel();
   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerPgg();
