@@ -92,8 +92,10 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
 
 Json::Value PpgMetaData::toJson() {
   Json::Value ppgMetaData;
+  Json::Value wavelength_nm(Json::uintValue);
+  wavelength_nm = this->wavelength_nm;
   if (this->wavelength_nm != 0) {
-    ppgMetaData["wavelength_nm"] = this->wavelength_nm;
+    ppgMetaData["wavelength_nm"] = wavelength_nm;
   }
 
   if (this->color != ProtobufColor::COLOR_NONE) {

@@ -195,33 +195,30 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(std::vector<DifferentialBlock> dif
 Json::Value Channel::toJson(DataForm dataForm, ProtobufType dataType) {
   Json::Value channel;
   Json::Value differentialBlocks(Json::arrayValue);
+  for (auto& differentialBlock : this->differentialBlocks) {
+    differentialBlocks.append(differentialBlock.toJson());
+  }
   Json::Value absoluteBlocks(this->absoluteBlock.toJson());
   Json::Value metData;
-  if(dataType == ProtobufType::SENSOR_TYPE_PPG ){
+  if (dataType == ProtobufType::SENSOR_TYPE_PPG) {
     metData = this->ppgMetaData.toJson();
-    if(dataForm == DataForm::ABSOLUTE){
+    if (dataForm == DataForm::ABSOLUTE) {
       channel["ppg_metadata"] = metData;
-      channel["absolute_block"] =  absoluteBlocks;
+      channel["absolute_block"] = absoluteBlocks;
     }
 
-    if(dataForm == DataForm::DIFFERENTIAL) {
-      for (auto& differentialBlock : this->differentialBlocks) {
-        differentialBlocks.append(differentialBlock.toJson());
-      }
-     channel["ppg_metadata"] = metData;
-     channel["differential_blocks"] = differentialBlocks;
+    if (dataForm == DataForm::DIFFERENTIAL) {
+      channel["ppg_metadata"] = metData;
+      channel["differential_blocks"] = differentialBlocks;
     }
   }
-  if(dataType == ProtobufType::SENSOR_TYPE_ACC) {
+  if (dataType == ProtobufType::SENSOR_TYPE_ACC) {
     metData = this->accMetadata.toJson();
-    if(dataForm == DataForm::ABSOLUTE){
-     channel["acc_metadata"] = metData;
-     channel["absolute_block"] =  absoluteBlocks;
+    if (dataForm == DataForm::ABSOLUTE) {
+      channel["acc_metadata"] = metData;
+      channel["absolute_block"] = absoluteBlocks;
     }
-    if(dataForm == DataForm::DIFFERENTIAL) {
-      for (auto& differentialBlock : this->differentialBlocks) {
-        differentialBlocks.append(differentialBlock.toJson());
-      }
+    if (dataForm == DataForm::DIFFERENTIAL) {
       channel["acc_metadata"] = metData;
       channel["differential_blocks"] = differentialBlocks;
     }

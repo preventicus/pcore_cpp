@@ -84,9 +84,11 @@ void Data::serialize(ProtobufData* protobufData) {
 
 Json::Value Data::toJson(DataForm dataForm) {
   Json::Value data;
+  Json::Value json;
   data["header"] = this->header.toJson(dataForm);
   data["raw"] = this->raw.toJson(dataForm);
-  return data;
+  json["data"] = data;
+  return json;
 }
 
 void Data::deserialize(const ProtobufData& protobufData) {

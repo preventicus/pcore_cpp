@@ -62,6 +62,6 @@ Json::Value AbsoluteBlock::toJson() {
   for (auto& absoluteValue : this->absoluteValues) {
     absoluteValues.append(absoluteValue);
   }
-  absoluteBlock["absolute_values"]= absoluteValues;
+  absoluteBlock["absolute_values"] = absoluteValues;
   return absoluteBlock;
 }

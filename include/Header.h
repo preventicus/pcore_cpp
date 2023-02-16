@@ -32,8 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include "Version.h"
 #include "DataFormat.h"
+#include "Version.h"
 #include "protobuf/pcore.pb.h"
 
 using ProtobufHeader = com::preventicus::pcore::Data_Header;

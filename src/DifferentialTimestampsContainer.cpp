@@ -102,15 +102,16 @@ uint32_t DifferentialTimestampsContainer::calculateLastTimestampInBlock(uint32_t
 
 Json::Value DifferentialTimestampsContainer::toJson() {
   Json::Value differentialTimestampsContainer;
-  Json::Value firstTimestamp(this->firstTimestamp_ms);
+  Json::Value firstTimestamp(Json::uintValue);
   Json::Value blockIntervals(Json::arrayValue);
   Json::Value timestampsIntervals(Json::arrayValue);
-  for(auto &blockInterval : this->blockIntervals_ms){
+  for (auto& blockInterval : this->blockIntervals_ms) {
     blockIntervals.append(blockInterval);
   }
-  for(auto &timestampsInterval : this->timestampsIntervals_ms){
+  for (auto& timestampsInterval : this->timestampsIntervals_ms) {
     timestampsIntervals.append(timestampsInterval);
   }
+  firstTimestamp = this->firstTimestamp_ms;
   differentialTimestampsContainer["first_timestamp_ms"] = firstTimestamp;
   differentialTimestampsContainer["block_intervals_ms"] = blockIntervals;
   differentialTimestampsContainer["timestamps_intervals_ms"] = timestampsIntervals;

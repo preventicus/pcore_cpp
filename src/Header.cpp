@@ -83,15 +83,15 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
 
 Json::Value Header::toJson(DataForm dataForm) {
   Json::Value header;
-  Json::Value timeZoneOffset(this->timeZoneOffset_min);
-
-  if (dataForm == DataForm::ABSOLUTE){
-    header["timeZoneOffset_min"] = timeZoneOffset;
+  Json::Value timeZoneOffset_min(Json::intValue);
+  timeZoneOffset_min = this->timeZoneOffset_min;
+  if (dataForm == DataForm::ABSOLUTE) {
+    header["time_zone_offset_min"] = timeZoneOffset_min;
     header["version"] = this->version.toJson();
     header["data_form"] = "ABSOLUTE";
   }
-  if (dataForm == DataForm::DIFFERENTIAL){
-    header["timeZoneOffset_min"] = timeZoneOffset;
+  if (dataForm == DataForm::DIFFERENTIAL) {
+    header["time_zone_offset_min"] = timeZoneOffset_min;
     header["version"] = this->version.toJson();
     header["data_form"] = "DIFFERENTIAL";
   }

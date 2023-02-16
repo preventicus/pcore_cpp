@@ -40,7 +40,7 @@ DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDi
 }
 
 DifferentialBlock::DifferentialBlock(Json::Value& differentialBlock) {
-  Json::Value jsonDifferentialBlock = differentialBlock["diff_values"];
+  Json::Value jsonDifferentialBlock = differentialBlock["differential_values"];
   std::vector<int32_t> differentialValues = {};
   differentialValues.reserve(jsonDifferentialBlock.size());
   for (Json::Value::ArrayIndex i = 0; i < jsonDifferentialBlock.size(); i++) {
@@ -76,7 +76,7 @@ Json::Value DifferentialBlock::toJson() {
   for (auto& i : this->differentialValues) {
     differentialValues.append(i);
   }
-  differentialBlock["differential_blocks"] = differentialValues;
+  differentialBlock["differential_values"] = differentialValues;
   return differentialBlock;
 }
 
