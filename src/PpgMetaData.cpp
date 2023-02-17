@@ -97,7 +97,6 @@ Json::Value PpgMetaData::toJson() {
   if (this->wavelength_nm != 0) {
     ppgMetaData["wavelength_nm"] = wavelength_nm;
   }
-
   if (this->color != ProtobufColor::COLOR_NONE) {
     if (this->color == ProtobufColor::COLOR_RED) {
       ppgMetaData["color"] = "COLOR_RED";

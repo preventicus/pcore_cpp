@@ -100,7 +100,6 @@ std::vector<uint64_t> AbsoluteTimestampsContainerExampleFactory::absoluteTimesta
   return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790227};
 }
 
-
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps() {
   std::vector<uint64_t> unixTimestamps = AbsoluteTimestampsContainerExampleFactory::normalUnixTimestamps_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);

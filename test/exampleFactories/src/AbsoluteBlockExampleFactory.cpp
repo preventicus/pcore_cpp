@@ -87,7 +87,6 @@ std::vector<int32_t> AbsoluteBlockExampleFactory::absoluteValuesWithOneValueInLa
   return {38763, 38771, 38780, 38793, 38784, 38780, 38780};
 }
 
-
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlock() {
   std::vector<int32_t> absoluteValues = AbsoluteBlockExampleFactory::absoluteValues();
   AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);

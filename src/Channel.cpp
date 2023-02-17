@@ -159,11 +159,11 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
 std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blocksIdxs) {
   std::vector<DifferentialBlock> differentialBlocks = {};
   size_t blockSize = blocksIdxs.size();
-  if(blockSize == 0){
+  if (blockSize == 0) {
     return differentialBlocks;
   }
   size_t absoluteValuesSize = absoluteBlock.getAbsoluteValues().size();
-  if(blockSize == 1){
+  if (blockSize == 1) {
     size_t fromIdx = 0;
     size_t toIdx = absoluteValuesSize > 1 ? absoluteValuesSize - 1 : 0;
     DifferentialBlock differentialBlock = DifferentialBlock(this->createDifferentialBlock(fromIdx, toIdx));
@@ -177,7 +177,7 @@ std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBloc
     toIdx = blocksIdxs[i + 1] - 1;
     differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   }
-  fromIdx = absoluteValuesSize - 1 == blocksIdxs[blockSize-1] ? absoluteValuesSize - 1 : blocksIdxs[blockSize - 1];
+  fromIdx = absoluteValuesSize - 1 == blocksIdxs[blockSize - 1] ? absoluteValuesSize - 1 : blocksIdxs[blockSize - 1];
   toIdx = absoluteValuesSize - 1;
   differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   return differentialBlocks;
