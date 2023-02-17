@@ -58,7 +58,7 @@ std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::zeroBlockIn
 }
 
 std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock() {
-  return {0,300};
+  return {0, 300};
 }
 
 std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms() {
@@ -70,7 +70,7 @@ std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::normalTimes
 }
 
 std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock() {
-  return {40,0};
+  return {40, 0};
 }
 
 std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithEqualDifferences() {
@@ -107,7 +107,7 @@ DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::d
 }
 
 std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::expectedBlockInterval() {
-  return { 40,120, 120, 160};
+  return {0, 480, 400, 480};
 }
 
 std::vector<uint32_t> DifferentialTimestampsContainerExampleFactory::expectedTimestampInterval() {

@@ -54,7 +54,7 @@ ADD_LIBRARY(FACTORIES STATIC ${FACTORIES_H} ${FACTORIES_SRC})
 TARGET_LINK_LIBRARIES(FACTORIES jsoncpp_lib)
 
 ADD_EXECUTABLE(
-    runUnitTest test_Json.cpp)
+    runUnitTest ${TEST_SRC_FILES})
 
 INCLUDE(GoogleTest)
 TARGET_LINK_LIBRARIES(runUnitTest  gtest gtest_main)

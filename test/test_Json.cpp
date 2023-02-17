@@ -32,12 +32,6 @@ TEST_F(JsonTest, TestToJsonAbsoluteForm) {
   Data absoluteData = Data(json["data"]);
   Json::Value data = absoluteData.toJson(DataForm::ABSOLUTE);
 
-  std::ofstream file_id;
-  file_id.open(JsonTest::getJsonPath("absolute_example.json"));
-  Json::StyledWriter styledWriter;
-  file_id << styledWriter.write(data);
-  file_id.close();
-
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
   EXPECT_EQ(json["data"]["header"]["time_zone_offset_min"].asUInt(), data["data"]["header"]["time_zone_offset_min"].asUInt());
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
@@ -95,11 +89,6 @@ TEST_F(JsonTest, TestToJsonDifferentialForm) {
   Data differentialJsonData = Data(json["data"]);
   Json::Value data = differentialJsonData.toJson(DataForm::DIFFERENTIAL);
 
-  std::ofstream file_id;
-  file_id.open(JsonTest::getJsonPath("differential_example.json"));
-  Json::StyledWriter styledWriter;
-  file_id << styledWriter.write(data);
-  file_id.close();
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
   EXPECT_EQ(json["data"]["header"]["time_zone_offset_min"].asUInt(), data["data"]["header"]["time_zone_offset_min"].asUInt());
   EXPECT_EQ(json["data"]["header"]["version"]["major"].asUInt(), data["data"]["header"]["version"]["major"].asUInt64());
@@ -109,25 +98,25 @@ TEST_F(JsonTest, TestToJsonDifferentialForm) {
   EXPECT_EQ(json["data"]["raw"]["sensors"].size(), data["data"]["raw"]["sensors"].size());
   for (Json::Value::ArrayIndex i = 0; i < json["data"]["raw"]["sensors"].size(); i++) {
     for (Json::Value::ArrayIndex j = 0; j < json["data"]["raw"]["sensors"][i]["channels"].size(); j++) {
-        EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["color"].asString(),
-                  data["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["color"].asString());
-        EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["wavelength_nm"].asInt(),
-                  data["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["wavelength_nm"].asInt());
-        EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString(),
-                  data["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString());
-        EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["coordinate"].asString(),
-                  data["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["coordinate"].asString());
-        for (Json::Value::ArrayIndex k = 0; k < json["data"]["raw"]["sensors"][i]["channels"][j]["absolute_block"]["absolute_values"].size(); k++) {
-          EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["absolute_block"]["absolute_values"][k].asInt(),
-                    data["data"]["raw"]["sensors"][i]["channels"][j]["absolute_block"]["absolute_values"][k].asInt());
+      EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["color"].asString(),
+                data["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["color"].asString());
+      EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["wavelength_nm"].asInt(),
+                data["data"]["raw"]["sensors"][i]["channels"][j]["ppg_metadata"]["wavelength_nm"].asInt());
+      EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString(),
+                data["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString());
+      EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["coordinate"].asString(),
+                data["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["coordinate"].asString());
+      for (Json::Value::ArrayIndex k = 0; k < json["data"]["raw"]["sensors"][i]["channels"][j]["absolute_block"]["absolute_values"].size(); k++) {
+        EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["absolute_block"]["absolute_values"][k].asInt(),
+                  data["data"]["raw"]["sensors"][i]["channels"][j]["absolute_block"]["absolute_values"][k].asInt());
+      }
+      for (Json::Value::ArrayIndex l = 0; l < json["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"].size(); l++) {
+        for (Json::Value::ArrayIndex m = 0; m < json["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"][l]["diff_values"].size();
+             l++) {
+          EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"][l]["differential_values"][m].asInt(),
+                    data["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"][l]["differential_values"][m].asInt());
         }
-        for (Json::Value::ArrayIndex l = 0; l < json["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"].size(); l++) {
-          for (Json::Value::ArrayIndex m = 0; m < json["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"][l]["diff_values"].size();
-               l++) {
-            EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"][l]["differential_values"][m].asInt(),
-                      data["data"]["raw"]["sensors"][i]["channels"][j]["differential_blocks"][l]["differential_values"][m].asInt());
-          }
-        }
+      }
       EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString(),
                 data["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["norm"].asString());
       EXPECT_EQ(json["data"]["raw"]["sensors"][i]["channels"][j]["acc_metadata"]["coordinate"].asString(),

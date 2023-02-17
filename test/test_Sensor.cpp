@@ -69,7 +69,7 @@ TEST_F(SensorTest, TestGetMethodComparableSensor) {
   }
   DifferentialTimestampsContainer differentialTimestampsContainer = this->comparableSensorWithPpgMetaData1.getDifferentialTimestamps();
   DifferentialTimestampsContainer comparableDifferentialTimestampsContainer =
-  DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps();
+      DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps();
   EXPECT_TRUE(differentialTimestampsContainer.isEqual(comparableDifferentialTimestampsContainer));
   AbsoluteTimestampsContainer absoluteTimestampsContainer = this->comparableSensorWithPpgMetaData1.getAbsoluteTimestamps();
   AbsoluteTimestampsContainer comparableAbsoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps();
@@ -77,42 +77,53 @@ TEST_F(SensorTest, TestGetMethodComparableSensor) {
   EXPECT_EQ(this->comparableSensorWithPpgMetaData1.getSensorType(), ProtobufSensortype::SENSOR_TYPE_PPG);
 }
 
-TEST_F(SensorTest, TestSensorWithOneUnix){
-  for(auto & unix : AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms()) {
+TEST_F(SensorTest, TestSensorWithOneUnix) {
+  for (auto& unix : AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms()) {
     EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getFirstTimestamp(), unix);
   }
-  for(size_t i  = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i ++){
-    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getBlockIntervals()[i], DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms()[i]);
+  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
+    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getBlockIntervals()[i],
+              DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms()[i]);
   }
-  for(size_t i  = 0; i < DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms().size(); i ++){
-    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getTimestampsIntervals()[i], DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms()[i]);
+  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms().size(); i++) {
+    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getTimestampsIntervals()[i],
+              DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms()[i]);
   }
 }
 
-TEST_F(SensorTest, normalSensorWithNUllUnix){
-    EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getFirstTimestamp(), DifferentialTimestampsContainerExampleFactory::zeroFirstTimestamp_ms());
-    EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getBlockIntervals(), DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms());
-    EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getTimestampsIntervals(), DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms());
+TEST_F(SensorTest, normalSensorWithNUllUnix) {
+  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getFirstTimestamp(),
+            DifferentialTimestampsContainerExampleFactory::zeroFirstTimestamp_ms());
+  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getBlockIntervals(),
+            DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms());
+  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getTimestampsIntervals(),
+            DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms());
 }
 
-TEST_F(SensorTest, TestSensorWithOneUnixAndOneValueInLastBlock){
-    EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getFirstTimestamp(), AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock()[0]);
-    for(size_t i  = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i ++){
-    EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getBlockIntervals()[i], DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock()[i]);
-    }
-    for(size_t i  = 0; i < DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms().size(); i ++){
-    EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getTimestampsIntervals()[i], DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock()[i]);
-    }
+TEST_F(SensorTest, TestSensorWithOneUnixAndOneValueInLastBlock) {
+  EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getFirstTimestamp(),
+            AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock()[0]);
+  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock().size(); i++) {
+    EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getBlockIntervals()[i],
+              DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock()[i]);
+  }
+  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock().size(); i++) {
+    EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getTimestampsIntervals()[i],
+              DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock()[i]);
+  }
 }
 
-TEST_F(SensorTest, TestSensorWithEqualTimestampsInterval){
-    EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getFirstTimestamp(), AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals()[0]);
-    for(size_t i  = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i ++){
-    EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getBlockIntervals()[i], DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms()[i]);
-    }
-    for(size_t i  = 0; i < DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms().size(); i ++){
-    EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getTimestampsIntervals()[i], DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithEqualDifferences()[i]);
-    }
+TEST_F(SensorTest, TestSensorWithEqualTimestampsInterval) {
+  EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getFirstTimestamp(),
+            AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals()[0]);
+  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
+    EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getBlockIntervals()[i],
+              DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms()[i]);
+  }
+  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms().size(); i++) {
+    EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getTimestampsIntervals()[i],
+              DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithEqualDifferences()[i]);
+  }
 }
 
 TEST_F(SensorTest, ComparableEqualNormalSensor) {

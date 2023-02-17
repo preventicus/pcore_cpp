@@ -36,10 +36,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(Json::Value& absoluteTimestampsContainer) {
+  Json::Value absoluteUnixTimestampsContainer(Json::arrayValue);
+  absoluteUnixTimestampsContainer = absoluteTimestampsContainer["unix_timestamps_ms"];
   std::vector<uint64_t> absoluteUnixTimestamps;
-  absoluteUnixTimestamps.reserve(absoluteTimestampsContainer["unix_timestamps_ms"].size());
-  for (Json::Value::ArrayIndex i = 0; i < absoluteTimestampsContainer["unix_timestamps_ms"].size(); i++) {
-    absoluteUnixTimestamps.push_back(absoluteTimestampsContainer["unix_timestamps_ms"][i].asUInt64());
+  absoluteUnixTimestamps.reserve(absoluteUnixTimestampsContainer.size());
+  for (Json::Value::ArrayIndex i = 0; i < absoluteUnixTimestampsContainer.size(); i++) {
+    absoluteUnixTimestamps.push_back(absoluteUnixTimestampsContainer[i].asUInt64());
   }
   this->unixTimestamps_ms = absoluteUnixTimestamps;
 }

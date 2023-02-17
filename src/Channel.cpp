@@ -157,15 +157,28 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
 }
 
 std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blocksIdxs) {
-  const size_t n = blocksIdxs.size() - 1;
   std::vector<DifferentialBlock> differentialBlocks = {};
-  for (size_t i = 0; i < n; i++) {
-    const size_t fromIdx = blocksIdxs[i];
-    const size_t toIdx = blocksIdxs[i + 1] - 1;
+  size_t blockSize = blocksIdxs.size();
+  if(blockSize == 0){
+    return differentialBlocks;
+  }
+  size_t absoluteValuesSize = absoluteBlock.getAbsoluteValues().size();
+  if(blockSize == 1){
+    size_t fromIdx = 0;
+    size_t toIdx = absoluteValuesSize > 1 ? absoluteValuesSize - 1 : 0;
+    DifferentialBlock differentialBlock = DifferentialBlock(this->createDifferentialBlock(fromIdx, toIdx));
+    differentialBlocks.push_back(differentialBlock);
+    return differentialBlocks;
+  }
+  size_t fromIdx = 0;
+  size_t toIdx = 0;
+  for (size_t i = 0; i < blockSize - 1; i++) {
+    fromIdx = blocksIdxs[i];
+    toIdx = blocksIdxs[i + 1] - 1;
     differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   }
-  const size_t fromIdx = blocksIdxs[n];
-  const size_t toIdx = absoluteBlock.getAbsoluteValues().size() - 1;
+  fromIdx = absoluteValuesSize - 1 == blocksIdxs[blockSize-1] ? absoluteValuesSize - 1 : blocksIdxs[blockSize - 1];
+  toIdx = absoluteValuesSize - 1;
   differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   return differentialBlocks;
 }

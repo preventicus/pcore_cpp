@@ -154,9 +154,13 @@ uint64_t Sensor::getDuration() {
 }
 
 std::vector<size_t> Sensor::findBlocksIdxs() {
+  std::vector<size_t> blocksIdxs = {};
+  if(this->absoluteTimestampsContainer.getUnixTimestamps().size() == 0) {
+    return blocksIdxs;
+  }
   uint64_t referenceTimeDifference = 0;
   bool isNewBlock = true;
-  std::vector<size_t> blocksIdxs = {0};
+  blocksIdxs.push_back(0);
   std::vector<uint64_t> absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
   for (size_t i = 1; i < absoluteUnixTimestamps.size(); i++) {
     uint64_t timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
@@ -193,52 +197,35 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(DifferentialTime
 
 DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(AbsoluteTimestampsContainer absoluteTimestamps,
                                                                         std::vector<size_t> blocksIdxs) {
-
   DifferentialTimestampsContainer differentialTimestampsContainer;
   size_t n = blocksIdxs.size();
   std::vector<uint64_t> absoluteUnixTimestamps = absoluteTimestamps.getUnixTimestamps();
-
   std::vector<uint32_t> blockIntervals_ms = {};
   std::vector<uint32_t> timestampIntervals_ms = {};
-  if(n == 0){
+  if (n == 0) {
     uint64_t firstTimestamp_ms = 0;
-    differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms,blockIntervals_ms,timestampIntervals_ms);
+    differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
+    return differentialTimestampsContainer;
   }
   uint64_t firstTimestamp_ms = absoluteTimestamps.getUnixTimestamps()[0];
-  if(n == 1) {
-    if (absoluteUnixTimestamps.size() == 1) {
-      blockIntervals_ms.push_back(0);
-      timestampIntervals_ms.push_back(0);
-      differentialTimestampsContainer =  DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
-    } else {
-      blockIntervals_ms.push_back(0);
-      timestampIntervals_ms.push_back(absoluteUnixTimestamps[1] - firstTimestamp_ms);
-      differentialTimestampsContainer =  DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
-    }
-  }
-  if(n > 1){
+  if (n == 1) {
+    timestampIntervals_ms.push_back(absoluteUnixTimestamps.size() == 1 ? 0 : absoluteUnixTimestamps[1] - firstTimestamp_ms);
     blockIntervals_ms.push_back(0);
-    timestampIntervals_ms.push_back(absoluteUnixTimestamps[1] - firstTimestamp_ms);
-    if(absoluteUnixTimestamps.size() - 1 == blocksIdxs[n-1]){
-      for (size_t i = 1; i < blocksIdxs.size() - 1; i++) {
-          const size_t prevIdx = blocksIdxs[i - 1];
-          const size_t idx = blocksIdxs[i];
-          timestampIntervals_ms.push_back(absoluteUnixTimestamps[idx + 1] - absoluteUnixTimestamps[idx]);
-          blockIntervals_ms.push_back(absoluteUnixTimestamps[idx] - absoluteUnixTimestamps[prevIdx]);
-      }
-      blockIntervals_ms.push_back(absoluteUnixTimestamps[blocksIdxs[n -1]] - absoluteUnixTimestamps[blocksIdxs[n -2]]);
-      timestampIntervals_ms.push_back(0);
-      differentialTimestampsContainer =  DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
+    differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
+    return differentialTimestampsContainer;
+  }
+  blockIntervals_ms.push_back(0);
+  timestampIntervals_ms.push_back(absoluteUnixTimestamps[1] - firstTimestamp_ms);
+  if (absoluteUnixTimestamps.size() - 1 == blocksIdxs[n - 1]) {
+    for (size_t i = 1; i < blocksIdxs.size() - 1; i++) {
+      const size_t prevIdx = blocksIdxs[i - 1];
+      const size_t idx = blocksIdxs[i];
+      timestampIntervals_ms.push_back(absoluteUnixTimestamps[idx + 1] - absoluteUnixTimestamps[idx]);
+      blockIntervals_ms.push_back(absoluteUnixTimestamps[idx] - absoluteUnixTimestamps[prevIdx]);
     }
-    else{
-      for (size_t i = 1; i < blocksIdxs.size() ; i++) {
-          const size_t prevIdx = blocksIdxs[i - 1];
-          const size_t idx = blocksIdxs[i];
-          timestampIntervals_ms.push_back(absoluteUnixTimestamps[idx + 1] - absoluteUnixTimestamps[idx]);
-          blockIntervals_ms.push_back(absoluteUnixTimestamps[idx] - absoluteUnixTimestamps[prevIdx]);
-      }
-      differentialTimestampsContainer =  DifferentialTimestampsContainer(firstTimestamp_ms,blockIntervals_ms, timestampIntervals_ms);
-    }
+    blockIntervals_ms.push_back(absoluteUnixTimestamps[blocksIdxs[n - 1]] - absoluteUnixTimestamps[blocksIdxs[n - 2]]);
+    timestampIntervals_ms.push_back(absoluteUnixTimestamps.size() - 1 == blocksIdxs[n-1] ? 0 : blocksIdxs[n - 1] );
+    differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
   }
   return differentialTimestampsContainer;
 }
