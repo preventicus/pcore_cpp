@@ -35,10 +35,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Version::Version(uint32_t major, uint32_t minor, uint32_t patch) : major(major), minor(minor), patch(patch) {}
 
-Version::Version(Json::Value& pcoreVersion) {
-  this->major = pcoreVersion["major"].asUInt();
-  this->minor = pcoreVersion["minor"].asUInt();
-  this->patch = pcoreVersion["patch"].asUInt();
+Version::Version(Json::Value& version) {
+  this->major = version["major"].asUInt();
+  this->minor = version["minor"].asUInt();
+  this->patch = version["patch"].asUInt();
 }
 
 Version::Version(const ProtobufVersion& protobufVersion) {
@@ -78,12 +78,9 @@ void Version::serialize(ProtobufVersion* protobufVersion) {
 
 Json::Value Version::toJson() {
   Json::Value version;
-  Json::Value major(Json::uintValue);
-  Json::Value minor(Json::uintValue);
-  Json::Value patch(Json::uintValue);
-  major = this->major;
-  minor = this->minor;
-  patch = this->patch;
+  Json::Value major(this->major);
+  Json::Value minor(this->minor);
+  Json::Value patch(this->patch);
   version["major"] = major;
   version["minor"] = minor;
   version["patch"] = patch;

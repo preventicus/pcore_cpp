@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 class AbsoluteTimestampsContainer final {
  public:
   AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms);
-  AbsoluteTimestampsContainer(Json::Value& absoluteTimestamps);
+  AbsoluteTimestampsContainer(Json::Value& absoluteTimestampsContainer);
   AbsoluteTimestampsContainer();
 
   std::vector<uint64_t> getUnixTimestamps();

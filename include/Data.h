@@ -49,7 +49,7 @@ class Data final {
   Raw getRaw();
   Header getHeader();
   bool isEqual(Data& data);
-  Json::Value toJson(DataForm dataform);
+  Json::Value toJson(DataForm dataForm);
   void serialize(ProtobufData* protobufData);
 
  private:

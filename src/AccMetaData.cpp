@@ -48,8 +48,8 @@ AccMetaData::AccMetaData(Json::Value& accMetaData) {
   }
   if (accMetaData["norm"].asString() == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
     this->norm = ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
-    this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
   }
+  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
   if (accMetaData["coordinate"].asString() != "") {
     Json::Value coordinate = accMetaData["coordinate"];
     if (coordinate.asString() == "COORDINATE_X") {

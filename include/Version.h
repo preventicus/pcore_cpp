@@ -41,7 +41,7 @@ class Version final {
  public:
   Version(uint32_t major, uint32_t minor, uint32_t patch);
   Version(const ProtobufVersion& protobufVersion);
-  Version(Json::Value& pcoreVersion);
+  Version(Json::Value& version);
   Version();
 
   uint32_t getMajor();

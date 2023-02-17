@@ -46,7 +46,7 @@ class AccMetaData final {
   AccMetaData(ProtobufNorm norm);
   AccMetaData(ProtobufCoordinate coordinate);
   AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);
-  AccMetaData(Json::Value& accMetadata);
+  AccMetaData(Json::Value& accMetaData);
   AccMetaData();
 
   ProtobufCoordinate getCoordinate();

@@ -44,12 +44,15 @@ PpgMetaData::PpgMetaData(uint32_t wavelength_nm) {
 }
 
 PpgMetaData::PpgMetaData(Json::Value& ppgMetaData) {
-  if (ppgMetaData["wavelength_nm"].asInt() != 0 && ppgMetaData["color"].asString() != "") {
+  if (ppgMetaData["wavelength_nm"].asUInt() != 0 && ppgMetaData["color"].asString() != "") {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
   }
-  if (ppgMetaData["wavelength_nm"].asInt() != 0) {
+  if (ppgMetaData["wavelength_nm"].asUInt() != 0) {
+    if(ppgMetaData["wavelength_nm"].asUInt() < 0){
+      throw std::invalid_argument("wavelength_nm  not allowed to be less than zero");
+    }
     Json::Value wavelength = ppgMetaData["wavelength_nm"];
-    this->wavelength_nm = wavelength.asInt();
+    this->wavelength_nm = wavelength.asUInt();
     this->color = ProtobufColor::COLOR_NONE;
   }
   if (ppgMetaData["color"].asString() != "") {
@@ -93,8 +96,7 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
 
 Json::Value PpgMetaData::toJson() {
   Json::Value ppgMetaData;
-  Json::Value wavelength_nm(Json::uintValue);
-  wavelength_nm = this->wavelength_nm;
+  Json::Value wavelength_nm(this->wavelength_nm);
   if (this->wavelength_nm != 0) {
     ppgMetaData["wavelength_nm"] = wavelength_nm;
   }

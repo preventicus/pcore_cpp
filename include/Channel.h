@@ -63,7 +63,7 @@ class Channel final {
   void serialize(ProtobufChannel* protobufChannel);
 
  private:
-  std::vector<DifferentialBlock> calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blocksIdxs);
+  std::vector<DifferentialBlock> calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs);
   DifferentialBlock createDifferentialBlock(size_t fromIdx, size_t toIdx);
   AbsoluteBlock calculateAbsoluteBlock(std::vector<DifferentialBlock> differentialBlocks);
 

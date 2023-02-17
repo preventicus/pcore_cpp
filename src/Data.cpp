@@ -40,16 +40,17 @@ Data::Data(const ProtobufData& protobufData) {
 }
 
 Data::Data(Json::Value& data) {
-  Json::Value jsonDataForm = data["header"]["data_form"];
-  if (jsonDataForm.asString() == "ABSOLUTE") {
+  Json::Value DataFormJson = data["header"]["data_form"];
+  Json::Value headerJson  = data["header"];
+  if (DataFormJson.asString() == "ABSOLUTE") {
     DataForm dataForm = DataForm::ABSOLUTE;
     this->raw = Raw(data["raw"], dataForm);
-    this->header = Header(data["header"]);
+    this->header = Header(headerJson);
   }
-  if (jsonDataForm.asString() == "DIFFERENTIAL") {
+  if (DataFormJson.asString() == "DIFFERENTIAL") {
     DataForm dataForm = DataForm::DIFFERENTIAL;
     this->raw = Raw(data["raw"], dataForm);
-    this->header = Header(data["header"]);
+    this->header = Header(headerJson);
   }
 }
 

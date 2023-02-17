@@ -75,20 +75,20 @@ Channel::Channel(Json::Value& channel, Json::Value& sensor_type, std::vector<siz
   this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
 }
 
-Channel::Channel(Json::Value& channel, Json::Value& sensor_type) {
-  if (sensor_type.asString() == "SENSOR_TYPE_PPG") {
+Channel::Channel(Json::Value& channel, Json::Value& protobufSensorType) {
+  if (protobufSensorType.asString() == "SENSOR_TYPE_PPG") {
     this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
     this->accMetadata = AccMetaData();
   }
-  if (sensor_type.asString() == "SENSOR_TYPE_ACC") {
+  if (protobufSensorType.asString() == "SENSOR_TYPE_ACC") {
     this->accMetadata = AccMetaData(channel["acc_metadata"]);
     this->ppgMetaData = PpgMetaData();
   }
-  Json::Value jsonDifferentialBlock = channel["differential_blocks"];
+  Json::Value jsonDifferentialBlocks = channel["differential_blocks"];
   std::vector<DifferentialBlock> differentialBlocks;
-  differentialBlocks.reserve(jsonDifferentialBlock.size());
-  for (Json::Value::ArrayIndex i = 0; i < jsonDifferentialBlock.size(); i++) {
-    differentialBlocks.push_back(DifferentialBlock(jsonDifferentialBlock[i]));
+  differentialBlocks.reserve(jsonDifferentialBlocks.size());
+  for (auto &jsonDifferentialBlock : jsonDifferentialBlocks) {
+    differentialBlocks.push_back(jsonDifferentialBlock);
   }
   this->differentialBlocks = differentialBlocks;
   this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
@@ -158,12 +158,12 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
 
 std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blocksIdxs) {
   std::vector<DifferentialBlock> differentialBlocks = {};
-  size_t blockSize = blocksIdxs.size();
-  if (blockSize == 0) {
+  size_t numberOfBlocks = blocksIdxs.size();
+  if (numberOfBlocks == 0) {
     return differentialBlocks;
   }
   size_t absoluteValuesSize = absoluteBlock.getAbsoluteValues().size();
-  if (blockSize == 1) {
+  if (numberOfBlocks == 1) {
     size_t fromIdx = 0;
     size_t toIdx = absoluteValuesSize > 1 ? absoluteValuesSize - 1 : 0;
     DifferentialBlock differentialBlock = DifferentialBlock(this->createDifferentialBlock(fromIdx, toIdx));
@@ -172,12 +172,12 @@ std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBloc
   }
   size_t fromIdx = 0;
   size_t toIdx = 0;
-  for (size_t i = 0; i < blockSize - 1; i++) {
+  for (size_t i = 0; i < numberOfBlocks - 1; i++) {
     fromIdx = blocksIdxs[i];
     toIdx = blocksIdxs[i + 1] - 1;
     differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   }
-  fromIdx = absoluteValuesSize - 1 == blocksIdxs[blockSize - 1] ? absoluteValuesSize - 1 : blocksIdxs[blockSize - 1];
+  fromIdx = absoluteValuesSize - 1 == blocksIdxs[numberOfBlocks - 1] ? absoluteValuesSize - 1 : blocksIdxs[numberOfBlocks - 1];
   toIdx = absoluteValuesSize - 1;
   differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   return differentialBlocks;
@@ -212,29 +212,26 @@ Json::Value Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensor
     differentialBlocks.append(differentialBlock.toJson());
   }
   Json::Value absoluteBlocks(this->absoluteBlock.toJson());
-  Json::Value metData;
+  Json::Value metaData;
   if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG) {
-    metData = this->ppgMetaData.toJson();
+    metaData = this->ppgMetaData.toJson();
     if (dataForm == DataForm::ABSOLUTE) {
-      channel["ppg_metadata"] = metData;
       channel["absolute_block"] = absoluteBlocks;
     }
-
     if (dataForm == DataForm::DIFFERENTIAL) {
-      channel["ppg_metadata"] = metData;
       channel["differential_blocks"] = differentialBlocks;
     }
+    channel["ppg_metadata"] = metaData;
   }
   if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
-    metData = this->accMetadata.toJson();
+    metaData = this->accMetadata.toJson();
     if (dataForm == DataForm::ABSOLUTE) {
-      channel["acc_metadata"] = metData;
       channel["absolute_block"] = absoluteBlocks;
     }
     if (dataForm == DataForm::DIFFERENTIAL) {
-      channel["acc_metadata"] = metData;
       channel["differential_blocks"] = differentialBlocks;
     }
+    channel["acc_metadata"] = metaData;
   }
   return channel;
 }

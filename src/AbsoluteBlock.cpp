@@ -37,8 +37,8 @@ AbsoluteBlock::AbsoluteBlock(std::vector<int32_t>& absoluteValues) : absoluteVal
 
 AbsoluteBlock::AbsoluteBlock(Json::Value& absoluteBlock) {
   Json::Value AbsoluteValuesJson = absoluteBlock["absolute_values"];
-  std::vector<int32_t> absoluteValues;
   Json::Value::ArrayIndex n = AbsoluteValuesJson.size();
+  std::vector<int32_t> absoluteValues;
   absoluteValues.reserve(n);
   for (auto& AbsoluteValueJson : AbsoluteValuesJson) {
     absoluteValues.push_back(AbsoluteValueJson.asInt());
