@@ -4,8 +4,8 @@ Created by Jakob Glück 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice,
    this list of conditions and the following disclaimer.
@@ -15,42 +15,42 @@ are permitted provided that the following conditions are met:
    and/or other materials provided with the distribution.
 
 3. Neither the name of the copyright holder nor the names of its contributors
-   may be used to endorse or promote products derived from this software without
-   specific prior written permission.
+   may be used to endorse or promote products derived from this software
+without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
 #include "Channel.h"
 
-Channel::Channel(AccMetaData& accMetadata, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdx) {
+Channel::Channel(AccMetaData& accMetadata, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs) {
   this->absoluteBlock = absoluteBlock;
-  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
+  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
   this->accMetadata = accMetadata;
   this->ppgMetaData = PpgMetaData();
 }
 
-Channel::Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdx) {
+Channel::Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs) {
   this->absoluteBlock = absoluteBlock;
-  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
+  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
   this->ppgMetaData = ppgMetaData;
   this->accMetadata = AccMetaData();
 }
 
-Channel::Channel(AccMetaData& accMetadata, std::vector<DifferentialBlock>& differentialBlocks) {
+Channel::Channel(AccMetaData& accMetaData, std::vector<DifferentialBlock>& differentialBlocks) {
   this->differentialBlocks = differentialBlocks;
   this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
-  this->accMetadata = accMetadata;
+  this->accMetadata = accMetaData;
   this->ppgMetaData = PpgMetaData();
 }
 
@@ -61,7 +61,7 @@ Channel::Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& diffe
   this->accMetadata = AccMetaData();
 }
 
-Channel::Channel(Json::Value& channel, Json::Value& sensor_type, std::vector<size_t> blockIdx) {
+Channel::Channel(Json::Value& channel, Json::Value& sensor_type, std::vector<size_t> blockIdxs) {
   if (sensor_type.asString() == "SENSOR_TYPE_PPG") {
     this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
     this->accMetadata = AccMetaData();
@@ -72,7 +72,7 @@ Channel::Channel(Json::Value& channel, Json::Value& sensor_type, std::vector<siz
   }
   AbsoluteBlock absoluteBlock = AbsoluteBlock(channel["absolute_block"]);
   this->absoluteBlock = absoluteBlock;
-  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdx);
+  this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
 }
 
 Channel::Channel(Json::Value& channel, Json::Value& sensor_type) {
@@ -205,7 +205,7 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(std::vector<DifferentialBlock> dif
   return AbsoluteBlock(absoluteValues);
 }
 
-Json::Value Channel::toJson(DataForm dataForm, ProtobufType dataType) {
+Json::Value Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) {
   Json::Value channel;
   Json::Value differentialBlocks(Json::arrayValue);
   for (auto& differentialBlock : this->differentialBlocks) {
@@ -213,7 +213,7 @@ Json::Value Channel::toJson(DataForm dataForm, ProtobufType dataType) {
   }
   Json::Value absoluteBlocks(this->absoluteBlock.toJson());
   Json::Value metData;
-  if (dataType == ProtobufType::SENSOR_TYPE_PPG) {
+  if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG) {
     metData = this->ppgMetaData.toJson();
     if (dataForm == DataForm::ABSOLUTE) {
       channel["ppg_metadata"] = metData;
@@ -225,7 +225,7 @@ Json::Value Channel::toJson(DataForm dataForm, ProtobufType dataType) {
       channel["differential_blocks"] = differentialBlocks;
     }
   }
-  if (dataType == ProtobufType::SENSOR_TYPE_ACC) {
+  if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
     metData = this->accMetadata.toJson();
     if (dataForm == DataForm::ABSOLUTE) {
       channel["acc_metadata"] = metData;

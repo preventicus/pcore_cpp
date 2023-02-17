@@ -4,8 +4,8 @@ Created by Jakob Glück 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice,
    this list of conditions and the following disclaimer.
@@ -15,31 +15,31 @@ are permitted provided that the following conditions are met:
    and/or other materials provided with the distribution.
 
 3. Neither the name of the copyright holder nor the names of its contributors
-   may be used to endorse or promote products derived from this software without
-   specific prior written permission.
+   may be used to endorse or promote products derived from this software
+without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
 #include "Sensor.h"
 
-Sensor::Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensortype sensorType)
-    : sensorType(sensorType), channels(channels), differentialTimestampsContainer(differentialTimestampsContainer) {
+Sensor::Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensorType protobufSensorType)
+    : protobufSensorType(protobufSensorType), channels(channels), differentialTimestampsContainer(differentialTimestampsContainer) {
   this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(differentialTimestampsContainer);
 }
 
-Sensor::Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensortype sensorType)
-    : sensorType(sensorType), channels(channels), absoluteTimestampsContainer(absoluteTimestampsContainer) {
+Sensor::Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensorType protobufSensorType)
+    : protobufSensorType(protobufSensorType), channels(channels), absoluteTimestampsContainer(absoluteTimestampsContainer) {
   std::vector<size_t> blockIdx = this->findBlocksIdxs();
   this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdx);
 }
@@ -72,10 +72,10 @@ Sensor::Sensor(Json::Value& sensor, DataForm dataForm) {
     this->channels = channels;
   }
   if (sensor["sensor_type"].asString() == "SENSOR_TYPE_PPG") {
-    this->sensorType = ProtobufSensortype::SENSOR_TYPE_PPG;
+    this->protobufSensorType = ProtobufSensorType::SENSOR_TYPE_PPG;
   }
   if (sensor["sensor_type"].asString() == "SENSOR_TYPE_ACC") {
-    this->sensorType = ProtobufSensortype::SENSOR_TYPE_ACC;
+    this->protobufSensorType = ProtobufSensorType::SENSOR_TYPE_ACC;
   }
 }
 
@@ -87,11 +87,11 @@ Sensor::Sensor() {
   this->channels = std::vector<Channel>{};
   this->absoluteTimestampsContainer = AbsoluteTimestampsContainer();
   this->differentialTimestampsContainer = DifferentialTimestampsContainer();
-  this->sensorType = ProtobufType::SENSOR_TYPE_NONE;
+  this->protobufSensorType = ProtobufSensorType::SENSOR_TYPE_NONE;
 }
 
-ProtobufSensortype Sensor::getSensorType() {
-  return this->sensorType;
+ProtobufSensorType Sensor::getSensorType() {
+  return this->protobufSensorType;
 }
 
 std::vector<Channel> Sensor::getChannels() {
@@ -115,7 +115,7 @@ bool Sensor::isEqual(Sensor& sensor) {
       return false;
     }
   }
-  return this->sensorType == sensor.sensorType && this->differentialTimestampsContainer.isEqual(sensor.differentialTimestampsContainer) &&
+  return this->protobufSensorType == sensor.protobufSensorType && this->differentialTimestampsContainer.isEqual(sensor.differentialTimestampsContainer) &&
          this->absoluteTimestampsContainer.isEqual(sensor.absoluteTimestampsContainer);
 }
 
@@ -127,7 +127,7 @@ void Sensor::serialize(ProtobufSensor* protobufSensor) {
     ProtobufChannel* protobufChannel = protobufSensor->add_channels();
     channel.serialize(protobufChannel);
   }
-  protobufSensor->set_sensor_type(this->sensorType);
+  protobufSensor->set_sensor_type(this->protobufSensorType);
   ProtobufDifferentialTimestampContainer protobufTimestampContainer;
   this->differentialTimestampsContainer.serialize(&protobufTimestampContainer);
   protobufSensor->mutable_differential_timestamps_container()->CopyFrom(protobufTimestampContainer);
@@ -236,12 +236,12 @@ Json::Value Sensor::toJson(DataForm dataForm) {
   Json::Value sensorType(Json::stringValue);
   if (dataForm == DataForm::ABSOLUTE) {
     for (auto& channel : this->channels) {
-      channels.append(channel.toJson(dataForm, this->sensorType));
+      channels.append(channel.toJson(dataForm, this->protobufSensorType));
     }
-    if (this->sensorType == ProtobufSensortype::SENSOR_TYPE_ACC) {
+    if (this->protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
       sensorType = "SENSOR_TYPE_ACC";
     }
-    if (this->sensorType == ProtobufSensortype::SENSOR_TYPE_PPG) {
+    if (this->protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG) {
       sensorType = "SENSOR_TYPE_PPG";
     }
     sensor["channels"] = channels;
@@ -250,12 +250,12 @@ Json::Value Sensor::toJson(DataForm dataForm) {
   }
   if (dataForm == DataForm::DIFFERENTIAL) {
     for (auto& channel : this->channels) {
-      channels.append(channel.toJson(dataForm, this->sensorType));
+      channels.append(channel.toJson(dataForm, this->protobufSensorType));
     }
-    if (this->sensorType == ProtobufSensortype::SENSOR_TYPE_ACC) {
+    if (this->protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
       sensorType = "SENSOR_TYPE_ACC";
     }
-    if (this->sensorType == ProtobufSensortype::SENSOR_TYPE_PPG) {
+    if (this->protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG) {
       sensorType = "SENSOR_TYPE_PPG";
     }
     sensor["channels"] = channels;
@@ -271,7 +271,7 @@ void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
     channels.push_back(Channel(channel));
   }
   this->channels = channels;
-  this->sensorType = protobufSensor.sensor_type();
+  this->protobufSensorType = protobufSensor.sensor_type();
   this->differentialTimestampsContainer = DifferentialTimestampsContainer(protobufSensor.differential_timestamps_container());
   this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(this->differentialTimestampsContainer);
 }
