@@ -51,9 +51,8 @@ Header::Header(Json::Value& header) {
   if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
     this->version = Version(header["version"]);
     this->timeZoneOffset_min = timeZoneOffset_min;
-  }
- else {
-  throw std::out_of_range("Out of range");
+  } else {
+    throw std::out_of_range("Out of range");
   }
 }
 

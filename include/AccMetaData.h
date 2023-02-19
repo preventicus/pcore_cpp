@@ -58,7 +58,8 @@ class AccMetaData final {
 
  private:
   void deserialize(const ProtobufAccMetaData& protobufAccMetaData);
-
+  ProtobufCoordinate toEnum(Json::Value string);
+  std::string toString(ProtobufCoordinate coordinate);
   ProtobufCoordinate coordinate;
   ProtobufNorm norm;
 };

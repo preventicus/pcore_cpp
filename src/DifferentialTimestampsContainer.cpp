@@ -49,10 +49,10 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(Json::Value& di
 
   blockIntervals_ms.reserve(jsonBlockIntervals_ms.size());
   timestampIntervals_ms.reserve(jsonTimestampIntervals_ms.size());
-  for (auto &jsonBlockInterval_ms : jsonBlockIntervals_ms) {
+  for (auto& jsonBlockInterval_ms : jsonBlockIntervals_ms) {
     blockIntervals_ms.push_back(jsonBlockInterval_ms.asUInt());
   }
-  for (auto &jsonTimestampInterval_ms : jsonTimestampIntervals_ms) {
+  for (auto& jsonTimestampInterval_ms : jsonTimestampIntervals_ms) {
     timestampIntervals_ms.push_back(jsonTimestampInterval_ms.asUInt());
   }
   this->blockIntervals_ms = blockIntervals_ms;

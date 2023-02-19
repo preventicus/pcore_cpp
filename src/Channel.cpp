@@ -61,37 +61,47 @@ Channel::Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& diffe
   this->accMetadata = AccMetaData();
 }
 
-Channel::Channel(Json::Value& channel, Json::Value& sensor_type, std::vector<size_t> blockIdxs) {
-  if (sensor_type.asString() == "SENSOR_TYPE_PPG") {
-    this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
-    this->accMetadata = AccMetaData();
-  }
-  if (sensor_type.asString() == "SENSOR_TYPE_ACC") {
-    this->accMetadata = AccMetaData(channel["acc_metadata"]);
-    this->ppgMetaData = PpgMetaData();
-  }
+Channel::Channel(Json::Value& channel, ProtobufSensorType sensorType, std::vector<size_t> blockIdxs) {
   AbsoluteBlock absoluteBlock = AbsoluteBlock(channel["absolute_block"]);
   this->absoluteBlock = absoluteBlock;
   this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
+  switch (sensorType) {
+    case ProtobufSensorType::SENSOR_TYPE_PPG: {
+      this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
+      this->accMetadata = AccMetaData();
+    }
+    case ProtobufSensorType::SENSOR_TYPE_ACC: {
+      this->accMetadata = AccMetaData(channel["acc_metadata"]);
+      this->ppgMetaData = PpgMetaData();
+    }
+    default: {
+      break;
+    }
+  }
 }
 
-Channel::Channel(Json::Value& channel, Json::Value& protobufSensorType) {
-  if (protobufSensorType.asString() == "SENSOR_TYPE_PPG") {
-    this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
-    this->accMetadata = AccMetaData();
-  }
-  if (protobufSensorType.asString() == "SENSOR_TYPE_ACC") {
-    this->accMetadata = AccMetaData(channel["acc_metadata"]);
-    this->ppgMetaData = PpgMetaData();
-  }
+Channel::Channel(Json::Value& channel, ProtobufSensorType sensorType) {
   Json::Value jsonDifferentialBlocks = channel["differential_blocks"];
   std::vector<DifferentialBlock> differentialBlocks;
   differentialBlocks.reserve(jsonDifferentialBlocks.size());
-  for (auto &jsonDifferentialBlock : jsonDifferentialBlocks) {
+  for (auto& jsonDifferentialBlock : jsonDifferentialBlocks) {
     differentialBlocks.push_back(jsonDifferentialBlock);
   }
   this->differentialBlocks = differentialBlocks;
   this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
+  switch (sensorType) {
+    case ProtobufSensorType::SENSOR_TYPE_PPG: {
+      this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
+      this->accMetadata = AccMetaData();
+    }
+    case ProtobufSensorType::SENSOR_TYPE_ACC: {
+      this->accMetadata = AccMetaData(channel["acc_metadata"]);
+      this->ppgMetaData = PpgMetaData();
+    }
+    default: {
+      break;
+    }
+  }
 }
 
 Channel::Channel(const ProtobufChannel& protobufChannel) {
@@ -213,27 +223,33 @@ Json::Value Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensor
   }
   Json::Value absoluteBlocks(this->absoluteBlock.toJson());
   Json::Value metaData;
-  if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG) {
-    metaData = this->ppgMetaData.toJson();
-    if (dataForm == DataForm::ABSOLUTE) {
-      channel["absolute_block"] = absoluteBlocks;
+  switch (protobufSensorType) {
+    case ProtobufSensorType::SENSOR_TYPE_PPG: {
+      metaData = this->ppgMetaData.toJson();
+      if (dataForm == DataForm::ABSOLUTE) {
+        channel["absolute_block"] = absoluteBlocks;
+      }
+      if (dataForm == DataForm::DIFFERENTIAL) {
+        channel["differential_blocks"] = differentialBlocks;
+      }
+      channel["ppg_metadata"] = metaData;
+      return channel;
     }
-    if (dataForm == DataForm::DIFFERENTIAL) {
-      channel["differential_blocks"] = differentialBlocks;
+    case ProtobufSensorType::SENSOR_TYPE_ACC: {
+      metaData = this->accMetadata.toJson();
+      if (dataForm == DataForm::ABSOLUTE) {
+        channel["absolute_block"] = absoluteBlocks;
+      }
+      if (dataForm == DataForm::DIFFERENTIAL) {
+        channel["differential_blocks"] = differentialBlocks;
+      }
+      channel["acc_metadata"] = metaData;
+      return channel;
     }
-    channel["ppg_metadata"] = metaData;
+    default: {
+      break;
+    }
   }
-  if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
-    metaData = this->accMetadata.toJson();
-    if (dataForm == DataForm::ABSOLUTE) {
-      channel["absolute_block"] = absoluteBlocks;
-    }
-    if (dataForm == DataForm::DIFFERENTIAL) {
-      channel["differential_blocks"] = differentialBlocks;
-    }
-    channel["acc_metadata"] = metaData;
-  }
-  return channel;
 }
 
 void Channel::deserialize(const ProtobufChannel& protobufChannel) {
@@ -245,4 +261,22 @@ void Channel::deserialize(const ProtobufChannel& protobufChannel) {
   this->differentialBlocks = differentialBlocks;
   this->accMetadata = AccMetaData(protobufChannel.acc_metadata());
   this->ppgMetaData = PpgMetaData(protobufChannel.ppg_metadata());
+}
+
+std::string Channel::toString(DataForm dataForm) {
+  if (dataForm == DataForm::ABSOLUTE) {
+    return "ABSOLUTE";
+  }
+  if (dataForm == DataForm::DIFFERENTIAL) {
+    return "DIFFERENTIAL";
+  }
+}
+
+DataForm Channel::toEnum(Json::Value string) {
+  if (string.asString() == "ABSOLUTE") {
+    return DataForm::ABSOLUTE;
+  }
+  if (string.asString() == "DIFFERENTIAL") {
+    return DataForm::DIFFERENTIAL;
+  }
 }

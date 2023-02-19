@@ -43,7 +43,7 @@ DifferentialBlock::DifferentialBlock(Json::Value& differentialBlock) {
   Json::Value differentialBlockJson = differentialBlock["differential_values"];
   std::vector<int32_t> differentialValues = {};
   differentialValues.reserve(differentialBlockJson.size());
-  for (auto &differentialValuesJson : differentialBlockJson) {
+  for (auto& differentialValuesJson : differentialBlockJson) {
     differentialValues.push_back(differentialValuesJson.asInt());
   }
   this->differentialValues = differentialValues;

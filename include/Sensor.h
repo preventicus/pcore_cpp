@@ -40,7 +40,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using ProtobufSensor = com::preventicus::pcore::Raw_Sensor;
 
-
 class Sensor final {
  public:
   Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensorType protobufSensorType);
@@ -66,6 +65,8 @@ class Sensor final {
   DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer absoluteTimestamps, std::vector<size_t> blocksIdxs);
   std::vector<size_t> findBlocksIdxs();
 
+  std::string toString(ProtobufSensorType protobufSensorType);
+  ProtobufSensorType toEnum(Json::Value string);
   void deserialize(const ProtobufSensor& protobufSensor);
 
   ProtobufSensorType protobufSensorType;

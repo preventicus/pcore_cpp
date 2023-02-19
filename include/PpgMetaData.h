@@ -56,7 +56,8 @@ class PpgMetaData final {
 
  private:
   void deserialize(const ProtobufPpgMetaData& protobufPpgMetaData);
-
+  std::string toString(ProtobufColor color);
+  ProtobufColor toEnum(Json::Value string);
   ProtobufColor color;
   uint32_t wavelength_nm;
 };

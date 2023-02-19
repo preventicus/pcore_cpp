@@ -40,17 +40,21 @@ Data::Data(const ProtobufData& protobufData) {
 }
 
 Data::Data(Json::Value& data) {
-  Json::Value DataFormJson = data["header"]["data_form"];
-  Json::Value headerJson  = data["header"];
-  if (DataFormJson.asString() == "ABSOLUTE") {
-    DataForm dataForm = DataForm::ABSOLUTE;
-    this->raw = Raw(data["raw"], dataForm);
-    this->header = Header(headerJson);
-  }
-  if (DataFormJson.asString() == "DIFFERENTIAL") {
-    DataForm dataForm = DataForm::DIFFERENTIAL;
-    this->raw = Raw(data["raw"], dataForm);
-    this->header = Header(headerJson);
+  Json::Value headerJson = data["header"];
+  switch (this->toEnum(headerJson["data_form"])) {
+    case DataForm::ABSOLUTE: {
+      this->raw = Raw(data["raw"], this->toEnum(headerJson["data_form"]));
+      this->header = Header(headerJson);
+      break;
+    }
+    case DataForm::DIFFERENTIAL: {
+      this->raw = Raw(data["raw"], this->toEnum(headerJson["data_form"]));
+      this->header = Header(headerJson);
+      break;
+    }
+    default: {
+      break;
+    }
   }
 }
 
@@ -95,4 +99,13 @@ Json::Value Data::toJson(DataForm dataForm) {
 void Data::deserialize(const ProtobufData& protobufData) {
   this->header = Header(protobufData.header());
   this->raw = Raw(protobufData.raw());
+}
+
+DataForm Data::toEnum(Json::Value string) {
+  if (string.asString() == "ABSOLUTE") {
+    return DataForm::ABSOLUTE;
+  }
+  if (string.asString() == "DIFFERENTIAL") {
+    return DataForm::DIFFERENTIAL;
+  }
 }

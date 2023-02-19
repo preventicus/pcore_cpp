@@ -52,15 +52,7 @@ AccMetaData::AccMetaData(Json::Value& accMetaData) {
   this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
   if (accMetaData["coordinate"].asString() != "") {
     Json::Value coordinate = accMetaData["coordinate"];
-    if (coordinate.asString() == "COORDINATE_X") {
-      this->coordinate = ProtobufCoordinate::COORDINATE_X;
-    }
-    if (coordinate.asString() == "COORDINATE_Y") {
-      this->coordinate = ProtobufCoordinate::COORDINATE_Y;
-    }
-    if (coordinate.asString() == "COORDINATE_Z") {
-      this->coordinate = ProtobufCoordinate::COORDINATE_Z;
-    }
+    this->coordinate = this->toEnum(accMetaData["coordinate"]);
     this->norm = ProtobufNorm::NORM_NONE;
   }
 }
@@ -113,15 +105,7 @@ Json::Value AccMetaData::toJson() {
     }
   }
   if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
-    if (this->coordinate == ProtobufCoordinate::COORDINATE_X) {
-      accMetadata["coordinate"] = "COORDINATE_X";
-    }
-    if (this->coordinate == ProtobufCoordinate::COORDINATE_Y) {
-      accMetadata["coordinate"] = "COORDINATE_Y";
-    }
-    if (this->coordinate == ProtobufCoordinate::COORDINATE_Z) {
-      accMetadata["coordinate"] = "COORDINATE_Z";
-    }
+    accMetadata["coordinate"] = this->toString(this->coordinate);
   }
   return accMetadata;
 }
@@ -129,4 +113,28 @@ Json::Value AccMetaData::toJson() {
 void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {
   this->norm = protobufAccMetaData.norm();
   this->coordinate = protobufAccMetaData.coordinate();
+}
+
+std::string AccMetaData::toString(ProtobufCoordinate coordinate) {
+  if (coordinate == ProtobufCoordinate::COORDINATE_X) {
+    return "COORDINATE_X";
+  }
+  if (coordinate == ProtobufCoordinate::COORDINATE_Y) {
+    return "COORDINATE_Y";
+  }
+  if (coordinate == ProtobufCoordinate::COORDINATE_Z) {
+    return "COORDINATE_Z";
+  }
+}
+
+ProtobufCoordinate AccMetaData::toEnum(Json::Value string) {
+  if (string.asString() == "COORDINATE_X") {
+    return ProtobufCoordinate::COORDINATE_X;
+  }
+  if (string.asString() == "COORDINATE_Y") {
+    return ProtobufCoordinate::COORDINATE_Y;
+  }
+  if (string.asString() == "COORDINATE_Z") {
+    return ProtobufCoordinate::COORDINATE_Z;
+  }
 }

@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(Json::Value& absoluteTimestampsContainer) {
-  Json::Value  absoluteTimestampsContainerJson = absoluteTimestampsContainer["unix_timestamps_ms"];
+  Json::Value absoluteTimestampsContainerJson = absoluteTimestampsContainer["unix_timestamps_ms"];
   Json::Value::ArrayIndex n = absoluteTimestampsContainerJson.size();
   std::vector<uint64_t> absoluteUnixTimestamps;
   absoluteUnixTimestamps.reserve(n);

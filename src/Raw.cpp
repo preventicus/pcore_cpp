@@ -41,10 +41,10 @@ Raw::Raw(const ProtobufRaw& protobufRaw) {
 
 Raw::Raw(Json::Value& raw, DataForm dataForm) {
   std::vector<Sensor> sensors;
-  Json::Value rawSensorsJson  = raw["sensors"];
-  Json::Value::ArrayIndex n =  raw["sensors"].size();
+  Json::Value rawSensorsJson = raw["sensors"];
+  Json::Value::ArrayIndex n = raw["sensors"].size();
   sensors.reserve(n);
-  for (auto &sensor :rawSensorsJson ) {
+  for (auto& sensor : rawSensorsJson) {
     sensors.push_back(Sensor(sensor, dataForm));
   }
   this->sensors = sensors;

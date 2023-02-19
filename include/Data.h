@@ -54,7 +54,7 @@ class Data final {
 
  private:
   void deserialize(const ProtobufData& protobufData);
-
+  DataForm toEnum(Json::Value string);
   Raw raw;
   Header header;
 };
