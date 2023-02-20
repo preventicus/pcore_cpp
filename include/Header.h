@@ -53,7 +53,7 @@ class Header final {
 
  private:
   void deserialize(const ProtobufHeader& protobufHeader);
-
+  std::string toString(DataForm dataForm);
   int32_t timeZoneOffset_min;
   Version version;
 };

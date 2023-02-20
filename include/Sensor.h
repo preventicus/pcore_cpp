@@ -66,7 +66,7 @@ class Sensor final {
   std::vector<size_t> findBlocksIdxs();
 
   std::string toString(ProtobufSensorType protobufSensorType);
-  ProtobufSensorType toEnum(Json::Value string);
+  ProtobufSensorType toEnum(Json::Value protobufSensorType);
   void deserialize(const ProtobufSensor& protobufSensor);
 
   ProtobufSensorType protobufSensorType;

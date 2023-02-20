@@ -119,25 +119,34 @@ void PpgMetaData::deserialize(const ProtobufPpgMetaData& protobufPpgMetaData) {
 }
 
 std::string PpgMetaData::toString(ProtobufColor color) {
-  if (color == ProtobufColor::COLOR_RED) {
-    return "COLOR_RED";
+  std::string jsonColor;
+  switch (color) {
+    case ProtobufColor::COLOR_RED: {
+      jsonColor = "COLOR_RED";
+    }
+    case ProtobufColor::COLOR_BLUE: {
+      jsonColor = "COLOR_BLUE";
+    }
+    case ProtobufColor::COLOR_GREEN: {
+      jsonColor = "COLOR_GREEN";
+    }
+    default: {
+      break;
+    }
   }
-  if (color == ProtobufColor::COLOR_BLUE) {
-    return "COLOR_BLUE";
-  }
-  if (color == ProtobufColor::COLOR_GREEN) {
-    return "COLOR_GREEN";
-  }
+  return jsonColor;
 }
 
-ProtobufColor PpgMetaData::toEnum(Json::Value string) {
-  if (string.asString() == "COLOR_RED") {
-    return ProtobufColor::COLOR_RED;
+ProtobufColor PpgMetaData::toEnum(Json::Value color) {
+  ProtobufColor protobufColor;
+  if (color.asString() == "COLOR_RED") {
+    protobufColor = ProtobufColor::COLOR_RED;
   }
-  if (string.asString() == "COLOR_BLUE") {
-    return ProtobufColor::COLOR_BLUE;
+  if (color.asString() == "COLOR_BLUE") {
+    protobufColor = ProtobufColor::COLOR_BLUE;
   }
-  if (string.asString() == "COLOR_GREEN") {
-    return ProtobufColor::COLOR_GREEN;
+  if (color.asString() == "COLOR_GREEN") {
+    protobufColor = ProtobufColor::COLOR_GREEN;
   }
+  return protobufColor;
 }

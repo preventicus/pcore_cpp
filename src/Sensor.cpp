@@ -48,11 +48,11 @@ Sensor::Sensor(Json::Value& sensor, DataForm dataForm) {
   Json::Value channelsJson = sensor["channels"];
   std::vector<Channel> channels;
   channels.reserve(channelsJson.size());
-  this->protobufSensorType = this->toEnum(sensor["sensor_type"]);
   switch (dataForm) {
     case DataForm::DIFFERENTIAL: {
+      this->protobufSensorType = this->toEnum(sensor["sensor_type"]);
       for (auto& channelJson : channelsJson) {
-        channels.push_back(Channel(channelJson, this->toEnum(sensor["sensor_type"])));
+        channels.push_back(Channel(channelJson, this->protobufSensorType));
       }
       this->channels = channels;
 
@@ -62,12 +62,13 @@ Sensor::Sensor(Json::Value& sensor, DataForm dataForm) {
       break;
     }
     case DataForm::ABSOLUTE: {
+      this->protobufSensorType = this->toEnum(sensor["sensor_type"]);
       AbsoluteTimestampsContainer absoluteTimestampsContainer = AbsoluteTimestampsContainer(sensor["absolute_timestamps_container"]);
       this->absoluteTimestampsContainer = absoluteTimestampsContainer;
       std::vector<size_t> blockIdxs = this->findBlocksIdxs();
       this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdxs);
       for (auto& channelJson : channelsJson) {
-        channels.push_back(Channel(channelJson, this->toEnum(sensor["sensor_type"]), blockIdxs));
+        channels.push_back(Channel(channelJson, this->protobufSensorType, blockIdxs));
       }
       this->channels = channels;
       break;
@@ -202,30 +203,41 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   std::vector<uint64_t> absoluteUnixTimestamps_ms = absoluteTimestamps.getUnixTimestamps();
   std::vector<uint32_t> blockIntervals_ms = {};
   std::vector<uint32_t> timestampIntervals_ms = {};
-  if (numberOfBlocks == 0) {
+  if (numberOfBlocks == 0) {  //  n == 0 : no timestamps are included
     uint64_t firstTimestamp_ms = 0;
-    return DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
+    return DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms,
+                                           timestampIntervals_ms);  // return a DifferentialTimestampsContainer with default values
   }
   uint64_t firstTimestamp_ms = absoluteTimestamps.getUnixTimestamps()[0];
   blockIntervals_ms.push_back(0);
-  if (numberOfBlocks == 1) {
+  if (numberOfBlocks ==
+      1) {  /// n == 1 : For n ==1 either worstCase(all timestamp have different differences) or bestCase(all timestamp have same differences) occurs
     int32_t timestampsInterval_ms = absoluteUnixTimestamps_ms[1] - firstTimestamp_ms;
-    timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() == 1 ? 0 : timestampsInterval_ms);  // when if lastTimestamp in a Block is single
+    timestampIntervals_ms.push_back(
+        absoluteUnixTimestamps_ms.size() == 1
+            ? 0
+            : timestampsInterval_ms);  // if condition is True there is just one timestamp so timestampIntervals_ms must be 0
     differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
     return differentialTimestampsContainer;
   }
   timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms[1] - firstTimestamp_ms);
-  for (size_t i = 1; i < blocksIdxs.size() - 1; i++) {
+  for (size_t i = 1; i < blocksIdxs.size() - 1; i++) {  // calculate timestampsContainers for all blockIdxs except last Idx
     const size_t prevIdx = blocksIdxs[i - 1];
     const size_t idx = blocksIdxs[i];
     timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms[idx + 1] - absoluteUnixTimestamps_ms[idx]);
     blockIntervals_ms.push_back(absoluteUnixTimestamps_ms[idx] - absoluteUnixTimestamps_ms[prevIdx]);
   }
-  blockIntervals_ms.push_back(absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 2]]);
-  int32_t timestampInterval =
-      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]];
-  timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1] ? 0 : timestampInterval);
-  differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
+  blockIntervals_ms.push_back(
+      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]] -
+      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 2]]);  // the same blockInterval_ms applies to both of the following conditions
+  int32_t timestampInterval = absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] -
+                              absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]];  // TimestampIntervals_ms last Value is a normal value
+  timestampIntervals_ms.push_back(
+      absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1]
+          ? 0
+          : timestampInterval);  // If the condition is true, the timestamp in the block is alone. TimestampIntervals_ms last Value has to be 0
+  differentialTimestampsContainer = DifferentialTimestampsContainer(
+      firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);  // last TimestampContainer has blockIntervall_ms and firstTimestamp
   return differentialTimestampsContainer;
 }
 
@@ -236,15 +248,20 @@ Json::Value Sensor::toJson(DataForm dataForm) {
   for (auto& channel : this->channels) {
     channels.append(channel.toJson(dataForm, this->protobufSensorType));
   }
-  if (dataForm == DataForm::ABSOLUTE) {
-    sensor["absolute_timestamps_container"] = this->absoluteTimestampsContainer.toJson();
+  switch (dataForm) {
+    case DataForm::ABSOLUTE: {
+      sensor["absolute_timestamps_container"] = this->absoluteTimestampsContainer.toJson();
+      break;
+    }
+    case DataForm::DIFFERENTIAL: {
+      sensor["differential_timestamps_container"] = this->differentialTimestampsContainer.toJson();
+    }
+    default: {
+      break;
+    }
   }
-  if (dataForm == DataForm::DIFFERENTIAL) {
-    sensor["differential_timestamps_container"] = this->differentialTimestampsContainer.toJson();
-  }
-  sensorType = this->toString(this->protobufSensorType);
   sensor["channels"] = channels;
-  sensor["sensor_type"] = sensorType;
+  sensor["sensor_type"] = this->toString(this->protobufSensorType);
   return sensor;
 }
 
@@ -260,19 +277,26 @@ void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
 }
 
 std::string Sensor::toString(ProtobufSensorType protobufSensorType) {
-  if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
-    return "SENSOR_TYPE_ACC";
-  }
-  if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG) {
-    return "SENSOR_TYPE_PPG";
+  switch (protobufSensorType) {
+    case ProtobufSensorType::SENSOR_TYPE_ACC: {
+      return "SENSOR_TYPE_ACC";
+    }
+    case ProtobufSensorType::SENSOR_TYPE_PPG: {
+      return "SENSOR_TYPE_PPG";
+    }
+    default: {
+      break;
+    }
   }
 }
 
-ProtobufSensorType Sensor::toEnum(Json::Value string) {
-  if (string.asString() == "SENSOR_TYPE_PPG") {
-    return ProtobufSensorType ::SENSOR_TYPE_PPG;
+ProtobufSensorType Sensor::toEnum(Json::Value protobufSensorType) {
+  ProtobufSensorType sensorType;
+  if (protobufSensorType.asString() == "SENSOR_TYPE_PPG") {
+    sensorType = ProtobufSensorType::SENSOR_TYPE_PPG;
   }
-  if (string.asString() == "SENSOR_TYPE_ACC") {
-    return ProtobufSensorType::SENSOR_TYPE_ACC;
+  if (protobufSensorType.asString() == "SENSOR_TYPE_ACC") {
+    sensorType = ProtobufSensorType::SENSOR_TYPE_ACC;
   }
+  return sensorType;
 }

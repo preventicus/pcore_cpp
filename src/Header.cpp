@@ -86,18 +86,30 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
 Json::Value Header::toJson(DataForm dataForm) {
   Json::Value header;
   Json::Value timeZoneOffset_min(this->timeZoneOffset_min);
-  if (dataForm == DataForm::ABSOLUTE) {
-    header["data_form"] = "ABSOLUTE";
-  }
-  if (dataForm == DataForm::DIFFERENTIAL) {
-    header["data_form"] = "DIFFERENTIAL";
-  }
   header["time_zone_offset_min"] = timeZoneOffset_min;
   header["version"] = this->version.toJson();
+  header["data_form"] = this->toString(dataForm);
   return header;
 }
 
 void Header::deserialize(const ProtobufHeader& protobufHeader) {
   this->timeZoneOffset_min = protobufHeader.time_zone_offset_min();
   this->version = Version(protobufHeader.pcore_version());
+}
+
+std::string Header::toString(DataForm dataForm) {
+  switch (dataForm) {
+    case DataForm::ABSOLUTE: {
+      return "ABSOLUTE";
+    }
+    case DataForm::DIFFERENTIAL: {
+      return "DIFFERENTIAL";
+    }
+    case DataForm::NOT_SET: {
+      return "NOT_SET";
+    }
+    default: {
+      break;
+    }
+  }
 }

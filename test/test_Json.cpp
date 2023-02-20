@@ -9,11 +9,12 @@ class JsonTest : public ::testing::Test {
 
 TEST_F(JsonTest, JsonObjectWithAbsoluteDataForm) {
   std::ifstream file(this->getJsonPath("absolute_pcore.json"));
-  std::cout << this->getJsonPath("absolute_pcore.json") << std::endl;
   Json::Value inputJson;
   file >> inputJson;
+  std::cout << inputJson << std::endl;
   Data pcoreAbsoluteData = Data(inputJson["data"]);
   Data outputJson = DataExampleFactory::absoluteJsonData();
+  std::cout << outputJson.toJson(DataForm::ABSOLUTE) << std::endl;
   EXPECT_TRUE(pcoreAbsoluteData.isEqual(outputJson));
 }
 

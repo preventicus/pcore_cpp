@@ -53,7 +53,6 @@ class Version final {
 
  private:
   void deserialize(const ProtobufVersion& protobufVersion);
-
   uint32_t major;
   uint32_t minor;
   uint32_t patch;

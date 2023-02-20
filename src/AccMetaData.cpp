@@ -116,25 +116,32 @@ void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {
 }
 
 std::string AccMetaData::toString(ProtobufCoordinate coordinate) {
-  if (coordinate == ProtobufCoordinate::COORDINATE_X) {
-    return "COORDINATE_X";
-  }
-  if (coordinate == ProtobufCoordinate::COORDINATE_Y) {
-    return "COORDINATE_Y";
-  }
-  if (coordinate == ProtobufCoordinate::COORDINATE_Z) {
-    return "COORDINATE_Z";
+  switch (coordinate) {
+    case ProtobufCoordinate::COORDINATE_X: {
+      return "COORDINATE_X";
+    }
+    case ProtobufCoordinate::COORDINATE_Y: {
+      return "COORDINATE_Y";
+    }
+    case ProtobufCoordinate::COORDINATE_Z: {
+      return "COORDINATE_Z";
+    }
+    default: {
+      break;
+    }
   }
 }
 
 ProtobufCoordinate AccMetaData::toEnum(Json::Value string) {
+  ProtobufCoordinate coordinate;
   if (string.asString() == "COORDINATE_X") {
-    return ProtobufCoordinate::COORDINATE_X;
+    coordinate = ProtobufCoordinate::COORDINATE_X;
   }
   if (string.asString() == "COORDINATE_Y") {
-    return ProtobufCoordinate::COORDINATE_Y;
+    coordinate = ProtobufCoordinate::COORDINATE_Y;
   }
   if (string.asString() == "COORDINATE_Z") {
-    return ProtobufCoordinate::COORDINATE_Z;
+    coordinate = ProtobufCoordinate::COORDINATE_Z;
   }
+  return coordinate;
 }

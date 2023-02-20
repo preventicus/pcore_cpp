@@ -68,8 +68,6 @@ class Channel final {
   AbsoluteBlock calculateAbsoluteBlock(std::vector<DifferentialBlock> differentialBlocks);
 
   void deserialize(const ProtobufChannel& protobufChannel);
-  std::string toString(DataForm dataForm);
-  DataForm toEnum(Json::Value string);
 
   PpgMetaData ppgMetaData;
   AccMetaData accMetadata;
