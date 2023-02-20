@@ -8,7 +8,8 @@ class JsonTest : public ::testing::Test {
 };
 
 TEST_F(JsonTest, JsonObjectWithAbsoluteDataForm) {
-  std::ifstream file(JsonTest::getJsonPath("absolute_pcore.json"));
+  std::ifstream file(this->getJsonPath("absolute_pcore.json"));
+  std::cout << this->getJsonPath("absolute_pcore.json") << std::endl;
   Json::Value inputJson;
   file >> inputJson;
   Data pcoreAbsoluteData = Data(inputJson["data"]);
@@ -17,19 +18,19 @@ TEST_F(JsonTest, JsonObjectWithAbsoluteDataForm) {
 }
 
 TEST_F(JsonTest, JsonObjectWithDifferentialDataForm) {
-  std::ifstream file(JsonTest::getJsonPath("differential_pcore.json"));
+  std::ifstream file(this->getJsonPath("differential_pcore.json"));
   Json::Value inputJson;
   file >> inputJson;
   Data pcoreDifferentialData = Data(inputJson["data"]);
   Data outputJson = DataExampleFactory::differentialJsonData();
+  std::cout << outputJson.toJson(DataForm::DIFFERENTIAL) << std::endl;
   EXPECT_TRUE(pcoreDifferentialData.isEqual(outputJson));
 }
 
 TEST_F(JsonTest, TestToJsonAbsoluteForm) {
-  std::ifstream file(JsonTest::getJsonPath("absolute_pcore.json"));
+  std::ifstream file(this->getJsonPath("absolute_pcore.json"));
   Json::Value inputJson;
   file >> inputJson;
-
   ProtobufData data;
   Data(inputJson["data"]).serialize(&data);
   Json::Value outputJson = Data(data).toJson(DataForm::ABSOLUTE);
@@ -86,14 +87,12 @@ TEST_F(JsonTest, TestToJsonAbsoluteForm) {
 }
 
 TEST_F(JsonTest, TestToJsonDifferentialForm) {
-  std::ifstream file(JsonTest::getJsonPath("differential_pcore.json"));
+  std::ifstream file(this->getJsonPath("differential_pcore.json"));
   Json::Value inputJson;
   file >> inputJson;
-
   ProtobufData data;
   Data(inputJson["data"]).serialize(&data);
   Json::Value outputJson = Data(data).toJson(DataForm::DIFFERENTIAL);
-  std::cout << outputJson << std::endl;
   Json::Value inputJsonHeader = inputJson["data"]["header"];
   Json::Value outputJsonHeader = outputJson["data"]["header"];
   Json::Value inputJsonVersion = inputJsonHeader["version"];

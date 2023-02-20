@@ -69,10 +69,12 @@ Channel::Channel(Json::Value& channel, ProtobufSensorType sensorType, std::vecto
     case ProtobufSensorType::SENSOR_TYPE_PPG: {
       this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
       this->accMetadata = AccMetaData();
+      break;
     }
     case ProtobufSensorType::SENSOR_TYPE_ACC: {
       this->accMetadata = AccMetaData(channel["acc_metadata"]);
       this->ppgMetaData = PpgMetaData();
+      break;
     }
     default: {
       break;
@@ -93,10 +95,12 @@ Channel::Channel(Json::Value& channel, ProtobufSensorType sensorType) {
     case ProtobufSensorType::SENSOR_TYPE_PPG: {
       this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
       this->accMetadata = AccMetaData();
+      break;
     }
     case ProtobufSensorType::SENSOR_TYPE_ACC: {
       this->accMetadata = AccMetaData(channel["acc_metadata"]);
       this->ppgMetaData = PpgMetaData();
+      break;
     }
     default: {
       break;
