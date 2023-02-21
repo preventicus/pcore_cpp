@@ -44,7 +44,7 @@ using ProtobufSensorType = com::preventicus::pcore::SensorType;
 
 class Channel final {
  public:
-  Channel(AccMetaData& accMetadata, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs);
+  Channel(AccMetaData& accMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs);
   Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs);
   Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& differentialBlocks);
   Channel(AccMetaData& accMetaData, std::vector<DifferentialBlock>& differentialBlocks);
@@ -70,7 +70,7 @@ class Channel final {
   void deserialize(const ProtobufChannel& protobufChannel);
 
   PpgMetaData ppgMetaData;
-  AccMetaData accMetadata;
+  AccMetaData accMetaData;
   std::vector<DifferentialBlock> differentialBlocks;
   AbsoluteBlock absoluteBlock;
 };

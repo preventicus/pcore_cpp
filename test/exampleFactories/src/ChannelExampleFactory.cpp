@@ -40,17 +40,17 @@ Channel ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX() {
 }
 
 Channel ChannelExampleFactory::channelWithOneValueBlock() {
-  std::vector<size_t> blockIdx = {0};
+  std::vector<size_t> blockIdxs = {0};
   AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockOneElement();
-  return Channel(accMetaData, absoluteBlock, blockIdx);
+  return Channel(accMetaData, absoluteBlock, blockIdxs);
 }
 
 Channel ChannelExampleFactory::channelWithNUllValueBlock() {
-  std::vector<size_t> blockIdx = {};
+  std::vector<size_t> blockIdxs = {};
   AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockEmpty();
-  return Channel(accMetaData, absoluteBlock, blockIdx);
+  return Channel(accMetaData, absoluteBlock, blockIdxs);
 }
 
 Channel ChannelExampleFactory::channelWithAccMetaDataWithCoordinateY() {
@@ -89,31 +89,31 @@ std::vector<Channel> ChannelExampleFactory::normalVectorWithChannel() {
 }
 
 Channel ChannelExampleFactory::channelWithAbsoluteBlocks() {
-  std::vector<size_t> blockIdx = {0, 10, 18, 23};
+  std::vector<size_t> blockIdxs = {0, 10, 18, 23};
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
-  AccMetaData accMetadata = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  return Channel(accMetadata, absoluteBlock, blockIdx);
+  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  return Channel(accMetaData, absoluteBlock, blockIdxs);
 }
 
 Channel ChannelExampleFactory::channelWithAbsoluteJsonDataPpg1() {
-  std::vector<size_t> blockIdx = {0, 2, 4, 6};
+  std::vector<size_t> blockIdxs = {0, 2, 4, 6};
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg1();
   PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataPpg1();
-  return Channel(ppgMetadata, absoluteBlock, blockIdx);
+  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
 }
 
 Channel ChannelExampleFactory::channelWithAbsoluteJsonDataPpg2() {
-  std::vector<size_t> blockIdx = {0, 2, 4, 6};
+  std::vector<size_t> blockIdxs = {0, 2, 4, 6};
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg2();
   PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataPpg2();
-  return Channel(ppgMetadata, absoluteBlock, blockIdx);
+  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
 }
 
 Channel ChannelExampleFactory::channelWithAbsoluteJsonDataAcc() {
-  std::vector<size_t> blockIdx = {0, 2, 4};
+  std::vector<size_t> blockIdxs = {0, 2, 4};
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockAcc();
-  AccMetaData accMetadata = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
-  return Channel(accMetadata, absoluteBlock, blockIdx);
+  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
+  return Channel(accMetaData, absoluteBlock, blockIdxs);
 }
 
 std::vector<Channel> ChannelExampleFactory::comparableVectorWithChannel() {
@@ -147,22 +147,22 @@ Channel ChannelExampleFactory::channelWithDifferentialJsonDataPpg2() {
 
 Channel ChannelExampleFactory::channelWithDifferentialJsonDataAcc() {
   std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::differentialJsonDataBlockAcc();
-  AccMetaData accMetadata = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
-  return Channel(accMetadata, differentialBlocks);
+  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
+  return Channel(accMetaData, differentialBlocks);
 }
 
 Channel ChannelExampleFactory::channelWithOneValueInLastBlock() {
-  std::vector<size_t> blockIdx = {0, 6};
+  std::vector<size_t> blockIdxs = {0, 6};
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock();
   PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1();
-  return Channel(ppgMetadata, absoluteBlock, blockIdx);
+  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
 }
 
 Channel ChannelExampleFactory::channelWithEqualTimestampIntervals() {
-  std::vector<size_t> blockIdx = {0};
+  std::vector<size_t> blockIdxs = {0};
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock();
   PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1();
-  return Channel(ppgMetadata, absoluteBlock, blockIdx);
+  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
 }
 
 std::vector<Channel> ChannelExampleFactory::normalVectorWithDifferentialJsonDataPpgChannel() {

@@ -88,9 +88,9 @@ uint32_t DifferentialTimestampsContainer::calculateFirstTimestampInBlock(uint32_
     throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
   }
   uint64_t firstTimestamp = this->firstTimestamp_ms;
-  std::vector<uint32_t> blockinterval = this->blockIntervals_ms;
+  std::vector<uint32_t> blockintervals_ms = this->blockIntervals_ms;
   for (size_t i = 1; i <= blockIdx; i++) {
-    firstTimestamp += blockinterval[i];
+    firstTimestamp += blockintervals_ms[i];
   }
   return firstTimestamp;
 }
@@ -123,11 +123,11 @@ void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampCon
   if (protobufDifferentialTimestampContainer == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialTimestampContainer is a null pointer");
   }
-  for (auto& blockInterval : this->blockIntervals_ms) {
-    protobufDifferentialTimestampContainer->add_block_intervals_ms(blockInterval);
+  for (auto& blockInterval_ms : this->blockIntervals_ms) {
+    protobufDifferentialTimestampContainer->add_block_intervals_ms(blockInterval_ms);
   }
-  for (auto& timestampsInterval : this->timestampsIntervals_ms) {
-    protobufDifferentialTimestampContainer->add_timestamps_intervals_ms(timestampsInterval);
+  for (auto& timestampsInterval_ms : this->timestampsIntervals_ms) {
+    protobufDifferentialTimestampContainer->add_timestamps_intervals_ms(timestampsInterval_ms);
   }
   protobufDifferentialTimestampContainer->set_first_timestamp_ms(this->firstTimestamp_ms);
 }

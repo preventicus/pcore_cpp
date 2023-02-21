@@ -40,8 +40,8 @@ Sensor::Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer di
 
 Sensor::Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensorType protobufSensorType)
     : protobufSensorType(protobufSensorType), channels(channels), absoluteTimestampsContainer(absoluteTimestampsContainer) {
-  std::vector<size_t> blockIdx = this->findBlocksIdxs();
-  this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdx);
+  std::vector<size_t> blockIdxs = this->findBlocksIdxs();
+  this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdxs);
 }
 
 Sensor::Sensor(Json::Value& sensor, DataForm dataForm) {
@@ -207,13 +207,13 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
    * blockIdxs.size = 0 -> no timestamps are included
                             return default Values for emptyBlock
    * blockIdxs.size = 1 -> case 1 : just one Block with one timestamps
-                            return firstTimestamps, BlockInterval = {0}, timestampsInterval{0}
+                            return firstTimestamps, BlockIntervals_ms = {0}, timestampsInterval_ms{0}
    *                       case 2 : one Block with certain amount of timestmaps with same timedifferences
-                            return firstTimestamps, BlockInterval = {0}, TimetsampsInterval with one value (BestCase)
+                            return firstTimestamps, BlockInterval_ms  = {0}, timetsampsIntervals_ms with one value (BestCase)
    * blockIdxs.size > 1 -> case 1: normal condition (Last block hold at least 2 Timestamps)
                             return calculate differentialTimestamps
    *                       case 2: the last Block hold just one Timestamp
-                            return calculate differentialTimestamps  + last timestampsInterval.pushback(0)
+                            return calculate differentialTimestamps  + last timestampsInterval_ms.pushback(0)
   */
   if (numberOfBlocks == 0) {
     uint64_t firstTimestamp_ms = 0;
@@ -237,11 +237,11 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   blockIntervals_ms.push_back(
       absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]] -
       absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 2]]);  // the same blockInterval_ms applies to both of the following conditions
-  int32_t timestampInterval =
+  int32_t timestampsInterval =
       absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]];
   timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1]
                                       ? 0
-                                      : timestampInterval);  // if the condition is true, last block hold one timestamp -> Case 2 t
+                                      : timestampsInterval);  // if the condition is true, last block hold one timestamp -> Case 2 t
   differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
   return differentialTimestampsContainer;
 }

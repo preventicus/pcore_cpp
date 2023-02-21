@@ -33,10 +33,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Channel.h"
 
-Channel::Channel(AccMetaData& accMetadata, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs) {
+Channel::Channel(AccMetaData& accMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs) {
   this->absoluteBlock = absoluteBlock;
   this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
-  this->accMetadata = accMetadata;
+  this->accMetaData = accMetaData;
   this->ppgMetaData = PpgMetaData();
 }
 
@@ -44,13 +44,13 @@ Channel::Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vec
   this->absoluteBlock = absoluteBlock;
   this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
   this->ppgMetaData = ppgMetaData;
-  this->accMetadata = AccMetaData();
+  this->accMetaData = AccMetaData();
 }
 
 Channel::Channel(AccMetaData& accMetaData, std::vector<DifferentialBlock>& differentialBlocks) {
   this->differentialBlocks = differentialBlocks;
   this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
-  this->accMetadata = accMetaData;
+  this->accMetaData = accMetaData;
   this->ppgMetaData = PpgMetaData();
 }
 
@@ -58,7 +58,7 @@ Channel::Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& diffe
   this->differentialBlocks = differentialBlocks;
   this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
   this->ppgMetaData = ppgMetaData;
-  this->accMetadata = AccMetaData();
+  this->accMetaData = AccMetaData();
 }
 
 Channel::Channel(Json::Value& channel, ProtobufSensorType sensorType, std::vector<size_t> blockIdxs) {
@@ -68,11 +68,11 @@ Channel::Channel(Json::Value& channel, ProtobufSensorType sensorType, std::vecto
   switch (sensorType) {
     case ProtobufSensorType::SENSOR_TYPE_PPG: {
       this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
-      this->accMetadata = AccMetaData();
+      this->accMetaData = AccMetaData();
       break;
     }
     case ProtobufSensorType::SENSOR_TYPE_ACC: {
-      this->accMetadata = AccMetaData(channel["acc_metadata"]);
+      this->accMetaData = AccMetaData(channel["acc_metadata"]);
       this->ppgMetaData = PpgMetaData();
       break;
     }
@@ -94,11 +94,11 @@ Channel::Channel(Json::Value& channel, ProtobufSensorType sensorType) {
   switch (sensorType) {
     case ProtobufSensorType::SENSOR_TYPE_PPG: {
       this->ppgMetaData = PpgMetaData(channel["ppg_metadata"]);
-      this->accMetadata = AccMetaData();
+      this->accMetaData = AccMetaData();
       break;
     }
     case ProtobufSensorType::SENSOR_TYPE_ACC: {
-      this->accMetadata = AccMetaData(channel["acc_metadata"]);
+      this->accMetaData = AccMetaData(channel["acc_metadata"]);
       this->ppgMetaData = PpgMetaData();
       break;
     }
@@ -113,7 +113,7 @@ Channel::Channel(const ProtobufChannel& protobufChannel) {
 }
 
 Channel::Channel() {
-  this->accMetadata = AccMetaData();
+  this->accMetaData = AccMetaData();
   this->ppgMetaData = PpgMetaData();
   this->absoluteBlock = AbsoluteBlock();
   this->differentialBlocks = std::vector<DifferentialBlock>{};
@@ -128,7 +128,7 @@ AbsoluteBlock Channel::getAbsoluteBlock() {
 }
 
 AccMetaData Channel::getAccMetaData() {
-  return this->accMetadata;
+  return this->accMetaData;
 }
 
 PpgMetaData Channel::getPpgMetaData() {
@@ -144,7 +144,7 @@ bool Channel::isEqual(Channel& channel) {
       return false;
     }
   }
-  return this->accMetadata.isEqual(channel.accMetadata) && this->ppgMetaData.isEqual(channel.ppgMetaData) &&
+  return this->accMetaData.isEqual(channel.accMetaData) && this->ppgMetaData.isEqual(channel.ppgMetaData) &&
          this->absoluteBlock.isEqual(channel.absoluteBlock);
 }
 
@@ -152,13 +152,13 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
   if (protobufChannel == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
   }
-  if (accMetadata.isSet() == ppgMetaData.isSet()) {
+  if (accMetaData.isSet() == ppgMetaData.isSet()) {
     throw std::invalid_argument("just one type of MetaData can be initialized");
   }
-  if (this->accMetadata.isSet()) {
-    ProtobufAccMetaData protobufAccMetadata;
-    this->accMetadata.serialize(&protobufAccMetadata);
-    protobufChannel->mutable_acc_metadata()->CopyFrom(protobufAccMetadata);
+  if (this->accMetaData.isSet()) {
+    ProtobufAccMetaData protobufaccMetaData;
+    this->accMetaData.serialize(&protobufaccMetaData);
+    protobufChannel->mutable_acc_metadata()->CopyFrom(protobufaccMetaData);
   } else if (this->ppgMetaData.isSet()) {
     ProtobufPpgMetaData protobufPpgMetaData;
     this->ppgMetaData.serialize(&protobufPpgMetaData);
@@ -249,7 +249,7 @@ Json::Value Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensor
         channel["ppg_metadata"] = metaData;
       }
       if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
-        metaData = this->accMetadata.toJson();
+        metaData = this->accMetaData.toJson();
         channel["acc_metadata"] = metaData;
       }
       channel["absolute_block"] = absoluteBlocks;
@@ -261,7 +261,7 @@ Json::Value Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensor
         channel["ppg_metadata"] = metaData;
       }
       if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC) {
-        metaData = this->accMetadata.toJson();
+        metaData = this->accMetaData.toJson();
         channel["acc_metadata"] = metaData;
       }
       channel["differential_blocks"] = differentialBlocks;
@@ -280,6 +280,6 @@ void Channel::deserialize(const ProtobufChannel& protobufChannel) {
   }
   this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
   this->differentialBlocks = differentialBlocks;
-  this->accMetadata = AccMetaData(protobufChannel.acc_metadata());
+  this->accMetaData = AccMetaData(protobufChannel.acc_metadata());
   this->ppgMetaData = PpgMetaData(protobufChannel.ppg_metadata());
 }

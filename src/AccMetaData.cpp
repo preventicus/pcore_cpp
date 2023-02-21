@@ -100,9 +100,7 @@ void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
 Json::Value AccMetaData::toJson() {
   Json::Value accMetadata;
   if (this->norm != ProtobufNorm::NORM_NONE) {
-    if (this->norm == ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM) {
-      accMetadata["norm"] = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
-    }
+    accMetadata["norm"] = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
   }
   if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
     accMetadata["coordinate"] = this->toString(this->coordinate);
@@ -132,15 +130,15 @@ std::string AccMetaData::toString(ProtobufCoordinate coordinate) {
   }
 }
 
-ProtobufCoordinate AccMetaData::toEnum(Json::Value string) {
+ProtobufCoordinate AccMetaData::toEnum(Json::Value jsonCoordinate) {
   ProtobufCoordinate coordinate;
-  if (string.asString() == "COORDINATE_X") {
+  if (jsonCoordinate.asString() == "COORDINATE_X") {
     coordinate = ProtobufCoordinate::COORDINATE_X;
   }
-  if (string.asString() == "COORDINATE_Y") {
+  if (jsonCoordinate.asString() == "COORDINATE_Y") {
     coordinate = ProtobufCoordinate::COORDINATE_Y;
   }
-  if (string.asString() == "COORDINATE_Z") {
+  if (jsonCoordinate.asString() == "COORDINATE_Z") {
     coordinate = ProtobufCoordinate::COORDINATE_Z;
   }
   return coordinate;
