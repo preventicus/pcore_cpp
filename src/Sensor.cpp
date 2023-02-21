@@ -203,25 +203,32 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   std::vector<uint64_t> absoluteUnixTimestamps_ms = absoluteTimestamps.getUnixTimestamps();
   std::vector<uint32_t> blockIntervals_ms = {};
   std::vector<uint32_t> timestampIntervals_ms = {};
-  if (numberOfBlocks == 0) {  //  n == 0 : no timestamps are included
+  /*
+   * blockIdxs.size = 0 -> no timestamps are included
+                            return default Values for emptyBlock
+   * blockIdxs.size = 1 -> case 1 : just one Block with one timestamps
+                            return firstTimestamps, BlockInterval = {0}, timestampsInterval{0}
+   *                       case 2 : one Block with certain amount of timestmaps with same timedifferences
+                            return firstTimestamps, BlockInterval = {0}, TimetsampsInterval with one value (BestCase)
+   * blockIdxs.size > 1 -> case 1: normal condition (Last block hold at least 2 Timestamps)
+                            return calculate differentialTimestamps
+   *                       case 2: the last Block hold just one Timestamp
+                            return calculate differentialTimestamps  + last timestampsInterval.pushback(0)
+  */
+  if (numberOfBlocks == 0) {
     uint64_t firstTimestamp_ms = 0;
-    return DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms,
-                                           timestampIntervals_ms);  // return a DifferentialTimestampsContainer with default values
+    return DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
   }
   uint64_t firstTimestamp_ms = absoluteTimestamps.getUnixTimestamps()[0];
   blockIntervals_ms.push_back(0);
-  if (numberOfBlocks ==
-      1) {  /// n == 1 : For n ==1 either worstCase(all timestamp have different differences) or bestCase(all timestamp have same differences) occurs
+  if (numberOfBlocks == 1) {
     int32_t timestampsInterval_ms = absoluteUnixTimestamps_ms[1] - firstTimestamp_ms;
-    timestampIntervals_ms.push_back(
-        absoluteUnixTimestamps_ms.size() == 1
-            ? 0
-            : timestampsInterval_ms);  // if condition is True there is just one timestamp so timestampIntervals_ms must be 0
+    timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() == 1 ? 0 : timestampsInterval_ms);
     differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
     return differentialTimestampsContainer;
   }
   timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms[1] - firstTimestamp_ms);
-  for (size_t i = 1; i < blocksIdxs.size() - 1; i++) {  // calculate timestampsContainers for all blockIdxs except last Idx
+  for (size_t i = 1; i < blocksIdxs.size() - 1; i++) {
     const size_t prevIdx = blocksIdxs[i - 1];
     const size_t idx = blocksIdxs[i];
     timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms[idx + 1] - absoluteUnixTimestamps_ms[idx]);
@@ -230,14 +237,12 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   blockIntervals_ms.push_back(
       absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]] -
       absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 2]]);  // the same blockInterval_ms applies to both of the following conditions
-  int32_t timestampInterval = absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] -
-                              absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]];  // TimestampIntervals_ms last Value is a normal value
-  timestampIntervals_ms.push_back(
-      absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1]
-          ? 0
-          : timestampInterval);  // If the condition is true, the timestamp in the block is alone. TimestampIntervals_ms last Value has to be 0
-  differentialTimestampsContainer = DifferentialTimestampsContainer(
-      firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);  // last TimestampContainer has blockIntervall_ms and firstTimestamp
+  int32_t timestampInterval =
+      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]];
+  timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1]
+                                      ? 0
+                                      : timestampInterval);  // if the condition is true, last block hold one timestamp -> Case 2 t
+  differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
   return differentialTimestampsContainer;
 }
 

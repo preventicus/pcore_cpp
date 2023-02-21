@@ -173,15 +173,25 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
 std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blocksIdxs) {
   std::vector<DifferentialBlock> differentialBlocks = {};
   size_t numberOfBlocks = blocksIdxs.size();
-  if (numberOfBlocks == 0) {  // n == 0 : must return an empty block because no values exist.
+  /*
+* blockIdxs.size = 0 -> no values are included
+                          return default value for emptyBlock
+* blockIdxs.size = 1 -> case 1 : just one Block with one value
+                          return DifferentialBlock with one absoluteValue
+*                       case 2 : one Block with certain amount of value
+                          return normal calculated differentialBlock
+* blockIdxs.size > 1 -> case 1: normal condition (Last block hold at least 2 values)
+                          return calculate differentialBlock
+*                       case 2: the last Block hold just one value
+                          return normal calculate differentialBlock  + last included differentialValue is a absoluteValue
+*/
+  if (numberOfBlocks == 0) {
     return differentialBlocks;
   }
   size_t absoluteValuesSize = absoluteBlock.getAbsoluteValues().size();
-  if (numberOfBlocks ==
-      1) {  // n == 1 : For n ==1 either worstCase(all values have different differences) or bestCase(all values have same differences) occurs
+  if (numberOfBlocks == 1) {
     size_t fromIdx = 0;
-    size_t toIdx = absoluteValuesSize > 1 ? absoluteValuesSize - 1 : 0;  // if the absoluteBlocksize is greater than 1 there are more than one Value
-                                                                         // contained. Which means that there are differentialValues.
+    size_t toIdx = absoluteValuesSize > 1 ? absoluteValuesSize - 1 : 0;
     DifferentialBlock differentialBlock =
         DifferentialBlock(this->createDifferentialBlock(fromIdx, toIdx));  // toIdx = 0  would create a DifferentialBlock with a absoluteValue.
     differentialBlocks.push_back(differentialBlock);
@@ -196,8 +206,7 @@ std::vector<DifferentialBlock> Channel::calculateDifferentialBlocks(AbsoluteBloc
   }
   fromIdx = absoluteValuesSize - 1 == blocksIdxs[numberOfBlocks - 1]
                 ? absoluteValuesSize - 1
-                : blocksIdxs[numberOfBlocks -
-                             1];  // If the condition is true, the last value in the block is alone. So the last block must contain only one value
+                : blocksIdxs[numberOfBlocks - 1];  // If the condition is true, the last block hold one value. ->case 2
   toIdx = absoluteValuesSize - 1;
   differentialBlocks.push_back(this->createDifferentialBlock(fromIdx, toIdx));
   return differentialBlocks;
