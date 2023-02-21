@@ -98,14 +98,14 @@ void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
 }
 
 Json::Value AccMetaData::toJson() {
-  Json::Value accMetadata;
+  Json::Value accMetaData;
   if (this->norm != ProtobufNorm::NORM_NONE) {
-    accMetadata["norm"] = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
+    accMetaData["norm"] = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
   }
   if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
-    accMetadata["coordinate"] = this->toString(this->coordinate);
+    accMetaData["coordinate"] = this->toString(this->coordinate);
   }
-  return accMetadata;
+  return accMetaData;
 }
 
 void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {
