@@ -61,4 +61,7 @@ class DifferentialBlockExampleFactory {
   static DifferentialBlock expectedDifferentialBlock4();
 
   static std::vector<DifferentialBlock> normalDifferentialBlocks();
+  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg1();
+  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg2();
+  static std::vector<DifferentialBlock> differentialJsonDataBlockAcc();
 };

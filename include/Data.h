@@ -43,16 +43,18 @@ class Data final {
  public:
   Data(Raw raw, Header header);
   Data(const ProtobufData& protobufData);
+  Data(Json::Value& data);
   Data();
 
   Raw getRaw();
   Header getHeader();
   bool isEqual(Data& data);
+  Json::Value toJson(DataForm dataForm);
   void serialize(ProtobufData* protobufData);
 
  private:
   void deserialize(const ProtobufData& protobufData);
-
+  DataForm toEnum(Json::Value string);
   Raw raw;
   Header header;
 };

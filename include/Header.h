@@ -32,8 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "DataFormat.h"
 #include "Version.h"
-
 #include "protobuf/pcore.pb.h"
 
 using ProtobufHeader = com::preventicus::pcore::Data_Header;
@@ -42,16 +42,18 @@ class Header final {
  public:
   Header(Version& version, int32_t timeZoneOffset_min);
   Header(const ProtobufHeader& protobufHeader);
+  Header(Json::Value& header);
   Header();
 
   int32_t getTimeZoneOffset();
   Version getVersion();
   bool isEqual(Header& header);
+  Json::Value toJson(DataForm dataForm);
   void serialize(ProtobufHeader* protobufHeader);
 
  private:
   void deserialize(const ProtobufHeader& protobufHeader);
-
+  std::string toString(DataForm dataForm);
   int32_t timeZoneOffset_min;
   Version version;
 };

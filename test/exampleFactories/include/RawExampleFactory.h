@@ -39,4 +39,6 @@ class RawExampleFactory {
  public:
   static Raw normalRaw();
   static Raw comparableRaw();
+  static Raw absoluteJsonDataRaw();
+  static Raw differentialJsonDataRaw();
 };

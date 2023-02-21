@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "json/json.h"
 #include "protobuf/pcore_color.pb.h"
 #include "protobuf/pcore_raw.pb.h"
 
@@ -43,17 +44,20 @@ class PpgMetaData final {
   PpgMetaData(ProtobufColor color);
   PpgMetaData(uint32_t wavelength_nm);
   PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);
+  PpgMetaData(Json::Value& ppgMetaData);
   PpgMetaData();
 
   ProtobufColor getColor();
   uint32_t getWavelength();
   bool isSet();
   bool isEqual(PpgMetaData& ppgMetaData);
+  Json::Value toJson();
   void serialize(ProtobufPpgMetaData* protobufPpgMetaData);
 
  private:
   void deserialize(const ProtobufPpgMetaData& protobufPpgMetaData);
-
+  std::string toString(ProtobufColor color);
+  ProtobufColor toEnum(Json::Value string);
   ProtobufColor color;
   uint32_t wavelength_nm;
 };

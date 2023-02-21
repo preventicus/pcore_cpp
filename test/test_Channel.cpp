@@ -54,7 +54,7 @@ class ChannelTest : public ::testing::Test {
 
 TEST_F(ChannelTest, TestGetMethodPpg) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
-  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getPpgMetData().isEqual(ppgMetaData));
+  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getPpgMetaData().isEqual(ppgMetaData));
   AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAccMetaData().isEqual(accMetaData));
   EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAbsoluteBlock().isEqual(this->comparableAbsoluteBlock));
@@ -68,7 +68,7 @@ TEST_F(ChannelTest, TestGetMethodAcc) {
   AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getAccMetaData().isEqual(accMetaData));
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getPpgMetData().isEqual(ppgMetaData));
+  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getPpgMetaData().isEqual(ppgMetaData));
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
   EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getAbsoluteBlock().isEqual(this->comparableAbsoluteBlock));
   std::vector<DifferentialBlock> differentialBlocks = this->channelAccMetaDataWithCoordinateX1.getDifferentialBlocks();

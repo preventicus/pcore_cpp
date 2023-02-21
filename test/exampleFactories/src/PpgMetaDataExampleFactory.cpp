@@ -41,6 +41,14 @@ uint32_t PpgMetaDataExampleFactory::comparableWavelength_nm() {
   return 100;
 }
 
+uint32_t PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1() {
+  return 450;
+}
+
+uint32_t PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2() {
+  return 660;
+}
+
 uint32_t PpgMetaDataExampleFactory::noWavelength_nm() {
   return 0;
 }
@@ -63,6 +71,14 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithWavelength() {
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithComparableWavelength() {
   return PpgMetaData(PpgMetaDataExampleFactory::comparableWavelength_nm());
+}
+
+PpgMetaData PpgMetaDataExampleFactory::absoluteJsonDataPpg1() {
+  return PpgMetaData(PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1());
+}
+
+PpgMetaData PpgMetaDataExampleFactory::absoluteJsonDataPpg2() {
+  return PpgMetaData(PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2());
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {

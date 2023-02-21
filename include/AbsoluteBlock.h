@@ -32,15 +32,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include <json/json.h>
 #include <vector>
 
 class AbsoluteBlock final {
  public:
   AbsoluteBlock(std::vector<int32_t>& absoluteValues);
+  AbsoluteBlock(Json::Value& absoluteBlock);
   AbsoluteBlock();
 
   std::vector<int32_t> getAbsoluteValues();
   bool isEqual(AbsoluteBlock& block);
+  Json::Value toJson();
 
  private:
   std::vector<int32_t> absoluteValues;

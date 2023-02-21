@@ -1,0 +1,57 @@
+{
+    "data": {
+        "header": {
+            "time_zone_offset_min": 0,
+            "version": {
+                "major": 1,
+                "minor": 1,
+                "patch": 0
+            },
+            "data_form": "ABSOLUTE"
+        },
+        "raw": {
+            "sensors": [
+                {
+                    "channels": [
+                        {
+                            "ppg_metadata": {
+                                "wavelength_nm": 450
+                            },
+                            "absolute_block":  {
+                                "absolute_values": [30021,30023,30027,30022,30020,30020,30030]
+                            }
+                        },
+                        {
+                            "ppg_metadata": {
+                                "wavelength_nm": 660
+                            },
+                            "absolute_block": {
+                                "absolute_values": [54834,54830,54836,54842,54841,54841,54830]
+                            }
+                        }
+                    ],
+                    "absolute_timestamps_container": {
+                        "unix_timestamps_ms": [1675423476214,1675423484760,1675423490027,1675423494521,1675423500121,1675423506321,1675423513156]
+                    },
+                    "sensor_type": "SENSOR_TYPE_PPG"
+                },
+                {
+                    "channels": [
+                        {
+                            "acc_metadata": {
+                                "norm": "NORM_EUCLIDEAN_DIFFERENCES_NORM"
+                            },
+                            "absolute_block": {
+                                "absolute_values": [548,34,234,3435,433,454]
+                            }
+                        }
+                    ],
+                    "absolute_timestamps_container": {
+                        "unix_timestamps_ms": [1675423476210,1675423484770,1675423490028,1675423494520,1675423500131,1675423506381]
+                    },
+                    "sensor_type": "SENSOR_TYPE_ACC"
+                }
+            ]
+        }
+    }
+}

@@ -52,4 +52,5 @@ class VersionExampleFactory {
   static Version startVersion();
   static Version highVersion();
   static Version randomVersion();
+  static Version absoluteJsonDataVersion();
 };

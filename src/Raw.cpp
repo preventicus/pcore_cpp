@@ -39,6 +39,17 @@ Raw::Raw(const ProtobufRaw& protobufRaw) {
   this->deserialize(protobufRaw);
 }
 
+Raw::Raw(Json::Value& raw, DataForm dataForm) {
+  std::vector<Sensor> sensors;
+  Json::Value rawSensorsJson = raw["sensors"];
+  Json::Value::ArrayIndex n = raw["sensors"].size();
+  sensors.reserve(n);
+  for (auto& sensor : rawSensorsJson) {
+    sensors.push_back(Sensor(sensor, dataForm));
+  }
+  this->sensors = sensors;
+}
+
 Raw::Raw() {
   this->sensors = std::vector<Sensor>{};
 }
@@ -67,6 +78,16 @@ void Raw::serialize(ProtobufRaw* protobufRaw) {
     ProtobufSensor* protobufSensor = protobufRaw->add_sensors();
     sensor.serialize(protobufSensor);
   }
+}
+
+Json::Value Raw::toJson(DataForm dataForm) {
+  Json::Value sensors(Json::arrayValue);
+  Json::Value raw;
+  for (auto& sensor : this->sensors) {
+    sensors.append(sensor.toJson(dataForm));
+  }
+  raw["sensors"] = sensors;
+  return raw;
 }
 
 void Raw::deserialize(const ProtobufRaw& protobufRaw) {

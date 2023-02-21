@@ -39,6 +39,8 @@ class PpgMetaDataExampleFactory {
   static uint32_t normalWavelength_nm();
   static uint32_t comparableWavelength_nm();
   static uint32_t noWavelength_nm();
+  static uint32_t absoluteJsonDataWavelength_nm1();
+  static uint32_t absoluteJsonDataWavelength_nm2();
 
   static PpgMetaData ppgMetDataWithColorGreen();
   static PpgMetaData ppgMetDataWithColorBlue();
@@ -46,6 +48,8 @@ class PpgMetaDataExampleFactory {
 
   static PpgMetaData ppgMetDataWithWavelength();
   static PpgMetaData ppgMetDataWithComparableWavelength();
+  static PpgMetaData absoluteJsonDataPpg1();
+  static PpgMetaData absoluteJsonDataPpg2();
 
   static PpgMetaData ppgMetaDataNotSet();
 };

@@ -40,4 +40,6 @@ class DataExampleFactory {
  public:
   static Data normalData();
   static Data comparableData();
+  static Data absoluteJsonData();
+  static Data differentialJsonData();
 };
