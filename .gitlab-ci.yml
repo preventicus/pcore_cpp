@@ -1,5 +1,6 @@
 image: registry.preventicus.com/research/protobuf/build:1.0
-
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
 style-job:
   stage: test
   script:
