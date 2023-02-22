@@ -1,0 +1,9 @@
+.DS_Store
+CMakeLists.txt.user
+build*
+include/protobuf/*
+.idea
+cmake-build-debug
+cmake-build-release
+cmake-build-debug-coverage
+cmake-build-default

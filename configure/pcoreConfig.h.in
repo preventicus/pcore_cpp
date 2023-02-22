@@ -1,0 +1,9 @@
+#ifndef PCORECONFIG_H // NOLINT
+#define PCORECONFIG_H
+
+// the configured options and settings for pcore
+#define PCORE_VERSION_MAJOR @PCORE_MAJOR_VERSION@
+#define PCORE_VERSION_MINOR @PCORE_MINOR_VERSION@
+#define PCORE_VERSION_PATCH @PCORE_PATCH_VERSION@
+
+#endif // PCORECONFIG_H

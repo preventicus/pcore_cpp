@@ -1,0 +1,16 @@
+image: registry.preventicus.com/research/protobuf/build:1.0
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+style-job:
+  stage: test
+  script:
+    - make format
+    - git diff > git.diff
+    - |
+      if [[ -s git.diff ]]; then
+        cat git.diff
+        exit 1
+      else
+        exit 0
+      fi
+    - ...
