@@ -33,23 +33,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "PpgMetaDataExampleFactory.h"
 
-uint32_t PpgMetaDataExampleFactory::normalWavelength_nm() {
+Wavelength PpgMetaDataExampleFactory::normalWavelength_nm() {
   return 255;
 }
 
-uint32_t PpgMetaDataExampleFactory::comparableWavelength_nm() {
+Wavelength PpgMetaDataExampleFactory::comparableWavelength_nm() {
   return 100;
 }
 
-uint32_t PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1() {
+Wavelength PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1() {
   return 450;
 }
 
-uint32_t PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2() {
+Wavelength PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2() {
   return 660;
 }
 
-uint32_t PpgMetaDataExampleFactory::noWavelength_nm() {
+Wavelength PpgMetaDataExampleFactory::noWavelength_nm() {
   return 0;
 }
 

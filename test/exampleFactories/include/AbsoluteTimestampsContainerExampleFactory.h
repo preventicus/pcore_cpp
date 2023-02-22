@@ -36,16 +36,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteTimestampsContainerExampleFactory {
  public:
-  static std::vector<uint64_t> unixTimestampsNormal_ms();
-  static std::vector<uint64_t> unixTimestampsTwoElements_ms();
-  static std::vector<uint64_t> unixTimestampsOneElement_ms();
-  static std::vector<uint64_t> unixTimestamps0_ms();
-  static std::vector<uint64_t> unixTimestampsEmpty_ms();
-  static std::vector<uint64_t> normalUnixTimestamps_ms();
-  static std::vector<uint64_t> absoluteJsonDataUNixTimestampsPpg();
-  static std::vector<uint64_t> absoluteJsonDataUNixTimestampsAcc();
-  static std::vector<uint64_t> absoluteTimestampWithOneUnixInLastBlock();
-  static std::vector<uint64_t> absoluteTimestampWithEqualTimestampIntervals();
+  static UnixTimestamps unixTimestampsNormal_ms();
+  static UnixTimestamps unixTimestampsTwoElements_ms();
+  static UnixTimestamps unixTimestampsOneElement_ms();
+  static UnixTimestamps unixTimestamps0_ms();
+  static UnixTimestamps unixTimestampsEmpty_ms();
+  static UnixTimestamps normalUnixTimestamps_ms();
+  static UnixTimestamps absoluteJsonDataUNixTimestampsPpg();
+  static UnixTimestamps absoluteJsonDataUNixTimestampsAcc();
+  static UnixTimestamps absoluteTimestampWithOneUnixInLastBlock();
+  static UnixTimestamps absoluteTimestampWithEqualTimestampIntervals();
 
   static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerPgg();
   static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerAcc();

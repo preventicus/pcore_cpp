@@ -37,6 +37,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialTimestampsContainerExampleFactory.h"
 #include "Sensor.h"
 
+#include "Raw.h"
+
 class SensorExampleFactory {
  public:
   static Sensor normalSensor();
@@ -50,8 +52,8 @@ class SensorExampleFactory {
   static Sensor differentialJsonDataPpgSensor();
   static Sensor differentialJsonDataAccSensor();
 
-  static std::vector<Sensor> normalVectorWithSensors();
-  static std::vector<Sensor> comparableVectorWithSensors();
-  static std::vector<Sensor> vectorWithAbsoluteJsonDataSensor();
-  static std::vector<Sensor> vectorWithDifferentialJsonDataSensor();
+  static Sensors normalVectorWithSensors();
+  static Sensors comparableVectorWithSensors();
+  static Sensors vectorWithAbsoluteJsonDataSensor();
+  static Sensors vectorWithDifferentialJsonDataSensor();
 };

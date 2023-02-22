@@ -33,12 +33,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Version.h"
 
-Version::Version(uint32_t major, uint32_t minor, uint32_t patch) : major(major), minor(minor), patch(patch) {}
+using MajorJson = Json::Value;
+using MinorJson = Json::Value;
+using PatchJson = Json::Value;
 
-Version::Version(Json::Value& version) {
-  this->major = version["major"].asUInt();
-  this->minor = version["minor"].asUInt();
-  this->patch = version["patch"].asUInt();
+Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
+
+Version::Version(VersionJson& versionJson) {
+  this->major = versionJson["major"].asUInt();
+  this->minor = versionJson["minor"].asUInt();
+  this->patch = versionJson["patch"].asUInt();
 }
 
 Version::Version(const ProtobufVersion& protobufVersion) {
@@ -51,15 +55,15 @@ Version::Version() {
   this->patch = 0;
 }
 
-uint32_t Version::getMajor() {
+Major Version::getMajor() {
   return this->major;
 }
 
-uint32_t Version::getMinor() {
+Minor Version::getMinor() {
   return this->minor;
 }
 
-uint32_t Version::getPatch() {
+Patch Version::getPatch() {
   return this->patch;
 }
 
@@ -76,15 +80,15 @@ void Version::serialize(ProtobufVersion* protobufVersion) {
   protobufVersion->set_patch(this->patch);
 }
 
-Json::Value Version::toJson() {
-  Json::Value version;
-  Json::Value major(this->major);
-  Json::Value minor(this->minor);
-  Json::Value patch(this->patch);
-  version["major"] = major;
-  version["minor"] = minor;
-  version["patch"] = patch;
-  return version;
+VersionJson Version::toJson() {
+  MajorJson major(this->major);
+  MinorJson minor(this->minor);
+  PatchJson patch(this->patch);
+  VersionJson jsonVersion;
+  jsonVersion["major"] = major;
+  jsonVersion["minor"] = minor;
+  jsonVersion["patch"] = patch;
+  return jsonVersion;
 }
 
 void Version::deserialize(const ProtobufVersion& protobufVersion) {

@@ -38,26 +38,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using ProtobufColor = com::preventicus::pcore::Color;
 using ProtobufPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
+using Wavelength = uint32_t;
+using PpgMetaDataJson = Json::Value;
 
 class PpgMetaData final {
  public:
   PpgMetaData(ProtobufColor color);
-  PpgMetaData(uint32_t wavelength_nm);
+  PpgMetaData(Wavelength wavelength_nm);
   PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);
-  PpgMetaData(Json::Value& ppgMetaData);
+  PpgMetaData(PpgMetaDataJson& ppgMetaData);
   PpgMetaData();
 
   ProtobufColor getColor();
-  uint32_t getWavelength();
+  Wavelength getWavelength();
   bool isSet();
   bool isEqual(PpgMetaData& ppgMetaData);
-  Json::Value toJson();
+  PpgMetaDataJson toJson();
   void serialize(ProtobufPpgMetaData* protobufPpgMetaData);
+  static std::string protobufColorToString(ProtobufColor protobufColor);
+  static ProtobufColor protobufColorFromString(std::string protobufColorString);
 
  private:
   void deserialize(const ProtobufPpgMetaData& protobufPpgMetaData);
-  std::string toString(ProtobufColor color);
-  ProtobufColor toEnum(Json::Value string);
+  
+  
   ProtobufColor color;
-  uint32_t wavelength_nm;
+  Wavelength wavelength_nm;
 };

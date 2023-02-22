@@ -37,13 +37,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class HeaderExampleFactory {
  public:
-  static int32_t positiveTimeZoneOffset_min();
-  static int32_t negativeTimeZoneOffset_min();
-  static int32_t invalidPositiveTimeZoneOffset_min();
-  static int32_t invalidNegativeTimeZoneOffset_min();
-  static int32_t noTimeZoneOffset_min();
-  static int32_t maxTimeZoneOffset_min();
-  static int32_t minTimeZoneOffset_min();
+  static TimeZoneOffset positiveTimeZoneOffset_min();
+  static TimeZoneOffset negativeTimeZoneOffset_min();
+  static TimeZoneOffset invalidPositiveTimeZoneOffset_min();
+  static TimeZoneOffset invalidNegativeTimeZoneOffset_min();
+  static TimeZoneOffset noTimeZoneOffset_min();
+  static TimeZoneOffset maxTimeZoneOffset_min();
+  static TimeZoneOffset minTimeZoneOffset_min();
 
   static Header normalHeaderWithPositiveTimeZoneOffset_min();
   static Header normalHeaderWithNegativeTimeZoneOffset_min();

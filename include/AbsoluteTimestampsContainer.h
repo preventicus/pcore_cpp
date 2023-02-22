@@ -34,17 +34,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <json/json.h>
 #include <vector>
+#include "UnixTimestamp.h"
+
+using UnixTimestamps = std::vector<UnixTimestamp>;
+using AbsoluteTimestampContainerJson = Json::Value;
 
 class AbsoluteTimestampsContainer final {
  public:
-  AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms);
-  AbsoluteTimestampsContainer(Json::Value& absoluteTimestampsContainer);
+  AbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps_ms);
+  AbsoluteTimestampsContainer(AbsoluteTimestampContainerJson& absoluteTimestampContainerJson);
   AbsoluteTimestampsContainer();
 
-  std::vector<uint64_t> getUnixTimestamps();
-  bool isEqual(AbsoluteTimestampsContainer& timestamps);
-  Json::Value toJson();
+  UnixTimestamps getUnixTimestamps();
+  bool isEqual(AbsoluteTimestampsContainer& absoluteTimestampsContainer);
+  AbsoluteTimestampContainerJson toJson();
 
  private:
-  std::vector<uint64_t> unixTimestamps_ms;
+  UnixTimestamps unixTimestamps_ms;
 };

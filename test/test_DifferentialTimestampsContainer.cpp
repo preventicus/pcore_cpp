@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DifferentialTimestampsTest : public ::testing::Test {
  protected:
-  uint64_t firstTimestamp = DifferentialTimestampsContainerExampleFactory::zeroFirstTimestamp_ms();
+  UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms();
 
   DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps1 =
       DifferentialTimestampsContainerExampleFactory::differentialTimestampsWithNormalTimestamps();
@@ -53,23 +53,23 @@ class DifferentialTimestampsTest : public ::testing::Test {
 };
 
 TEST_F(DifferentialTimestampsTest, TestGetMethodTimestampsContainer) {
-  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.getFirstTimestamp(),
-            DifferentialTimestampsContainerExampleFactory::normalFirstTimestamp_ms());
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.getFirstUnixTimestamp(),
+            DifferentialTimestampsContainerExampleFactory::normalFirstUnixTimestamp_ms());
   EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.getBlockIntervals(),
             DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_ms());
   EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.getTimestampsIntervals(),
             DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_ms());
 }
 
-TEST_F(DifferentialTimestampsTest, TestGetTimestampsContainerFirstTimestamp0) {
-  EXPECT_EQ(this->differentialTimestampsWith0Timestamps1.getFirstTimestamp(), this->firstTimestamp);
+TEST_F(DifferentialTimestampsTest, TestGetTimestampsContainerFirstUnixTimestamp0) {
+  EXPECT_EQ(this->differentialTimestampsWith0Timestamps1.getFirstUnixTimestamp(), this->firstUnixTimestamp_ms);
   EXPECT_EQ(this->differentialTimestampsWith0Timestamps1.getBlockIntervals(), DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms());
   EXPECT_EQ(this->differentialTimestampsWith0Timestamps1.getTimestampsIntervals(),
             DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms());
 }
 
 TEST_F(DifferentialTimestampsTest, TestGetEmptyTimestampsContainer) {
-  EXPECT_EQ(this->differentialTimestampsEmpty1.getFirstTimestamp(), this->firstTimestamp);
+  EXPECT_EQ(this->differentialTimestampsEmpty1.getFirstUnixTimestamp(), this->firstUnixTimestamp_ms);
   EXPECT_EQ(this->differentialTimestampsEmpty1.getBlockIntervals(), DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms());
   EXPECT_EQ(this->differentialTimestampsEmpty1.getTimestampsIntervals(),
             DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms());
@@ -138,32 +138,32 @@ TEST_F(DifferentialTimestampsTest, TestSerializeAndDeserializeBetweenTwoEmptyTim
   EXPECT_TRUE(baseDifferentialTimestamps.isEqual(comparableDifferentialTimestamps));
 }
 
-TEST_F(DifferentialTimestampsTest, TestCalculateFirstTimestampInBlock) {
-  uint32_t blockIdx = 2;
-  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateFirstTimestampInBlock(blockIdx), 146);
+TEST_F(DifferentialTimestampsTest, TestCalculateFirstUnixTimestampInBlock) {
+  BlockIdx blockIdx = 2;
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateFirstUnixTimestampInBlock(blockIdx), 146);
 }
 
-TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlock) {
-  uint32_t blockIdx = 2;
-  uint32_t firstTimestampInBlock = 146;  // reference to the UnitTest before
-  std::vector<int32_t> differentialValues = {30, 32, 54};
+TEST_F(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlock) {
+  BlockIdx blockIdx = 2;
+  UnixTimestamp firstUnixTimestampInBlock = 146;  // reference to the UnitTest before
+  DifferentialValues differentialValues = {30, 32, 54};
   DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
-  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, differentialBlock), 518);
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock), 518);
 }
 
-TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlock0) {
-  uint32_t blockIdx = 0;
-  uint32_t firstTimestampInBlock = 150;
-  std::vector<int32_t> differentialValues = {30, 32, 54};
+TEST_F(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlock0) {
+  BlockIdx blockIdx = 0;
+  UnixTimestamp firstUnixTimestampInBlock = 150;
+  DifferentialValues differentialValues = {30, 32, 54};
   DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
-  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastTimestampInBlock(blockIdx, firstTimestampInBlock, differentialBlock), 552);
+  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock), 552);
 }
 
-TEST_F(DifferentialTimestampsTest, TestCalculateLastTimestampInBlockException) {
-  uint32_t blockIdx = 10;
-  std::vector<int32_t> differentialValues = {30, 32, 54};
+TEST_F(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockException) {
+  BlockIdx blockIdx = 10;
+  DifferentialValues differentialValues = {30, 32, 54};
   DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
-  EXPECT_THROW(this->differentialTimestampsWithNormalTimestamps1.calculateFirstTimestampInBlock(blockIdx), std::invalid_argument);
+  EXPECT_THROW(this->differentialTimestampsWithNormalTimestamps1.calculateFirstUnixTimestampInBlock(blockIdx), std::invalid_argument);
 }
 
 TEST_F(DifferentialTimestampsTest, CheckDifferentialTimestampsPtr) {

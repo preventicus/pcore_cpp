@@ -47,8 +47,8 @@ class SensorTest : public ::testing::Test {
   Sensor normalSensorWithEqualTimestampsInterval = SensorExampleFactory::sensorWithEqualTimestampsInterval();
 };
 TEST_F(SensorTest, TestGetMethodStandardSensor) {
-  std::vector<Channel> channels = this->normalSensorWithAccMetaData1.getChannels();
-  std::vector<Channel> comparableChannels = ChannelExampleFactory::normalVectorWithChannel();
+  Channels channels = this->normalSensorWithAccMetaData1.getChannels();
+  Channels comparableChannels = ChannelExampleFactory::normalVectorWithChannel();
   for (size_t i = 0; i < channels.size(); i++) {
     EXPECT_TRUE(channels[i].isEqual(comparableChannels[i]));
   }
@@ -63,8 +63,8 @@ TEST_F(SensorTest, TestGetMethodStandardSensor) {
 }
 
 TEST_F(SensorTest, TestGetMethodComparableSensor) {
-  std::vector<Channel> channels = this->comparableSensorWithPpgMetaData1.getChannels();
-  std::vector<Channel> comparableChannels = ChannelExampleFactory::normalVectorWithChannel();
+  Channels channels = this->comparableSensorWithPpgMetaData1.getChannels();
+  Channels comparableChannels = ChannelExampleFactory::normalVectorWithChannel();
   for (size_t i = 0; i < channels.size(); i++) {
     EXPECT_TRUE(channels[i].isEqual(comparableChannels[i]));
   }
@@ -80,7 +80,7 @@ TEST_F(SensorTest, TestGetMethodComparableSensor) {
 
 TEST_F(SensorTest, TestSensorWithOneUnix) {
   for (auto& unix : AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms()) {
-    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getFirstTimestamp(), unix);
+    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getFirstUnixTimestamp(), unix);
   }
   for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
     EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getBlockIntervals()[i],
@@ -93,8 +93,8 @@ TEST_F(SensorTest, TestSensorWithOneUnix) {
 }
 
 TEST_F(SensorTest, normalSensorWithNUllUnix) {
-  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getFirstTimestamp(),
-            DifferentialTimestampsContainerExampleFactory::zeroFirstTimestamp_ms());
+  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getFirstUnixTimestamp(),
+            DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms());
   EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getBlockIntervals(),
             DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms());
   EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getTimestampsIntervals(),
@@ -102,7 +102,7 @@ TEST_F(SensorTest, normalSensorWithNUllUnix) {
 }
 
 TEST_F(SensorTest, TestSensorWithOneUnixAndOneValueInLastBlock) {
-  EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getFirstTimestamp(),
+  EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getFirstUnixTimestamp(),
             AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock()[0]);
   for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock().size(); i++) {
     EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getBlockIntervals()[i],
@@ -115,7 +115,7 @@ TEST_F(SensorTest, TestSensorWithOneUnixAndOneValueInLastBlock) {
 }
 
 TEST_F(SensorTest, TestSensorWithEqualTimestampsInterval) {
-  EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getFirstTimestamp(),
+  EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getFirstUnixTimestamp(),
             AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals()[0]);
   for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
     EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getBlockIntervals()[i],
@@ -157,12 +157,12 @@ TEST_F(SensorTest, TestSerializeAndDeserializeMethodComparableSensor) {
   EXPECT_TRUE(this->comparableSensorWithPpgMetaData1.isEqual(sensor2));
 }
 
-TEST_F(SensorTest, TestMethodFirstTimestamp) {
-  EXPECT_EQ(this->normalSensorWithAccMetaData1.getFirstTimestamp(), DifferentialTimestampsContainerExampleFactory::expectedFirstTimestamps());
+TEST_F(SensorTest, TestMethodFirstUnixTimestamp) {
+  EXPECT_EQ(this->normalSensorWithAccMetaData1.getFirstUnixTimestamp(), DifferentialTimestampsContainerExampleFactory::expectedFirstUnixTimestamps());
 }
 
-TEST_F(SensorTest, TestMethodLastTimestamp) {
-  EXPECT_EQ(this->normalSensorWithAccMetaData1.getLastTimestamp(), DifferentialTimestampsContainerExampleFactory::lastTimestamp());
+TEST_F(SensorTest, TestMethodLastUnixTimestamp) {
+  EXPECT_EQ(this->normalSensorWithAccMetaData1.getLastUnixTimestamp(), DifferentialTimestampsContainerExampleFactory::lastUnixTimestamp_ms());
 }
 
 TEST_F(SensorTest, TestMethodDuration) {

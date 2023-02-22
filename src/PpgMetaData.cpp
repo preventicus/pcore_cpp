@@ -33,31 +33,30 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "PpgMetaData.h"
 
+using WavelegthJson = Json::Value;
+
 PpgMetaData::PpgMetaData(ProtobufColor color) {
   this->color = color;
   this->wavelength_nm = 0;
 }
 
-PpgMetaData::PpgMetaData(uint32_t wavelength_nm) {
+PpgMetaData::PpgMetaData(Wavelength wavelength_nm) {
   this->wavelength_nm = wavelength_nm;
   this->color = ProtobufColor::COLOR_NONE;
 }
 
-PpgMetaData::PpgMetaData(Json::Value& ppgMetaData) {
-  if (ppgMetaData["wavelength_nm"].asUInt() != 0 && ppgMetaData["color"].asString() != "") {
+PpgMetaData::PpgMetaData(PpgMetaDataJson& ppgMetaDataJson) {
+  if (ppgMetaDataJson["wavelength_nm"].asUInt() != 0 && ppgMetaDataJson["color"].asString() != "") {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
   }
-  if (ppgMetaData["wavelength_nm"].asUInt() != 0) {
-    if (ppgMetaData["wavelength_nm"].asUInt() < 0) {
-      throw std::invalid_argument("wavelength_nm  not allowed to be less than zero");
-    }
-    Json::Value wavelength = ppgMetaData["wavelength_nm"];
-    this->wavelength_nm = wavelength.asUInt();
+  if (ppgMetaDataJson["wavelength_nm"] != 0) {
+    WavelegthJson wavelengthJson = ppgMetaDataJson["wavelength_nm"];
+    this->wavelength_nm = wavelengthJson.asInt();
     this->color = ProtobufColor::COLOR_NONE;
   }
-  if (ppgMetaData["color"].asString() != "") {
-    this->color = this->toEnum(ppgMetaData["color"]);
+  if (ppgMetaDataJson["color"] != "COLOR_NONE") {
     this->wavelength_nm = 0;
+    this->color = PpgMetaData::protobufColorFromString(ppgMetaDataJson["color"].asString());
   }
 }
 
@@ -74,7 +73,7 @@ ProtobufColor PpgMetaData::getColor() {
   return this->color;
 }
 
-uint32_t PpgMetaData::getWavelength() {
+Wavelength PpgMetaData::getWavelength() {
   return this->wavelength_nm;
 }
 
@@ -86,16 +85,16 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
   return this->color == ppgMetaData.color && this->wavelength_nm == ppgMetaData.wavelength_nm;
 }
 
-Json::Value PpgMetaData::toJson() {
-  Json::Value ppgMetaData;
-  Json::Value wavelength_nm(this->wavelength_nm);
+PpgMetaDataJson PpgMetaData::toJson() {
+  PpgMetaDataJson ppgMetaDataJson;
+  WavelegthJson wavelength_nm(this->wavelength_nm);
   if (this->wavelength_nm != 0) {
-    ppgMetaData["wavelength_nm"] = wavelength_nm;
+    ppgMetaDataJson["wavelength_nm"] = wavelength_nm;
   }
   if (this->color != ProtobufColor::COLOR_NONE) {
-    ppgMetaData["color"] = this->toString(this->color);
+    ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(this->color);
   }
-  return ppgMetaData;
+  return ppgMetaDataJson;
 }
 
 void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) {
@@ -118,35 +117,31 @@ void PpgMetaData::deserialize(const ProtobufPpgMetaData& protobufPpgMetaData) {
   this->wavelength_nm = protobufPpgMetaData.wavelength_nm();
 }
 
-std::string PpgMetaData::toString(ProtobufColor color) {
-  std::string jsonColor;
-  switch (color) {
+std::string PpgMetaData::protobufColorToString(ProtobufColor protobufColor) {
+  switch (protobufColor) {
     case ProtobufColor::COLOR_RED: {
-      jsonColor = "COLOR_RED";
+      return "COLOR_RED";
     }
     case ProtobufColor::COLOR_BLUE: {
-      jsonColor = "COLOR_BLUE";
+      return "COLOR_BLUE";
     }
     case ProtobufColor::COLOR_GREEN: {
-      jsonColor = "COLOR_GREEN";
+      return "COLOR_GREEN";
     }
     default: {
-      break;
+      return "COLOR_NONE";
     }
   }
-  return jsonColor;
 }
 
-ProtobufColor PpgMetaData::toEnum(Json::Value color) {
-  ProtobufColor protobufColor;
-  if (color.asString() == "COLOR_RED") {
-    protobufColor = ProtobufColor::COLOR_RED;
+ProtobufColor PpgMetaData::protobufColorFromString(std::string protobufColorString) {
+  if (protobufColorString == "COLOR_RED") {
+    return ProtobufColor::COLOR_RED;
+  } else if (protobufColorString == "COLOR_BLUE") {
+    return ProtobufColor::COLOR_BLUE;
+  } else if (protobufColorString == "COLOR_GREEN") {
+    return ProtobufColor::COLOR_GREEN;
+  } else {
+    return ProtobufColor::COLOR_NONE;
   }
-  if (color.asString() == "COLOR_BLUE") {
-    protobufColor = ProtobufColor::COLOR_BLUE;
-  }
-  if (color.asString() == "COLOR_GREEN") {
-    protobufColor = ProtobufColor::COLOR_GREEN;
-  }
-  return protobufColor;
 }

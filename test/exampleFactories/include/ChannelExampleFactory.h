@@ -38,6 +38,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialBlockExampleFactory.h"
 #include "PpgMetaDataExampleFactory.h"
 
+#include "Sensor.h"
+
 class ChannelExampleFactory {
  public:
   static Channel channelWithAccMetaDataWithCoordinateX();
@@ -60,14 +62,14 @@ class ChannelExampleFactory {
   static Channel channelWithDifferentialJsonDataPpg2();
   static Channel channelWithDifferentialJsonDataAcc();
 
-  static std::vector<Channel> normalVectorWithChannel();
-  static std::vector<Channel> comparableVectorWithChannel();
-  static std::vector<Channel> normalVectorWithAbsoluteJsonDataPpgChannel();
-  static std::vector<Channel> normalVectorWithAbsoluteJsonDataAccChannel();
-  static std::vector<Channel> normalVectorWithDifferentialJsonDataPpgChannel();
-  static std::vector<Channel> normalVectorWithDifferentialJsonDataAccChannel();
-  static std::vector<Channel> normalVectorWithOneValueBlock();
-  static std::vector<Channel> normalVectorWithNUllValueBlock();
-  static std::vector<Channel> normalVectorWithOneValueInLastBlock();
-  static std::vector<Channel> normalVectorWithEqualTimestampIntervals();
+  static Channels normalVectorWithChannel();
+  static Channels comparableVectorWithChannel();
+  static Channels normalVectorWithAbsoluteJsonDataPpgChannel();
+  static Channels normalVectorWithAbsoluteJsonDataAccChannel();
+  static Channels normalVectorWithDifferentialJsonDataPpgChannel();
+  static Channels normalVectorWithDifferentialJsonDataAccChannel();
+  static Channels normalVectorWithOneValueBlock();
+  static Channels normalVectorWithNUllValueBlock();
+  static Channels normalVectorWithOneValueInLastBlock();
+  static Channels normalVectorWithEqualTimestampIntervals();
 };
