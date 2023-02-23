@@ -237,11 +237,11 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   blockIntervals_ms.push_back(
       absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]] -
       absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 2]]);  // the same blockInterval_ms applies to both of the following conditions
-  int32_t timestampsInterval =
-      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]];
-  timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1]
-                                      ? 0
-                                      : timestampsInterval);  // if the condition is true, last block hold one timestamp -> Case 2 t
+  timestampIntervals_ms.push_back(
+      absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1]
+          ? 0
+          : absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] -
+                absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]]);  // if the condition is true, last block hold one timestamp -> Case 2 t
   differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
   return differentialTimestampsContainer;
 }
