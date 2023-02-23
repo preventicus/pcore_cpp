@@ -233,8 +233,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
     blockIntervals_ms.push_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
   }
   blockIntervals_ms.push_back(absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
-  Interval timestampsInterval = absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]];
-  timestampsIntervals_ms.push_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1] ? 0 : timestampsInterval);
+  timestampsIntervals_ms.push_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1] ? 0 : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
   differentialTimestampsContainer = DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
   return differentialTimestampsContainer;
 }
