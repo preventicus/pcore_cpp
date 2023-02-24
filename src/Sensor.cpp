@@ -47,7 +47,6 @@ Sensor::Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestam
 }
 
 Sensor::Sensor(SensorJson& sensor, DataForm dataForm) {
-
   SensorTypeString sensorTypeString = sensor["sensor_type"].asString();
   this->sensorType = Sensor::senorTypeFromString(sensorTypeString);
   ChannelsJson channelsJson = sensor["channels"];
