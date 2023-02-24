@@ -41,7 +41,8 @@ using ProtobufAccMetaData = com::preventicus::pcore::Raw_Sensor_Channel_AccMetad
 using ProtobufCoordinate = com::preventicus::pcore::Coordinate;
 using ProtobufNorm = com::preventicus::pcore::Norm;
 using AccMetaDataJson = Json::Value;
-
+using ProtobufCoordinateString = std::string;
+using ProtobufNormString = std::string;
 
 class AccMetaData final {
  public:
@@ -58,10 +59,10 @@ class AccMetaData final {
   AccMetaDataJson toJson();
   void serialize(ProtobufAccMetaData* protobufAccMetaData);
 
-  static ProtobufCoordinate protobufCoordinateFromString(std::string protobufCoordinateString);
-  static std::string protobufCoordinateToString(ProtobufCoordinate protobufCoordinate);
-  static ProtobufNorm protobufNormFromString(std::string protobufNormString);
-  static std::string protobufNormToString(ProtobufNorm protobufNorm);
+  static ProtobufCoordinate protobufCoordinateFromString(ProtobufCoordinateString protobufCoordinateString);
+  static ProtobufCoordinateString protobufCoordinateToString(ProtobufCoordinate protobufCoordinate);
+  static ProtobufNorm protobufNormFromString(ProtobufNormString protobufNormString);
+  static ProtobufNormString protobufNormToString(ProtobufNorm protobufNorm);
 
  private:
   void deserialize(const ProtobufAccMetaData& protobufAccMetaData);

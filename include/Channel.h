@@ -35,20 +35,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteBlock.h"
 #include "AccMetaData.h"
+#include "BlockIdx.h"
 #include "DataFormat.h"
 #include "DifferentialBlock.h"
 #include "PpgMetaData.h"
-#include "BlockIdx.h"
-
 #include "protobuf/pcore_raw.pb.h"
 
 using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
 using ProtobufSensorType = com::preventicus::pcore::SensorType;
-
 using BlockIdxs = std::vector<BlockIdx>;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 using ChannelJson = Json::Value;
-
 
 class Channel final {
  public:

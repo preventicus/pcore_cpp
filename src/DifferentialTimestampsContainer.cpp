@@ -41,7 +41,8 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp f
                                                                  TimestampsIntervals& timestampsIntervals_ms)
     : firstUnixTimestamp_ms(firstUnixTimestamp_ms), blockIntervals_ms(blockIntervals_ms), timestampsIntervals_ms(timestampsIntervals_ms) {}
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(
+    const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
   this->deserialize(protobufDifferentialTimestampContainer);
 }
 
@@ -82,7 +83,8 @@ TimestampsIntervals DifferentialTimestampsContainer::getTimestampsIntervals() {
 }
 
 bool DifferentialTimestampsContainer::isEqual(DifferentialTimestampsContainer& differentialTimestampsContainer) {
-  return this->firstUnixTimestamp_ms == differentialTimestampsContainer.firstUnixTimestamp_ms && this->blockIntervals_ms == differentialTimestampsContainer.blockIntervals_ms &&
+  return this->firstUnixTimestamp_ms == differentialTimestampsContainer.firstUnixTimestamp_ms &&
+         this->blockIntervals_ms == differentialTimestampsContainer.blockIntervals_ms &&
          this->timestampsIntervals_ms == differentialTimestampsContainer.timestampsIntervals_ms;
 }
 
@@ -99,8 +101,8 @@ UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBloc
 }
 
 UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock(BlockIdx& blockIdx,
-                                                                        UnixTimestamp firstUnixTimestampInBlock_ms,
-                                                                        DifferentialBlock& lastDifferentialBlock) {
+                                                                                 UnixTimestamp firstUnixTimestampInBlock_ms,
+                                                                                 DifferentialBlock& lastDifferentialBlock) {
   return firstUnixTimestampInBlock_ms + lastDifferentialBlock.getDifferentialValues().size() * this->timestampsIntervals_ms[blockIdx];
 }
 

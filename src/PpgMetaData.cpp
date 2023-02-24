@@ -46,18 +46,13 @@ PpgMetaData::PpgMetaData(Wavelength wavelength_nm) {
 }
 
 PpgMetaData::PpgMetaData(PpgMetaDataJson& ppgMetaDataJson) {
-  if (ppgMetaDataJson["wavelength_nm"].asUInt() != 0 && ppgMetaDataJson["color"].asString() != "") {
+  Wavelength wavelength_nm = ppgMetaDataJson["wavelength_nm"].asUInt();
+  ProtobufColor protobufColor = PpgMetaData::protobufColorFromString(ppgMetaDataJson["color"].asString());
+  if (wavelength_nm != 0 && protobufColor != ProtobufColor::COLOR_NONE) {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
   }
-  if (ppgMetaDataJson["wavelength_nm"] != 0) {
-    WavelegthJson wavelengthJson = ppgMetaDataJson["wavelength_nm"];
-    this->wavelength_nm = wavelengthJson.asInt();
-    this->color = ProtobufColor::COLOR_NONE;
-  }
-  if (ppgMetaDataJson["color"] != "COLOR_NONE") {
-    this->wavelength_nm = 0;
-    this->color = PpgMetaData::protobufColorFromString(ppgMetaDataJson["color"].asString());
-  }
+  this->wavelength_nm = wavelength_nm;
+  this->color = protobufColor;
 }
 
 PpgMetaData::PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData) {
@@ -87,9 +82,9 @@ bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
 
 PpgMetaDataJson PpgMetaData::toJson() {
   PpgMetaDataJson ppgMetaDataJson;
-  WavelegthJson wavelength_nm(this->wavelength_nm);
+  WavelegthJson wavelengthJson(this->wavelength_nm);
   if (this->wavelength_nm != 0) {
-    ppgMetaDataJson["wavelength_nm"] = wavelength_nm;
+    ppgMetaDataJson["wavelength_nm"] = wavelengthJson;
   }
   if (this->color != ProtobufColor::COLOR_NONE) {
     ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(this->color);
@@ -117,7 +112,7 @@ void PpgMetaData::deserialize(const ProtobufPpgMetaData& protobufPpgMetaData) {
   this->wavelength_nm = protobufPpgMetaData.wavelength_nm();
 }
 
-std::string PpgMetaData::protobufColorToString(ProtobufColor protobufColor) {
+ProtobufColorString PpgMetaData::protobufColorToString(ProtobufColor protobufColor) {
   switch (protobufColor) {
     case ProtobufColor::COLOR_RED: {
       return "COLOR_RED";
@@ -134,7 +129,7 @@ std::string PpgMetaData::protobufColorToString(ProtobufColor protobufColor) {
   }
 }
 
-ProtobufColor PpgMetaData::protobufColorFromString(std::string protobufColorString) {
+ProtobufColor PpgMetaData::protobufColorFromString(ProtobufColorString protobufColorString) {
   if (protobufColorString == "COLOR_RED") {
     return ProtobufColor::COLOR_RED;
   } else if (protobufColorString == "COLOR_BLUE") {

@@ -59,7 +59,7 @@ class Header final {
 
  private:
   void deserialize(const ProtobufHeader& protobufHeader);
-  
+
   TimeZoneOffset timeZoneOffset_min;
   Version version;
 };

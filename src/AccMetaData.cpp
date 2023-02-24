@@ -46,11 +46,13 @@ AccMetaData::AccMetaData(ProtobufNorm norm) {
 }
 
 AccMetaData::AccMetaData(AccMetaDataJson& accMetaDataJson) {
-  if (accMetaDataJson["norm"].asString() != "" && accMetaDataJson["coordinate"].asString() != "") {
+  ProtobufCoordinate protobufCoordinate = AccMetaData::protobufCoordinateFromString(accMetaDataJson["coordinate"].asString());
+  ProtobufNorm protobufNorm = AccMetaData::protobufNormFromString(accMetaDataJson["norm"].asString());
+  if (protobufNorm != ProtobufNorm::NORM_NONE && protobufCoordinate != ProtobufCoordinate::COORDINATE_NONE) {
     throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
   }
-  this->coordinate = AccMetaData::protobufCoordinateFromString(accMetaDataJson["coordinate"].asString());
-  this->norm = AccMetaData::protobufNormFromString(accMetaDataJson["norm"].asString());
+  this->coordinate = protobufCoordinate;
+  this->norm = protobufNorm;
 }
 
 AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData) {
@@ -100,7 +102,7 @@ Json::Value AccMetaData::toJson() {
   }
   if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
     accMetaDataJson["coordinate"] = AccMetaData::protobufCoordinateToString(this->coordinate);
-  } 
+  }
   return accMetaDataJson;
 }
 
@@ -109,7 +111,7 @@ void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {
   this->coordinate = protobufAccMetaData.coordinate();
 }
 
-std::string AccMetaData::protobufCoordinateToString(ProtobufCoordinate protobufCoordinate) {
+ProtobufCoordinateString AccMetaData::protobufCoordinateToString(ProtobufCoordinate protobufCoordinate) {
   switch (protobufCoordinate) {
     case ProtobufCoordinate::COORDINATE_X: {
       return "COORDINATE_X";
@@ -126,7 +128,7 @@ std::string AccMetaData::protobufCoordinateToString(ProtobufCoordinate protobufC
   }
 }
 
-ProtobufCoordinate AccMetaData::protobufCoordinateFromString(std::string protobufCoordinateString) {
+ProtobufCoordinate AccMetaData::protobufCoordinateFromString(ProtobufCoordinateString protobufCoordinateString) {
   if (protobufCoordinateString == "COORDINATE_X") {
     return ProtobufCoordinate::COORDINATE_X;
   } else if (protobufCoordinateString == "COORDINATE_Y") {
@@ -138,7 +140,7 @@ ProtobufCoordinate AccMetaData::protobufCoordinateFromString(std::string protobu
   }
 }
 
-std::string AccMetaData::protobufNormToString(ProtobufNorm protobufNorm) {
+ProtobufNormString AccMetaData::protobufNormToString(ProtobufNorm protobufNorm) {
   switch (protobufNorm) {
     case ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM: {
       return "NORM_EUCLIDEAN_DIFFERENCES_NORM";
@@ -149,7 +151,7 @@ std::string AccMetaData::protobufNormToString(ProtobufNorm protobufNorm) {
   }
 }
 
-ProtobufNorm AccMetaData::protobufNormFromString(std::string protobufNormString) {
+ProtobufNorm AccMetaData::protobufNormFromString(ProtobufNormString protobufNormString) {
   if (protobufNormString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
     return ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
   } else {

@@ -148,7 +148,9 @@ TEST_F(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlock) {
   UnixTimestamp firstUnixTimestampInBlock = 146;  // reference to the UnitTest before
   DifferentialValues differentialValues = {30, 32, 54};
   DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
-  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock), 518);
+  EXPECT_EQ(
+      this->differentialTimestampsWithNormalTimestamps1.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock),
+      518);
 }
 
 TEST_F(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlock0) {
@@ -156,7 +158,9 @@ TEST_F(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlock0) {
   UnixTimestamp firstUnixTimestampInBlock = 150;
   DifferentialValues differentialValues = {30, 32, 54};
   DifferentialBlock differentialBlock = DifferentialBlock(differentialValues);
-  EXPECT_EQ(this->differentialTimestampsWithNormalTimestamps1.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock), 552);
+  EXPECT_EQ(
+      this->differentialTimestampsWithNormalTimestamps1.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock),
+      552);
 }
 
 TEST_F(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockException) {

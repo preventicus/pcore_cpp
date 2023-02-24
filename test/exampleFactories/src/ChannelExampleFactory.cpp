@@ -123,7 +123,7 @@ Channels ChannelExampleFactory::comparableVectorWithChannel() {
 
 Channels ChannelExampleFactory::normalVectorWithAbsoluteJsonDataPpgChannel() {
   Channels normalVectorWithAbsoluteJsonDataChannel = {ChannelExampleFactory::channelWithAbsoluteJsonDataPpg1(),
-                                                                  ChannelExampleFactory::channelWithAbsoluteJsonDataPpg2()};
+                                                      ChannelExampleFactory::channelWithAbsoluteJsonDataPpg2()};
   return normalVectorWithAbsoluteJsonDataChannel;
 }
 
@@ -167,7 +167,7 @@ Channel ChannelExampleFactory::channelWithEqualTimestampIntervals() {
 
 Channels ChannelExampleFactory::normalVectorWithDifferentialJsonDataPpgChannel() {
   Channels normalVectorWithAbsoluteJsonDataChannel = {ChannelExampleFactory::channelWithDifferentialJsonDataPpg1(),
-                                                                  ChannelExampleFactory::channelWithDifferentialJsonDataPpg2()};
+                                                      ChannelExampleFactory::channelWithDifferentialJsonDataPpg2()};
   return normalVectorWithAbsoluteJsonDataChannel;
 }
 

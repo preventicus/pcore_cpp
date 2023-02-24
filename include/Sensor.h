@@ -33,7 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-//#include <string.h>
 #include "AbsoluteTimestampsContainer.h"
 #include "Channel.h"
 #include "DifferentialTimestampsContainer.h"
@@ -41,7 +40,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_sensor_type.pb.h"
 
 using ProtobufSensor = com::preventicus::pcore::Raw_Sensor;
-
 using Channels = std::vector<Channel>;
 using SensorTypeString = std::string;
 using SensorJson = Json::Value;
@@ -75,8 +73,6 @@ class Sensor final {
   DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer& absoluteTimestampsContainer, BlockIdxs& blockIdxs);
   BlockIdxs findBlockIdxs();
 
-  std::string toString(ProtobufSensorType protobufSensorType);
-  ProtobufSensorType toEnum(Json::Value protobufSensorType);
   void deserialize(const ProtobufSensor& protobufSensor);
 
   ProtobufSensorType sensorType;

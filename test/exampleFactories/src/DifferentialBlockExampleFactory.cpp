@@ -83,7 +83,7 @@ DifferentialBlock DifferentialBlockExampleFactory::differentialBlock0Value() {
 }
 
 DifferentialBlock DifferentialBlockExampleFactory::differentialBlockEmptyValue() {
-  DifferentialValues differentialValues= DifferentialBlockExampleFactory::differentialValuesEmpty();
+  DifferentialValues differentialValues = DifferentialBlockExampleFactory::differentialValuesEmpty();
   return DifferentialBlock(differentialValues);
 }
 

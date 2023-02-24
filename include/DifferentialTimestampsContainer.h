@@ -33,10 +33,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <vector>
+#include "BlockIdx.h"
 #include "DifferentialBlock.h"
 #include "UnixTimestamp.h"
 #include "protobuf/pcore_raw.pb.h"
-#include "BlockIdx.h"
 
 using ProtobufDifferentialTimestampContainer = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
 using Interval = uint32_t;
@@ -60,7 +60,9 @@ class DifferentialTimestampsContainer final {
   bool isEqual(DifferentialTimestampsContainer& differentialTimestampsContainer);
   DifferentialTimestampsContainerJson toJson();
   UnixTimestamp calculateFirstUnixTimestampInBlock(BlockIdx& blockIdx);
-  UnixTimestamp calculateLastUnixTimestampInBlock(BlockIdx& blockIdx, UnixTimestamp firstUnixTimestampInBlock_ms, DifferentialBlock& lastDifferentialBlock);
+  UnixTimestamp calculateLastUnixTimestampInBlock(BlockIdx& blockIdx,
+                                                  UnixTimestamp firstUnixTimestampInBlock_ms,
+                                                  DifferentialBlock& lastDifferentialBlock);
 
   void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer);
 

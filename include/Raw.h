@@ -33,7 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "Sensor.h"
-
 #include "protobuf/pcore.pb.h"
 
 using ProtobufRaw = com::preventicus::pcore::Raw;

@@ -32,8 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include "DifferentialBlock.h"
 #include "Channel.h"
+#include "DifferentialBlock.h"
 
 class DifferentialBlockExampleFactory {
  public:

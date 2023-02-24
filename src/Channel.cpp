@@ -65,39 +65,42 @@ Channel::Channel(PpgMetaData& ppgMetaData, DifferentialBlocks& differentialBlock
 }
 
 Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, BlockIdxs& blockIdxs) {
-
   switch (protobufSensorType) {
-    case ProtobufSensorType::SENSOR_TYPE_PPG:
+    case ProtobufSensorType::SENSOR_TYPE_PPG: {
       this->ppgMetaData = PpgMetaData(channelJson["ppg_metadata"]);
       this->accMetaData = AccMetaData();
       break;
-    case ProtobufSensorType::SENSOR_TYPE_ACC:
+    }
+    case ProtobufSensorType::SENSOR_TYPE_ACC: {
       this->accMetaData = AccMetaData(channelJson["acc_metadata"]);
       this->ppgMetaData = PpgMetaData();
       break;
-    default:
+    }
+    default: {
       throw std::runtime_error("Sensortype is not set");
+    }
   }
 
   AbsoluteBlock absoluteBlock = AbsoluteBlock(channelJson["absolute_block"]);
   this->absoluteBlock = absoluteBlock;
   this->differentialBlocks = this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
-
 }
 
 Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType) {
-
   switch (protobufSensorType) {
-    case ProtobufSensorType::SENSOR_TYPE_PPG:
+    case ProtobufSensorType::SENSOR_TYPE_PPG: {
       this->ppgMetaData = PpgMetaData(channelJson["ppg_metadata"]);
       this->accMetaData = AccMetaData();
-      break; 
-    case ProtobufSensorType::SENSOR_TYPE_ACC:
+      break;
+    }
+    case ProtobufSensorType::SENSOR_TYPE_ACC: {
       this->accMetaData = AccMetaData(channelJson["acc_metadata"]);
       this->ppgMetaData = PpgMetaData();
       break;
-    default:
+    }
+    default: {
       throw std::runtime_error("Sensortype is not set");
+    }
   }
 
   DifferentialBlocksJson differentialBlocksJson = channelJson["differential_blocks"];
@@ -108,7 +111,6 @@ Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType
   }
   this->differentialBlocks = differentialBlocks;
   this->absoluteBlock = this->calculateAbsoluteBlock(differentialBlocks);
-
 }
 
 Channel::Channel(const ProtobufChannel& protobufChannel) {
@@ -196,11 +198,12 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteB
   BlockIdx toBlockIdx = 0;
   if (numberOfBlocks == 1) {
     toBlockIdx = numberOfAbsoluteValues > 1 ? numberOfAbsoluteValues - 1 : 0;
-    differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx)); // toIdx = 0  would create a DifferentialBlock with a absoluteValue.
+    differentialBlocks.push_back(
+        this->createDifferentialBlock(fromBlockIdx, toBlockIdx));  // toIdx = 0  would create a DifferentialBlock with a absoluteValue.
     return differentialBlocks;
   }
 
-  for (size_t i = 0; i < numberOfBlocks - 1; i++) { // calculate DifferentialBlocks for all blockIdxs except last Idx
+  for (size_t i = 0; i < numberOfBlocks - 1; i++) {  // calculate DifferentialBlocks for all blockIdxs except last Idx
     fromBlockIdx = blockIdxs[i];
     toBlockIdx = blockIdxs[i + 1] - 1;
     differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx));
@@ -252,6 +255,7 @@ ChannelJson Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensor
           throw std::runtime_error("protobufSensorType is not set");
         }
       }
+      break;
     }
     case DataForm::DIFFERENTIAL: {
       DifferentialBlocksJson differentialBlocksJson(Json::arrayValue);
@@ -272,7 +276,8 @@ ChannelJson Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensor
           throw std::runtime_error("protobufSensorType is not set");
         }
       }
-    } 
+      break;
+    }
     default: {
       throw std::runtime_error("dataForm is not set");
     }

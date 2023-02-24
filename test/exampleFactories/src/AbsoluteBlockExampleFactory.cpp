@@ -93,7 +93,7 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlock() {
 }
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock() {
   AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValuesWithOneValueInLastBlock();
-  return AbsoluteBlock(absoluteValues);;
+  return AbsoluteBlock(absoluteValues);
 }
 
 // -------------------------------------JSON-----------------------

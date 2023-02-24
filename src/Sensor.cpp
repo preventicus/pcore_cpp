@@ -70,7 +70,6 @@ Sensor::Sensor(SensorJson& sensor, DataForm dataForm) {
     }
     this->channels = channels;
   }
-
 }
 
 Sensor::Sensor(const ProtobufSensor& protobufSensor) {
@@ -109,8 +108,7 @@ bool Sensor::isEqual(Sensor& sensor) {
       return false;
     }
   }
-  return this->sensorType == sensor.sensorType &&
-         this->differentialTimestampsContainer.isEqual(sensor.differentialTimestampsContainer) &&
+  return this->sensorType == sensor.sensorType && this->differentialTimestampsContainer.isEqual(sensor.differentialTimestampsContainer) &&
          this->absoluteTimestampsContainer.isEqual(sensor.absoluteTimestampsContainer);
 }
 
@@ -127,7 +125,6 @@ void Sensor::serialize(ProtobufSensor* protobufSensor) {
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer;
   this->differentialTimestampsContainer.serialize(&protobufDifferentialTimestampContainer);
   protobufSensor->mutable_differential_timestamps_container()->CopyFrom(protobufDifferentialTimestampContainer);
-
 }
 
 UnixTimestamp Sensor::getFirstUnixTimestamp() {
@@ -196,7 +193,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   BlockIntervals blockIntervals_ms = {};
   TimestampsIntervals timestampsIntervals_ms = {};
   UnixTimestamp firstUnixTimestamp_ms = 0;
-  
+
   /*
    * blockIdxs.size = 0 -> no timestamps are included
                             return default Values for emptyBlock
@@ -233,7 +230,10 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
     blockIntervals_ms.push_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
   }
   blockIntervals_ms.push_back(absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
-  timestampsIntervals_ms.push_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1] ? 0 : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
+  timestampsIntervals_ms.push_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1]
+                                       ? 0
+                                       : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] -
+                                             absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
   differentialTimestampsContainer = DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
   return differentialTimestampsContainer;
 }

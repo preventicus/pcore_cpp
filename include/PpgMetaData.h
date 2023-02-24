@@ -40,6 +40,7 @@ using ProtobufColor = com::preventicus::pcore::Color;
 using ProtobufPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
 using Wavelength = uint32_t;
 using PpgMetaDataJson = Json::Value;
+using ProtobufColorString = std::string;
 
 class PpgMetaData final {
  public:
@@ -55,13 +56,12 @@ class PpgMetaData final {
   bool isEqual(PpgMetaData& ppgMetaData);
   PpgMetaDataJson toJson();
   void serialize(ProtobufPpgMetaData* protobufPpgMetaData);
-  static std::string protobufColorToString(ProtobufColor protobufColor);
-  static ProtobufColor protobufColorFromString(std::string protobufColorString);
+  static ProtobufColorString protobufColorToString(ProtobufColor protobufColor);
+  static ProtobufColor protobufColorFromString(ProtobufColorString protobufColorString);
 
  private:
   void deserialize(const ProtobufPpgMetaData& protobufPpgMetaData);
-  
-  
+
   ProtobufColor color;
   Wavelength wavelength_nm;
 };
