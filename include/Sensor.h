@@ -65,7 +65,7 @@ class Sensor final {
   SensorJson toJson(DataForm dataForm);
   void serialize(ProtobufSensor* protobufSensor);
 
-  static ProtobufSensorType senorTypeFromString(SensorTypeString senorTypeString);
+  static ProtobufSensorType senorTypeFromString(SensorTypeString& senorTypeString);
   static SensorTypeString senorTypeToString(ProtobufSensorType protobufSensorType);
 
  private:

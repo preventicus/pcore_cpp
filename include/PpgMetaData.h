@@ -57,7 +57,7 @@ class PpgMetaData final {
   PpgMetaDataJson toJson();
   void serialize(ProtobufPpgMetaData* protobufPpgMetaData);
   static ProtobufColorString protobufColorToString(ProtobufColor protobufColor);
-  static ProtobufColor protobufColorFromString(ProtobufColorString protobufColorString);
+  static ProtobufColor protobufColorFromString(ProtobufColorString& protobufColorString);
 
  private:
   void deserialize(const ProtobufPpgMetaData& protobufPpgMetaData);

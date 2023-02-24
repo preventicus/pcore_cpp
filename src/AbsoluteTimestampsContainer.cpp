@@ -39,12 +39,12 @@ AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps& unixTim
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampContainerJson& absoluteTimestampsContainerJson) {
   UnixTimestampsJson unixTimestampsJson = absoluteTimestampsContainerJson["unix_timestamps_ms"];
-  UnixTimestamps unixTimestamps;
-  unixTimestamps.reserve(unixTimestampsJson.size());
+  UnixTimestamps unixTimestamps_ms;
+  unixTimestamps_ms.reserve(unixTimestampsJson.size());
   for (auto& unixTimestampJson : unixTimestampsJson) {
-    unixTimestamps.push_back(unixTimestampJson.asUInt64());
+    unixTimestamps_ms.push_back(unixTimestampJson.asUInt64());
   }
-  this->unixTimestamps_ms = unixTimestamps;
+  this->unixTimestamps_ms = unixTimestamps_ms;
 }
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() {

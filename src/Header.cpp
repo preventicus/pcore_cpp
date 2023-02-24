@@ -99,7 +99,7 @@ void Header::deserialize(const ProtobufHeader& protobufHeader) {
   this->version = Version(protobufHeader.pcore_version());
 }
 
-DataForm Header::dataFormFromString(DataFormString dataFormString) {
+DataForm Header::dataFormFromString(DataFormString& dataFormString) {
   if (dataFormString == "DATA_FORM_ABSOLUTE") {
     return DataForm::DATA_FORM_ABSOLUTE;
   } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {
