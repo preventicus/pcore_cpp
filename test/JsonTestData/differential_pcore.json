@@ -7,7 +7,7 @@
                 "minor": 1,
                 "patch": 0
             },
-            "data_form": "DIFFERENTIAL"
+            "data_form": "DATA_FORM_DIFFERENTIAL"
         },
         "raw": {
             "sensors": [

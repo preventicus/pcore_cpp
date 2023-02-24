@@ -239,7 +239,7 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(DifferentialBlocks& differentialBl
 ChannelJson Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) {
   ChannelJson channelJson;
   switch (dataForm) {
-    case DataForm::ABSOLUTE: {
+    case DataForm::DATA_FORM_ABSOLUTE: {
       AbsoluteBlockJson absoluteBlockJson(this->absoluteBlock.toJson());
       channelJson["absolute_block"] = absoluteBlockJson;
       switch (protobufSensorType) {
@@ -257,7 +257,7 @@ ChannelJson Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensor
       }
       break;
     }
-    case DataForm::DIFFERENTIAL: {
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
       DifferentialBlocksJson differentialBlocksJson(Json::arrayValue);
       for (auto& differentialBlock : this->differentialBlocks) {
         differentialBlocksJson.append(differentialBlock.toJson());

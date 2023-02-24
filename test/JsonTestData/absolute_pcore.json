@@ -7,7 +7,7 @@
                 "minor": 1,
                 "patch": 0
             },
-            "data_form": "ABSOLUTE"
+            "data_form": "DATA_FORM_ABSOLUTE"
         },
         "raw": {
             "sensors": [

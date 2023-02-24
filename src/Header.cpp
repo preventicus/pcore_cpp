@@ -100,25 +100,25 @@ void Header::deserialize(const ProtobufHeader& protobufHeader) {
 }
 
 DataForm Header::dataFormFromString(DataFormString dataFormString) {
-  if (dataFormString == "ABSOLUTE") {
-    return DataForm::ABSOLUTE;
-  } else if (dataFormString == "DIFFERENTIAL") {
-    return DataForm::DIFFERENTIAL;
+  if (dataFormString == "DATA_FORM_ABSOLUTE") {
+    return DataForm::DATA_FORM_ABSOLUTE;
+  } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {
+    return DataForm::DATA_FORM_DIFFERENTIAL;
   } else {
-    return DataForm::NOT_SET;
+    return DataForm::DATA_FORM_NONE;
   }
 }
 
 DataFormString Header::dataFormToString(DataForm dataForm) {
   switch (dataForm) {
-    case DataForm::ABSOLUTE: {
-      return "ABSOLUTE";
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      return "DATA_FORM_ABSOLUTE";
     }
-    case DataForm::DIFFERENTIAL: {
-      return "DIFFERENTIAL";
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      return "DATA_FORM_DIFFERENTIAL";
     }
     default: {
-      return "NOT_SET";
+      return "DATA_FORM_NONE";
     }
   }
 }
