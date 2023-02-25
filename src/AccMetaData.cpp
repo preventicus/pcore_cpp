@@ -42,7 +42,7 @@ AccMetaData::AccMetaData(ProtobufNorm norm) : coordinate(ProtobufCoordinate::COO
 AccMetaData::AccMetaData(AccMetaDataJson& accMetaDataJson)
     : coordinate(AccMetaData::protobufCoordinateFromString(accMetaDataJson["coordinate"].asString())),
       norm(AccMetaData::protobufNormFromString(accMetaDataJson["norm"].asString())) {
-  if (this->norm != ProtobufNorm::NORM_NONE && this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
+  if (this->norm != ProtobufNorm::NORM_NONE & this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
     throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
   }
 }

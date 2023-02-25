@@ -37,23 +37,29 @@ using DifferentialValuesJson = Json::Value;
 
 DifferentialBlock::DifferentialBlock(DifferentialValues& differentialValues) : differentialValues(differentialValues) {}
 
-DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
-  this->deserialize(protobufDifferentialBlock);
-}
+DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock)
+    : differentialValues([&]() {
+        auto protobufDifferentialValues = protobufDifferentialBlock.differential_values();
+        DifferentialValues differentialValues = {};
+        differentialValues.reserve(protobufDifferentialValues.size());
+        for (auto& protobufDifferentialValue : protobufDifferentialValues) {
+          this->differentialValues.push_back(protobufDifferentialValue);
+        }
+        return differentialValues;
+      }()) {}
 
-DifferentialBlock::DifferentialBlock(DifferentialBlockJson& differentialBlockJson) {
-  DifferentialValuesJson differentialValuesJson = differentialBlockJson["differential_values"];
-  DifferentialValues differentialValues = {};
-  differentialValues.reserve(differentialValuesJson.size());
-  for (auto& differentialValueJson : differentialValuesJson) {
-    differentialValues.push_back(differentialValueJson.asInt());
-  }
-  this->differentialValues = differentialValues;
-}
+DifferentialBlock::DifferentialBlock(DifferentialBlockJson& differentialBlockJson)
+    : differentialValues([&]() {
+        DifferentialValuesJson differentialValuesJson = differentialBlockJson["differential_values"];
+        DifferentialValues differentialValues = {};
+        differentialValues.reserve(differentialValuesJson.size());
+        for (auto& differentialValueJson : differentialValuesJson) {
+          differentialValues.push_back(differentialValueJson.asInt());
+        }
+        return differentialValues;
+      }()) {}
 
-DifferentialBlock::DifferentialBlock() {
-  this->differentialValues = {};
-}
+DifferentialBlock::DifferentialBlock() : differentialValues({}){};
 
 DifferentialValues DifferentialBlock::getDifferentialValues() {
   return this->differentialValues;
@@ -80,10 +86,4 @@ DifferentialBlockJson DifferentialBlock::toJson() {
   DifferentialBlockJson differentialBlockJson;
   differentialBlockJson["differential_values"] = differentialValuesJson;
   return differentialBlockJson;
-}
-
-void DifferentialBlock::deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
-  for (auto& protobufDifferentialValues : protobufDifferentialBlock.differential_values()) {
-    this->differentialValues.push_back(protobufDifferentialValues);
-  }
 }

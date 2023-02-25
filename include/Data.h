@@ -50,8 +50,9 @@ class Data final {
   Raw getRaw();
   Header getHeader();
   bool isEqual(Data& data);
-  DataJson toJson(DataForm dataform);
+  DataJson toJson(DataForm dataForm);
   void serialize(ProtobufData* protobufData);
+  void switchDataForm();
 
  private:
   Header header;

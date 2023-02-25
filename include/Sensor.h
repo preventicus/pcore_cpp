@@ -64,16 +64,15 @@ class Sensor final {
   bool isEqual(Sensor& Sensor);
   SensorJson toJson(DataForm dataForm);
   void serialize(ProtobufSensor* protobufSensor);
+  void switchDataForm(DataForm currentDataForm);
 
-  static ProtobufSensorType senorTypeFromString(SensorTypeString& senorTypeString);
+  static ProtobufSensorType senorTypeFromString(SensorTypeString senorTypeString);
   static SensorTypeString senorTypeToString(ProtobufSensorType protobufSensorType);
 
  private:
   AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer& differentialTimestampsContainer);
   DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer& absoluteTimestampsContainer, BlockIdxs& blockIdxs);
   BlockIdxs findBlockIdxs();
-
-  void deserialize(const ProtobufSensor& protobufSensor);
 
   ProtobufSensorType sensorType;
   Channels channels;

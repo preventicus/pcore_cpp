@@ -57,6 +57,7 @@ TEST_F(ChannelTest, TestGetMethodPpg) {
   EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getPpgMetaData().isEqual(ppgMetaData));
   AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAccMetaData().isEqual(accMetaData));
+
   EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAbsoluteBlock().isEqual(this->comparableAbsoluteBlock));
   DifferentialBlocks differentialBlocks = this->channelPpgMetaDataWithColor1.getDifferentialBlocks();
   for (size_t i = 0; i < differentialBlocks.size(); i++) {

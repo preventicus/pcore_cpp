@@ -36,56 +36,53 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using DifferentialBlocksJson = Json::Value;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 
-Channel::Channel(AccMetaData& accMetaData, AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs)
-    : ppgMetaData(PpgMetaData()),
-      accMetaData(accMetaData),
-      differentialBlocks(this->calculateDifferentialBlocks(absoluteBlock, blockIdxs)),
-      absoluteBlock(absoluteBlock) {}
+Channel::Channel(AccMetaData& accMetaData, AbsoluteBlock& absoluteBlock)
+    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(absoluteBlock) {}
 
-Channel::Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs)
-    : ppgMetaData(ppgMetaData),
-      accMetaData(AccMetaData()),
-      differentialBlocks(this->calculateDifferentialBlocks(absoluteBlock, blockIdxs)),
-      absoluteBlock(absoluteBlock) {}
+Channel::Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock)
+    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(DifferentialBlocks()), absoluteBlock(absoluteBlock) {}
 
 Channel::Channel(AccMetaData& accMetaData, DifferentialBlocks& differentialBlocks)
-    : ppgMetaData(PpgMetaData()),
-      accMetaData(accMetaData),
-      differentialBlocks(differentialBlocks),
-      absoluteBlock(this->calculateAbsoluteBlock(differentialBlocks)) {}
+    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(differentialBlocks), absoluteBlock(AbsoluteBlock()) {}
 
 Channel::Channel(PpgMetaData& ppgMetaData, DifferentialBlocks& differentialBlocks)
-    : ppgMetaData(ppgMetaData),
-      accMetaData(AccMetaData()),
-      differentialBlocks(differentialBlocks),
-      absoluteBlock(this->calculateAbsoluteBlock(differentialBlocks)) {}
+    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(differentialBlocks), absoluteBlock(AbsoluteBlock()) {}
 
-Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, BlockIdxs& blockIdxs)
+Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm)
     : ppgMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG ? PpgMetaData(channelJson["ppg_metadata"]) : PpgMetaData()),
       accMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC ? AccMetaData(channelJson["acc_metadata"]) : AccMetaData()),
       differentialBlocks([&]() {
-        AbsoluteBlock absoluteBlock = AbsoluteBlock(channelJson["absolute_block"]);
-        return this->calculateDifferentialBlocks(absoluteBlock, blockIdxs);
-      }()),
-      absoluteBlock(AbsoluteBlock(channelJson["absolute_block"])) {
-  if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_NONE) {
-    throw std::runtime_error("Sensortype is not set");
-  }
-}
-
-Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType)
-    : ppgMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG ? PpgMetaData(channelJson["ppg_metadata"]) : PpgMetaData()),
-      accMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC ? AccMetaData(channelJson["acc_metadata"]) : AccMetaData()),
-      differentialBlocks([&]() {
-        DifferentialBlocksJson differentialBlocksJson = channelJson["differential_blocks"];
-        DifferentialBlocks differentialBlocks;
-        differentialBlocks.reserve(differentialBlocksJson.size());
-        for (auto& differentialBlockJson : differentialBlocksJson) {
-          differentialBlocks.push_back(DifferentialBlock(differentialBlockJson));
+        switch (dataForm) {
+          case DATA_FORM_ABSOLUTE: {
+            return DifferentialBlocks();
+          }
+          case DATA_FORM_DIFFERENTIAL: {
+            DifferentialBlocksJson differentialBlocksJson = channelJson["differential_blocks"];
+            DifferentialBlocks differentialBlocks;
+            differentialBlocks.reserve(differentialBlocksJson.size());
+            for (auto& differentialBlockJson : differentialBlocksJson) {
+              differentialBlocks.push_back(DifferentialBlock(differentialBlockJson));
+            }
+            return differentialBlocks;
+          }
+          default: {
+            throw std::runtime_error("DataForm is NONE");
+          }
         }
-        return differentialBlocks;
       }()),
-      absoluteBlock(this->calculateAbsoluteBlock(this->differentialBlocks)) {
+      absoluteBlock([&]() {
+        switch (dataForm) {
+          case DATA_FORM_ABSOLUTE: {
+            return AbsoluteBlock(channelJson["absolute_block"]);
+          }
+          case DATA_FORM_DIFFERENTIAL: {
+            return AbsoluteBlock();
+          }
+          default: {
+            throw std::runtime_error("DataForm is NONE");
+          }
+        }
+      }()) {
   if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_NONE) {
     throw std::runtime_error("Sensortype is not set");
   }
@@ -101,7 +98,7 @@ Channel::Channel(const ProtobufChannel& protobufChannel)
         }
         return differentialBlocks;
       }()),
-      absoluteBlock(this->calculateAbsoluteBlock(this->differentialBlocks)) {}
+      absoluteBlock(AbsoluteBlock()) {}
 
 Channel::Channel()
     : ppgMetaData(PpgMetaData()), accMetaData(AccMetaData()), differentialBlocks(DifferentialBlocks()), absoluteBlock(AbsoluteBlock()) {}
@@ -155,6 +152,16 @@ void Channel::serialize(ProtobufChannel* protobufChannel) {
     ProtobufDifferentialBlock* protobufDifferentialBlock = protobufChannel->add_differential_blocks();
     differentialBlock.serialize(protobufDifferentialBlock);
   }
+}
+
+void Channel::switchDataForm(BlockIdxs& blockIdxs) {
+  this->differentialBlocks = this->calculateDifferentialBlocks(this->absoluteBlock, blockIdxs);
+  this->absoluteBlock = AbsoluteBlock();
+}
+
+void Channel::switchDataForm() {
+  this->absoluteBlock = this->calculateAbsoluteBlock(this->differentialBlocks);
+  this->differentialBlocks = DifferentialBlocks();
 }
 
 DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs) {

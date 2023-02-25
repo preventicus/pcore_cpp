@@ -82,6 +82,22 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
   protobufHeader->mutable_pcore_version()->CopyFrom(protobufVersion);
 }
 
+void Header::switchDataForm() {
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      this->dataForm = DATA_FORM_ABSOLUTE;
+      break;
+    }
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      this->dataForm = DATA_FORM_DIFFERENTIAL;
+      break;
+    }
+    default: {
+      throw std::runtime_error("DataForm is NONE");
+    }
+  }
+}
+
 HeaderJson Header::toJson(DataForm dataForm) {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);

@@ -55,6 +55,7 @@ class Header final {
   bool isEqual(Header& header);
   HeaderJson toJson(DataForm dataForm);
   void serialize(ProtobufHeader* protobufHeader);
+  void switchDataForm();
 
   static DataForm dataFormFromString(DataFormString dataFormString);
   static DataFormString dataFormToString(DataForm dataForm);

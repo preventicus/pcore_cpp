@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <json/json.h>
 #include <vector>
+#include "AbsoluteBlock.h"
 #include "protobuf/pcore_raw.pb.h"
 
 using ProtobufDifferentialBlock = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;
@@ -54,7 +55,5 @@ class DifferentialBlock final {
   void serialize(ProtobufDifferentialBlock* differentialBlock);
 
  private:
-  void deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock);
-
   DifferentialValues differentialValues;
 };

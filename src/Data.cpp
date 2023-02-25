@@ -65,6 +65,12 @@ void Data::serialize(ProtobufData* protobufData) {
   protobufData->mutable_raw()->CopyFrom(protobufRaw);
 }
 
+void Data::switchDataForm() {
+  DataForm currentDataForm = this->header.getDataForm();
+  this->raw.switchDataForm(currentDataForm);
+  this->header.switchDataForm();
+}
+
 Json::Value Data::toJson(DataForm dataForm) {
   DataJson data;
   data["header"] = this->header.toJson(dataForm);

@@ -37,23 +37,27 @@ using SensorsJson = Json::Value;
 
 Raw::Raw(Sensors& sensors) : sensors(sensors) {}
 
-Raw::Raw(const ProtobufRaw& protobufRaw) {
-  this->deserialize(protobufRaw);
-}
+Raw::Raw(const ProtobufRaw& protobufRaw)
+    : sensors([&]() {
+        Sensors sensors{};
+        for (auto& protobufSensor : protobufRaw.sensors()) {
+          sensors.push_back(Sensor(protobufSensor));
+        }
+        return sensors;
+      }()) {}
 
-Raw::Raw(RawJson& rawJson, DataForm dataForm) {
-  Sensors sensors;
-  SensorsJson sensorsJson = rawJson["sensors"];
-  sensors.reserve(sensorsJson.size());
-  for (auto& sensorJson : sensorsJson) {
-    sensors.push_back(Sensor(sensorJson, dataForm));
-  }
-  this->sensors = sensors;
-}
+Raw::Raw(RawJson& rawJson, DataForm dataForm)
+    : sensors([&]() {
+        Sensors sensors;
+        SensorsJson sensorsJson = rawJson["sensors"];
+        sensors.reserve(sensorsJson.size());
+        for (auto& sensorJson : sensorsJson) {
+          sensors.push_back(Sensor(sensorJson, dataForm));
+        }
+        return sensors;
+      }()) {}
 
-Raw::Raw() {
-  this->sensors = Sensors{};
-}
+Raw::Raw() : sensors({}) {}
 
 Sensors Raw::getSensors() {
   return this->sensors;
@@ -81,6 +85,12 @@ void Raw::serialize(ProtobufRaw* protobufRaw) {
   }
 }
 
+void Raw::switchDataForm(DataForm currentDataForm) {
+  for (auto& sensor : this->sensors) {
+    sensor.switchDataForm(currentDataForm);
+  }
+}
+
 RawJson Raw::toJson(DataForm dataForm) {
   RawJson rawJson;
   SensorsJson sensorsJson(Json::arrayValue);
@@ -89,12 +99,4 @@ RawJson Raw::toJson(DataForm dataForm) {
   }
   rawJson["sensors"] = sensorsJson;
   return rawJson;
-}
-
-void Raw::deserialize(const ProtobufRaw& protobufRaw) {
-  Sensors sensors{};
-  for (auto& protobufSensor : protobufRaw.sensors()) {
-    sensors.push_back(Sensor(protobufSensor));
-  }
-  this->sensors = sensors;
 }
