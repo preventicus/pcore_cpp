@@ -58,8 +58,7 @@ class Header final {
   static DataFormString dataFormToString(DataForm dataForm);
 
  private:
-  void deserialize(const ProtobufHeader& protobufHeader);
-
+  void checkTimeZoneOffset();
   TimeZoneOffset timeZoneOffset_min;
   Version version;
 };
