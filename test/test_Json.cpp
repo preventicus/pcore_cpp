@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class JsonTest : public ::testing::Test {
  protected:
-  std::string static getJsonPath(std::string nameFromJson) { return "./../../test/JsonTestData/" + nameFromJson; }
+  std::string static getJsonPath(std::string nameFromJson) { return "./../../../test/JsonTestData/" + nameFromJson; }
 };
 
 TEST_F(JsonTest, JsonObjectWithAbsoluteDataForm) {

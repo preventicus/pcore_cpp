@@ -69,10 +69,8 @@ class Channel final {
 
  private:
   DifferentialBlocks calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
-  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx);
+  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues);
   AbsoluteBlock calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks);
-
-  void deserialize(const ProtobufChannel& protobufChannel);
 
   PpgMetaData ppgMetaData;
   AccMetaData accMetaData;

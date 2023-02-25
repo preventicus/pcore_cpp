@@ -46,30 +46,39 @@ Sensor::Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestam
   this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdx);
 }
 
-Sensor::Sensor(SensorJson& sensor, DataForm dataForm) {
-  SensorTypeString sensorTypeString = sensor["sensor_type"].asString();
+Sensor::Sensor(SensorJson& sensorJson, DataForm dataForm) {
+  SensorTypeString sensorTypeString = sensorJson["sensor_type"].asString();
   this->sensorType = Sensor::senorTypeFromString(sensorTypeString);
-  ChannelsJson channelsJson = sensor["channels"];
+  ChannelsJson channelsJson = sensorJson["channels"];
   Channels channels;
   channels.reserve(channelsJson.size());
-  if (dataForm == DataForm::DATA_FORM_DIFFERENTIAL) {
-    for (auto& channelJson : channelsJson) {
-      channels.push_back(Channel(channelJson, this->sensorType));
+
+  switch (dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      AbsoluteTimestampsContainer absoluteTimestampsContainer = AbsoluteTimestampsContainer(sensorJson["absolute_timestamps_container"]);
+      this->absoluteTimestampsContainer = absoluteTimestampsContainer;
+      BlockIdxs blockIdxs = this->findBlockIdxs();
+      this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdxs);
+      for (auto& channelJson : channelsJson) {
+        channels.push_back(Channel(channelJson, this->sensorType, blockIdxs));
+      }
+      this->channels = channels;
+      break;
     }
-    this->channels = channels;
-    DifferentialTimestampsContainer differentialTimestampsContainer = DifferentialTimestampsContainer(sensor["differential_timestamps_container"]);
-    this->differentialTimestampsContainer = differentialTimestampsContainer;
-    this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(differentialTimestampsContainer);
-  }
-  if (dataForm == DataForm::DATA_FORM_ABSOLUTE) {
-    AbsoluteTimestampsContainer absoluteTimestampsContainer = AbsoluteTimestampsContainer(sensor["absolute_timestamps_container"]);
-    this->absoluteTimestampsContainer = absoluteTimestampsContainer;
-    BlockIdxs blockIdxs = this->findBlockIdxs();
-    this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdxs);
-    for (auto& channelJson : channelsJson) {
-      channels.push_back(Channel(channelJson, this->sensorType, blockIdxs));
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      for (auto& channelJson : channelsJson) {
+        channels.push_back(Channel(channelJson, this->sensorType));
+      }
+      this->channels = channels;
+      DifferentialTimestampsContainer differentialTimestampsContainer =
+          DifferentialTimestampsContainer(sensorJson["differential_timestamps_container"]);
+      this->differentialTimestampsContainer = differentialTimestampsContainer;
+      this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(differentialTimestampsContainer);
+      break;
     }
-    this->channels = channels;
+    default: {
+      std::runtime_error("dataForm is NONE");
+    }
   }
 }
 

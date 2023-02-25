@@ -43,22 +43,25 @@ using DataFormString = std::string;
 
 class Header final {
  public:
-  Header(Version& version, TimeZoneOffset timeZoneOffset_min);
+  Header(Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
   Header(const ProtobufHeader& protobufHeader);
   Header(HeaderJson& header);
   Header();
 
   TimeZoneOffset getTimeZoneOffset();
   Version getVersion();
+  DataForm getDataForm();
+
   bool isEqual(Header& header);
   HeaderJson toJson(DataForm dataForm);
   void serialize(ProtobufHeader* protobufHeader);
 
-  static DataForm dataFormFromString(DataFormString& dataFormString);
+  static DataForm dataFormFromString(DataFormString dataFormString);
   static DataFormString dataFormToString(DataForm dataForm);
 
  private:
   void checkTimeZoneOffset();
   TimeZoneOffset timeZoneOffset_min;
   Version version;
+  DataForm dataForm;
 };

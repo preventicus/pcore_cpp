@@ -35,20 +35,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using TimeZoneOffsetJson = Json::Value;
 
-Header::Header(Version& version, TimeZoneOffset timeZoneOffset_min) : timeZoneOffset_min(timeZoneOffset_min), version(version) {
+Header::Header(Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
+    : timeZoneOffset_min(timeZoneOffset_min), version(version), dataForm(dataForm) {
   this->checkTimeZoneOffset();
 }
 
 Header::Header(const ProtobufHeader& protobufHeader)
-    : timeZoneOffset_min(protobufHeader.time_zone_offset_min()), version(Version(protobufHeader.pcore_version())) {
+    : timeZoneOffset_min(protobufHeader.time_zone_offset_min()),
+      version(Version(protobufHeader.pcore_version())),
+      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {
   this->checkTimeZoneOffset();
 }
 
-Header::Header(HeaderJson& header) : timeZoneOffset_min(header["time_zone_offset_min"].asInt()), version(Version(header["version"])) {
+Header::Header(HeaderJson& headerJson)
+    : timeZoneOffset_min(headerJson["time_zone_offset_min"].asInt()),
+      version(Version(headerJson["version"])),
+      dataForm(Header::dataFormFromString(headerJson["data_form"].asString())) {
   this->checkTimeZoneOffset();
 }
 
-Header::Header() : timeZoneOffset_min(0), version(Version()) {}
+Header::Header() : timeZoneOffset_min(0), version(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
 
 TimeZoneOffset Header::getTimeZoneOffset() {
   return this->timeZoneOffset_min;
@@ -58,8 +64,12 @@ Version Header::getVersion() {
   return this->version;
 }
 
+DataForm Header::getDataForm() {
+  return this->dataForm;
+}
+
 bool Header::isEqual(Header& header) {
-  return this->timeZoneOffset_min == header.timeZoneOffset_min;
+  return this->timeZoneOffset_min == header.timeZoneOffset_min && this->version.isEqual(header.version) && this->dataForm == header.dataForm;
 }
 
 void Header::serialize(ProtobufHeader* protobufHeader) {
@@ -87,7 +97,7 @@ void Header::checkTimeZoneOffset() {
   }
 }
 
-DataForm Header::dataFormFromString(DataFormString& dataFormString) {
+DataForm Header::dataFormFromString(DataFormString dataFormString) {
   if (dataFormString == "DATA_FORM_ABSOLUTE") {
     return DataForm::DATA_FORM_ABSOLUTE;
   } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {

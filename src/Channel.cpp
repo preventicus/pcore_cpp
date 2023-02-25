@@ -175,30 +175,29 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteB
   if (numberOfBlocks == 0) {
     return differentialBlocks;
   }
-  size_t numberOfAbsoluteValues = absoluteBlock.getAbsoluteValues().size();
+  AbsoluteValues absoluteValues = absoluteBlock.getAbsoluteValues();
+  size_t numberOfAbsoluteValues = absoluteValues.size();
   BlockIdx fromBlockIdx = 0;
-  BlockIdx toBlockIdx = 0;
+  BlockIdx toBlockIdx = numberOfAbsoluteValues > 1 ? numberOfAbsoluteValues - 1 : 0;
   if (numberOfBlocks == 1) {
-    toBlockIdx = numberOfAbsoluteValues > 1 ? numberOfAbsoluteValues - 1 : 0;
-    differentialBlocks.push_back(
-        this->createDifferentialBlock(fromBlockIdx, toBlockIdx));  // toIdx = 0  would create a DifferentialBlock with a absoluteValue.
+    differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx,
+                                                               absoluteValues));  // toIdx = 0  would create a DifferentialBlock with a absoluteValue.
     return differentialBlocks;
   }
 
   for (size_t i = 0; i < numberOfBlocks - 1; i++) {  // calculate DifferentialBlocks for all blockIdxs except last Idx
     fromBlockIdx = blockIdxs[i];
     toBlockIdx = blockIdxs[i + 1] - 1;
-    differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx));
+    differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
   }
   fromBlockIdx = numberOfAbsoluteValues - 1 == blockIdxs[numberOfBlocks - 1] ? numberOfAbsoluteValues - 1 : blockIdxs[numberOfBlocks - 1];
   toBlockIdx = numberOfAbsoluteValues - 1;
-  differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx));
+  differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
   return differentialBlocks;
 }
 
-DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx) {
+DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues) {
   DifferentialValues differentialValues = {};
-  AbsoluteValues absoluteValues = this->absoluteBlock.getAbsoluteValues();
   differentialValues.push_back(absoluteValues[fromBlockIdx]);
   for (size_t i = fromBlockIdx + 1; i <= toBlockIdx; i++) {
     differentialValues.push_back(absoluteValues[i] - absoluteValues[i - 1]);

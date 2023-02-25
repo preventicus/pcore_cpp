@@ -54,8 +54,6 @@ class Data final {
   void serialize(ProtobufData* protobufData);
 
  private:
-  void deserialize(const ProtobufData& protobufData);
-
-  Raw raw;
   Header header;
+  Raw raw;
 };
