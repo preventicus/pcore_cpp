@@ -35,36 +35,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using CoordinateJson = Json::Value;
 
-AccMetaData::AccMetaData(ProtobufCoordinate coordinate) {
-  this->coordinate = coordinate;
-  this->norm = ProtobufNorm::NORM_NONE;
-}
+AccMetaData::AccMetaData(ProtobufCoordinate coordinate) : coordinate(coordinate), norm(ProtobufNorm::NORM_NONE) {}
 
-AccMetaData::AccMetaData(ProtobufNorm norm) {
-  this->norm = norm;
-  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
-}
+AccMetaData::AccMetaData(ProtobufNorm norm) : coordinate(ProtobufCoordinate::COORDINATE_NONE), norm(norm) {}
 
-AccMetaData::AccMetaData(AccMetaDataJson& accMetaDataJson) {
-  ProtobufCoordinateString protobufCoordinateString = accMetaDataJson["coordinate"].asString();
-  ProtobufCoordinate protobufCoordinate = AccMetaData::protobufCoordinateFromString(protobufCoordinateString);
-  ProtobufNormString protobufNormString = accMetaDataJson["norm"].asString();
-  ProtobufNorm protobufNorm = AccMetaData::protobufNormFromString(protobufNormString);
-  if (protobufNorm != ProtobufNorm::NORM_NONE && protobufCoordinate != ProtobufCoordinate::COORDINATE_NONE) {
+AccMetaData::AccMetaData(AccMetaDataJson& accMetaDataJson)
+    : coordinate(AccMetaData::protobufCoordinateFromString(accMetaDataJson["coordinate"].asString())),
+      norm(AccMetaData::protobufNormFromString(accMetaDataJson["norm"].asString())) {
+  if (this->norm != ProtobufNorm::NORM_NONE && this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
     throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
   }
-  this->coordinate = protobufCoordinate;
-  this->norm = protobufNorm;
 }
 
-AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData) {
-  this->deserialize(protobufAccMetaData);
-}
+AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData)
+    : coordinate(protobufAccMetaData.coordinate()), norm(protobufAccMetaData.norm()) {}
 
-AccMetaData::AccMetaData() {
-  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
-  this->norm = ProtobufNorm::NORM_NONE;
-};
+AccMetaData::AccMetaData() : coordinate(ProtobufCoordinate::COORDINATE_NONE), norm(ProtobufNorm::NORM_NONE) {}
 
 ProtobufCoordinate AccMetaData::getCoordinate() {
   return this->coordinate;
@@ -108,11 +94,6 @@ Json::Value AccMetaData::toJson() {
   return accMetaDataJson;
 }
 
-void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {
-  this->norm = protobufAccMetaData.norm();
-  this->coordinate = protobufAccMetaData.coordinate();
-}
-
 ProtobufCoordinateString AccMetaData::protobufCoordinateToString(ProtobufCoordinate protobufCoordinate) {
   switch (protobufCoordinate) {
     case ProtobufCoordinate::COORDINATE_X: {
@@ -130,7 +111,7 @@ ProtobufCoordinateString AccMetaData::protobufCoordinateToString(ProtobufCoordin
   }
 }
 
-ProtobufCoordinate AccMetaData::protobufCoordinateFromString(ProtobufCoordinateString& protobufCoordinateString) {
+ProtobufCoordinate AccMetaData::protobufCoordinateFromString(ProtobufCoordinateString protobufCoordinateString) {
   if (protobufCoordinateString == "COORDINATE_X") {
     return ProtobufCoordinate::COORDINATE_X;
   } else if (protobufCoordinateString == "COORDINATE_Y") {
@@ -153,7 +134,7 @@ ProtobufNormString AccMetaData::protobufNormToString(ProtobufNorm protobufNorm) 
   }
 }
 
-ProtobufNorm AccMetaData::protobufNormFromString(ProtobufNormString& protobufNormString) {
+ProtobufNorm AccMetaData::protobufNormFromString(ProtobufNormString protobufNormString) {
   if (protobufNormString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
     return ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
   } else {
