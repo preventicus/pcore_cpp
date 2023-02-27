@@ -31,17 +31,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "AccMetaDataExampleFactory.h"
-#include "AccMetaData.h"
+#pragma once
+#include "AbsoluteTimestampsContainer.h"
 
-AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufCoordinate coordinate) {
-  AccMetaDataJson accMetaDataJson;
-  accMetaDataJson["coordinate"] = AccMetaData::protobufCoordinateToString(coordinate);
-  return accMetaDataJson;
-}
+class UnixTimestampsExampleFactory {
+ public:
+  static UnixTimestamps unixTimestampsNormal1_ms();
+  static UnixTimestamps unixTimestampsNormal2_ms();
+  static UnixTimestamps unixTimestampsTwoElements_ms();
+  static UnixTimestamps unixTimestampsOneElement_ms();
+  static UnixTimestamps unixTimestamps0_ms();
+  static UnixTimestamps unixTimestampsEmpty_ms();
+  static UnixTimestamps normalUnixTimestamps_ms();
+  static UnixTimestamps absoluteJsonDataUNixTimestampsPpg();
+  static UnixTimestamps absoluteJsonDataUNixTimestampsAcc();
+  static UnixTimestamps absoluteTimestampWithOneUnixInLastBlock();
+  static UnixTimestamps absoluteTimestampWithEqualTimestampIntervals();
 
-AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufNorm norm) {
-  AccMetaDataJson accMetaDataJson;
-  accMetaDataJson["norm"] = AccMetaData::protobufNormToString(norm);
-  return accMetaDataJson;
-}
+  static UnixTimestampsJson buildUnixTimestampsJson(UnixTimestamps& unixTimestamps_ms);
+};

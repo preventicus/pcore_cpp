@@ -33,94 +33,44 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteBlockExampleFactory.h"
 
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteValuesNormal() {
-  return {1, 2, 3};
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteValuesTwoElements() {
-  return {1, 2};
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteValuesOneElement() {
-  return {12};
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteValues0Element() {
-  return {0};
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteValuesEmpty() {
-  return {};
-}
-
-AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockNormal() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValuesNormal();
-  return AbsoluteBlock(absoluteValues);
-}
-
-AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockTwoElement() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValuesTwoElements();
-  return AbsoluteBlock(absoluteValues);
-}
-
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockOneElement() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValuesOneElement();
-  return AbsoluteBlock(absoluteValues);
-}
-
-AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlock0Element() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValues0Element();
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesOneElement();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockEmpty() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValuesEmpty();
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesEmpty();
   return AbsoluteBlock(absoluteValues);
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteValues() {
-  return {38763, 38771, 38780, 38793, 38784, 38780, 38780, 38783, 38790, 38782, 46321, 46327, 46318,
-          46316, 46313, 46313, 46313, 46336, 58772, 58774, 58775, 58776, 58773, 19982, 19982, 19978};
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteValuesWithOneValueInLastBlock() {
-  return {38763, 38771, 38780, 38793, 38784, 38780, 38780};
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlock() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValues();
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValues();
   return AbsoluteBlock(absoluteValues);
 }
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteValuesWithOneValueInLastBlock();
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithOneValueInLastBlock();
   return AbsoluteBlock(absoluteValues);
 }
 
 // -------------------------------------JSON-----------------------
 
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg1() {
-  return {30021, 30023, 30027, 30022, 30020, 30020, 30030};
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg2() {
-  return {54834, 54830, 54836, 54842, 54841, 54841, 54830};
-}
-
-AbsoluteValues AbsoluteBlockExampleFactory::absoluteJsonDataValuesAcc() {
-  return {548, 34, 234, 3435, 433, 454};
+AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson) {
+  AbsoluteBlockJson absoluteBlockJson;
+  absoluteBlockJson["absolute_values"] = absoluteValuesJson;
+  return absoluteBlockJson;
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg1() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg1();
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteJsonDataValuesPpg1();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg2() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteJsonDataValuesPpg2();
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteJsonDataValuesPpg2();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteJsonDataBlockAcc() {
-  AbsoluteValues absoluteValues = AbsoluteBlockExampleFactory::absoluteJsonDataValuesAcc();
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteJsonDataValuesAcc();
   return AbsoluteBlock(absoluteValues);
 }

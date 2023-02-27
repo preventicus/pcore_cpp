@@ -72,4 +72,13 @@ class ChannelExampleFactory {
   static Channels normalVectorWithNUllValueBlock();
   static Channels normalVectorWithOneValueInLastBlock();
   static Channels normalVectorWithEqualTimestampIntervals();
+
+  static Channel channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm();
+  static Channel channelWithNormalAbsoluteBlocksAndAccMetaDataWithCoordinateX();
+  static Channel channelWithNormalNegativeAbsoluteBlocksAndAccMetaDataWithNorm();
+  static Channel channelWithOneElementAbsoluteBlocksAndAccMetaDataWithNorm();
+  static Channel channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1();
+  static Channel channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength2();
+  static Channel channelWithNormalNegativeDifferentialBlocksAndPpgMetaDataWithNormalWavelength1();
+
 };

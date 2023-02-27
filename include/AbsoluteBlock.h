@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using AbsoluteValue = int32_t;
 using AbsoluteValues = std::vector<AbsoluteValue>;
+using AbsoluteValuesJson = Json::Value;
 using AbsoluteBlockJson = Json::Value;
 
 class AbsoluteBlock final {

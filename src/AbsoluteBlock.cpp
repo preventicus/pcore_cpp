@@ -33,8 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteBlock.h"
 
-using AbsoluteValuesJson = Json::Value;
-
 AbsoluteBlock::AbsoluteBlock(AbsoluteValues& absoluteValues) : absoluteValues(absoluteValues) {}
 
 AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson)
@@ -59,11 +57,11 @@ bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
 }
 
 AbsoluteBlockJson AbsoluteBlock::toJson() {
-  AbsoluteBlockJson absoluteBlock;
+  AbsoluteBlockJson absoluteBlockJson;
   AbsoluteValuesJson absoluteValuesJson(Json::arrayValue);
   for (auto& absoluteValue : this->absoluteValues) {
     absoluteValuesJson.append(absoluteValue);
   }
-  absoluteBlock["absolute_values"] = absoluteValuesJson;
-  return absoluteBlock;
+  absoluteBlockJson["absolute_values"] = absoluteValuesJson;
+  return absoluteBlockJson;
 }

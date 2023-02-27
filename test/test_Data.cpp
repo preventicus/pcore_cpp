@@ -42,6 +42,11 @@ class DataTest : public ::testing::Test {
   Data comparableDataPpgMetaData2 = DataExampleFactory::comparableData();
 };
 
+// GET RAW
+// GET HEADER
+// COMPRAE HEADER, RAW
+// TOJSON
+
 TEST_F(DataTest, TestGetMethodData) {
   Raw raw = this->normalDataWithAccMetaData1.getRaw();
   Raw comparableRaw = RawExampleFactory::normalRaw();
@@ -49,6 +54,10 @@ TEST_F(DataTest, TestGetMethodData) {
   Header header = HeaderExampleFactory::normalHeaderWithPositiveTimeZoneOffset_min();
   EXPECT_TRUE(this->normalDataWithAccMetaData1.getHeader().isEqual(header));
 }
+
+TEST_F(DataTest, TestGetRaw) {}
+
+TEST_F(DataTest, TestGetHeader) {}
 
 TEST_F(DataTest, CompareEqualNormalData) {
   EXPECT_TRUE(this->normalDataWithAccMetaData1.isEqual(this->normalDataWithAccMetaData2));

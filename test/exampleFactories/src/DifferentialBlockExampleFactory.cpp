@@ -171,3 +171,9 @@ DifferentialBlocks DifferentialBlockExampleFactory::differentialJsonDataBlockAcc
   DifferentialBlocks normalDifferentialBlocks = {differentialBlock1, differentialBlock2, differentialBlock3};
   return normalDifferentialBlocks;
 }
+
+DifferentialBlockJson DifferentialBlockExampleFactory::buildDifferentialBlockJson(DifferentialValuesJson differentialValuesJson) {
+  DifferentialBlockJson differentialBlockJson;
+  differentialBlockJson["differential_values"] = differentialValuesJson;
+  return differentialBlockJson;
+}

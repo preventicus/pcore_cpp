@@ -79,7 +79,7 @@ TEST_F(SensorTest, TestGetMethodComparableSensor) {
 }
 
 TEST_F(SensorTest, TestSensorWithOneUnix) {
-  for (auto& unix : AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms()) {
+  for (auto& unix : UnixTimestampsExampleFactory::unixTimestampsOneElement_ms()) {
     EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getFirstUnixTimestamp(), unix);
   }
   for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
@@ -103,7 +103,7 @@ TEST_F(SensorTest, normalSensorWithNullUnix) {
 
 TEST_F(SensorTest, TestSensorWithOneUnixAndOneValueInLastBlock) {
   EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getFirstUnixTimestamp(),
-            AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock()[0]);
+            UnixTimestampsExampleFactory::absoluteTimestampWithOneUnixInLastBlock()[0]);
   for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock().size(); i++) {
     EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getBlockIntervals()[i],
               DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock()[i]);
@@ -116,7 +116,7 @@ TEST_F(SensorTest, TestSensorWithOneUnixAndOneValueInLastBlock) {
 
 TEST_F(SensorTest, TestSensorWithEqualTimestampsInterval) {
   EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getFirstUnixTimestamp(),
-            AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals()[0]);
+            UnixTimestampsExampleFactory::absoluteTimestampWithEqualTimestampIntervals()[0]);
   for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
     EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getBlockIntervals()[i],
               DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms()[i]);

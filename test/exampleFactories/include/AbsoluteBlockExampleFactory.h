@@ -33,28 +33,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "AbsoluteBlock.h"
+#include "AbsoluteValuesExampleFactory.h"
 
 class AbsoluteBlockExampleFactory {
  public:
-  static AbsoluteValues absoluteValuesNormal();
-  static AbsoluteValues absoluteValuesTwoElements();
-  static AbsoluteValues absoluteValuesOneElement();
-  static AbsoluteValues absoluteValues0Element();
-  static AbsoluteValues absoluteValuesEmpty();
-  static AbsoluteValues absoluteValues();
-  static AbsoluteValues absoluteJsonDataValuesPpg1();
-  static AbsoluteValues absoluteJsonDataValuesPpg2();
-  static AbsoluteValues absoluteJsonDataValuesAcc();
-  static AbsoluteValues absoluteValuesWithOneValueInLastBlock();
-
   static AbsoluteBlock absoluteBlock();
   static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
   static AbsoluteBlock absoluteJsonDataBlockAcc();
   static AbsoluteBlock absoluteJsonDataBlockPpg1();
   static AbsoluteBlock absoluteJsonDataBlockPpg2();
-  static AbsoluteBlock absoluteBlockNormal();
-  static AbsoluteBlock absoluteBlockTwoElement();
+
   static AbsoluteBlock absoluteBlockOneElement();
-  static AbsoluteBlock absoluteBlock0Element();
+
   static AbsoluteBlock absoluteBlockEmpty();
+
+  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson);
 };

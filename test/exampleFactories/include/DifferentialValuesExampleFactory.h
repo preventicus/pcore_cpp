@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -34,14 +34,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "Channel.h"
 #include "DifferentialBlock.h"
-#include "DifferentialValuesExampleFactory.h"
 
-class DifferentialBlockExampleFactory {
+class DifferentialValuesExampleFactory {
  public:
   static DifferentialValues differentialValuesNormal();
-  static DifferentialValues differentialValuesNormalNeagtive();
+  static DifferentialValues differentialValuesNormalNegative();
   static DifferentialValues differentialValuesOneNegative();
-  static DifferentialValues differentialValuesOnePositive();
+  static DifferentialValues differentialValuesOneElement();
   static DifferentialValues differentialValues0();
   static DifferentialValues differentialValuesEmpty();
 
@@ -50,22 +49,5 @@ class DifferentialBlockExampleFactory {
   static DifferentialValues expectedDifferentialValues3();
   static DifferentialValues expectedDifferentialValues4();
 
-  static DifferentialBlock differentialBlockNormal();
-  static DifferentialBlock differentialBlockWithNegativeValues();
-  static DifferentialBlock differentialBlockOneNegativeValue();
-  static DifferentialBlock differentialBlockOnePositiveValue();
-  static DifferentialBlock differentialBlock0Value();
-  static DifferentialBlock differentialBlockEmptyValue();
-
-  static DifferentialBlock expectedDifferentialBlock1();
-  static DifferentialBlock expectedDifferentialBlock2();
-  static DifferentialBlock expectedDifferentialBlock3();
-  static DifferentialBlock expectedDifferentialBlock4();
-
-  static std::vector<DifferentialBlock> normalDifferentialBlocks();
-  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg1();
-  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg2();
-  static std::vector<DifferentialBlock> differentialJsonDataBlockAcc();
-
-  static DifferentialBlockJson buildDifferentialBlockJson(DifferentialValuesJson differentialValuesJson);
+  static DifferentialValuesJson buildDifferentialValuesJson(DifferentialValues& differentialValues);
 };

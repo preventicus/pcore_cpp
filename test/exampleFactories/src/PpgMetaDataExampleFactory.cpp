@@ -33,8 +33,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "PpgMetaDataExampleFactory.h"
 
-Wavelength PpgMetaDataExampleFactory::normalWavelength_nm() {
+Wavelength PpgMetaDataExampleFactory::wavelengthNormal1_nm() {
   return 255;
+}
+
+Wavelength PpgMetaDataExampleFactory::wavelengthNormal2_nm() {
+  return 300;
 }
 
 Wavelength PpgMetaDataExampleFactory::comparableWavelength_nm() {
@@ -49,7 +53,7 @@ Wavelength PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2() {
   return 660;
 }
 
-Wavelength PpgMetaDataExampleFactory::noWavelength_nm() {
+Wavelength PpgMetaDataExampleFactory::wavelengthNotSet_mn() {
   return 0;
 }
 
@@ -66,7 +70,7 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorRed() {
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithWavelength() {
-  return PpgMetaData(PpgMetaDataExampleFactory::normalWavelength_nm());
+  return PpgMetaData(PpgMetaDataExampleFactory::wavelengthNormal1_nm());
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithComparableWavelength() {
@@ -83,4 +87,16 @@ PpgMetaData PpgMetaDataExampleFactory::absoluteJsonDataPpg2() {
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
   return PpgMetaData();
+}
+
+PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(ProtobufColor color) {
+  PpgMetaDataJson ppgMetaDataJson;
+  ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(color);
+  return ppgMetaDataJson;
+}
+
+PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(Wavelength wavelength_nm) {
+  PpgMetaDataJson ppgMetaDataJson;
+  ppgMetaDataJson["wavelength_nm"] = wavelength_nm;
+  return ppgMetaDataJson;
 }

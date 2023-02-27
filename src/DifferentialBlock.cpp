@@ -33,8 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DifferentialBlock.h"
 
-using DifferentialValuesJson = Json::Value;
-
 DifferentialBlock::DifferentialBlock(DifferentialValues& differentialValues) : differentialValues(differentialValues) {}
 
 DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock)

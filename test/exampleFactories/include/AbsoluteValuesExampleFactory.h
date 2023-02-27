@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -31,17 +31,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "AccMetaDataExampleFactory.h"
-#include "AccMetaData.h"
+#pragma once
+#include "AbsoluteBlock.h"
 
-AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufCoordinate coordinate) {
-  AccMetaDataJson accMetaDataJson;
-  accMetaDataJson["coordinate"] = AccMetaData::protobufCoordinateToString(coordinate);
-  return accMetaDataJson;
-}
+class AbsoluteValuesExampleFactory {
+ public:
+  static AbsoluteValues absoluteValuesNormal();
+  static AbsoluteValues absoluteValuesNormalNegative();
+  static AbsoluteValues absoluteValuesOneElement();
+  static AbsoluteValues absoluteValuesEmpty();
+  static AbsoluteValues absoluteValues();
+  static AbsoluteValues absoluteJsonDataValuesPpg1();
+  static AbsoluteValues absoluteJsonDataValuesPpg2();
+  static AbsoluteValues absoluteJsonDataValuesAcc();
+  static AbsoluteValues absoluteValuesWithOneValueInLastBlock();
 
-AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufNorm norm) {
-  AccMetaDataJson accMetaDataJson;
-  accMetaDataJson["norm"] = AccMetaData::protobufNormToString(norm);
-  return accMetaDataJson;
-}
+  static AbsoluteValuesJson buildAbsoluteValuesJson(AbsoluteValues& absoluteValues);
+};

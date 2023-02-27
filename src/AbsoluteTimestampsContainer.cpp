@@ -33,11 +33,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteTimestampsContainer.h"
 
-using UnixTimestampsJson = Json::Value;
-
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampContainerJson& absoluteTimestampsContainerJson)
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
     : unixTimestamps_ms([&]() {
         UnixTimestampsJson unixTimestampsJson = absoluteTimestampsContainerJson["unix_timestamps_ms"];
         UnixTimestamps unixTimestamps_ms;
@@ -58,8 +56,8 @@ bool AbsoluteTimestampsContainer::isEqual(AbsoluteTimestampsContainer& absoluteT
   return this->unixTimestamps_ms == absoluteTimestampsContainer.unixTimestamps_ms;
 }
 
-AbsoluteTimestampContainerJson AbsoluteTimestampsContainer::toJson() {
-  AbsoluteTimestampContainerJson absoluteTimestampsContainerJson;
+AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() {
+  AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
   UnixTimestampsJson unixTimestampsJson(Json::arrayValue);
   for (auto& unixTimestamp_ms : this->unixTimestamps_ms) {
     unixTimestampsJson.append(unixTimestamp_ms);

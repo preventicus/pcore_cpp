@@ -36,9 +36,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class PpgMetaDataExampleFactory {
  public:
-  static Wavelength normalWavelength_nm();
+  static Wavelength wavelengthNormal1_nm();
+  static Wavelength wavelengthNormal2_nm();
   static Wavelength comparableWavelength_nm();
-  static Wavelength noWavelength_nm();
+  static Wavelength wavelengthNotSet_mn();
   static Wavelength absoluteJsonDataWavelength_nm1();
   static Wavelength absoluteJsonDataWavelength_nm2();
 
@@ -52,4 +53,7 @@ class PpgMetaDataExampleFactory {
   static PpgMetaData absoluteJsonDataPpg2();
 
   static PpgMetaData ppgMetaDataNotSet();
+
+  static PpgMetaDataJson buildPpgMetaDataJson(ProtobufColor color);
+  static PpgMetaDataJson buildPpgMetaDataJson(Wavelength wavelength_nm);
 };

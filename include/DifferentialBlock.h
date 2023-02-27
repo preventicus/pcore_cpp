@@ -40,6 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using ProtobufDifferentialBlock = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;
 using DifferentialValue = int32_t;
 using DifferentialValues = std::vector<DifferentialValue>;
+using DifferentialValuesJson = Json::Value;
 using DifferentialBlockJson = Json::Value;
 
 class DifferentialBlock final {

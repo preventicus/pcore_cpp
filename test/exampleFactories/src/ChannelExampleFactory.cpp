@@ -33,34 +33,83 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ChannelExampleFactory.h"
 
+Channel ChannelExampleFactory::channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm() {
+  AccMetaData accMetaData = AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesNormal();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return Channel(accMetaData, absoluteBlock);
+}
+
+Channel ChannelExampleFactory::channelWithNormalAbsoluteBlocksAndAccMetaDataWithCoordinateX() {
+  AccMetaData accMetaData = AccMetaData(ProtobufCoordinate::COORDINATE_X);
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesNormal();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return Channel(accMetaData, absoluteBlock);
+}
+
+Channel ChannelExampleFactory::channelWithNormalNegativeAbsoluteBlocksAndAccMetaDataWithNorm() {
+  AccMetaData accMetaData = AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesNormalNegative();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return Channel(accMetaData, absoluteBlock);
+}
+
+Channel ChannelExampleFactory::channelWithOneElementAbsoluteBlocksAndAccMetaDataWithNorm() {
+  AccMetaData accMetaData = AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesOneElement();
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(absoluteValues);
+  return Channel(accMetaData, absoluteBlock);
+}
+
+Channel ChannelExampleFactory::channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1() {
+  PpgMetaData ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::wavelengthNormal1_nm());
+  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesNormal();
+  DifferentialBlocks differentialBlocks = {DifferentialBlock(differentialValues)};
+  return Channel(ppgMetaData, differentialBlocks);
+}
+
+Channel ChannelExampleFactory::channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength2() {
+  PpgMetaData ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::wavelengthNormal2_nm());
+  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesNormal();
+  DifferentialBlocks differentialBlocks = {DifferentialBlock(differentialValues)};
+  return Channel(ppgMetaData, differentialBlocks);
+}
+
+Channel ChannelExampleFactory::channelWithNormalNegativeDifferentialBlocksAndPpgMetaDataWithNormalWavelength1() {
+  PpgMetaData ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::wavelengthNormal2_nm());
+  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesNormal();
+  DifferentialBlocks differentialBlocks = {DifferentialBlock(differentialValues)};
+  return Channel(ppgMetaData, differentialBlocks);
+}
+
 Channel ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   DifferentialBlocks differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
-  return Channel(accMetaData, differentialBlocks);
+  return Channel();
 }
 
 Channel ChannelExampleFactory::channelWithOneValueBlock() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockOneElement();
-  return Channel(accMetaData, absoluteBlock);
+  return Channel();
 }
 
 Channel ChannelExampleFactory::channelWithNUllValueBlock() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockEmpty();
-  return Channel(accMetaData, absoluteBlock);
+  return Channel();
 }
 
 Channel ChannelExampleFactory::channelWithAccMetaDataWithCoordinateY() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
   DifferentialBlocks differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
-  return Channel(accMetaData, differentialBlocks);
+  return Channel();
 }
 
 Channel ChannelExampleFactory::channelWithAccMetaDataWithNorm() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
   DifferentialBlocks differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
-  return Channel(accMetaData, differentialBlocks);
+  return Channel();
 }
 
 Channel ChannelExampleFactory::channelWithPpgMetaDataWithWavelength() {
@@ -88,8 +137,8 @@ Channels ChannelExampleFactory::normalVectorWithChannel() {
 
 Channel ChannelExampleFactory::channelWithAbsoluteBlocks() {
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  return Channel(accMetaData, absoluteBlock);
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  return Channel();
 }
 
 Channel ChannelExampleFactory::channelWithAbsoluteJsonDataPpg1() {
@@ -106,8 +155,8 @@ Channel ChannelExampleFactory::channelWithAbsoluteJsonDataPpg2() {
 
 Channel ChannelExampleFactory::channelWithAbsoluteJsonDataAcc() {
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockAcc();
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
-  return Channel(accMetaData, absoluteBlock);
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
+  return Channel();
 }
 
 Channels ChannelExampleFactory::comparableVectorWithChannel() {
@@ -141,8 +190,8 @@ Channel ChannelExampleFactory::channelWithDifferentialJsonDataPpg2() {
 
 Channel ChannelExampleFactory::channelWithDifferentialJsonDataAcc() {
   DifferentialBlocks differentialBlocks = DifferentialBlockExampleFactory::differentialJsonDataBlockAcc();
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
-  return Channel(accMetaData, differentialBlocks);
+  // AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
+  return Channel();
 }
 
 Channel ChannelExampleFactory::channelWithOneValueInLastBlock() {

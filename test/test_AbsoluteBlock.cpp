@@ -36,58 +36,71 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteBlockTest : public ::testing::Test {
  protected:
-  AbsoluteBlock absoluteBlockNormal1 = AbsoluteBlockExampleFactory::absoluteBlockNormal();
-  AbsoluteBlock absoluteBlockNormal2 = AbsoluteBlockExampleFactory::absoluteBlockNormal();
-  AbsoluteBlock absoluteBlockWithTwoElement1 = AbsoluteBlockExampleFactory::absoluteBlockTwoElement();
-  AbsoluteBlock absoluteBlockWithTwoElement2 = AbsoluteBlockExampleFactory::absoluteBlockTwoElement();
-  AbsoluteBlock absoluteBlockWithOneElement1 = AbsoluteBlockExampleFactory::absoluteBlockOneElement();
-  AbsoluteBlock absoluteBlockWithOneElement2 = AbsoluteBlockExampleFactory::absoluteBlockOneElement();
-  AbsoluteBlock absoluteBlockWith0Element1 = AbsoluteBlockExampleFactory::absoluteBlock0Element();
-  AbsoluteBlock absoluteBlockWith0Element2 = AbsoluteBlockExampleFactory::absoluteBlock0Element();
-  AbsoluteBlock absoluteBlockEmpty1 = AbsoluteBlockExampleFactory::absoluteBlockEmpty();
-  AbsoluteBlock absoluteBlockEmpty2 = AbsoluteBlockExampleFactory::absoluteBlockEmpty();
+  AbsoluteValues absoluteValuesNormal = AbsoluteValuesExampleFactory::absoluteValuesNormal();
+  AbsoluteValues absoluteValuesEmpty = AbsoluteValuesExampleFactory::absoluteValuesEmpty();
+  AbsoluteValues absoluteValuesOneElement = AbsoluteValuesExampleFactory::absoluteValuesOneElement();
+  AbsoluteValues absoluteValuesNormalNegative = AbsoluteValuesExampleFactory::absoluteValuesNormalNegative();
 };
 
-TEST_F(AbsoluteBlockTest, TestGetValues) {
-  EXPECT_EQ(this->absoluteBlockNormal1.getAbsoluteValues(), AbsoluteBlockExampleFactory::absoluteValuesNormal());
+TEST_F(AbsoluteBlockTest, TestGetAbsoluteValues) {
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(this->absoluteValuesNormal);
+  EXPECT_EQ(absoluteBlock.getAbsoluteValues(), this->absoluteValuesNormal);
 }
 
-TEST_F(AbsoluteBlockTest, TestGetEmptyValues) {
-  EXPECT_EQ(this->absoluteBlockEmpty1.getAbsoluteValues(), AbsoluteBlockExampleFactory::absoluteValuesEmpty());
+TEST_F(AbsoluteBlockTest, TestGetEmptyAbsoluteValues) {
+  AbsoluteBlock absoluteBlock = AbsoluteBlock(this->absoluteValuesEmpty);
+  EXPECT_EQ(absoluteBlock.getAbsoluteValues(), this->absoluteValuesEmpty);
 }
 
-TEST_F(AbsoluteBlockTest, TestGet0Values) {
-  EXPECT_EQ(this->absoluteBlockWith0Element1.getAbsoluteValues(), AbsoluteBlockExampleFactory::absoluteValues0Element());
+TEST_F(AbsoluteBlockTest, CompareEqualNormalBlocks) {
+  AbsoluteBlock absoluteBlock1 = AbsoluteBlock(this->absoluteValuesNormal);
+  AbsoluteBlock absoluteBlock2 = AbsoluteBlock(this->absoluteValuesNormal);
+  EXPECT_TRUE(absoluteBlock1.isEqual(absoluteBlock2));
 }
 
-TEST_F(AbsoluteBlockTest, CompareEmptyAndFullBlocks) {
-  EXPECT_FALSE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockEmpty1));
-}
-
-TEST_F(AbsoluteBlockTest, CompareShortAndFullBlocks) {
-  EXPECT_FALSE(this->absoluteBlockWithOneElement1.isEqual(this->absoluteBlockNormal1));
-}
-
-TEST_F(AbsoluteBlockTest, CompareSameContentBlocks) {
-  EXPECT_TRUE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockNormal2));
-}
-
-TEST_F(AbsoluteBlockTest, CompareFullAndShortBlocks) {
-  EXPECT_FALSE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockWithOneElement1));
-}
-
-TEST_F(AbsoluteBlockTest, CompareLongWithMediumBlocks) {
-  EXPECT_FALSE(this->absoluteBlockNormal1.isEqual(this->absoluteBlockWithTwoElement1));
+TEST_F(AbsoluteBlockTest, CompareNotEqualNormalBlocks) {
+  AbsoluteBlock absoluteBlock1 = AbsoluteBlock(this->absoluteValuesNormal);
+  AbsoluteBlock absoluteBlock2 = AbsoluteBlock(this->absoluteValuesNormalNegative);
+  EXPECT_FALSE(absoluteBlock1.isEqual(absoluteBlock2));
 }
 
 TEST_F(AbsoluteBlockTest, CompareEmptyWithEmptyBlocks) {
-  EXPECT_TRUE(this->absoluteBlockEmpty1.isEqual(this->absoluteBlockEmpty2));
+  AbsoluteBlock absoluteBlock1 = AbsoluteBlock(this->absoluteValuesEmpty);
+  AbsoluteBlock absoluteBlock2 = AbsoluteBlock(this->absoluteValuesEmpty);
+  EXPECT_TRUE(absoluteBlock1.isEqual(absoluteBlock2));
 }
 
-TEST_F(AbsoluteBlockTest, CompareZeroWithZeroBlocks) {
-  EXPECT_TRUE(this->absoluteBlockWith0Element1.isEqual(this->absoluteBlockWith0Element2));
+TEST_F(AbsoluteBlockTest, CompareEmptyWithNormalBlocks) {
+  AbsoluteBlock absoluteBlock1 = AbsoluteBlock(this->absoluteValuesNormal);
+  AbsoluteBlock absoluteBlock2 = AbsoluteBlock(this->absoluteValuesEmpty);
+  EXPECT_FALSE(absoluteBlock1.isEqual(absoluteBlock2));
 }
 
-TEST_F(AbsoluteBlockTest, CompareEmptyWithZeroBlocks) {
-  EXPECT_FALSE(this->absoluteBlockWith0Element1.isEqual(this->absoluteBlockEmpty1));
+TEST_F(AbsoluteBlockTest, CompareBlocksWithDifferentSize) {
+  AbsoluteBlock absoluteBlock1 = AbsoluteBlock(this->absoluteValuesNormal);
+  AbsoluteBlock absoluteBlock2 = AbsoluteBlock(this->absoluteValuesOneElement);
+  EXPECT_FALSE(absoluteBlock1.isEqual(absoluteBlock2));
+}
+
+TEST_F(AbsoluteBlockTest, TestToJson) {
+  AbsoluteBlock absoluteBlockN1 = AbsoluteBlock(this->absoluteValuesNormal);
+  AbsoluteBlock absoluteBlockE1 = AbsoluteBlock(this->absoluteValuesEmpty);
+  AbsoluteBlock absoluteBlockO1 = AbsoluteBlock(this->absoluteValuesOneElement);
+  AbsoluteBlock absoluteBlockNN1 = AbsoluteBlock(this->absoluteValuesNormalNegative);
+  AbsoluteBlockJson absoluteBlockJsonN1 = absoluteBlockN1.toJson();
+  AbsoluteBlockJson absoluteBlockJsonE1 = absoluteBlockE1.toJson();
+  AbsoluteBlockJson absoluteBlockJsonO1 = absoluteBlockO1.toJson();
+  AbsoluteBlockJson absoluteBlockJsonNN1 = absoluteBlockNN1.toJson();
+  AbsoluteValuesJson absoluteValuesJsonN = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(this->absoluteValuesNormal);
+  AbsoluteValuesJson absoluteValuesJsonE = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(this->absoluteValuesEmpty);
+  AbsoluteValuesJson absoluteValuesJsonO = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(this->absoluteValuesOneElement);
+  AbsoluteValuesJson absoluteValuesJsonNN = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(this->absoluteValuesNormalNegative);
+  AbsoluteBlockJson absoluteBlockJsonN2 = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteValuesJsonN);
+  AbsoluteBlockJson absoluteBlockJsonE2 = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteValuesJsonE);
+  AbsoluteBlockJson absoluteBlockJsonO2 = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteValuesJsonO);
+  AbsoluteBlockJson absoluteBlockJsonNN2 = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteValuesJsonNN);
+  EXPECT_TRUE(absoluteBlockJsonN1 == absoluteBlockJsonN2);
+  EXPECT_TRUE(absoluteBlockJsonE1 == absoluteBlockJsonE2);
+  EXPECT_TRUE(absoluteBlockJsonO1 == absoluteBlockJsonO2);
+  EXPECT_TRUE(absoluteBlockJsonNN1 == absoluteBlockJsonNN2);
 }

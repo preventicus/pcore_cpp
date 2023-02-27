@@ -33,20 +33,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "AbsoluteTimestampsContainer.h"
+#include "UnixTimestampsExampleFactory.h"
 
 class AbsoluteTimestampsContainerExampleFactory {
  public:
-  static UnixTimestamps unixTimestampsNormal_ms();
-  static UnixTimestamps unixTimestampsTwoElements_ms();
-  static UnixTimestamps unixTimestampsOneElement_ms();
-  static UnixTimestamps unixTimestamps0_ms();
-  static UnixTimestamps unixTimestampsEmpty_ms();
-  static UnixTimestamps normalUnixTimestamps_ms();
-  static UnixTimestamps absoluteJsonDataUNixTimestampsPpg();
-  static UnixTimestamps absoluteJsonDataUNixTimestampsAcc();
-  static UnixTimestamps absoluteTimestampWithOneUnixInLastBlock();
-  static UnixTimestamps absoluteTimestampWithEqualTimestampIntervals();
-
   static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerPgg();
   static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerAcc();
   static AbsoluteTimestampsContainer absoluteTimestampsNormal();
@@ -57,4 +47,7 @@ class AbsoluteTimestampsContainerExampleFactory {
   static AbsoluteTimestampsContainer absoluteTimestampsEmpty();
   static AbsoluteTimestampsContainer normalAbsoluteTimestamps();
   static AbsoluteTimestampsContainer absoluteTimestampsBlockWithEqualTimestampIntervals();
+
+  static AbsoluteTimestampsContainer buildAbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps);
+  static AbsoluteTimestampsContainerJson buildAbsoluteTimestampsContainerJson(UnixTimestampsJson& unixTimestampsJson);
 };
