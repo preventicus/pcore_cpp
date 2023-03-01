@@ -65,7 +65,7 @@ TEST_F(JsonTest, TestToJsonAbsoluteForm) {
   file >> inputJson;
   ProtobufData data;
   Data(inputJson["data"]).serialize(&data);
-  Json::Value outputJson = Data(data).toJson(DataForm::ABSOLUTE);
+  Json::Value outputJson = Data(data).toJson(DataForm::DATA_FORM_ABSOLUTE);
   Json::Value inputJsonHeader = inputJson["data"]["header"];
   Json::Value outputJsonHeader = outputJson["data"]["header"];
   Json::Value inputJsonVersion = inputJsonHeader["version"];
@@ -124,7 +124,7 @@ TEST_F(JsonTest, TestToJsonDifferentialForm) {
   file >> inputJson;
   ProtobufData data;
   Data(inputJson["data"]).serialize(&data);
-  Json::Value outputJson = Data(data).toJson(DataForm::DIFFERENTIAL);
+  Json::Value outputJson = Data(data).toJson(DataForm::DATA_FORM_DIFFERENTIAL);
   Json::Value inputJsonHeader = inputJson["data"]["header"];
   Json::Value outputJsonHeader = outputJson["data"]["header"];
   Json::Value inputJsonVersion = inputJsonHeader["version"];

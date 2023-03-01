@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteBlock.h"
 #include "AccMetaData.h"
 #include "BlockIdx.h"
-#include "DataFormat.h"
+#include "DataForm.h"
 #include "DifferentialBlock.h"
 #include "PpgMetaData.h"
 #include "protobuf/pcore_raw.pb.h"
