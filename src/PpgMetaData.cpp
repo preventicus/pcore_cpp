@@ -47,7 +47,8 @@ PpgMetaData::PpgMetaData(Wavelength wavelength_nm) {
 
 PpgMetaData::PpgMetaData(PpgMetaDataJson& ppgMetaDataJson) {
   Wavelength wavelength_nm = ppgMetaDataJson["wavelength_nm"].asUInt();
-  ProtobufColor protobufColor = PpgMetaData::protobufColorFromString(ppgMetaDataJson["color"].asString());
+  ProtobufColorString protobufColorString = ppgMetaDataJson["color"].asString();
+  ProtobufColor protobufColor = PpgMetaData::protobufColorFromString(protobufColorString);
   if (wavelength_nm != 0 && protobufColor != ProtobufColor::COLOR_NONE) {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
   }
@@ -129,7 +130,7 @@ ProtobufColorString PpgMetaData::protobufColorToString(ProtobufColor protobufCol
   }
 }
 
-ProtobufColor PpgMetaData::protobufColorFromString(ProtobufColorString protobufColorString) {
+ProtobufColor PpgMetaData::protobufColorFromString(ProtobufColorString& protobufColorString) {
   if (protobufColorString == "COLOR_RED") {
     return ProtobufColor::COLOR_RED;
   } else if (protobufColorString == "COLOR_BLUE") {

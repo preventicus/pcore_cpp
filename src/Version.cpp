@@ -81,14 +81,14 @@ void Version::serialize(ProtobufVersion* protobufVersion) {
 }
 
 VersionJson Version::toJson() {
-  MajorJson major(this->major);
-  MinorJson minor(this->minor);
-  PatchJson patch(this->patch);
-  VersionJson jsonVersion;
-  jsonVersion["major"] = major;
-  jsonVersion["minor"] = minor;
-  jsonVersion["patch"] = patch;
-  return jsonVersion;
+  MajorJson majorJson(this->major);
+  MinorJson minorJson(this->minor);
+  PatchJson patchJson(this->patch);
+  VersionJson versionJson;
+  versionJson["major"] = majorJson;
+  versionJson["minor"] = minorJson;
+  versionJson["patch"] = patchJson;
+  return versionJson;
 }
 
 void Version::deserialize(const ProtobufVersion& protobufVersion) {

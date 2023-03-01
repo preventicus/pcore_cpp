@@ -54,7 +54,7 @@ class Header final {
   HeaderJson toJson(DataForm dataForm);
   void serialize(ProtobufHeader* protobufHeader);
 
-  static DataForm dataFormFromString(DataFormString dataFormString);
+  static DataForm dataFormFromString(DataFormString& dataFormString);
   static DataFormString dataFormToString(DataForm dataForm);
 
  private:

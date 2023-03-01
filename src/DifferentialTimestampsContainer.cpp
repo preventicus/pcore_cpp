@@ -92,12 +92,11 @@ UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBloc
   if (this->blockIntervals_ms.size() <= blockIdx) {  // toDo : FOR-325
     throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
   }
-  UnixTimestamp firstUnixTimestamp_ms = this->firstUnixTimestamp_ms;
-  BlockIntervals blockIntervals_ms = this->blockIntervals_ms;
+  UnixTimestamp firstUnixTimestampInBlock_ms = this->firstUnixTimestamp_ms;
   for (size_t i = 1; i <= blockIdx; i++) {
-    firstUnixTimestamp_ms += blockIntervals_ms[i];
+    firstUnixTimestampInBlock_ms += this->blockIntervals_ms[i];
   }
-  return firstUnixTimestamp_ms;
+  return firstUnixTimestampInBlock_ms;
 }
 
 UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock(BlockIdx& blockIdx,

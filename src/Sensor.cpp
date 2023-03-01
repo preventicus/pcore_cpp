@@ -47,7 +47,8 @@ Sensor::Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestam
 }
 
 Sensor::Sensor(SensorJson& sensor, DataForm dataForm) {
-  this->sensorType = Sensor::senorTypeFromString(sensor["sensor_type"].asString());
+  SensorTypeString sensorTypeString = sensor["sensor_type"].asString();
+  this->sensorType = Sensor::senorTypeFromString(sensorTypeString);
   ChannelsJson channelsJson = sensor["channels"];
   Channels channels;
   channels.reserve(channelsJson.size());
@@ -275,7 +276,7 @@ void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
   this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(this->differentialTimestampsContainer);
 }
 
-ProtobufSensorType Sensor::senorTypeFromString(SensorTypeString senorTypeString) {
+ProtobufSensorType Sensor::senorTypeFromString(SensorTypeString& senorTypeString) {
   if (senorTypeString == "SENSOR_TYPE_PPG") {
     return ProtobufSensorType::SENSOR_TYPE_PPG;
   } else if (senorTypeString == "SENSOR_TYPE_ACC") {

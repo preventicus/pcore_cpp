@@ -41,7 +41,8 @@ Data::Data(const ProtobufData& protobufData) {
 
 Data::Data(DataJson& dataJson) {
   HeaderJson headerJson = dataJson["header"];
-  DataForm dataForm = Header::dataFormFromString(headerJson["data_form"].asString());
+  DataFormString dataFormString = headerJson["data_form"].asString();
+  DataForm dataForm = Header::dataFormFromString(dataFormString);
   this->raw = Raw(dataJson["raw"], dataForm);
   this->header = Header(headerJson);
 }

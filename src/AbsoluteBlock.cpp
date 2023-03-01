@@ -42,7 +42,7 @@ AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson) {
   AbsoluteValues absoluteValues;
   absoluteValues.reserve(absoluteValuesJson.size());
   for (auto& absoluteValueJson : absoluteValuesJson) {
-    absoluteValues.push_back(absoluteValueJson.asUInt64());
+    absoluteValues.push_back(absoluteValueJson.asInt());
   }
   this->absoluteValues = absoluteValues;
 }
@@ -61,10 +61,10 @@ bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
 
 AbsoluteBlockJson AbsoluteBlock::toJson() {
   AbsoluteBlockJson absoluteBlock;
-  AbsoluteValuesJson absoluteValues(Json::arrayValue);
+  AbsoluteValuesJson absoluteValuesJson(Json::arrayValue);
   for (auto& absoluteValue : this->absoluteValues) {
-    absoluteValues.append(absoluteValue);
+    absoluteValuesJson.append(absoluteValue);
   }
-  absoluteBlock["absolute_values"] = absoluteValues;
+  absoluteBlock["absolute_values"] = absoluteValuesJson;
   return absoluteBlock;
 }
