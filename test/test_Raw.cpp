@@ -43,8 +43,8 @@ class RawTest : public ::testing::Test {
 };
 
 TEST_F(RawTest, TestGetMethodeRaw) {
-  std::vector<Sensor> sensors = this->normalRawWithAccMetaData1.getSensors();
-  std::vector<Sensor> comparableSensors = SensorExampleFactory::normalVectorWithSensors();
+  Sensors sensors = this->normalRawWithAccMetaData1.getSensors();
+  Sensors comparableSensors = SensorExampleFactory::normalVectorWithSensors();
   for (size_t i = 0; i < sensors.size(); i++) {
     EXPECT_TRUE(sensors[i].isEqual(comparableSensors[i]));
   }

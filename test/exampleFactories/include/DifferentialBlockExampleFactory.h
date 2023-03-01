@@ -32,21 +32,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "Channel.h"
 #include "DifferentialBlock.h"
 
 class DifferentialBlockExampleFactory {
  public:
-  static std::vector<int32_t> differentialValuesNormal();
-  static std::vector<int32_t> differentialValuesNormalNeagtive();
-  static std::vector<int32_t> differentialValuesOneNegative();
-  static std::vector<int32_t> differentialValuesOnePositive();
-  static std::vector<int32_t> differentialValues0();
-  static std::vector<int32_t> differentialValuesEmpty();
+  static DifferentialValues differentialValuesNormal();
+  static DifferentialValues differentialValuesNormalNeagtive();
+  static DifferentialValues differentialValuesOneNegative();
+  static DifferentialValues differentialValuesOnePositive();
+  static DifferentialValues differentialValues0();
+  static DifferentialValues differentialValuesEmpty();
 
-  static std::vector<int32_t> expectedDifferentialValues1();
-  static std::vector<int32_t> expectedDifferentialValues2();
-  static std::vector<int32_t> expectedDifferentialValues3();
-  static std::vector<int32_t> expectedDifferentialValues4();
+  static DifferentialValues expectedDifferentialValues1();
+  static DifferentialValues expectedDifferentialValues2();
+  static DifferentialValues expectedDifferentialValues3();
+  static DifferentialValues expectedDifferentialValues4();
 
   static DifferentialBlock differentialBlockNormal();
   static DifferentialBlock differentialBlockWithNegativeValues();

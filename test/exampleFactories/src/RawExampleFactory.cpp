@@ -34,17 +34,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "RawExampleFactory.h"
 
 Raw RawExampleFactory::normalRaw() {
-  return Raw(SensorExampleFactory::normalVectorWithSensors());
+  Sensors sensors = SensorExampleFactory::normalVectorWithSensors();
+  return Raw(sensors);
 }
 
 Raw RawExampleFactory::comparableRaw() {
-  return Raw(SensorExampleFactory::comparableVectorWithSensors());
+  Sensors sensors = SensorExampleFactory::comparableVectorWithSensors();
+  return Raw(sensors);
 }
 
 Raw RawExampleFactory::absoluteJsonDataRaw() {
-  return Raw(SensorExampleFactory::vectorWithAbsoluteJsonDataSensor());
+  Sensors sensors = SensorExampleFactory::vectorWithAbsoluteJsonDataSensor();
+  return Raw(sensors);
 }
 
 Raw RawExampleFactory::differentialJsonDataRaw() {
-  return Raw(SensorExampleFactory::vectorWithDifferentialJsonDataSensor());
+  Sensors sensors = SensorExampleFactory::vectorWithDifferentialJsonDataSensor();
+  return Raw(sensors);
 }

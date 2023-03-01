@@ -33,29 +33,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Data.h"
 
-Data::Data(Raw raw, Header header) : raw(raw), header(header) {}
+Data::Data(Raw& raw, Header& header) : raw(raw), header(header) {}
 
 Data::Data(const ProtobufData& protobufData) {
   this->deserialize(protobufData);
 }
 
-Data::Data(Json::Value& data) {
-  Json::Value headerJson = data["header"];
-  switch (this->toEnum(headerJson["data_form"])) {
-    case DataForm::ABSOLUTE: {
-      this->raw = Raw(data["raw"], this->toEnum(headerJson["data_form"]));
-      this->header = Header(headerJson);
-      break;
-    }
-    case DataForm::DIFFERENTIAL: {
-      this->raw = Raw(data["raw"], this->toEnum(headerJson["data_form"]));
-      this->header = Header(headerJson);
-      break;
-    }
-    default: {
-      break;
-    }
-  }
+Data::Data(DataJson& dataJson) {
+  HeaderJson headerJson = dataJson["header"];
+  DataForm dataForm = Header::dataFormFromString(headerJson["data_form"].asString());
+  this->raw = Raw(dataJson["raw"], dataForm);
+  this->header = Header(headerJson);
 }
 
 Data::Data() {
@@ -88,10 +76,10 @@ void Data::serialize(ProtobufData* protobufData) {
 }
 
 Json::Value Data::toJson(DataForm dataForm) {
-  Json::Value data;
-  Json::Value json;
+  DataJson data;
   data["header"] = this->header.toJson(dataForm);
   data["raw"] = this->raw.toJson(dataForm);
+  Json::Value json;
   json["data"] = data;
   return json;
 }
@@ -99,13 +87,4 @@ Json::Value Data::toJson(DataForm dataForm) {
 void Data::deserialize(const ProtobufData& protobufData) {
   this->header = Header(protobufData.header());
   this->raw = Raw(protobufData.raw());
-}
-
-DataForm Data::toEnum(Json::Value string) {
-  if (string.asString() == "ABSOLUTE") {
-    return DataForm::ABSOLUTE;
-  }
-  if (string.asString() == "DIFFERENTIAL") {
-    return DataForm::DIFFERENTIAL;
-  }
 }

@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+
 #include "AbsoluteTimestampsContainer.h"
 #include "Channel.h"
 #include "DifferentialTimestampsContainer.h"
@@ -39,38 +40,43 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_sensor_type.pb.h"
 
 using ProtobufSensor = com::preventicus::pcore::Raw_Sensor;
+using Channels = std::vector<Channel>;
+using SensorTypeString = std::string;
+using SensorJson = Json::Value;
+using Duration = uint64_t;
 
 class Sensor final {
  public:
-  Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensorType protobufSensorType);
-  Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensorType protobufSensorType);
-  Sensor(Json::Value& sensor, DataForm dataForm);
+  Sensor(Channels& channels, DifferentialTimestampsContainer& differentialTimestampsContainer, ProtobufSensorType protobufSensorType);
+  Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestampsContainer, ProtobufSensorType protobufSensorType);
+  Sensor(SensorJson& sensor, DataForm dataForm);
   Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
 
   ProtobufSensorType getSensorType();
-  std::vector<Channel> getChannels();
+  Channels getChannels();
   DifferentialTimestampsContainer getDifferentialTimestamps();
   AbsoluteTimestampsContainer getAbsoluteTimestamps();
-  uint64_t getFirstTimestamp();
-  uint64_t getLastTimestamp();
-  uint64_t getDuration();
+  UnixTimestamp getFirstUnixTimestamp();
+  UnixTimestamp getLastUnixTimestamp();
+  Duration getDuration();
 
   bool isEqual(Sensor& Sensor);
-  Json::Value toJson(DataForm dataForm);
+  SensorJson toJson(DataForm dataForm);
   void serialize(ProtobufSensor* protobufSensor);
 
- private:
-  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer differentialTimestamps);
-  DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer absoluteTimestamps, std::vector<size_t> blocksIdxs);
-  std::vector<size_t> findBlocksIdxs();
+  static ProtobufSensorType senorTypeFromString(SensorTypeString senorTypeString);
+  static SensorTypeString senorTypeToString(ProtobufSensorType protobufSensorType);
 
-  std::string toString(ProtobufSensorType protobufSensorType);
-  ProtobufSensorType toEnum(Json::Value protobufSensorType);
+ private:
+  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer& differentialTimestampsContainer);
+  DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer& absoluteTimestampsContainer, BlockIdxs& blockIdxs);
+  BlockIdxs findBlockIdxs();
+
   void deserialize(const ProtobufSensor& protobufSensor);
 
-  ProtobufSensorType protobufSensorType;
-  std::vector<Channel> channels;
+  ProtobufSensorType sensorType;
+  Channels channels;
   DifferentialTimestampsContainer differentialTimestampsContainer;
   AbsoluteTimestampsContainer absoluteTimestampsContainer;
 };

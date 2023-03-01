@@ -45,10 +45,8 @@ TEST_F(JsonTest, JsonObjectWithAbsoluteDataForm) {
   std::ifstream file(this->getJsonPath("absolute_pcore.json"));
   Json::Value inputJson;
   file >> inputJson;
-  std::cout << inputJson << std::endl;
   Data pcoreAbsoluteData = Data(inputJson["data"]);
   Data outputJson = DataExampleFactory::absoluteJsonData();
-  std::cout << outputJson.toJson(DataForm::ABSOLUTE) << std::endl;
   EXPECT_TRUE(pcoreAbsoluteData.isEqual(outputJson));
 }
 
@@ -58,7 +56,6 @@ TEST_F(JsonTest, JsonObjectWithDifferentialDataForm) {
   file >> inputJson;
   Data pcoreDifferentialData = Data(inputJson["data"]);
   Data outputJson = DataExampleFactory::differentialJsonData();
-  std::cout << outputJson.toJson(DataForm::DIFFERENTIAL) << std::endl;
   EXPECT_TRUE(pcoreDifferentialData.isEqual(outputJson));
 }
 

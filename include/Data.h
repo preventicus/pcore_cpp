@@ -38,23 +38,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore.pb.h"
 
 using ProtobufData = com::preventicus::pcore::Data;
+using DataJson = Json::Value;
 
 class Data final {
  public:
-  Data(Raw raw, Header header);
+  Data(Raw& raw, Header& header);
   Data(const ProtobufData& protobufData);
-  Data(Json::Value& data);
+  Data(DataJson& dataJson);
   Data();
 
   Raw getRaw();
   Header getHeader();
   bool isEqual(Data& data);
-  Json::Value toJson(DataForm dataForm);
+  DataJson toJson(DataForm dataform);
   void serialize(ProtobufData* protobufData);
 
  private:
   void deserialize(const ProtobufData& protobufData);
-  DataForm toEnum(Json::Value string);
+
   Raw raw;
   Header header;
 };

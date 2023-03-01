@@ -36,17 +36,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class VersionExampleFactory {
  public:
-  static uint32_t majorOne();
-  static uint32_t minorOne();
-  static uint32_t patchOne();
+  static Major majorOne();
+  static Minor minorOne();
+  static Patch patchOne();
 
-  static uint32_t majorTwo();
-  static uint32_t minorTwo();
-  static uint32_t patchTwo();
+  static Major majorTwo();
+  static Minor minorTwo();
+  static Patch patchTwo();
 
-  static uint32_t majorZero();
-  static uint32_t minorZero();
-  static uint32_t patchZero();
+  static Major majorZero();
+  static Minor minorZero();
+  static Patch patchZero();
 
   static Version normalVersion();
   static Version startVersion();

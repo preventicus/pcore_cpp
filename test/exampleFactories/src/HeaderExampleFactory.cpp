@@ -33,31 +33,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "HeaderExampleFactory.h"
 
-int32_t HeaderExampleFactory::positiveTimeZoneOffset_min() {
+TimeZoneOffset HeaderExampleFactory::positiveTimeZoneOffset_min() {
   return 120;
 }
 
-int32_t HeaderExampleFactory::negativeTimeZoneOffset_min() {
+TimeZoneOffset HeaderExampleFactory::negativeTimeZoneOffset_min() {
   return -120;
 }
 
-int32_t HeaderExampleFactory::noTimeZoneOffset_min() {
+TimeZoneOffset HeaderExampleFactory::noTimeZoneOffset_min() {
   return 0;
 }
 
-int32_t HeaderExampleFactory::maxTimeZoneOffset_min() {
+TimeZoneOffset HeaderExampleFactory::maxTimeZoneOffset_min() {
   return 840;
 }
 
-int32_t HeaderExampleFactory::minTimeZoneOffset_min() {
+TimeZoneOffset HeaderExampleFactory::minTimeZoneOffset_min() {
   return -720;
 }
 
-int32_t HeaderExampleFactory::invalidPositiveTimeZoneOffset_min() {
+TimeZoneOffset HeaderExampleFactory::invalidPositiveTimeZoneOffset_min() {
   return 1000;
 }
 
-int32_t HeaderExampleFactory::invalidNegativeTimeZoneOffset_min() {
+TimeZoneOffset HeaderExampleFactory::invalidNegativeTimeZoneOffset_min() {
   return -1000;
 }
 

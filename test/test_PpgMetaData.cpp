@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class PpgMetaDataTest : public ::testing::Test {
  protected:
-  uint32_t noWavelength_mn = PpgMetaDataExampleFactory::noWavelength_nm();
+  Wavelength noWavelength_mn = PpgMetaDataExampleFactory::noWavelength_nm();
 
   PpgMetaData ppgMetDataWithColorGreen1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   PpgMetaData ppgMetDataWithColorGreen2 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();

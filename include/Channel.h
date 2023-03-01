@@ -32,8 +32,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+
 #include "AbsoluteBlock.h"
 #include "AccMetaData.h"
+#include "BlockIdx.h"
 #include "DataFormat.h"
 #include "DifferentialBlock.h"
 #include "PpgMetaData.h"
@@ -41,36 +43,39 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
 using ProtobufSensorType = com::preventicus::pcore::SensorType;
+using BlockIdxs = std::vector<BlockIdx>;
+using DifferentialBlocks = std::vector<DifferentialBlock>;
+using ChannelJson = Json::Value;
 
 class Channel final {
  public:
-  Channel(AccMetaData& accMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs);
-  Channel(PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs);
-  Channel(PpgMetaData& ppgMetaData, std::vector<DifferentialBlock>& differentialBlocks);
-  Channel(AccMetaData& accMetaData, std::vector<DifferentialBlock>& differentialBlocks);
-  Channel(Json::Value& channel, ProtobufSensorType sensorType, std::vector<size_t> blockIdxs);
-  Channel(Json::Value& channel, ProtobufSensorType sensorType);
+  Channel(AccMetaData& accMetadata, AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
+  Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
+  Channel(PpgMetaData& ppgMetaData, DifferentialBlocks& differentialBlocks);
+  Channel(AccMetaData& accMetaData, DifferentialBlocks& differentialBlocks);
+  Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, BlockIdxs& blockIdxs);
+  Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType);
   Channel(const ProtobufChannel& protobufChannel);
   Channel();
 
-  std::vector<DifferentialBlock> getDifferentialBlocks();
+  DifferentialBlocks getDifferentialBlocks();
   AbsoluteBlock getAbsoluteBlock();
   AccMetaData getAccMetaData();
   PpgMetaData getPpgMetaData();
 
   bool isEqual(Channel& channel);
-  Json::Value toJson(DataForm dataForm, ProtobufSensorType protobufSensorType);
+  ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType);
   void serialize(ProtobufChannel* protobufChannel);
 
  private:
-  std::vector<DifferentialBlock> calculateDifferentialBlocks(AbsoluteBlock absoluteBlock, std::vector<size_t> blockIdxs);
-  DifferentialBlock createDifferentialBlock(size_t fromIdx, size_t toIdx);
-  AbsoluteBlock calculateAbsoluteBlock(std::vector<DifferentialBlock> differentialBlocks);
+  DifferentialBlocks calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
+  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx);
+  AbsoluteBlock calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks);
 
   void deserialize(const ProtobufChannel& protobufChannel);
 
   PpgMetaData ppgMetaData;
   AccMetaData accMetaData;
-  std::vector<DifferentialBlock> differentialBlocks;
+  DifferentialBlocks differentialBlocks;
   AbsoluteBlock absoluteBlock;
 };

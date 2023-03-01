@@ -33,18 +33,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DifferentialBlock.h"
 
-DifferentialBlock::DifferentialBlock(std::vector<int32_t>& differentialValues) : differentialValues(differentialValues) {}
+using DifferentialValuesJson = Json::Value;
+
+DifferentialBlock::DifferentialBlock(DifferentialValues& differentialValues) : differentialValues(differentialValues) {}
 
 DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
   this->deserialize(protobufDifferentialBlock);
 }
 
-DifferentialBlock::DifferentialBlock(Json::Value& differentialBlock) {
-  Json::Value differentialBlockJson = differentialBlock["differential_values"];
-  std::vector<int32_t> differentialValues = {};
-  differentialValues.reserve(differentialBlockJson.size());
-  for (auto& differentialValuesJson : differentialBlockJson) {
-    differentialValues.push_back(differentialValuesJson.asInt());
+DifferentialBlock::DifferentialBlock(DifferentialBlockJson& differentialBlockJson) {
+  DifferentialValuesJson differentialValuesJson = differentialBlockJson["differential_values"];
+  DifferentialValues differentialValues = {};
+  differentialValues.reserve(differentialValuesJson.size());
+  for (auto& differentialValueJson : differentialValuesJson) {
+    differentialValues.push_back(differentialValueJson.asInt());
   }
   this->differentialValues = differentialValues;
 }
@@ -53,7 +55,7 @@ DifferentialBlock::DifferentialBlock() {
   this->differentialValues = {};
 }
 
-std::vector<int32_t> DifferentialBlock::getDifferentialValues() {
+DifferentialValues DifferentialBlock::getDifferentialValues() {
   return this->differentialValues;
 }
 
@@ -70,14 +72,14 @@ void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentia
   }
 }
 
-Json::Value DifferentialBlock::toJson() {
-  Json::Value differentialBlock;
-  Json::Value differentialValues(Json::arrayValue);
+DifferentialBlockJson DifferentialBlock::toJson() {
+  DifferentialValuesJson differentialValuesJson(Json::arrayValue);
   for (auto& differentialValue : this->differentialValues) {
-    differentialValues.append(differentialValue);
+    differentialValuesJson.append(differentialValue);
   }
-  differentialBlock["differential_values"] = differentialValues;
-  return differentialBlock;
+  DifferentialBlockJson differentialBlockJson;
+  differentialBlockJson["differential_values"] = differentialValuesJson;
+  return differentialBlockJson;
 }
 
 void DifferentialBlock::deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock) {

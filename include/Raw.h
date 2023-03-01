@@ -33,25 +33,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "Sensor.h"
-
 #include "protobuf/pcore.pb.h"
 
 using ProtobufRaw = com::preventicus::pcore::Raw;
+using Sensors = std::vector<Sensor>;
+using RawJson = Json::Value;
 
 class Raw final {
  public:
-  Raw(std::vector<Sensor> sensors);
+  Raw(Sensors& sensors);
   Raw(const ProtobufRaw& protobufRaw);
-  Raw(Json::Value& raw, DataForm dataForm);
+  Raw(RawJson& rawJson, DataForm dataForm);
   Raw();
 
-  std::vector<Sensor> getSensors();
+  Sensors getSensors();
   bool isEqual(Raw& protobufRaw);
-  Json::Value toJson(DataForm dataForm);
+  RawJson toJson(DataForm dataForm);
   void serialize(ProtobufRaw* protobufRaw);
 
  private:
   void deserialize(const ProtobufRaw& protobufRaw);
 
-  std::vector<Sensor> sensors;
+  Sensors sensors;
 };

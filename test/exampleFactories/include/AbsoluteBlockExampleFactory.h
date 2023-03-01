@@ -36,16 +36,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteBlockExampleFactory {
  public:
-  static std::vector<int32_t> absoluteValuesNormal();
-  static std::vector<int32_t> absoluteValuesTwoElements();
-  static std::vector<int32_t> absoluteValuesOneElement();
-  static std::vector<int32_t> absoluteValues0Element();
-  static std::vector<int32_t> absoluteValuesEmpty();
-  static std::vector<int32_t> absoluteValues();
-  static std::vector<int32_t> absoluteJsonDataValuesPpg1();
-  static std::vector<int32_t> absoluteJsonDataValuesPpg2();
-  static std::vector<int32_t> absoluteJsonDataValuesAcc();
-  static std::vector<int32_t> absoluteValuesWithOneValueInLastBlock();
+  static AbsoluteValues absoluteValuesNormal();
+  static AbsoluteValues absoluteValuesTwoElements();
+  static AbsoluteValues absoluteValuesOneElement();
+  static AbsoluteValues absoluteValues0Element();
+  static AbsoluteValues absoluteValuesEmpty();
+  static AbsoluteValues absoluteValues();
+  static AbsoluteValues absoluteJsonDataValuesPpg1();
+  static AbsoluteValues absoluteJsonDataValuesPpg2();
+  static AbsoluteValues absoluteJsonDataValuesAcc();
+  static AbsoluteValues absoluteValuesWithOneValueInLastBlock();
 
   static AbsoluteBlock absoluteBlock();
   static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();

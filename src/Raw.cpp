@@ -33,28 +33,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Raw.h"
 
-Raw::Raw(std::vector<Sensor> sensors) : sensors(sensors) {}
+using SensorsJson = Json::Value;
+
+Raw::Raw(Sensors& sensors) : sensors(sensors) {}
 
 Raw::Raw(const ProtobufRaw& protobufRaw) {
   this->deserialize(protobufRaw);
 }
 
-Raw::Raw(Json::Value& raw, DataForm dataForm) {
-  std::vector<Sensor> sensors;
-  Json::Value rawSensorsJson = raw["sensors"];
-  Json::Value::ArrayIndex n = raw["sensors"].size();
-  sensors.reserve(n);
-  for (auto& sensor : rawSensorsJson) {
-    sensors.push_back(Sensor(sensor, dataForm));
+Raw::Raw(RawJson& rawJson, DataForm dataForm) {
+  Sensors sensors;
+  SensorsJson sensorsJson = rawJson["sensors"];
+  sensors.reserve(sensorsJson.size());
+  for (auto& sensorJson : sensorsJson) {
+    sensors.push_back(Sensor(sensorJson, dataForm));
   }
   this->sensors = sensors;
 }
 
 Raw::Raw() {
-  this->sensors = std::vector<Sensor>{};
+  this->sensors = Sensors{};
 }
 
-std::vector<Sensor> Raw::getSensors() {
+Sensors Raw::getSensors() {
   return this->sensors;
 }
 
@@ -80,18 +81,18 @@ void Raw::serialize(ProtobufRaw* protobufRaw) {
   }
 }
 
-Json::Value Raw::toJson(DataForm dataForm) {
-  Json::Value sensors(Json::arrayValue);
-  Json::Value raw;
+RawJson Raw::toJson(DataForm dataForm) {
+  RawJson rawJson;
+  SensorsJson sensorsJson(Json::arrayValue);
   for (auto& sensor : this->sensors) {
-    sensors.append(sensor.toJson(dataForm));
+    sensorsJson.append(sensor.toJson(dataForm));
   }
-  raw["sensors"] = sensors;
-  return raw;
+  rawJson["sensors"] = sensorsJson;
+  return rawJson;
 }
 
 void Raw::deserialize(const ProtobufRaw& protobufRaw) {
-  std::vector<Sensor> sensors{};
+  Sensors sensors{};
   for (auto& protobufSensor : protobufRaw.sensors()) {
     sensors.push_back(Sensor(protobufSensor));
   }

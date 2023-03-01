@@ -36,24 +36,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_version.pb.h"
 
 using ProtobufVersion = com::preventicus::pcore::Version;
+using Major = uint32_t;
+using Minor = uint32_t;
+using Patch = uint32_t;
+using VersionJson = Json::Value;
 
 class Version final {
  public:
-  Version(uint32_t major, uint32_t minor, uint32_t patch);
+  Version(Major major, Minor minor, Patch patch);
   Version(const ProtobufVersion& protobufVersion);
-  Version(Json::Value& version);
+  Version(VersionJson& jsonVersion);
   Version();
 
-  uint32_t getMajor();
-  uint32_t getMinor();
-  uint32_t getPatch();
+  Major getMajor();
+  Minor getMinor();
+  Patch getPatch();
   bool isEqual(Version& version);
-  Json::Value toJson();
+  VersionJson toJson();
   void serialize(ProtobufVersion* protobufVersion);
 
  private:
   void deserialize(const ProtobufVersion& protobufVersion);
-  uint32_t major;
-  uint32_t minor;
-  uint32_t patch;
+
+  Major major;
+  Minor minor;
+  Patch patch;
 };

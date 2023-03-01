@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 class ChannelTest : public ::testing::Test {
  protected:
   AbsoluteBlock comparableAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
-  std::vector<DifferentialBlock> comparableDifferentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
+  DifferentialBlocks comparableDifferentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
 
   Channel channelAccMetaDataWithCoordinateX1 = ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX();
   Channel channelAccMetaDataWithCoordinateX2 = ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX();
@@ -58,7 +58,7 @@ TEST_F(ChannelTest, TestGetMethodPpg) {
   AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAccMetaData().isEqual(accMetaData));
   EXPECT_TRUE(this->channelPpgMetaDataWithColor1.getAbsoluteBlock().isEqual(this->comparableAbsoluteBlock));
-  std::vector<DifferentialBlock> differentialBlocks = this->channelPpgMetaDataWithColor1.getDifferentialBlocks();
+  DifferentialBlocks differentialBlocks = this->channelPpgMetaDataWithColor1.getDifferentialBlocks();
   for (size_t i = 0; i < differentialBlocks.size(); i++) {
     EXPECT_TRUE(differentialBlocks[i].isEqual(this->comparableDifferentialBlocks[i]));
   }
@@ -71,7 +71,7 @@ TEST_F(ChannelTest, TestGetMethodAcc) {
   EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getPpgMetaData().isEqual(ppgMetaData));
   AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
   EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.getAbsoluteBlock().isEqual(this->comparableAbsoluteBlock));
-  std::vector<DifferentialBlock> differentialBlocks = this->channelAccMetaDataWithCoordinateX1.getDifferentialBlocks();
+  DifferentialBlocks differentialBlocks = this->channelAccMetaDataWithCoordinateX1.getDifferentialBlocks();
   for (size_t i = 0; i < differentialBlocks.size(); i++) {
     EXPECT_TRUE(differentialBlocks[i].isEqual(this->comparableDifferentialBlocks[i]));
   }

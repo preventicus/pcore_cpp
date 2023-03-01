@@ -33,7 +33,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Header.h"
 
-Header::Header(Version& version, int32_t timeZoneOffset_min) {
+using TimeZoneOffsetJson = Json::Value;
+
+Header::Header(Version& version, TimeZoneOffset timeZoneOffset_min) {
   if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
     this->timeZoneOffset_min = timeZoneOffset_min;
     this->version = version;
@@ -46,8 +48,8 @@ Header::Header(const ProtobufHeader& protobufHeader) {
   this->deserialize(protobufHeader);
 }
 
-Header::Header(Json::Value& header) {
-  int32_t timeZoneOffset_min = header["time_zone_offset_min"].asInt();
+Header::Header(HeaderJson& header) {
+  TimeZoneOffset timeZoneOffset_min = header["time_zone_offset_min"].asInt();
   if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
     this->version = Version(header["version"]);
     this->timeZoneOffset_min = timeZoneOffset_min;
@@ -61,7 +63,7 @@ Header::Header() {
   this->timeZoneOffset_min = 0;
 }
 
-int32_t Header::getTimeZoneOffset() {
+TimeZoneOffset Header::getTimeZoneOffset() {
   return this->timeZoneOffset_min;
 }
 
@@ -83,13 +85,13 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
   protobufHeader->mutable_pcore_version()->CopyFrom(protobufVersion);
 }
 
-Json::Value Header::toJson(DataForm dataForm) {
-  Json::Value header;
-  Json::Value timeZoneOffset_min(this->timeZoneOffset_min);
-  header["time_zone_offset_min"] = timeZoneOffset_min;
-  header["version"] = this->version.toJson();
-  header["data_form"] = this->toString(dataForm);
-  return header;
+HeaderJson Header::toJson(DataForm dataForm) {
+  HeaderJson headerJson;
+  TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
+  headerJson["time_zone_offset_min"] = timeZoneOffset_min;
+  headerJson["version"] = this->version.toJson();
+  headerJson["data_form"] = this->dataFormToString(dataForm);
+  return headerJson;
 }
 
 void Header::deserialize(const ProtobufHeader& protobufHeader) {
@@ -97,7 +99,17 @@ void Header::deserialize(const ProtobufHeader& protobufHeader) {
   this->version = Version(protobufHeader.pcore_version());
 }
 
-std::string Header::toString(DataForm dataForm) {
+DataForm Header::dataFormFromString(DataFormString dataFormString) {
+  if (dataFormString == "ABSOLUTE") {
+    return DataForm::ABSOLUTE;
+  } else if (dataFormString == "DIFFERENTIAL") {
+    return DataForm::DIFFERENTIAL;
+  } else {
+    return DataForm::NOT_SET;
+  }
+}
+
+DataFormString Header::dataFormToString(DataForm dataForm) {
   switch (dataForm) {
     case DataForm::ABSOLUTE: {
       return "ABSOLUTE";
@@ -105,11 +117,8 @@ std::string Header::toString(DataForm dataForm) {
     case DataForm::DIFFERENTIAL: {
       return "DIFFERENTIAL";
     }
-    case DataForm::NOT_SET: {
-      return "NOT_SET";
-    }
     default: {
-      break;
+      return "NOT_SET";
     }
   }
 }

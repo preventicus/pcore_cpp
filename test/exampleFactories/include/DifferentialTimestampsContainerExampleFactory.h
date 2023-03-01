@@ -34,26 +34,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "DifferentialTimestampsContainer.h"
 
+#include "Sensor.h"
+
 class DifferentialTimestampsContainerExampleFactory {
  public:
-  static uint64_t normalFirstTimestamp_ms();
-  static uint64_t zeroFirstTimestamp_ms();
-  static uint64_t expectedFirstTimestamps();
-  static uint64_t lastTimestamp();
-  static uint64_t duration();
+  static UnixTimestamp normalFirstUnixTimestamp_ms();
+  static UnixTimestamp zeroFirstUnixTimestamp_ms();
+  static UnixTimestamp expectedFirstUnixTimestamps();
+  static UnixTimestamp lastUnixTimestamp_ms();
 
-  static std::vector<uint32_t> normalBlockIntervals_ms();
-  static std::vector<uint32_t> zeroBlockIntervals_ms();
-  static std::vector<uint32_t> normalBlockIntervals_msWithOneUnixInLastBlock();
-  static std::vector<uint32_t> emptyBlockIntervals_ms();
-  static std::vector<uint32_t> expectedBlockInterval();
+  static Duration duration();
 
-  static std::vector<uint32_t> normalTimestampsIntervals_ms();
-  static std::vector<uint32_t> normalTimestampsIntervals_msWithOneUnixInLastBlock();
-  static std::vector<uint32_t> normalTimestampsIntervals_msWithEqualDifferences();
-  static std::vector<uint32_t> zeroTimestampsIntervals_ms();
-  static std::vector<uint32_t> emptyTimestampsIntervals_ms();
-  static std::vector<uint32_t> expectedTimestampInterval();
+  static BlockIntervals normalBlockIntervals_ms();
+  static BlockIntervals zeroBlockIntervals_ms();
+  static BlockIntervals normalBlockIntervals_msWithOneUnixInLastBlock();
+  static BlockIntervals emptyBlockIntervals_ms();
+  static BlockIntervals expectedBlockInterval();
+
+  static TimestampsIntervals normalTimestampsIntervals_ms();
+  static TimestampsIntervals normalTimestampsIntervals_msWithOneUnixInLastBlock();
+  static TimestampsIntervals normalTimestampsIntervals_msWithEqualDifferences();
+  static TimestampsIntervals zeroTimestampsIntervals_ms();
+  static TimestampsIntervals emptyTimestampsIntervals_ms();
+  static TimestampsIntervals expectedTimestampInterval();
 
   static DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps();
   static DifferentialTimestampsContainer differentialTimestampsWith0Timestamps();

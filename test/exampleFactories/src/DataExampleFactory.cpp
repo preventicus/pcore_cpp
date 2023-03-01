@@ -34,17 +34,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DataExampleFactory.h"
 
 Data DataExampleFactory::normalData() {
-  return Data(RawExampleFactory::normalRaw(), HeaderExampleFactory::normalHeaderWithPositiveTimeZoneOffset_min());
+  Raw raw = RawExampleFactory::normalRaw();
+  Header header = HeaderExampleFactory::normalHeaderWithPositiveTimeZoneOffset_min();
+  return Data(raw, header);
 }
 
 Data DataExampleFactory::comparableData() {
-  return Data(RawExampleFactory::comparableRaw(), HeaderExampleFactory::normalHeaderWithNegativeTimeZoneOffset_min());
+  Raw raw = RawExampleFactory::comparableRaw();
+  Header header = HeaderExampleFactory::normalHeaderWithNegativeTimeZoneOffset_min();
+  return Data(raw, header);
 }
 
 Data DataExampleFactory::absoluteJsonData() {
-  return Data(RawExampleFactory::absoluteJsonDataRaw(), HeaderExampleFactory::absoluteJsonDataHeader());
+  Raw raw = RawExampleFactory::absoluteJsonDataRaw();
+  Header header = HeaderExampleFactory::absoluteJsonDataHeader();
+  return Data(raw, header);
 }
 
 Data DataExampleFactory::differentialJsonData() {
-  return Data(RawExampleFactory::differentialJsonDataRaw(), HeaderExampleFactory::absoluteJsonDataHeader());
+  Raw raw = RawExampleFactory::differentialJsonDataRaw();
+  Header header = HeaderExampleFactory::absoluteJsonDataHeader();
+  return Data(raw, header);
 }

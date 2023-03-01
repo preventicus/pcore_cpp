@@ -35,16 +35,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <json/json.h>
 #include <vector>
 
+using AbsoluteValue = int32_t;
+using AbsoluteValues = std::vector<AbsoluteValue>;
+using AbsoluteBlockJson = Json::Value;
+
 class AbsoluteBlock final {
  public:
-  AbsoluteBlock(std::vector<int32_t>& absoluteValues);
-  AbsoluteBlock(Json::Value& absoluteBlock);
+  AbsoluteBlock(AbsoluteValues& absoluteValues);
+  AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
   AbsoluteBlock();
 
-  std::vector<int32_t> getAbsoluteValues();
+  AbsoluteValues getAbsoluteValues();
   bool isEqual(AbsoluteBlock& block);
-  Json::Value toJson();
+  AbsoluteBlockJson toJson();
 
  private:
-  std::vector<int32_t> absoluteValues;
+  AbsoluteValues absoluteValues;
 };

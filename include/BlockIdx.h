@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -31,60 +31,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "VersionExampleFactory.h"
+#pragma once
 
-Major VersionExampleFactory::majorOne() {
-  return 1;
-}
-
-Minor VersionExampleFactory::minorOne() {
-  return 1;
-}
-
-Patch VersionExampleFactory::patchOne() {
-  return 1;
-}
-
-Major VersionExampleFactory::majorTwo() {
-  return 2;
-}
-
-Minor VersionExampleFactory::minorTwo() {
-  return 2;
-}
-
-Patch VersionExampleFactory::patchTwo() {
-  return 2;
-}
-
-Major VersionExampleFactory::majorZero() {
-  return 0;
-}
-
-Minor VersionExampleFactory::minorZero() {
-  return 0;
-}
-
-Patch VersionExampleFactory::patchZero() {
-  return 0;
-}
-
-Version VersionExampleFactory::normalVersion() {
-  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchOne());
-}
-
-Version VersionExampleFactory::startVersion() {
-  return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorZero(), VersionExampleFactory::patchZero());
-}
-
-Version VersionExampleFactory::highVersion() {
-  return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorTwo(), VersionExampleFactory::patchTwo());
-}
-
-Version VersionExampleFactory::randomVersion() {
-  return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
-}
-
-Version VersionExampleFactory::absoluteJsonDataVersion() {
-  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
-}
+using BlockIdx = size_t;
