@@ -59,13 +59,12 @@ class AccMetaData final {
   AccMetaDataJson toJson();
   void serialize(ProtobufAccMetaData* protobufAccMetaData);
 
-  static ProtobufCoordinate protobufCoordinateFromString(ProtobufCoordinateString& protobufCoordinateString);
+  static ProtobufCoordinate protobufCoordinateFromString(ProtobufCoordinateString protobufCoordinateString);
   static ProtobufCoordinateString protobufCoordinateToString(ProtobufCoordinate protobufCoordinate);
-  static ProtobufNorm protobufNormFromString(ProtobufNormString& protobufNormString);
+  static ProtobufNorm protobufNormFromString(ProtobufNormString protobufNormString);
   static ProtobufNormString protobufNormToString(ProtobufNorm protobufNorm);
 
  private:
-  void deserialize(const ProtobufAccMetaData& protobufAccMetaData);
   ProtobufCoordinate coordinate;
   ProtobufNorm norm;
 };

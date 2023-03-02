@@ -33,24 +33,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Data.h"
 
-Data::Data(Raw& raw, Header& header) : raw(raw), header(header) {}
+Data::Data(Raw& raw, Header& header) : header(header), raw(raw) {}
 
-Data::Data(const ProtobufData& protobufData) {
-  this->deserialize(protobufData);
-}
+Data::Data(const ProtobufData& protobufData) : header(Header(protobufData.header())), raw(Raw(protobufData.raw())) {}
 
-Data::Data(DataJson& dataJson) {
-  HeaderJson headerJson = dataJson["header"];
-  DataFormString dataFormString = headerJson["data_form"].asString();
-  DataForm dataForm = Header::dataFormFromString(dataFormString);
-  this->raw = Raw(dataJson["raw"], dataForm);
-  this->header = Header(headerJson);
-}
+Data::Data(DataJson& dataJson) : header(Header(dataJson["header"])), raw(Raw(dataJson["raw"], header.getDataForm())) {}
 
-Data::Data() {
-  this->raw = Raw();
-  this->header = Header();
-}
+Data::Data() : header(Header()), raw(Raw()) {}
 
 Raw Data::getRaw() {
   return this->raw;
@@ -76,6 +65,12 @@ void Data::serialize(ProtobufData* protobufData) {
   protobufData->mutable_raw()->CopyFrom(protobufRaw);
 }
 
+void Data::switchDataForm() {
+  DataForm currentDataForm = this->header.getDataForm();
+  this->raw.switchDataForm(currentDataForm);
+  this->header.switchDataForm();
+}
+
 Json::Value Data::toJson(DataForm dataForm) {
   DataJson data;
   data["header"] = this->header.toJson(dataForm);
@@ -83,9 +78,4 @@ Json::Value Data::toJson(DataForm dataForm) {
   Json::Value json;
   json["data"] = data;
   return json;
-}
-
-void Data::deserialize(const ProtobufData& protobufData) {
-  this->header = Header(protobufData.header());
-  this->raw = Raw(protobufData.raw());
 }

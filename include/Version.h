@@ -56,7 +56,7 @@ class Version final {
   void serialize(ProtobufVersion* protobufVersion);
 
  private:
-  void deserialize(const ProtobufVersion& protobufVersion);
+  Major getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey);
 
   Major major;
   Minor minor;

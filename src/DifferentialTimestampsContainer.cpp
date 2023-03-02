@@ -41,34 +41,54 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp f
                                                                  TimestampsIntervals& timestampsIntervals_ms)
     : firstUnixTimestamp_ms(firstUnixTimestamp_ms), blockIntervals_ms(blockIntervals_ms), timestampsIntervals_ms(timestampsIntervals_ms) {}
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(
-    const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
-  this->deserialize(protobufDifferentialTimestampContainer);
-}
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer)
+    : firstUnixTimestamp_ms(protobufDifferentialTimestampContainer.first_timestamp_ms()),
+      blockIntervals_ms([&]() {
+        auto protobufBlockIntervals_ms = protobufDifferentialTimestampContainer.block_intervals_ms();
+        BlockIntervals blockIntervals_ms = {};
+        blockIntervals_ms.reserve(protobufBlockIntervals_ms.size());
+        for (auto& protobufBlockInterval_ms : protobufBlockIntervals_ms) {
+          blockIntervals_ms.push_back(protobufBlockInterval_ms);
+        }
+        return blockIntervals_ms;
+      }()),
+      timestampsIntervals_ms([&]() {
+        auto protoBufTimestampsIntervals_ms = protobufDifferentialTimestampContainer.timestamps_intervals_ms();
+        TimestampsIntervals timestampsIntervals_ms = {};
+        timestampsIntervals_ms.reserve(protoBufTimestampsIntervals_ms.size());
+        for (auto& protobufTimestampsInterval_ms : protoBufTimestampsIntervals_ms) {
+          timestampsIntervals_ms.push_back(protobufTimestampsInterval_ms);
+        }
+        return timestampsIntervals_ms;
+      }()) {}
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(DifferentialTimestampsContainerJson& differentialTimestampsContainerJson) {
-  BlockIntervalsJson blockIntervalsJson = differentialTimestampsContainerJson["block_intervals_ms"];
-  TimestampsIntervalsJson timestampsIntervalsJson = differentialTimestampsContainerJson["timestamps_intervals_ms"];
-  BlockIntervals blockIntervals_ms = {};
-  TimestampsIntervals timestampsIntervals_ms = {};
-  blockIntervals_ms.reserve(blockIntervalsJson.size());
-  timestampsIntervals_ms.reserve(timestampsIntervalsJson.size());
-  for (auto& blockIntervalJson : blockIntervalsJson) {
-    blockIntervals_ms.push_back(blockIntervalJson.asUInt());
-  }
-  for (auto& timestampsIntervalJson : timestampsIntervalsJson) {
-    timestampsIntervals_ms.push_back(timestampsIntervalJson.asUInt());
-  }
-  this->blockIntervals_ms = blockIntervals_ms;
-  this->timestampsIntervals_ms = timestampsIntervals_ms;
-  this->firstUnixTimestamp_ms = differentialTimestampsContainerJson["first_timestamp_ms"].asUInt64();
-}
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
+    : firstUnixTimestamp_ms([&]() {
+        if (differentialTimestampsContainerJson["first_timestamp_ms"].asInt64() < 0) {
+          throw std::invalid_argument("firstUnixTimestamp_ms is negative in json");
+        }
+        return differentialTimestampsContainerJson["first_timestamp_ms"].asUInt64();
+      }()),
+      blockIntervals_ms([&]() {
+        BlockIntervalsJson blockIntervalsJson = differentialTimestampsContainerJson["block_intervals_ms"];
+        BlockIntervals blockIntervals_ms = {};
+        blockIntervals_ms.reserve(blockIntervalsJson.size());
+        for (auto& blockIntervalJson : blockIntervalsJson) {
+          blockIntervals_ms.push_back(blockIntervalJson.asUInt());
+        }
+        return blockIntervals_ms;
+      }()),
+      timestampsIntervals_ms([&]() {
+        TimestampsIntervalsJson timestampsIntervalsJson = differentialTimestampsContainerJson["timestamps_intervals_ms"];
+        TimestampsIntervals timestampsIntervals_ms = {};
+        timestampsIntervals_ms.reserve(timestampsIntervalsJson.size());
+        for (auto& timestampsIntervalJson : timestampsIntervalsJson) {
+          timestampsIntervals_ms.push_back(timestampsIntervalJson.asUInt());
+        }
+        return timestampsIntervals_ms;
+      }()) {}
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer() {
-  this->blockIntervals_ms = {};
-  this->timestampsIntervals_ms = {};
-  this->firstUnixTimestamp_ms = 0;
-}
+DifferentialTimestampsContainer::DifferentialTimestampsContainer() : firstUnixTimestamp_ms(0), blockIntervals_ms({}), timestampsIntervals_ms({}) {}
 
 UnixTimestamp DifferentialTimestampsContainer::getFirstUnixTimestamp() {
   return this->firstUnixTimestamp_ms;
@@ -134,14 +154,4 @@ void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampCon
     protobufDifferentialTimestampContainer->add_timestamps_intervals_ms(timestampsInterval_ms);
   }
   protobufDifferentialTimestampContainer->set_first_timestamp_ms(this->firstUnixTimestamp_ms);
-}
-
-void DifferentialTimestampsContainer::deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
-  this->firstUnixTimestamp_ms = protobufDifferentialTimestampContainer.first_timestamp_ms();
-  for (auto& protobufBlockInterval_ms : protobufDifferentialTimestampContainer.block_intervals_ms()) {
-    this->blockIntervals_ms.push_back(protobufBlockInterval_ms);
-  }
-  for (auto& protobufTimestampsInterval_ms : protobufDifferentialTimestampContainer.timestamps_intervals_ms()) {
-    this->timestampsIntervals_ms.push_back(protobufTimestampsInterval_ms);
-  }
 }

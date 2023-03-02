@@ -35,33 +35,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using TimeZoneOffsetJson = Json::Value;
 
-Header::Header(Version& version, TimeZoneOffset timeZoneOffset_min) {
-  if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
-    this->timeZoneOffset_min = timeZoneOffset_min;
-    this->version = version;
-  } else {
-    throw std::out_of_range("Out of range");
-  }
+Header::Header(Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
+    : timeZoneOffset_min(timeZoneOffset_min), version(version), dataForm(dataForm) {
+  this->checkTimeZoneOffset();
 }
 
-Header::Header(const ProtobufHeader& protobufHeader) {
-  this->deserialize(protobufHeader);
+Header::Header(const ProtobufHeader& protobufHeader)
+    : timeZoneOffset_min(protobufHeader.time_zone_offset_min()),
+      version(Version(protobufHeader.pcore_version())),
+      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {
+  this->checkTimeZoneOffset();
 }
 
-Header::Header(HeaderJson& header) {
-  TimeZoneOffset timeZoneOffset_min = header["time_zone_offset_min"].asInt();
-  if (timeZoneOffset_min < 841 && timeZoneOffset_min > -721) {
-    this->version = Version(header["version"]);
-    this->timeZoneOffset_min = timeZoneOffset_min;
-  } else {
-    throw std::out_of_range("Out of range");
-  }
+Header::Header(HeaderJson& headerJson)
+    : timeZoneOffset_min(headerJson["time_zone_offset_min"].asInt()),
+      version(Version(headerJson["version"])),
+      dataForm(Header::dataFormFromString(headerJson["data_form"].asString())) {
+  this->checkTimeZoneOffset();
 }
 
-Header::Header() {
-  this->version = Version();
-  this->timeZoneOffset_min = 0;
-}
+Header::Header() : timeZoneOffset_min(0), version(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
 
 TimeZoneOffset Header::getTimeZoneOffset() {
   return this->timeZoneOffset_min;
@@ -71,8 +64,12 @@ Version Header::getVersion() {
   return this->version;
 }
 
+DataForm Header::getDataForm() {
+  return this->dataForm;
+}
+
 bool Header::isEqual(Header& header) {
-  return this->timeZoneOffset_min == header.timeZoneOffset_min;
+  return this->timeZoneOffset_min == header.timeZoneOffset_min && this->version.isEqual(header.version) && this->dataForm == header.dataForm;
 }
 
 void Header::serialize(ProtobufHeader* protobufHeader) {
@@ -85,21 +82,38 @@ void Header::serialize(ProtobufHeader* protobufHeader) {
   protobufHeader->mutable_pcore_version()->CopyFrom(protobufVersion);
 }
 
+void Header::switchDataForm() {
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      this->dataForm = DATA_FORM_ABSOLUTE;
+      break;
+    }
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      this->dataForm = DATA_FORM_DIFFERENTIAL;
+      break;
+    }
+    default: {
+      throw std::runtime_error("DataForm is NONE");
+    }
+  }
+}
+
 HeaderJson Header::toJson(DataForm dataForm) {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
   headerJson["time_zone_offset_min"] = timeZoneOffset_min;
   headerJson["version"] = this->version.toJson();
-  headerJson["data_form"] = this->dataFormToString(dataForm);
+  headerJson["data_form"] = Header::dataFormToString(dataForm);
   return headerJson;
 }
 
-void Header::deserialize(const ProtobufHeader& protobufHeader) {
-  this->timeZoneOffset_min = protobufHeader.time_zone_offset_min();
-  this->version = Version(protobufHeader.pcore_version());
+void Header::checkTimeZoneOffset() {
+  if (840 < this->timeZoneOffset_min || this->timeZoneOffset_min < -720) {
+    throw std::invalid_argument("timeZoneOffset must be between -720 and 840");
+  }
 }
 
-DataForm Header::dataFormFromString(DataFormString& dataFormString) {
+DataForm Header::dataFormFromString(DataFormString dataFormString) {
   if (dataFormString == "DATA_FORM_ABSOLUTE") {
     return DataForm::DATA_FORM_ABSOLUTE;
   } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {

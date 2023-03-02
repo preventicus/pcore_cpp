@@ -50,6 +50,7 @@ class Raw final {
   bool isEqual(Raw& protobufRaw);
   RawJson toJson(DataForm dataForm);
   void serialize(ProtobufRaw* protobufRaw);
+  void switchDataForm(DataForm currentDataForm);
 
  private:
   void deserialize(const ProtobufRaw& protobufRaw);

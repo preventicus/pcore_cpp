@@ -49,12 +49,11 @@ using ChannelJson = Json::Value;
 
 class Channel final {
  public:
-  Channel(AccMetaData& accMetadata, AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
-  Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
+  Channel(AccMetaData& accMetadata, AbsoluteBlock& absoluteBlock);
+  Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock);
   Channel(PpgMetaData& ppgMetaData, DifferentialBlocks& differentialBlocks);
   Channel(AccMetaData& accMetaData, DifferentialBlocks& differentialBlocks);
-  Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, BlockIdxs& blockIdxs);
-  Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType);
+  Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm);
   Channel(const ProtobufChannel& protobufChannel);
   Channel();
 
@@ -66,13 +65,13 @@ class Channel final {
   bool isEqual(Channel& channel);
   ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType);
   void serialize(ProtobufChannel* protobufChannel);
+  void switchDataForm(BlockIdxs& blockIdxs);
+  void switchDataForm();
 
  private:
   DifferentialBlocks calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
-  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx);
+  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues);
   AbsoluteBlock calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks);
-
-  void deserialize(const ProtobufChannel& protobufChannel);
 
   PpgMetaData ppgMetaData;
   AccMetaData accMetaData;

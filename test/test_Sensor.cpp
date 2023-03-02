@@ -42,7 +42,7 @@ class SensorTest : public ::testing::Test {
   Sensor comparableSensorWithPpgMetaData1 = SensorExampleFactory::comparableSensor();
   Sensor comparableSensorWithPpgMetaData2 = SensorExampleFactory::comparableSensor();
   Sensor normalSensorWithOneUnix = SensorExampleFactory::sensorWithOneUnixAndOneValue();
-  Sensor normalSensorWithNUllUnix = SensorExampleFactory::sensorWithNUllUnixAndNUllValue();
+  Sensor normalSensorWithNullUnix = SensorExampleFactory::sensorWithNUllUnixAndNUllValue();
   Sensor normalSensorWithOneUnixAndOneValueInLastBlock = SensorExampleFactory::sensorWithOneUnixAndOneValueInLastBlock();
   Sensor normalSensorWithEqualTimestampsInterval = SensorExampleFactory::sensorWithEqualTimestampsInterval();
 };
@@ -92,12 +92,12 @@ TEST_F(SensorTest, TestSensorWithOneUnix) {
   }
 }
 
-TEST_F(SensorTest, normalSensorWithNUllUnix) {
-  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getFirstUnixTimestamp(),
+TEST_F(SensorTest, normalSensorWithNullUnix) {
+  EXPECT_EQ(this->normalSensorWithNullUnix.getDifferentialTimestamps().getFirstUnixTimestamp(),
             DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms());
-  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getBlockIntervals(),
+  EXPECT_EQ(this->normalSensorWithNullUnix.getDifferentialTimestamps().getBlockIntervals(),
             DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms());
-  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getTimestampsIntervals(),
+  EXPECT_EQ(this->normalSensorWithNullUnix.getDifferentialTimestamps().getTimestampsIntervals(),
             DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms());
 }
 

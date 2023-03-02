@@ -37,19 +37,18 @@ using UnixTimestampsJson = Json::Value;
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampContainerJson& absoluteTimestampsContainerJson) {
-  UnixTimestampsJson unixTimestampsJson = absoluteTimestampsContainerJson["unix_timestamps_ms"];
-  UnixTimestamps unixTimestamps_ms;
-  unixTimestamps_ms.reserve(unixTimestampsJson.size());
-  for (auto& unixTimestampJson : unixTimestampsJson) {
-    unixTimestamps_ms.push_back(unixTimestampJson.asUInt64());
-  }
-  this->unixTimestamps_ms = unixTimestamps_ms;
-}
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampContainerJson& absoluteTimestampsContainerJson)
+    : unixTimestamps_ms([&]() {
+        UnixTimestampsJson unixTimestampsJson = absoluteTimestampsContainerJson["unix_timestamps_ms"];
+        UnixTimestamps unixTimestamps_ms;
+        unixTimestamps_ms.reserve(unixTimestampsJson.size());
+        for (auto& unixTimestampJson : unixTimestampsJson) {
+          unixTimestamps_ms.push_back(unixTimestampJson.asUInt64());
+        }
+        return unixTimestamps_ms;
+      }()) {}
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() {
-  this->unixTimestamps_ms = {};
-}
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestamps_ms({}) {}
 
 UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps() {
   return this->unixTimestamps_ms;

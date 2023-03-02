@@ -39,21 +39,15 @@ using PatchJson = Json::Value;
 
 Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
 
-Version::Version(VersionJson& versionJson) {
-  this->major = versionJson["major"].asUInt();
-  this->minor = versionJson["minor"].asUInt();
-  this->patch = versionJson["patch"].asUInt();
-}
+Version::Version(VersionJson& versionJson)
+    : major(this->getVersionPartsFromJson(versionJson, "major")),
+      minor(this->getVersionPartsFromJson(versionJson, "minor")),
+      patch(this->getVersionPartsFromJson(versionJson, "patch")) {}
 
-Version::Version(const ProtobufVersion& protobufVersion) {
-  this->deserialize(protobufVersion);
-}
+Version::Version(const ProtobufVersion& protobufVersion)
+    : major(protobufVersion.major()), minor(protobufVersion.minor()), patch(protobufVersion.patch()) {}
 
-Version::Version() {
-  this->major = 0;
-  this->minor = 0;
-  this->patch = 0;
-}
+Version::Version() : major(0), minor(0), patch(0) {}
 
 Major Version::getMajor() {
   return this->major;
@@ -91,8 +85,9 @@ VersionJson Version::toJson() {
   return versionJson;
 }
 
-void Version::deserialize(const ProtobufVersion& protobufVersion) {
-  this->major = protobufVersion.major();
-  this->minor = protobufVersion.minor();
-  this->patch = protobufVersion.patch();
+Major Version::getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey) {
+  if (versionJson[jsonKey].asInt() < 0) {
+    throw std::invalid_argument(jsonKey + " is negative in json.");
+  }
+  return versionJson[jsonKey].asUInt();
 }

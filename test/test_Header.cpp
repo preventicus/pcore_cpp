@@ -108,13 +108,15 @@ TEST_F(HeaderTest, SerializeAndDeserializeWithNegativeValue) {
 TEST_F(HeaderTest, TestExecptionPositiveOutOfRange) {
   Version version = VersionExampleFactory::randomVersion();
   TimeZoneOffset invalidPositiveTimeZoneOffset_min = HeaderExampleFactory::invalidPositiveTimeZoneOffset_min();
-  EXPECT_THROW(Header invalidHeaderWithPositiveTimeZoneOffset_min = Header(version, invalidPositiveTimeZoneOffset_min), std::out_of_range);
+  EXPECT_THROW(Header invalidHeaderWithPositiveTimeZoneOffset_min = Header(version, invalidPositiveTimeZoneOffset_min, DataForm::DATA_FORM_ABSOLUTE),
+               std::invalid_argument);
 }
 
 TEST_F(HeaderTest, TestExecptionNegativeOutOfRange) {
   TimeZoneOffset invalidNegativeTimeZoneOffset_min = HeaderExampleFactory::invalidNegativeTimeZoneOffset_min();
   Version version = VersionExampleFactory::randomVersion();
-  EXPECT_THROW(Header invalidHeaderWithNegativeTimeZoneOffset_min = Header(version, invalidNegativeTimeZoneOffset_min), std::out_of_range);
+  EXPECT_THROW(Header invalidHeaderWithNegativeTimeZoneOffset_min = Header(version, invalidNegativeTimeZoneOffset_min, DataForm::DATA_FORM_ABSOLUTE),
+               std::invalid_argument);
 }
 
 TEST_F(HeaderTest, CheckHeaderPtr) {

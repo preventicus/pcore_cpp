@@ -37,19 +37,18 @@ using AbsoluteValuesJson = Json::Value;
 
 AbsoluteBlock::AbsoluteBlock(AbsoluteValues& absoluteValues) : absoluteValues(absoluteValues) {}
 
-AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson) {
-  AbsoluteValuesJson absoluteValuesJson = absoluteBlockJson["absolute_values"];
-  AbsoluteValues absoluteValues;
-  absoluteValues.reserve(absoluteValuesJson.size());
-  for (auto& absoluteValueJson : absoluteValuesJson) {
-    absoluteValues.push_back(absoluteValueJson.asInt());
-  }
-  this->absoluteValues = absoluteValues;
-}
+AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson)
+    : absoluteValues([&]() {
+        AbsoluteValuesJson absoluteValuesJson = absoluteBlockJson["absolute_values"];
+        AbsoluteValues absoluteValues;
+        absoluteValues.reserve(absoluteValuesJson.size());
+        for (auto& absoluteValueJson : absoluteValuesJson) {
+          absoluteValues.push_back(absoluteValueJson.asInt());
+        }
+        return absoluteValues;
+      }()) {}
 
-AbsoluteBlock::AbsoluteBlock() {
-  this->absoluteValues = {};
-}
+AbsoluteBlock::AbsoluteBlock() : absoluteValues({}) {}
 
 AbsoluteValues AbsoluteBlock::getAbsoluteValues() {
   return this->absoluteValues;
