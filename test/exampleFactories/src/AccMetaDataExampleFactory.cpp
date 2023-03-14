@@ -45,3 +45,31 @@ AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufNorm nor
   accMetaDataJson["norm"] = AccMetaData::protobufNormToString(norm);
   return accMetaDataJson;
 }
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm() {
+  return AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormNone() {
+  return AccMetaData(ProtobufNorm::NORM_NONE);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateX() {
+  return AccMetaData(ProtobufCoordinate::COORDINATE_X);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateY() {
+  return AccMetaData(ProtobufCoordinate::COORDINATE_Y);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateZ() {
+  return AccMetaData(ProtobufCoordinate::COORDINATE_Z);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateNone() {
+  return AccMetaData(ProtobufCoordinate::COORDINATE_NONE);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataNotSet() {
+  return AccMetaData();
+}

@@ -33,12 +33,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteBlockExampleFactory.h"
 
-AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockOneElement() {
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesOneElement();
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithThreePositiveAbsoluteValues() {
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreePositiveElements();
   return AbsoluteBlock(absoluteValues);
 }
 
-AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockEmpty() {
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues() {
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreeMixedElements();
+  return AbsoluteBlock(absoluteValues);
+}
+
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithThreeNegativeAbsoluteValues() {
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreeNegativeElements();
+  return AbsoluteBlock(absoluteValues);
+}
+
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithOneAbsoluteValue() {
+  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithOneElement();
+  return AbsoluteBlock(absoluteValues);
+}
+
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithEmptyAbsoluteValue() {
   AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesEmpty();
   return AbsoluteBlock(absoluteValues);
 }
@@ -51,6 +66,14 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock(
   AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithOneValueInLastBlock();
   return AbsoluteBlock(absoluteValues);
 }
+
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForTestSwitchTo() {
+    AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesForTestSwitchTo();
+    return AbsoluteBlock(absoluteValues);
+}
+
+
+
 
 // -------------------------------------JSON-----------------------
 

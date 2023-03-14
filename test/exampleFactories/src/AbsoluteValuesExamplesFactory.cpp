@@ -33,20 +33,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteValuesExampleFactory.h"
 
-AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesNormal() {
+AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithThreePositiveElements() {
   return {1, 2, 3};
 }
 
-AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesNormalNegative() {
+AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithThreeMixedElements() {
   return {3, -1, 2};
 }
 
-AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesOneElement() {
+AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithThreeNegativeElements() {
+  return {-7, -1, -2};
+}
+
+AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithOneElement() {
   return {12};
 }
 
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesEmpty() {
   return {};
+}
+
+AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesForTestSwitchTo() {
+  return {1000, 9415, 10093, 2411, -6568, -8589, -1794, 7570, 10894, 5121, -4440, -9000, -4366,
+          5202, 10906, 7503, -1879, -8614, -6510, 2499, 10129, 9367, 911, -7462, -8056, -324, 8626};
 }
 
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteValues() {
@@ -57,6 +66,7 @@ AbsoluteValues AbsoluteValuesExampleFactory::absoluteValues() {
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithOneValueInLastBlock() {
   return {38763, 38771, 38780, 38793, 38784, 38780, 38780};
 }
+
 
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteJsonDataValuesPpg1() {
   return {30021, 30023, 30027, 30022, 30020, 30020, 30030};

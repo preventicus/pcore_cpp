@@ -36,15 +36,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteValuesExampleFactory {
  public:
-  static AbsoluteValues absoluteValuesNormal();
-  static AbsoluteValues absoluteValuesNormalNegative();
-  static AbsoluteValues absoluteValuesOneElement();
+  static AbsoluteValues absoluteValuesWithThreePositiveElements();
+  static AbsoluteValues absoluteValuesWithThreeMixedElements();
+  static AbsoluteValues absoluteValuesWithThreeNegativeElements();
+  static AbsoluteValues absoluteValuesWithOneElement();
   static AbsoluteValues absoluteValuesEmpty();
+  static AbsoluteValues absoluteValuesForTestSwitchTo();
   static AbsoluteValues absoluteValues();
   static AbsoluteValues absoluteJsonDataValuesPpg1();
   static AbsoluteValues absoluteJsonDataValuesPpg2();
   static AbsoluteValues absoluteJsonDataValuesAcc();
   static AbsoluteValues absoluteValuesWithOneValueInLastBlock();
+
 
   static AbsoluteValuesJson buildAbsoluteValuesJson(AbsoluteValues& absoluteValues);
 };

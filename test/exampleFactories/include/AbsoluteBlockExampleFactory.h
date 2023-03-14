@@ -37,15 +37,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteBlockExampleFactory {
  public:
+
+  static AbsoluteBlock absoluteBlockWithThreePositiveAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithThreeMixedAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithThreeNegativeAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithOneAbsoluteValue();
+  static AbsoluteBlock absoluteBlockWithEmptyAbsoluteValue();
+
   static AbsoluteBlock absoluteBlock();
   static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
   static AbsoluteBlock absoluteJsonDataBlockAcc();
   static AbsoluteBlock absoluteJsonDataBlockPpg1();
   static AbsoluteBlock absoluteJsonDataBlockPpg2();
 
-  static AbsoluteBlock absoluteBlockOneElement();
 
-  static AbsoluteBlock absoluteBlockEmpty();
 
   static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson);
+
+  static AbsoluteBlock absoluteBlockForTestSwitchTo();
 };

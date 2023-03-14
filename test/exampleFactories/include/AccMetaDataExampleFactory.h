@@ -38,4 +38,11 @@ class AccMetaDataExampleFactory {
  public:
   static AccMetaDataJson buildAccMetaDataJson(ProtobufCoordinate coordinate);
   static AccMetaDataJson buildAccMetaDataJson(ProtobufNorm norm);
+  static AccMetaData accMetaDataWithNormEuclideanDifferencesNorm();
+  static AccMetaData accMetaDataWithNormNone();
+  static AccMetaData accMetaDataWithCoordinateX();
+  static AccMetaData accMetaDataWithCoordinateY();
+  static AccMetaData accMetaDataWithCoordinateZ();
+  static AccMetaData accMetaDataWithCoordinateNone();
+  static AccMetaData accMetaDataNotSet();
 };

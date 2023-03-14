@@ -37,17 +37,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DifferentialValuesExampleFactory {
  public:
-  static DifferentialValues differentialValuesNormal();
-  static DifferentialValues differentialValuesNormalNegative();
-  static DifferentialValues differentialValuesOneNegative();
-  static DifferentialValues differentialValuesOneElement();
-  static DifferentialValues differentialValues0();
-  static DifferentialValues differentialValuesEmpty();
 
-  static DifferentialValues expectedDifferentialValues1();
-  static DifferentialValues expectedDifferentialValues2();
-  static DifferentialValues expectedDifferentialValues3();
-  static DifferentialValues expectedDifferentialValues4();
+  static DifferentialValues differentialValuesWithThreePositiveElements();
+  static DifferentialValues differentialValuesWithThreeMixedElements();
+  static DifferentialValues differentialValuesWithThreeNegativeElements();
+  static DifferentialValues differentialValuesOneElement();
+  static DifferentialValues differentialValuesEmpty();
 
   static DifferentialValuesJson buildDifferentialValuesJson(DifferentialValues& differentialValues);
 };

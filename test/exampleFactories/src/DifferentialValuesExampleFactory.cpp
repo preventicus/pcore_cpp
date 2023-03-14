@@ -33,45 +33,41 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DifferentialValuesExampleFactory.h"
 
-DifferentialValues DifferentialValuesExampleFactory::differentialValuesNormal() {
+DifferentialValues DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements() {
   return {30, 32, 54};
 }
 
-DifferentialValues DifferentialValuesExampleFactory::differentialValuesNormalNegative() {
-  return {-23, -234, -13};
+DifferentialValues DifferentialValuesExampleFactory::differentialValuesWithThreeMixedElements() {
+  return {6, -53, 0};
 }
 
-DifferentialValues DifferentialValuesExampleFactory::differentialValuesOneNegative() {
-  return {-123};
+DifferentialValues DifferentialValuesExampleFactory::differentialValuesWithThreeNegativeElements() {
+  return {-23, -234, -13};
 }
 
 DifferentialValues DifferentialValuesExampleFactory::differentialValuesOneElement() {
   return {123};
 }
 
-DifferentialValues DifferentialValuesExampleFactory::differentialValues0() {
-  return {0};
-}
-
 DifferentialValues DifferentialValuesExampleFactory::differentialValuesEmpty() {
   return {};
 }
 
-DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues1() {
-  return {38763, 8, 9, 13, -9, -4, 0, 3, 7, -8};
-}
-
-DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues2() {
-  return {46321, 6, -9, -2, -3, 0, 0, 23};
-}
-
-DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues3() {
-  return {58772, 2, 1, 1, -3};
-}
-
-DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues4() {
-  return {19982, 0, -4};
-}
+//DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues1() {
+//  return {38763, 8, 9, 13, -9, -4, 0, 3, 7, -8};
+//}
+//
+//DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues2() {
+//  return {46321, 6, -9, -2, -3, 0, 0, 23};
+//}
+//
+//DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues3() {
+//  return {58772, 2, 1, 1, -3};
+//}
+//
+//DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues4() {
+//  return {19982, 0, -4};
+//}
 
 DifferentialValuesJson DifferentialValuesExampleFactory::buildDifferentialValuesJson(DifferentialValues& differentialValues) {
   DifferentialValuesJson differentialValuesJson(Json::arrayValue);

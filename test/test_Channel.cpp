@@ -37,88 +37,89 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class ChannelTest : public ::testing::Test {
  protected:
-  Channel channelWithNormalAbsoluteBlocksAndAccMetaDataWithCoordinateX =
-      ChannelExampleFactory::channelWithNormalAbsoluteBlocksAndAccMetaDataWithCoordinateX();
-  Channel channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1 =
-      ChannelExampleFactory::channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1();
-  Channel channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1 = ChannelExampleFactory::channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm();
-  Channel channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm2 = ChannelExampleFactory::channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm();
-  Channel channelWithNormalNegativeAbsoluteBlocksAndAccMetaDataWithNorm =
-      ChannelExampleFactory::channelWithNormalNegativeAbsoluteBlocksAndAccMetaDataWithNorm();
-  Channel channelWithOneElementAbsoluteBlocksAndAccMetaDataWithNorm =
-      ChannelExampleFactory::channelWithOneElementAbsoluteBlocksAndAccMetaDataWithNorm();
-  Channel channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength2 =
-      ChannelExampleFactory::channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength2();
-  Channel channelWithNormalNegativeDifferentialBlocksAndPpgMetaDataWithNormalWavelength1 = ChannelExampleFactory::channelWithNormalNegativeDifferentialBlocksAndPpgMetaDataWithNormalWavelength1();
-
 };
 
 TEST_F(ChannelTest, TestGetPpgMetaData) {
-  PpgMetaData ppgMetaData1 = this->channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1.getPpgMetaData();
-  PpgMetaData ppgMetaData2 = PpgMetaData(PpgMetaDataExampleFactory::wavelengthNormal1_nm());
-  EXPECT_TRUE(ppgMetaData1.isEqual(ppgMetaData2));
-
-  PpgMetaData ppgMetaData3 = this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1.getPpgMetaData();
-  PpgMetaData ppgMetaData4 = PpgMetaData();
-  EXPECT_TRUE(ppgMetaData3.isEqual(ppgMetaData4));
+  Channel channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  EXPECT_TRUE(channel.getPpgMetaData().isEqual(ppgMetaData));
 }
 
 TEST_F(ChannelTest, TestGetAccMetaData) {
-  AccMetaData accMetaData1 = this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1.getAccMetaData();
-  AccMetaData accMetaData2 = AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
-
-  AccMetaData accMetaData3 = this->channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1.getAccMetaData();
-  AccMetaData accMetaData4 = AccMetaData();
-  EXPECT_TRUE(accMetaData3.isEqual(accMetaData4));
+  Channel channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
+  EXPECT_TRUE(channel.getAccMetaData().isEqual(accMetaData));
 }
 
 TEST_F(ChannelTest, TestGetDifferentialBlocks) {
-  DifferentialBlocks differentialBlocks1 = this->channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1.getDifferentialBlocks();
-  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesNormal();
-  DifferentialBlocks differentialBlocks2 = {DifferentialBlock(differentialValues)};
-  EXPECT_EQ(differentialBlocks1.size(), differentialBlocks2.size());
-  for (size_t i = 0; i < differentialBlocks1.size(); i++) {
-    EXPECT_TRUE(differentialBlocks1[i].isEqual(differentialBlocks2[i]));
-  }
-
-  DifferentialBlocks differentialBlocks3 = this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1.getDifferentialBlocks();
-  DifferentialBlocks differentialBlocks4 = {};
-  EXPECT_EQ(differentialBlocks1.size(), differentialBlocks2.size());
-  for (size_t i = 0; i < differentialBlocks1.size(); i++) {
-    EXPECT_TRUE(differentialBlocks1[i].isEqual(differentialBlocks2[i]));
+  Channel channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
+  DifferentialBlocks actualDifferentialBlocks = channel.getDifferentialBlocks();
+  DifferentialBlocks expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksWithThreeMixedDifferentialBlocks();
+  EXPECT_EQ(actualDifferentialBlocks.size(), expectedDifferentialBlocks.size());
+  for (size_t i = 0; i < actualDifferentialBlocks.size(); i++) {
+    EXPECT_TRUE(actualDifferentialBlocks[i].isEqual(expectedDifferentialBlocks[i]));
   }
 }
 
 TEST_F(ChannelTest, TestGetAbsoluteBlock) {
-  AbsoluteBlock absoluteBlock1 = this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1.getAbsoluteBlock();
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesNormal();
-  AbsoluteBlock absoluteBlock2 = AbsoluteBlock(absoluteValues);
-  EXPECT_TRUE(absoluteBlock1.isEqual(absoluteBlock2));
-
-  AbsoluteBlock absoluteBlock3 = this->channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1.getAbsoluteBlock();
-  AbsoluteBlock absoluteBlock4 = AbsoluteBlock();
-  EXPECT_TRUE(absoluteBlock3.isEqual(absoluteBlock4));
+  Channel channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  AbsoluteBlock actualAbsoluteBlock = channel.getAbsoluteBlock();
+  AbsoluteBlock expectedAbsoluteValues = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
+  EXPECT_TRUE(actualAbsoluteBlock.isEqual(expectedAbsoluteValues));
 }
 
-TEST_F(ChannelTest, CompareEqualChannels) {
-  EXPECT_TRUE(this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1.isEqual(this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm2));
+TEST_F(ChannelTest, CompareEqualChannelWithAbsoluteBlockAndAccMetaData) {
+  Channel channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  Channel channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  EXPECT_TRUE(channel1.isEqual(channel2));
 }
 
-TEST_F(ChannelTest, CompareNotEqualInPpgMetaData) {
-  EXPECT_FALSE(this->channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1.isEqual(this->channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength2));
+TEST_F(ChannelTest, CompareEqualChannelWithAbsoluteBlockAndPpgMetaData) {
+  Channel channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  Channel channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_TRUE(channel1.isEqual(channel2));
 }
 
-TEST_F(ChannelTest, CompareNotEqualInAccMetaData) {
-  EXPECT_FALSE(this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1.isEqual(this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm2));
+TEST_F(ChannelTest, CompareEqualChannelWithDifferentialBlocksAndAccMetaData) {
+  Channel channel1 = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
+  Channel channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
+  EXPECT_TRUE(channel1.isEqual(channel2));
+}
+
+TEST_F(ChannelTest, CompareEqualChannelWithDifferentialBlocksAndPpgMetaData) {
+  Channel channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  Channel channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_TRUE(channel1.isEqual(channel2));
+}
+
+TEST_F(ChannelTest, CompareNotEqualInMetaData) {
+  Channel channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  Channel channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  EXPECT_FALSE(channel1.isEqual(channel2));
+}
+
+TEST_F(ChannelTest, CompareNotEqualInBlocks) {
+  Channel channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  Channel channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_FALSE(channel1.isEqual(channel2));
+}
+
+TEST_F(ChannelTest, CompareNotEqualInBlocksAndMetaData) {
+  Channel channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  Channel channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_FALSE(channel1.isEqual(channel2));
 }
 
 TEST_F(ChannelTest, CompareNotEqualInAbsoluteBlock) {
-  EXPECT_FALSE(this->channelWithNormalAbsoluteBlocksAndAccMetaDataWithNorm1.isEqual(this->channelWithOneElementAbsoluteBlocksAndAccMetaDataWithNorm));
+  Channel channel1 = ChannelExampleFactory::channelWithAbsoluteBlockForNotEquallTest();
+  Channel channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_FALSE(channel1.isEqual(channel2));
 }
 
-TEST_F(ChannelTest, CompareNotEqualInDifferentialBlocks) {
-  EXPECT_FALSE(this->channelWithNormalNegativeDifferentialBlocksAndPpgMetaDataWithNormalWavelength1.isEqual(this->channelWithNormalDifferentialBlocksAndPpgMetaDataWithNormalWavelength1));
+TEST_F(ChannelTest, CompareNotEqualInDifferentialBlock) {
+  Channel channel1 = ChannelExampleFactory::channelWithDifferentialBlocksForNotEqualTest();
+  Channel channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_FALSE(channel1.isEqual(channel2));
 }
 
 TEST_F(ChannelTest, CompareEmptyWithEmptyChannel) {
@@ -127,45 +128,69 @@ TEST_F(ChannelTest, CompareEmptyWithEmptyChannel) {
   EXPECT_TRUE(channel1.isEqual(channel2));
 }
 
+TEST_F(ChannelTest, TestSwitchTo) {
+    BlockIdxs blockIdxs = {0, 11, 20};
+    Channel channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForTestSwitchTo();
+    channelWithAbsoluteBlock.switchDataForm(blockIdxs);
+    AbsoluteBlock absoluteBlockEmpty = AbsoluteBlock();
+    EXPECT_TRUE( channelWithAbsoluteBlock.getAbsoluteBlock().isEqual(absoluteBlockEmpty) );
+    DifferentialBlocks expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForTestSwitchTo();
+    DifferentialBlocks actualDifferentialBlocks = channelWithAbsoluteBlock.getDifferentialBlocks();
+    size_t actualDifferentialBlocksSize = actualDifferentialBlocks.size();
+    EXPECT_EQ(actualDifferentialBlocksSize, expectedDifferentialBlocks.size());
+    for (size_t i = 0; i < actualDifferentialBlocksSize; i++ ) {
+      EXPECT_TRUE(actualDifferentialBlocks[i].isEqual(expectedDifferentialBlocks[i]));
+    }
 
-// switchTo, Serialize, To Json
-
-
-
-TEST_F(ChannelTest, TestSerializeAndDeserializeMethodPpgColor) {
-  ProtobufChannel protobufChannel;
-  this->channelPpgMetaDataWithColor1.serialize(&protobufChannel);
-  Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelPpgMetaDataWithColor1.isEqual(channel2));
+    Channel channelWithDifferentialBlocks = ChannelExampleFactory::channelWithDifferentialValuesForTestSwitchTo();
+    channelWithDifferentialBlocks.switchDataForm();
+    EXPECT_EQ( channelWithDifferentialBlocks.getDifferentialBlocks().size(), 0);
+    AbsoluteBlock expectedAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForTestSwitchTo();
+    AbsoluteBlock actualAbsoluteBlock = channelWithDifferentialBlocks.getAbsoluteBlock();
+    EXPECT_TRUE(actualAbsoluteBlock.isEqual(expectedAbsoluteBlock));
 }
 
-TEST_F(ChannelTest, TestSerializeAndDeserializeMethodPpgWavelength) {
-  ProtobufChannel protobufChannel;
-  this->channelPpgMetaDataWithWavelength1.serialize(&protobufChannel);
-  Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelPpgMetaDataWithWavelength1.isEqual(channel2));
+TEST_F(ChannelTest, TestSerializeWithChannelWithAbsoluteValuesAndAccMetaData) {
+    Channel channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+    ProtobufChannel protobufChannel;
+    channel.serialize(&protobufChannel);
+    EXPECT_TRUE(Channel(protobufChannel).isEqual(channel));
 }
 
-TEST_F(ChannelTest, TestSerializeAndDeserializeMethodAccNorm) {
-  ProtobufChannel protobufChannel;
-  this->channelAccMetaDataWithNorm1.serialize(&protobufChannel);
-  Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelAccMetaDataWithNorm1.isEqual(channel2));
+TEST_F(ChannelTest, TestSerializeWithChannelWithAbsoluteValuesAndPpgMetaData) {
+    Channel channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+    ProtobufChannel protobufChannel;
+    channel.serialize(&protobufChannel);
+    EXPECT_TRUE(Channel(protobufChannel).isEqual(channel));
 }
 
-TEST_F(ChannelTest, TestSerializeAndDeserializeMethodCoordinate) {
-  ProtobufChannel protobufChannel;
-  this->channelAccMetaDataWithCoordinateX1.serialize(&protobufChannel);
-  Channel channel2 = Channel(protobufChannel);
-  EXPECT_TRUE(this->channelAccMetaDataWithCoordinateX1.isEqual(channel2));
+TEST_F(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndAccMetaData) {
+    Channel channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
+    ProtobufChannel protobufChannel;
+    channel.serialize(&protobufChannel);
+    EXPECT_TRUE(Channel(protobufChannel).isEqual(channel));
 }
 
-TEST_F(ChannelTest, CheckChannelPtr) {
-  ProtobufChannel protobufChannel;
-  EXPECT_NO_THROW(this->channelAccMetaDataWithNorm1.serialize(&protobufChannel));
+TEST_F(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndPpgMetaData) {
+    Channel channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+    ProtobufChannel protobufChannel;
+    channel.serialize(&protobufChannel);
+    EXPECT_TRUE(Channel(protobufChannel).isEqual(channel));
 }
 
-TEST_F(ChannelTest, CheckChannelNullPtr) {
-  ProtobufChannel* protobufChannel = nullptr;
-  EXPECT_THROW(this->channelAccMetaDataWithNorm1.serialize(protobufChannel), std::invalid_argument);
+TEST_F(ChannelTest, TestSerializeThrow) {
+    Channel channel = Channel();
+    ProtobufChannel* protobufChannel = nullptr;
+    EXPECT_THROW(channel.serialize(protobufChannel), std::invalid_argument);
 }
+
+TEST_F(ChannelTest, TestSerializeNoThrow) {
+    Channel channel = Channel();
+    ProtobufChannel protobufChannel;
+    EXPECT_NO_THROW(channel.serialize(&protobufChannel));
+}
+
+TEST_F(ChannelTest, TestToJson) {
+
+}
+
