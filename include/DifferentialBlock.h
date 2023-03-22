@@ -51,6 +51,7 @@ class DifferentialBlock final {
   DifferentialBlock();
 
   DifferentialValues getDifferentialValues();
+  bool isSet();
   bool isEqual(DifferentialBlock& differentialBlock);
   DifferentialBlockJson toJson();
   void serialize(ProtobufDifferentialBlock* differentialBlock);

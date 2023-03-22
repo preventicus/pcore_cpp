@@ -132,6 +132,22 @@ bool Channel::isEqual(Channel& channel) {
          this->absoluteBlock.isEqual(channel.absoluteBlock);
 }
 
+bool Channel::hasAccMetaData() {
+  return this->accMetaData.isSet();
+}
+
+bool Channel::hasPpgMetaData() {
+  return this->ppgMetaData.isSet();
+}
+
+bool Channel::hasDifferentialBlocks() {
+  return !this->differentialBlocks.empty();
+}
+
+bool Channel::hasAbsoluteBlock() {
+  return this->absoluteBlock.isSet();
+}
+
 void Channel::serialize(ProtobufChannel* protobufChannel) {
   if (protobufChannel == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");

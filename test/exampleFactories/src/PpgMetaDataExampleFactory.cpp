@@ -45,6 +45,14 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorRed() {
   return PpgMetaData(ProtobufColor::COLOR_RED);
 }
 
+static PpgMetaData ppgMetaDataWithColorNone() {
+    return PpgMetaData(ProtobufColor::COLOR_NONE);
+}
+
+static PpgMetaData ppgMetaDataWithWavelength0() {
+    return PpgMetaData(0);
+}
+
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255() {
   return PpgMetaData(255);
 }
@@ -57,14 +65,13 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
   return PpgMetaData();
 }
 
-PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(ProtobufColor color) {
+PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgMetaData) {
   PpgMetaDataJson ppgMetaDataJson;
-  ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(color);
+  if( ppgMetaData.hasWavelength() ) {
+    ppgMetaDataJson["wavelength_nm"] = ppgMetaData.getWavelength();
+  } else if( ppgMetaData.hasColor() ) {
+    ppgMetaDataJson["color"] = ppgMetaData.getColor();
+  }
   return ppgMetaDataJson;
 }
 
-PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(Wavelength wavelength_nm) {
-  PpgMetaDataJson ppgMetaDataJson;
-  ppgMetaDataJson["wavelength_nm"] = wavelength_nm;
-  return ppgMetaDataJson;
-}

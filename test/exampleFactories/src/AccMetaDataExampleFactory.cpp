@@ -34,17 +34,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AccMetaDataExampleFactory.h"
 #include "AccMetaData.h"
 
-AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufCoordinate coordinate) {
+AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(AccMetaData accMetaData) {
   AccMetaDataJson accMetaDataJson;
-  accMetaDataJson["coordinate"] = AccMetaData::protobufCoordinateToString(coordinate);
-  return accMetaDataJson;
+  if(accMetaData.hasCoordinate()) {
+    accMetaDataJson["coordinate"] = accMetaData.getCoordinate();
+  } else if (accMetaData.hasNorm()) {
+    accMetaDataJson["norm"] = accMetaData.getNorm();
+  }
 }
 
-AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufNorm norm) {
-  AccMetaDataJson accMetaDataJson;
-  accMetaDataJson["norm"] = AccMetaData::protobufNormToString(norm);
-  return accMetaDataJson;
-}
+//AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufCoordinate coordinate) {
+//  AccMetaDataJson accMetaDataJson;
+//  accMetaDataJson["coordinate"] = AccMetaData::protobufCoordinateToString(coordinate);
+//  return accMetaDataJson;
+//}
+//
+//AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(ProtobufNorm norm) {
+//  AccMetaDataJson accMetaDataJson;
+//  accMetaDataJson["norm"] = AccMetaData::protobufNormToString(norm);
+//  return accMetaDataJson;
+//}
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm() {
   return AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);

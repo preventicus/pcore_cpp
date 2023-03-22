@@ -90,5 +90,5 @@ class ChannelExampleFactory {
   static Channel channelWithDifferentialBlocksAndPpgMetaData();
   static Channel channelWithDifferentialBlocksAndAccMetaData();
 
-
+  static ChannelJson buildChannelJson(Channel channel);
 };

@@ -307,3 +307,19 @@ Channel ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData() {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   return Channel(ppgMetaData, differentialBlocks);
 }
+
+ChannelJson ChannelExampleFactory::buildChannelJson(Channel channel) {
+  ChannelJson channelJson;
+  if (channel.hasAbsoluteBlock() && channel.hasAccMetaData()) {
+    AbsoluteBlock absoluteBlock = channel.getAbsoluteBlock();
+    channelJson["absolute_block"] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
+    channelJson["acc_metadata"] =
+  } else if (channel.hasAbsoluteBlock() && channel.hasPpgMetaData()) {
+
+  } else if (channel.hasDifferentialBlocks() && channel.hasAccMetaData()) {
+
+  } else if (channel.hasDifferentialBlocks() && channel.hasPpgMetaData()) {
+
+  }
+
+}

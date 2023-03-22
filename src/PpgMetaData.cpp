@@ -64,6 +64,14 @@ Wavelength PpgMetaData::getWavelength() {
   return this->wavelength_nm;
 }
 
+bool PpgMetaData::hasColor() {
+  return this->color != ProtobufColor::COLOR_NONE;
+}
+
+bool PpgMetaData::hasWavelength() {
+  return this->wavelength_nm > 0;
+}
+
 bool PpgMetaData::isSet() {
   return !(this->color == ProtobufColor::COLOR_NONE && this->wavelength_nm == 0);
 }

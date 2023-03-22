@@ -191,6 +191,6 @@ TEST_F(ChannelTest, TestSerializeNoThrow) {
 }
 
 TEST_F(ChannelTest, TestToJson) {
-
+    Channel channel = ChannelExampleFactory::
 }
 

@@ -176,27 +176,47 @@ TEST_F(PpgMetaDataTest, TestSerializeThrow) {
 TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetaDataWithWavelength255) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
-  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(255);
+  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
   EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
 }
 
 TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorRed) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
-  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ProtobufColor::COLOR_RED);
+  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
   EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
 }
 
 TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorGreen) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
-  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ProtobufColor::COLOR_GREEN);
+  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
   EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
 }
 
 TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorBlue) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
-  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ProtobufColor::COLOR_BLUE);
+  PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
   EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
+}
+
+TEST_F(PpgMetaDataTest, TestHasColorWithPpgMetDataWithColorBlue) {
+  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  EXPECT_TRUE(ppgMetaData.hasColor());
+}
+
+TEST_F(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithColorNone) {
+  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithColorNone();
+  EXPECT_FALSE(ppgMetaData.hasColor());
+}
+
+TEST_F(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithWavelength255) {
+  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  EXPECT_TRUE(ppgMetaData.hasWavelength());
+}
+
+TEST_F(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithWavelength0) {
+  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0();
+  EXPECT_FALSE(ppgMetaData.hasWavelength());
 }

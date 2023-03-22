@@ -52,6 +52,8 @@ class PpgMetaData final {
 
   ProtobufColor getColor();
   Wavelength getWavelength();
+  bool hasColor();
+  bool hasWavelength();
   bool isSet();
   bool isEqual(PpgMetaData& ppgMetaData);
   PpgMetaDataJson toJson();

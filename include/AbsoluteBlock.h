@@ -47,6 +47,7 @@ class AbsoluteBlock final {
   AbsoluteBlock();
 
   AbsoluteValues getAbsoluteValues();
+  bool isSet();
   bool isEqual(AbsoluteBlock& block);
   AbsoluteBlockJson toJson();
 

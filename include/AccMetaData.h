@@ -54,6 +54,8 @@ class AccMetaData final {
 
   ProtobufCoordinate getCoordinate();
   ProtobufNorm getNorm();
+  bool hasNorm();
+  bool hasCoordinate();
   bool isSet();
   bool isEqual(AccMetaData& AccMetaData);
   AccMetaDataJson toJson();

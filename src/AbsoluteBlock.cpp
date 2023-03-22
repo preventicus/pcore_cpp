@@ -52,6 +52,10 @@ AbsoluteValues AbsoluteBlock::getAbsoluteValues() {
   return this->absoluteValues;
 }
 
+bool AbsoluteBlock::isSet() {
+  return !this->absoluteValues.empty();
+}
+
 bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
   return this->absoluteValues == block.absoluteValues;
 }

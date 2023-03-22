@@ -39,9 +39,12 @@ class PpgMetaDataExampleFactory {
   static PpgMetaData ppgMetDataWithColorGreen();
   static PpgMetaData ppgMetDataWithColorBlue();
   static PpgMetaData ppgMetDataWithColorRed();
+  static PpgMetaData ppgMetaDataWithColorNone();
   static PpgMetaData ppgMetaDataWithWavelength255();
   static PpgMetaData ppgMetaDataWithWavelength100();
+  static PpgMetaData ppgMetaDataWithWavelength0();
   static PpgMetaData ppgMetaDataNotSet();
-  static PpgMetaDataJson buildPpgMetaDataJson(ProtobufColor color);
-  static PpgMetaDataJson buildPpgMetaDataJson(Wavelength wavelength_nm);
+  static PpgMetaDataJson buildPpgMetaDataJson(PpgMetaData ppgMetaData);
+//  static PpgMetaDataJson buildPpgMetaDataJson(ProtobufColor color);
+//  static PpgMetaDataJson buildPpgMetaDataJson(Wavelength wavelength_nm);
 };

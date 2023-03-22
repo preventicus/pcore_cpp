@@ -63,6 +63,10 @@ DifferentialValues DifferentialBlock::getDifferentialValues() {
   return this->differentialValues;
 }
 
+bool DifferentialBlock::isSet() {
+  return !this->differentialValues.empty();
+}
+
 bool DifferentialBlock::isEqual(DifferentialBlock& differentialBlock) {
   return this->differentialValues == differentialBlock.differentialValues;
 }

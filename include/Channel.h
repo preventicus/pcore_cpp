@@ -63,6 +63,11 @@ class Channel final {
   PpgMetaData getPpgMetaData();
 
   bool isEqual(Channel& channel);
+  bool hasAccMetaData();
+  bool hasPpgMetaData();
+  bool hasDifferentialBlocks();
+  bool hasAbsoluteBlock();
+
   ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType);
   void serialize(ProtobufChannel* protobufChannel);
   void switchDataForm(BlockIdxs& blockIdxs);

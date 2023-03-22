@@ -60,8 +60,16 @@ ProtobufNorm AccMetaData::getNorm() {
   return this->norm;
 }
 
+bool AccMetaData::hasNorm() {
+  return this->norm != ProtobufNorm::NORM_NONE;
+}
+
+bool AccMetaData::hasCoordinate() {
+  return this->coordinate != ProtobufCoordinate::COORDINATE_NONE;
+}
+
 bool AccMetaData::isSet() {
-  return !(this->coordinate == ProtobufCoordinate::COORDINATE_NONE && this->norm == ProtobufNorm::NORM_NONE);
+  return this->hasNorm() || this->hasCoordinate();
 }
 
 bool AccMetaData::isEqual(AccMetaData& AccMetaData) {

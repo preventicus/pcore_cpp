@@ -36,8 +36,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AccMetaDataExampleFactory {
  public:
-  static AccMetaDataJson buildAccMetaDataJson(ProtobufCoordinate coordinate);
-  static AccMetaDataJson buildAccMetaDataJson(ProtobufNorm norm);
+  static AccMetaDataJson buildAccMetaDataJson(AccMetaData accMetaData);
+//  static AccMetaDataJson buildAccMetaDataJson(ProtobufCoordinate coordinate);
+//  static AccMetaDataJson buildAccMetaDataJson(ProtobufNorm norm);
   static AccMetaData accMetaDataWithNormEuclideanDifferencesNorm();
   static AccMetaData accMetaDataWithNormNone();
   static AccMetaData accMetaDataWithCoordinateX();

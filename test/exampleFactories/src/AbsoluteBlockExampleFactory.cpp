@@ -77,9 +77,17 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForTestSwitchTo() {
 
 // -------------------------------------JSON-----------------------
 
-AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson) {
+//AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson) {
+//  AbsoluteBlockJson absoluteBlockJson;
+//  absoluteBlockJson["absolute_values"] = absoluteValuesJson;
+//  return absoluteBlockJson;
+//}
+
+static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock& absoluteBlock) {
   AbsoluteBlockJson absoluteBlockJson;
-  absoluteBlockJson["absolute_values"] = absoluteValuesJson;
+  if(absoluteBlock.isSet()) {
+    absoluteBlockJson["absolute_values"] = absoluteBlock.getAbsoluteValues();
+  }
   return absoluteBlockJson;
 }
 
