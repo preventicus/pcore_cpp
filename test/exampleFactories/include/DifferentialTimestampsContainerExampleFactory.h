@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -38,30 +38,39 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DifferentialTimestampsContainerExampleFactory {
  public:
-  static UnixTimestamp normalFirstUnixTimestamp_ms();
-  static UnixTimestamp zeroFirstUnixTimestamp_ms();
-  static UnixTimestamp expectedFirstUnixTimestamps();
-  static UnixTimestamp lastUnixTimestamp_ms();
+  static DifferentialTimestampsContainer differentialTimestampsContainerWithThreeBlocks();
+  static DifferentialTimestampsContainer differentialTimestampsContainerEmpty();
+  static DifferentialTimestampsContainer differentialTimestampsContainerWithTwoBlocks();
+  static DifferentialTimestampsContainer differentialTimestampsContainerWithBigBlocks();
+  static DifferentialTimestampsContainer differentialTimestampsContainerForSwitchDataFormTest();
 
-  static Duration duration();
+  static DifferentialTimestampsContainerJson buildDifferentialTimestampsContainerJson(
+      DifferentialTimestampsContainer differentialTimestampsContainer);
 
-  static BlockIntervals normalBlockIntervals_ms();
-  static BlockIntervals zeroBlockIntervals_ms();
-  static BlockIntervals normalBlockIntervals_msWithOneUnixInLastBlock();
-  static BlockIntervals emptyBlockIntervals_ms();
-  static BlockIntervals expectedBlockInterval();
-
-  static TimestampsIntervals normalTimestampsIntervals_ms();
-  static TimestampsIntervals normalTimestampsIntervals_msWithOneUnixInLastBlock();
-  static TimestampsIntervals normalTimestampsIntervals_msWithEqualDifferences();
-  static TimestampsIntervals zeroTimestampsIntervals_ms();
-  static TimestampsIntervals emptyTimestampsIntervals_ms();
-  static TimestampsIntervals expectedTimestampInterval();
-
-  static DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps();
-  static DifferentialTimestampsContainer differentialTimestampsWith0Timestamps();
-  static DifferentialTimestampsContainer differentialTimestampsWithEmptyTimestamps();
-  static DifferentialTimestampsContainer normalDifferentialTimestamps();
-  static DifferentialTimestampsContainer differentiaJsonDataTimestampsContainerPpg();
-  static DifferentialTimestampsContainer differentiaJsonDataTimestampsContainerAcc();
+  //  static UnixTimestamp normalFirstUnixTimestamp_ms();
+  //  static UnixTimestamp zeroFirstUnixTimestamp_ms();
+  //  static UnixTimestamp expectedFirstUnixTimestamps();
+  //  static UnixTimestamp lastUnixTimestamp_ms();
+  //
+  //  static Duration duration();
+  //
+  //  static BlockIntervals normalBlockIntervals_ms();
+  //  static BlockIntervals zeroBlockIntervals_ms();
+  //  static BlockIntervals normalBlockIntervals_msWithOneUnixInLastBlock();
+  //  static BlockIntervals emptyBlockIntervals_ms();
+  //  static BlockIntervals expectedBlockInterval();
+  //
+  //  static TimestampsIntervals normalTimestampsIntervals_ms();
+  //  static TimestampsIntervals normalTimestampsIntervals_msWithOneUnixInLastBlock();
+  //  static TimestampsIntervals normalTimestampsIntervals_msWithEqualDifferences();
+  //  static TimestampsIntervals zeroTimestampsIntervals_ms();
+  //  static TimestampsIntervals emptyTimestampsIntervals_ms();
+  //  static TimestampsIntervals expectedTimestampInterval();
+  //
+  //  static DifferentialTimestampsContainer differentialTimestampsWithNormalTimestamps();
+  //  static DifferentialTimestampsContainer differentialTimestampsWith0Timestamps();
+  //  static DifferentialTimestampsContainer differentialTimestampsWithEmptyTimestamps();
+  //  static DifferentialTimestampsContainer normalDifferentialTimestamps();
+  //  static DifferentialTimestampsContainer differentiaJsonDataTimestampsContainerPpg();
+  //  static DifferentialTimestampsContainer differentiaJsonDataTimestampsContainerAcc();
 };

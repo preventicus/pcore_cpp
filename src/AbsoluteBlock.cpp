@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -62,6 +62,9 @@ bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
 
 AbsoluteBlockJson AbsoluteBlock::toJson() {
   AbsoluteBlockJson absoluteBlockJson;
+  if (!isSet()) {
+    return absoluteBlockJson;
+  }
   AbsoluteValuesJson absoluteValuesJson(Json::arrayValue);
   for (auto& absoluteValue : this->absoluteValues) {
     absoluteValuesJson.append(absoluteValue);

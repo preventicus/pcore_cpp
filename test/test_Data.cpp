@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -36,81 +36,103 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DataTest : public ::testing::Test {
  protected:
-  Data normalDataWithAccMetaData1 = DataExampleFactory::normalData();
-  Data normalDataWithAccMetaData2 = DataExampleFactory::normalData();
-  Data comparableDataPpgMetaData1 = DataExampleFactory::comparableData();
-  Data comparableDataPpgMetaData2 = DataExampleFactory::comparableData();
 };
 
-// GET RAW
-// GET HEADER
-// COMPRAE HEADER, RAW
-// TOJSON
-
-TEST_F(DataTest, TestGetMethodData) {
-  Raw raw = this->normalDataWithAccMetaData1.getRaw();
-  Raw comparableRaw = RawExampleFactory::normalRaw();
-  EXPECT_TRUE(raw.isEqual(comparableRaw));
-  Header header = HeaderExampleFactory::normalHeaderWithPositiveTimeZoneOffset_min();
-  EXPECT_TRUE(this->normalDataWithAccMetaData1.getHeader().isEqual(header));
+TEST_F(DataTest, TestGetRaw) {
+  Data data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  Raw raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  Raw raw2 = data.getRaw();
+  EXPECT_TRUE(raw1.isEqual(raw2));
 }
 
-TEST_F(DataTest, TestGetRaw) {}
-
-TEST_F(DataTest, TestGetHeader) {}
-
-TEST_F(DataTest, CompareEqualNormalData) {
-  EXPECT_TRUE(this->normalDataWithAccMetaData1.isEqual(this->normalDataWithAccMetaData2));
+TEST_F(DataTest, TestGetHeader) {
+  Data data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  Header header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  Header header2 = data.getHeader();
+  EXPECT_TRUE(header1.isEqual(header2));
 }
 
-TEST_F(DataTest, CompareDifferentData) {
-  EXPECT_FALSE(this->comparableDataPpgMetaData1.isEqual(this->normalDataWithAccMetaData1));
+TEST_F(DataTest, TestIsEqualWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+  Data data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  Data data2 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  EXPECT_TRUE(data1.isEqual(data2));
 }
 
-TEST_F(DataTest, CompareEqualComparableData) {
-  EXPECT_TRUE(this->comparableDataPpgMetaData1.isEqual(this->comparableDataPpgMetaData2));
+TEST_F(DataTest, TestIsEqualWithDataEmpty) {
+  Data data1 = DataExampleFactory::dataEmpty();
+  Data data2 = DataExampleFactory::dataEmpty();
+  EXPECT_TRUE(data1.isEqual(data2));
 }
 
-TEST_F(DataTest, TestSerializeAndDeserializeData) {
+TEST_F(DataTest, TestIsEqualWithDataEmptyAndDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+  Data data1 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  Data data2 = DataExampleFactory::dataEmpty();
+  EXPECT_FALSE(data1.isEqual(data2));
+}
+
+TEST_F(DataTest, TestIsEqualWithDifferentHeader) {
+  Data data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  Data data2 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive();
+  EXPECT_FALSE(data1.isEqual(data2));
+}
+
+TEST_F(DataTest, TestIsEqualWithDifferentRaw) {
+  Data data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  Data data2 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  EXPECT_FALSE(data1.isEqual(data2));
+}
+
+TEST_F(DataTest, TestSerializeWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+  Data data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   ProtobufData protobufData;
-  this->normalDataWithAccMetaData1.serialize(&protobufData);
-  Data data = Data(protobufData);
-  EXPECT_TRUE(this->normalDataWithAccMetaData1.isEqual(data));
+  data1.serialize(&protobufData);
+  Data data2 = Data(protobufData);
+  EXPECT_TRUE(data1.isEqual(data2));
 }
 
-TEST_F(DataTest, TestSerializeAndDeserializeComparableData) {
+TEST_F(DataTest, TestSerializeNoThrow) {
+  Data data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   ProtobufData protobufData;
-  this->comparableDataPpgMetaData1.serialize(&protobufData);
-  Data data = Data(protobufData);
-  EXPECT_TRUE(this->comparableDataPpgMetaData1.isEqual(data));
+  EXPECT_NO_THROW(data.serialize(&protobufData));
 }
 
-TEST_F(DataTest, TestSerializeAndDeserializeTwoComparableData) {
-  ProtobufData protobufData1;
-  this->comparableDataPpgMetaData1.serialize(&protobufData1);
-  Data standardData = Data(protobufData1);
-  ProtobufData protobufData2;
-  this->comparableDataPpgMetaData2.serialize(&protobufData2);
-  Data comparableData = Data(protobufData2);
-  EXPECT_TRUE(standardData.isEqual(comparableData));
-}
-
-TEST_F(DataTest, TestSerializeAndDeserializeTwoNormalData) {
-  ProtobufData protobufData1;
-  this->normalDataWithAccMetaData1.serialize(&protobufData1);
-  Data standardData = Data(protobufData1);
-  ProtobufData protobufData2;
-  this->normalDataWithAccMetaData2.serialize(&protobufData2);
-  Data comparableData = Data(protobufData2);
-  EXPECT_TRUE(standardData.isEqual(comparableData));
-}
-
-TEST_F(DataTest, CheckDataPtr) {
-  ProtobufData protobufData;
-  EXPECT_NO_THROW(this->comparableDataPpgMetaData1.serialize(&protobufData));
-}
-
-TEST_F(DataTest, CheckDataNullPtr) {
+TEST_F(DataTest, TestSerializeThrow) {
+  Data data = DataExampleFactory::dataEmpty();
   ProtobufData* protobufData = nullptr;
-  EXPECT_THROW(this->comparableDataPpgMetaData1.serialize(protobufData), std::invalid_argument);
+  EXPECT_THROW(data.serialize(protobufData), std::invalid_argument);
+}
+
+TEST_F(DataTest, TestSwitchDataFormWithDataInAbsoluteForm) {
+  Data data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
+  data.switchDataForm();
+  Data dataInDifferentialForm = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
+  EXPECT_TRUE(data.isEqual(dataInDifferentialForm));
+}
+
+TEST_F(DataTest, TestSwitchDataFormWithDataInDifferentialForm) {
+  Data data = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
+  data.switchDataForm();
+  Data dataInAbsoluteForm = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
+  EXPECT_TRUE(data.isEqual(dataInAbsoluteForm));
+}
+
+TEST_F(DataTest, TestToJsonWithDataEmpty) {
+  Data data = DataExampleFactory::dataEmpty();
+  DataJson dataJson1 = DataExampleFactory::buildDataJson(data);
+  DataJson dataJson2 = data.toJson(DataForm::DATA_FORM_NONE);
+  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
+}
+
+TEST_F(DataTest, TestToJsonWithDataInAbsoluteForm) {
+  Data data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
+  DataJson dataJson1 = DataExampleFactory::buildDataJson(data);
+  DataJson dataJson2 = data.toJson(DataForm::DATA_FORM_ABSOLUTE);
+  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
+}
+
+TEST_F(DataTest, TestToJsonWithDataInDifferentialForm) {
+  Data data = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
+  DataJson dataJson1 = DataExampleFactory::buildDataJson(data);
+  DataJson dataJson2 = data.toJson(DataForm::DATA_FORM_DIFFERENTIAL);
+  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
 }

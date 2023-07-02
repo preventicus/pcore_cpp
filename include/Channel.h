@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -46,6 +46,8 @@ using ProtobufSensorType = com::preventicus::pcore::SensorType;
 using BlockIdxs = std::vector<BlockIdx>;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 using ChannelJson = Json::Value;
+using DifferentialBlocksJson = Json::Value;
+using DifferentialBlocks = std::vector<DifferentialBlock>;
 
 class Channel final {
  public:

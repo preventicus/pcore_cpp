@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -45,6 +45,6 @@ class PpgMetaDataExampleFactory {
   static PpgMetaData ppgMetaDataWithWavelength0();
   static PpgMetaData ppgMetaDataNotSet();
   static PpgMetaDataJson buildPpgMetaDataJson(PpgMetaData ppgMetaData);
-//  static PpgMetaDataJson buildPpgMetaDataJson(ProtobufColor color);
-//  static PpgMetaDataJson buildPpgMetaDataJson(Wavelength wavelength_nm);
+  //  static PpgMetaDataJson buildPpgMetaDataJson(ProtobufColor color);
+  //  static PpgMetaDataJson buildPpgMetaDataJson(Wavelength wavelength_nm);
 };

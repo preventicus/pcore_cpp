@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -45,12 +45,12 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorRed() {
   return PpgMetaData(ProtobufColor::COLOR_RED);
 }
 
-static PpgMetaData ppgMetaDataWithColorNone() {
-    return PpgMetaData(ProtobufColor::COLOR_NONE);
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithColorNone() {
+  return PpgMetaData(ProtobufColor::COLOR_NONE);
 }
 
-static PpgMetaData ppgMetaDataWithWavelength0() {
-    return PpgMetaData(0);
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0() {
+  return PpgMetaData(0);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255() {
@@ -67,11 +67,10 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
 
 PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgMetaData) {
   PpgMetaDataJson ppgMetaDataJson;
-  if( ppgMetaData.hasWavelength() ) {
+  if (ppgMetaData.hasWavelength()) {
     ppgMetaDataJson["wavelength_nm"] = ppgMetaData.getWavelength();
-  } else if( ppgMetaData.hasColor() ) {
-    ppgMetaDataJson["color"] = ppgMetaData.getColor();
+  } else if (ppgMetaData.hasColor()) {
+    ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(ppgMetaData.getColor());
   }
   return ppgMetaDataJson;
 }
-

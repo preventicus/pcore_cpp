@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -37,17 +37,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteTimestampsContainerExampleFactory {
  public:
-  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerPgg();
-  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerAcc();
-  static AbsoluteTimestampsContainer absoluteTimestampsNormal();
-  static AbsoluteTimestampsContainer absoluteUNixTimestampBlockWithOneUnixInLastBlock();
-  static AbsoluteTimestampsContainer absoluteTimestampsTwoElement();
-  static AbsoluteTimestampsContainer absoluteTimestampsOneElement();
-  static AbsoluteTimestampsContainer absoluteTimestamps0();
-  static AbsoluteTimestampsContainer absoluteTimestampsEmpty();
-  static AbsoluteTimestampsContainer normalAbsoluteTimestamps();
-  static AbsoluteTimestampsContainer absoluteTimestampsBlockWithEqualTimestampIntervals();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithThreeSmallTimestamps();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithThreeBigTimestamps();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithOneBigTimestamp();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestamp0();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestampsEmpty();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
 
-  static AbsoluteTimestampsContainer buildAbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps);
-  static AbsoluteTimestampsContainerJson buildAbsoluteTimestampsContainerJson(UnixTimestampsJson& unixTimestampsJson);
+  //  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerPgg();
+  //  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerAcc();
+  //  static AbsoluteTimestampsContainer absoluteTimestampsNormal();
+  //  static AbsoluteTimestampsContainer absoluteUNixTimestampBlockWithOneUnixInLastBlock();
+  //  static AbsoluteTimestampsContainer absoluteTimestampsTwoElement();
+  //  static AbsoluteTimestampsContainer absoluteTimestampsOneElement();
+  //  static AbsoluteTimestampsContainer absoluteTimestamps0();
+  //  static AbsoluteTimestampsContainer normalAbsoluteTimestamps();
+  //  static AbsoluteTimestampsContainer absoluteTimestampsBlockWithEqualTimestampIntervals();
+
+  static AbsoluteTimestampsContainerJson buildAbsoluteTimestampsContainerJson(AbsoluteTimestampsContainer absoluteTimestampsContainer);
+
+  //  static AbsoluteTimestampsContainer buildAbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps);
 };

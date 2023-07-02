@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -81,51 +81,51 @@ TEST_F(PpgMetaDataTest, TestIsSetWithPpgMetaDataNotSet) {
   EXPECT_FALSE(ppgMetaData.isSet());
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualColor) {
+TEST_F(PpgMetaDataTest, TestIsEqualPpgMetDataWithColorRed) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   EXPECT_TRUE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualColor) {
+TEST_F(PpgMetaDataTest, TestIsEqualPpgMetDataWithColorGreen) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   EXPECT_TRUE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualColor) {
+TEST_F(PpgMetaDataTest, TestIsEqualPpgMetDataWithColorBlue) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
   PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
   EXPECT_TRUE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualWavelength) {
+TEST_F(PpgMetaDataTest, TestIsEqualPpgMetDataWithWavelength255) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   EXPECT_TRUE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
-TEST_F(PpgMetaDataTest, CompareDifferentColor) {
+TEST_F(PpgMetaDataTest, TestIsEqualWithDifferentColor) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   EXPECT_FALSE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
-TEST_F(PpgMetaDataTest, CompareDifferentWavelength) {
+TEST_F(PpgMetaDataTest, TestIsEqualWithDifferentWavelength) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
   EXPECT_FALSE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualNotSet) {
+TEST_F(PpgMetaDataTest, TestIsEqualWithPpgMetaDataNotSet) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
   PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
   EXPECT_TRUE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
-TEST_F(PpgMetaDataTest, CompareColorWithWavelength) {
+TEST_F(PpgMetaDataTest, TestIsEqualWithColorAndWavelength) {
   PpgMetaData ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
-  PpgMetaData ppgMetaData2 =  PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
+  PpgMetaData ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
   EXPECT_FALSE(ppgMetaData1.isEqual(ppgMetaData2));
 }
 
@@ -177,28 +177,28 @@ TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetaDataWithWavelength255) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
   PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
-  EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
 }
 
 TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorRed) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
   PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
-  EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
 }
 
 TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorGreen) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
   PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
-  EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
 }
 
 TEST_F(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorBlue) {
   PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
   PpgMetaDataJson ppgMetaDataJson1 = ppgMetaData.toJson();
   PpgMetaDataJson ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
-  EXPECT_TRUE(ppgMetaDataJson1 == ppgMetaDataJson2);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
 }
 
 TEST_F(PpgMetaDataTest, TestHasColorWithPpgMetDataWithColorBlue) {

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,23 +33,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "UnixTimestampsExampleFactory.h"
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsNormal1_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestamps_ms() {
   return {1, 2, 3};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsNormal2_ms() {
-  return {3, 4, 5};
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms() {
+  return {1675732789987, 1675732789995, 1675732790000};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsTwoElements_ms() {
-  return {1, 2};
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestamp_ms() {
+  return {1675732789987};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsOneElement_ms() {
-  return {1675732790147};
-}
-
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestamps0_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0_ms() {
   return {0};
 }
 
@@ -57,29 +53,50 @@ UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsEmpty_ms() {
   return {};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::absoluteJsonDataUNixTimestampsPpg() {
-  return {1675423476214, 1675423484760, 1675423490027, 1675423494521, 1675423500121, 1675423506321, 1675423513156};
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithFiveDifferentialTimestamps_ms() {
+  return {5, 0, 7, 200, 1};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::absoluteJsonDataUNixTimestampsAcc() {
-  return {1675423476210, 1675423484770, 1675423490028, 1675423494520, 1675423500131, 1675423506381};
+UnixTimestamp UnixTimestampsExampleFactory::firstTimestamp_ms() {
+  return 1675732789987;
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::normalUnixTimestamps_ms() {
-  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790227, 1675732790267, 1675732790307,
-          1675732790347, 1675732790467, 1675732790507, 1675732790547, 1675732790587, 1675732790627, 1675732790667, 1675732790707, 1675732790747,
-          1675732790867, 1675732790947, 1675732791027, 1675732791107, 1675732791187, 1675732791347, 1675732791387, 1675732791427};
+UnixTimestamp UnixTimestampsExampleFactory::firstTimestampEmpty_ms() {
+  return 0;
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::absoluteTimestampWithOneUnixInLastBlock() {
-  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790287};
+UnixTimestamp UnixTimestampsExampleFactory::lastTimestamp_ms() {
+  return 1675732790000;
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::absoluteTimestampWithEqualTimestampIntervals() {
-  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790227};
+// UnixTimestamps UnixTimestampsExampleFactory::absoluteJsonDataUNixTimestampsPpg() {
+//   return {1675423476214, 1675423484760, 1675423490027, 1675423494521, 1675423500121, 1675423506321, 1675423513156};
+// }
+//
+// UnixTimestamps UnixTimestampsExampleFactory::absoluteJsonDataUNixTimestampsAcc() {
+//   return {1675423476210, 1675423484770, 1675423490028, 1675423494520, 1675423500131, 1675423506381};
+// }
+//
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTest_ms() {
+  return {1677696136587, 1677696136627, 1677696136667, 1677696136707, 1677696136747, 1677696136787, 1677696136827, 1677696136867, 1677696136907,
+          1677696136947, 1677696136987, 1677696137028, 1677696137068, 1677696137108, 1677696137148, 1677696137188, 1677696137228, 1677696137268,
+          1677696137308, 1677696137348, 1677696137387, 1677696137427, 1677696137467, 1677696137507, 1677696137547, 1677696137587, 1677696137627};
 }
 
-UnixTimestampsJson UnixTimestampsExampleFactory::buildUnixTimestampsJson(UnixTimestamps& unixTimestamps_ms) {
+UnixTimestamp UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormTest_ms() {
+  return 1677696136587;
+}
+
+//
+// UnixTimestamps UnixTimestampsExampleFactory::absoluteTimestampWithOneUnixInLastBlock() {
+//  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790287};
+//}
+//
+// UnixTimestamps UnixTimestampsExampleFactory::absoluteTimestampWithEqualTimestampIntervals() {
+//  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790227};
+//}
+
+UnixTimestampsJson UnixTimestampsExampleFactory::buildUnixTimestampsJson(UnixTimestamps unixTimestamps_ms) {
   UnixTimestampsJson unixTimestampsJson(Json::arrayValue);
   for (auto& unixTimestamp_ms : unixTimestamps_ms) {
     unixTimestampsJson.append(unixTimestamp_ms);

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -37,23 +37,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AbsoluteBlockExampleFactory {
  public:
-
   static AbsoluteBlock absoluteBlockWithThreePositiveAbsoluteValues();
   static AbsoluteBlock absoluteBlockWithThreeMixedAbsoluteValues();
   static AbsoluteBlock absoluteBlockWithThreeNegativeAbsoluteValues();
   static AbsoluteBlock absoluteBlockWithOneAbsoluteValue();
   static AbsoluteBlock absoluteBlockWithEmptyAbsoluteValue();
 
-//  static AbsoluteBlock absoluteBlock();
-//  static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
-//  static AbsoluteBlock absoluteJsonDataBlockAcc();
-//  static AbsoluteBlock absoluteJsonDataBlockPpg1();
-//  static AbsoluteBlock absoluteJsonDataBlockPpg2();
+  //  static AbsoluteBlock absoluteBlock();
+  //  static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
+  //  static AbsoluteBlock absoluteJsonDataBlockAcc();
+  //  static AbsoluteBlock absoluteJsonDataBlockPpg1();
+  //  static AbsoluteBlock absoluteJsonDataBlockPpg2();
 
-
-
-//  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson);
-  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock& absoluteBlock);
+  //  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson);
+  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock);
 
   static AbsoluteBlock absoluteBlockForTestSwitchTo();
 };

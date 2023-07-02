@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -37,18 +37,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class HeaderExampleFactory {
  public:
-  static TimeZoneOffset positiveTimeZoneOffset_min();
-  static TimeZoneOffset negativeTimeZoneOffset_min();
-  static TimeZoneOffset invalidPositiveTimeZoneOffset_min();
-  static TimeZoneOffset invalidNegativeTimeZoneOffset_min();
-  static TimeZoneOffset noTimeZoneOffset_min();
-  static TimeZoneOffset maxTimeZoneOffset_min();
-  static TimeZoneOffset minTimeZoneOffset_min();
+  static TimeZoneOffset timeZoneOffsetPositive_min();
+  static TimeZoneOffset timeZoneOffsetNegative_min();
+  static TimeZoneOffset timeZoneOffsetEmpty_min();
+  static TimeZoneOffset timeZoneOffsetMaxValue_min();
+  static TimeZoneOffset timeZoneOffsetMinValue_min();
+  static TimeZoneOffset timeZoneOffsetPositiveInvalid_min();
+  static TimeZoneOffset timeZoneOffsetNegativeInvalid_min();
 
-  static Header normalHeaderWithPositiveTimeZoneOffset_min();
-  static Header normalHeaderWithNegativeTimeZoneOffset_min();
-  static Header normalHeaderWithNoTimeZoneOffset_min();
-  static Header headerWithMaxTimeZoneOffset_min();
-  static Header headerWithMinTimeZoneOffset_min();
-  static Header absoluteJsonDataHeader();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  static Header headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
+
+  static Header headerEmpty();
+
+  static HeaderJson buildHeaderJson(Header header);
 };

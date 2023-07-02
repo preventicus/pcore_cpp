@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -44,12 +44,13 @@ using Channels = std::vector<Channel>;
 using SensorTypeString = std::string;
 using SensorJson = Json::Value;
 using Duration = uint64_t;
+using ChannelsJson = Json::Value;
 
 class Sensor final {
  public:
   Sensor(Channels& channels, DifferentialTimestampsContainer& differentialTimestampsContainer, ProtobufSensorType protobufSensorType);
   Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestampsContainer, ProtobufSensorType protobufSensorType);
-  Sensor(SensorJson& sensor, DataForm dataForm);
+  Sensor(SensorJson& sensorJson, DataForm dataForm);
   Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
 
@@ -57,11 +58,12 @@ class Sensor final {
   Channels getChannels();
   DifferentialTimestampsContainer getDifferentialTimestamps();
   AbsoluteTimestampsContainer getAbsoluteTimestamps();
-  UnixTimestamp getFirstUnixTimestamp();
-  UnixTimestamp getLastUnixTimestamp();
-  Duration getDuration();
+  UnixTimestamp getFirstUnixTimestamp(DataForm dataForm);
+  UnixTimestamp getLastUnixTimestamp(DataForm dataForm);
+  Duration getDuration(DataForm dataForm);
 
   bool isEqual(Sensor& Sensor);
+  // bool isSet();
   SensorJson toJson(DataForm dataForm);
   void serialize(ProtobufSensor* protobufSensor);
   void switchDataForm(DataForm currentDataForm);

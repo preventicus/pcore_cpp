@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -38,8 +38,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DataExampleFactory {
  public:
-  static Data normalData();
-  static Data comparableData();
-  static Data absoluteJsonData();
-  static Data differentialJsonData();
+  static Data dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive();
+  static Data dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  static Data dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  static Data dataEmpty();
+  static Data dataWithRawForSwitchDataFormTestInAbsoluteForm();
+  static Data dataWithRawForSwitchDataFormTestInDifferentialForm();
+
+  static Json::Value buildDataJson(Data data);
 };

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,9 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Channel.h"
-
-using DifferentialBlocksJson = Json::Value;
-using DifferentialBlocks = std::vector<DifferentialBlock>;
 
 Channel::Channel(AccMetaData& accMetaData, AbsoluteBlock& absoluteBlock)
     : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(absoluteBlock) {}

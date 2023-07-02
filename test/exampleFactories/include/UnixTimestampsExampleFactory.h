@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -36,17 +36,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class UnixTimestampsExampleFactory {
  public:
-  static UnixTimestamps unixTimestampsNormal1_ms();
-  static UnixTimestamps unixTimestampsNormal2_ms();
-  static UnixTimestamps unixTimestampsTwoElements_ms();
-  static UnixTimestamps unixTimestampsOneElement_ms();
-  static UnixTimestamps unixTimestamps0_ms();
+  static UnixTimestamps unixTimestampsWithThreeSmallTimestamps_ms();
+  static UnixTimestamps unixTimestampsWithThreeBigTimestamps_ms();
+  static UnixTimestamps unixTimestampsWithOneBigTimestamp_ms();
+  static UnixTimestamps unixTimestampsWithTimestamp0_ms();
   static UnixTimestamps unixTimestampsEmpty_ms();
-  static UnixTimestamps normalUnixTimestamps_ms();
-  static UnixTimestamps absoluteJsonDataUNixTimestampsPpg();
-  static UnixTimestamps absoluteJsonDataUNixTimestampsAcc();
-  static UnixTimestamps absoluteTimestampWithOneUnixInLastBlock();
-  static UnixTimestamps absoluteTimestampWithEqualTimestampIntervals();
+  static UnixTimestamps unixTimestampsWithFiveDifferentialTimestamps_ms();
+  static UnixTimestamps unixTimestampsForSwitchDataFormTest_ms();
 
-  static UnixTimestampsJson buildUnixTimestampsJson(UnixTimestamps& unixTimestamps_ms);
+  static UnixTimestamp firstTimestamp_ms();
+  static UnixTimestamp firstTimestampEmpty_ms();
+  static UnixTimestamp lastTimestamp_ms();
+  static UnixTimestamp firstUnixTimestampForSwitchDataFormTest_ms();
+
+  static UnixTimestampsJson buildUnixTimestampsJson(UnixTimestamps unixTimestamps_ms);
 };

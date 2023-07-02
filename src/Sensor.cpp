@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,8 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Sensor.h"
-
-using ChannelsJson = Json::Value;
 
 Sensor::Sensor(Channels& channels, DifferentialTimestampsContainer& differentialTimestampsContainer, ProtobufSensorType sensorType)
     : sensorType(sensorType), channels(channels), differentialTimestampsContainer(differentialTimestampsContainer) {}
@@ -126,6 +124,11 @@ bool Sensor::isEqual(Sensor& sensor) {
          this->absoluteTimestampsContainer.isEqual(sensor.absoluteTimestampsContainer);
 }
 
+// bool Sensor::isSet() {
+//   return this->channels.empty() && this->sensorType == ProtobufSensorType::SENSOR_TYPE_NONE && ( !this->absoluteTimestampsContainer.isSet() &&
+//   !this->differentialTimestampsContainer.isSet() );
+// }
+
 void Sensor::serialize(ProtobufSensor* protobufSensor) {
   if (protobufSensor == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufSensor is a null pointer");
@@ -166,29 +169,61 @@ void Sensor::switchDataForm(DataForm currentDataForm) {
   }
 }
 
-UnixTimestamp Sensor::getFirstUnixTimestamp() {
-  return this->differentialTimestampsContainer.getFirstUnixTimestamp();
-}
-
-UnixTimestamp Sensor::getLastUnixTimestamp() {
-  const TimestampsIntervals timestampsIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
-  const BlockIntervals blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
-  DifferentialBlocks differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
-  const size_t nLastBlock = differentialBlocksOfFirstChannel[differentialBlocksOfFirstChannel.size() - 1].getDifferentialValues().size();
-  UnixTimestamp absoluteUnixTimestamp = this->getFirstUnixTimestamp();
-  for (auto& blockInterval_ms : blockIntervals_ms) {
-    absoluteUnixTimestamp += blockInterval_ms;
+UnixTimestamp Sensor::getFirstUnixTimestamp(DataForm dataForm) {
+  switch (dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
+      if (unixTimestamps.empty()) {  // TODO use is set methode of absoluteTimestampsContainer
+        throw std::runtime_error("absoluteTimestampsContainer is not set");
+      } else {
+        return unixTimestamps[0];  // TODO add firsttimestamp in absoluteTimestampsContainer
+      }
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      // TODO use isSet methode
+      return this->differentialTimestampsContainer.getFirstUnixTimestamp();
+    }
+    case DataForm::DATA_FORM_NONE: {
+      throw std::invalid_argument("dataForm is none");
+    }
   }
-  return absoluteUnixTimestamp + timestampsIntervals_ms[timestampsIntervals_ms.size() - 1] * (nLastBlock - 1);
 }
 
-Duration Sensor::getDuration() {
-  return this->getLastUnixTimestamp() - this->getFirstUnixTimestamp();
+UnixTimestamp Sensor::getLastUnixTimestamp(DataForm dataForm) {
+  switch (dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
+      if (unixTimestamps.empty()) {  // TODO use is set methode of absoluteTimestampsContainer
+        throw std::runtime_error("absoluteTimestampsContainer is not set");
+      } else {
+        return unixTimestamps.back();  // TODO add firsttimestamp in absoluteTimestampsContainer
+      }
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      // TODO use isSet methode
+      const TimestampsIntervals timestampsIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
+      const BlockIntervals blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
+      DifferentialBlocks differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
+      const size_t nLastBlock = differentialBlocksOfFirstChannel[differentialBlocksOfFirstChannel.size() - 1].getDifferentialValues().size();
+      UnixTimestamp absoluteUnixTimestamp = this->getFirstUnixTimestamp(dataForm);
+      for (auto& blockInterval_ms : blockIntervals_ms) {
+        absoluteUnixTimestamp += blockInterval_ms;
+      }
+      return absoluteUnixTimestamp + timestampsIntervals_ms[timestampsIntervals_ms.size() - 1] * (nLastBlock - 1);
+    }
+    case DataForm::DATA_FORM_NONE: {
+      throw std::invalid_argument("dataForm is none");
+    }
+  }
+}
+
+Duration Sensor::getDuration(DataForm dataForm) {
+  return this->getLastUnixTimestamp(dataForm) - this->getFirstUnixTimestamp(dataForm);
 }
 
 BlockIdxs Sensor::findBlockIdxs() {
   BlockIdxs blockIdxs = {};
-  if (this->absoluteTimestampsContainer.getUnixTimestamps().size() == 0) {
+  if (this->absoluteTimestampsContainer.getUnixTimestamps().size() == 0) {  // TODO use is set
     return blockIdxs;
   }
   Interval referenceTimeDifference = 0;
@@ -279,12 +314,8 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
 
 SensorJson Sensor::toJson(DataForm dataForm) {
   SensorJson sensorJson;
-  ChannelsJson channelsJson(Json::arrayValue);
 
-  for (auto& channel : this->channels) {
-    channelsJson.append(channel.toJson(dataForm, this->sensorType));
-  }
-  sensorJson["channels"] = channelsJson;
+  ChannelsJson channelsJson(Json::arrayValue);
 
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
@@ -296,9 +327,15 @@ SensorJson Sensor::toJson(DataForm dataForm) {
       break;
     }
     default: {
-      throw std::runtime_error("dataForm is not set");
+      return sensorJson;
     }
   }
+
+  for (auto& channel : this->channels) {
+    channelsJson.append(channel.toJson(dataForm, this->sensorType));
+  }
+  sensorJson["channels"] = channelsJson;
+
   sensorJson["sensor_type"] = Sensor::senorTypeToString(this->sensorType);
   return sensorJson;
 }

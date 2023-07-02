@@ -54,8 +54,8 @@ AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesEmpty() {
 }
 
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesForTestSwitchTo() {
-  return {1000, 9415, 10093, 2411, -6568, -8589, -1794, 7570, 10894, 5121, -4440, -9000, -4366,
-          5202, 10906, 7503, -1879, -8614, -6510, 2499, 10129, 9367, 911, -7462, -8056, -324, 8626};
+  return {1000,  9415, 10093, 2411,  -6568, -8589, -1794, 7570, 10894, 5121,  -4440, -9000, -4366, 5202,
+          10906, 7503, -1879, -8614, -6510, 2499,  10129, 9367, 911,   -7462, -8056, -324,  8626};
 }
 
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteValues() {
@@ -66,7 +66,6 @@ AbsoluteValues AbsoluteValuesExampleFactory::absoluteValues() {
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithOneValueInLastBlock() {
   return {38763, 38771, 38780, 38793, 38784, 38780, 38780};
 }
-
 
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteJsonDataValuesPpg1() {
   return {30021, 30023, 30027, 30022, 30020, 30020, 30030};
@@ -80,7 +79,7 @@ AbsoluteValues AbsoluteValuesExampleFactory::absoluteJsonDataValuesAcc() {
   return {548, 34, 234, 3435, 433, 454};
 }
 
-AbsoluteValuesJson AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(AbsoluteValues& absoluteValues) {
+AbsoluteValuesJson AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(AbsoluteValues absoluteValues) {
   AbsoluteValuesJson absoluteValuesJson(Json::arrayValue);
   for (auto& absoluteValue : absoluteValues) {
     absoluteValuesJson.append(absoluteValue);

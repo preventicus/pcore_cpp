@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,109 +32,157 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DifferentialTimestampsContainerExampleFactory.h"
+#include "IntervalsExampleFactory.h"
+#include "UnixTimestampsExampleFactory.h"
 
-UnixTimestamp DifferentialTimestampsContainerExampleFactory::normalFirstUnixTimestamp_ms() {
-  return 10;
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks() {
+  UnixTimestamp firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
+  BlockIntervals blockIntervals = IntervalsExampleFactory::blockIntervalsWithThreeMixedIntervals();
+  TimestampsIntervals timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsWithThreeZeroIntervals();
+
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
 }
 
-UnixTimestamp DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms() {
-  return 0;
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty() {
+  return DifferentialTimestampsContainer();
 }
 
-UnixTimestamp DifferentialTimestampsContainerExampleFactory::lastUnixTimestamp_ms() {
-  return 1675732791427;
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithTwoBlocks() {
+  UnixTimestamp firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
+  BlockIntervals blockIntervals = IntervalsExampleFactory::blockIntervalsWithTwoMixedIntervals();
+  TimestampsIntervals timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsWithTwoMixedIntervals();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
 }
 
-Duration DifferentialTimestampsContainerExampleFactory::duration() {
-  return 1440;
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithBigBlocks() {
+  UnixTimestamp firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
+  BlockIntervals blockIntervals = IntervalsExampleFactory::blockIntervalsWithThreeBigIntervals();
+  TimestampsIntervals timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsWithThreeBigIntervals();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
 }
 
-BlockIntervals DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_ms() {
-  return {0, 113, 23, 34};
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerForSwitchDataFormTest() {
+  UnixTimestamp firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormTest_ms();
+  BlockIntervals blockIntervals = IntervalsExampleFactory::blockIntervalsForSwitchDataFormTest();
+  TimestampsIntervals timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsForSwitchDataFromTest();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
 }
 
-BlockIntervals DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms() {
-  return {0};
+DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(
+    DifferentialTimestampsContainer differentialTimestampsContainer) {
+  BlockIntervals blockIntervals = differentialTimestampsContainer.getBlockIntervals();
+  TimestampsIntervals timestampsIntervals = differentialTimestampsContainer.getTimestampsIntervals();
+  BlockIntervalsJson blockIntervalsJson = IntervalsExampleFactory::buildBlockIntervalsJson(blockIntervals);
+  TimestampsIntervalsJson timestampsIntervalsJson = IntervalsExampleFactory::buildTimestampsIntervalsJson(timestampsIntervals);
+  DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
+  differentialTimestampsContainerJson["first_timestamp_ms"] = differentialTimestampsContainer.getFirstUnixTimestamp();
+  differentialTimestampsContainerJson["block_intervals_ms"] = blockIntervalsJson;
+  differentialTimestampsContainerJson["timestamps_intervals_ms"] = timestampsIntervalsJson;
+  return differentialTimestampsContainerJson;
 }
 
-BlockIntervals DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock() {
-  return {0, 300};
-}
-
-BlockIntervals DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms() {
-  return {};
-}
-
-TimestampsIntervals DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_ms() {
-  return {134, 31, 124};
-}
-
-TimestampsIntervals DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock() {
-  return {40, 0};
-}
-
-TimestampsIntervals DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithEqualDifferences() {
-  return {40};
-}
-
-TimestampsIntervals DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms() {
-  return {0};
-}
-
-TimestampsIntervals DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms() {
-  return {};
-}
-
-DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsWithNormalTimestamps() {
-  UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::normalFirstUnixTimestamp_ms();
-  BlockIntervals blockInterval_ms = DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_ms();
-  TimestampsIntervals timestampsInterval_ms = DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_ms();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval_ms, timestampsInterval_ms);
-}
-
-DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsWith0Timestamps() {
-  UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms();
-  BlockIntervals blockInterval_ms = DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms();
-  TimestampsIntervals timestampsInterval_ms = DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval_ms, timestampsInterval_ms);
-}
-
-DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsWithEmptyTimestamps() {
-  UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms();
-  BlockIntervals blockInterval_ms = DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms();
-  TimestampsIntervals timestampsInterval_ms = DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval_ms, timestampsInterval_ms);
-}
-
-BlockIntervals DifferentialTimestampsContainerExampleFactory::expectedBlockInterval() {
-  return {0, 480, 400, 480};
-}
-
-TimestampsIntervals DifferentialTimestampsContainerExampleFactory::expectedTimestampInterval() {
-  return {40, 40, 80, 40};
-}
-
-UnixTimestamp DifferentialTimestampsContainerExampleFactory::expectedFirstUnixTimestamps() {
-  return 1675732789987;
-}
-
-DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps() {
-  UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::expectedFirstUnixTimestamps();
-  BlockIntervals blockInterval = DifferentialTimestampsContainerExampleFactory::expectedBlockInterval();
-  TimestampsIntervals timestampsInterval = DifferentialTimestampsContainerExampleFactory::expectedTimestampInterval();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval, timestampsInterval);
-}
-
-DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerPpg() {
-  UnixTimestamp firstUnixTimestamp_ms = 1675416424341;
-  BlockIntervals blockInterval = {30, 30, 30, 30};
-  TimestampsIntervals timestampsInterval = {28, 30, 22, 30};
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval, timestampsInterval);
-}
-
-DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerAcc() {
-  UnixTimestamp firstUnixTimestamp_ms = 1675416424301;
-  BlockIntervals blockInterval = {30, 31, 30};
-  TimestampsIntervals timestampsInterval = {31, 30, 30};
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval, timestampsInterval);
-}
+// UnixTimestamp DifferentialTimestampsContainerExampleFactory::normalFirstUnixTimestamp_ms() {
+//   return 10;
+// }
+//
+// UnixTimestamp DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms() {
+//   return 0;
+// }
+//
+// UnixTimestamp DifferentialTimestampsContainerExampleFactory::lastUnixTimestamp_ms() {
+//   return 1675732791427;
+// }
+//
+// Duration DifferentialTimestampsContainerExampleFactory::duration() {
+//   return 1440;
+// }
+//
+// BlockIntervals DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_ms() {
+//   return {0, 113, 23, 34};
+// }
+//
+// BlockIntervals DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms() {
+//   return {0};
+// }
+//
+// BlockIntervals DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock() {
+//   return {0, 300};
+// }
+//
+// BlockIntervals DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms() {
+//   return {};
+// }
+//
+// TimestampsIntervals DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_ms() {
+//   return {134, 31, 124};
+// }
+//
+// TimestampsIntervals DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock() {
+//   return {40, 0};
+// }
+//
+// TimestampsIntervals DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithEqualDifferences() {
+//   return {40};
+// }
+//
+// TimestampsIntervals DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms() {
+//   return {0};
+// }
+//
+// TimestampsIntervals DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms() {
+//   return {};
+// }
+//
+// DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsWithNormalTimestamps() {
+//   UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::normalFirstUnixTimestamp_ms();
+//   BlockIntervals blockInterval_ms = DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_ms();
+//   TimestampsIntervals timestampsInterval_ms = DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_ms();
+//   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval_ms, timestampsInterval_ms);
+// }
+//
+// DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsWith0Timestamps() {
+//   UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms();
+//   BlockIntervals blockInterval_ms = DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms();
+//   TimestampsIntervals timestampsInterval_ms = DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms();
+//   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval_ms, timestampsInterval_ms);
+// }
+//
+// DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsWithEmptyTimestamps() {
+//   UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::zeroFirstUnixTimestamp_ms();
+//   BlockIntervals blockInterval_ms = DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms();
+//   TimestampsIntervals timestampsInterval_ms = DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms();
+//   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval_ms, timestampsInterval_ms);
+// }
+//
+// BlockIntervals DifferentialTimestampsContainerExampleFactory::expectedBlockInterval() {
+//   return {0, 480, 400, 480};
+// }
+//
+// TimestampsIntervals DifferentialTimestampsContainerExampleFactory::expectedTimestampInterval() {
+//   return {40, 40, 80, 40};
+// }
+//
+// UnixTimestamp DifferentialTimestampsContainerExampleFactory::expectedFirstUnixTimestamps() {
+//   return 1675732789987;
+// }
+//
+// DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps() {
+//   UnixTimestamp firstUnixTimestamp_ms = DifferentialTimestampsContainerExampleFactory::expectedFirstUnixTimestamps();
+//   BlockIntervals blockInterval = DifferentialTimestampsContainerExampleFactory::expectedBlockInterval();
+//   TimestampsIntervals timestampsInterval = DifferentialTimestampsContainerExampleFactory::expectedTimestampInterval();
+//   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval, timestampsInterval);
+// }
+//
+// DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerPpg() {
+//   UnixTimestamp firstUnixTimestamp_ms = 1675416424341;
+//   BlockIntervals blockInterval = {30, 30, 30, 30};
+//   TimestampsIntervals timestampsInterval = {28, 30, 22, 30};
+//   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval, timestampsInterval);
+// }
+//
+// DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerAcc() {
+//   UnixTimestamp firstUnixTimestamp_ms = 1675416424301;
+//   BlockIntervals blockInterval = {30, 31, 30};
+//   TimestampsIntervals timestampsInterval = {31, 30, 30};
+//   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockInterval, timestampsInterval);
+// }

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -48,9 +48,13 @@ class VersionExampleFactory {
   static Minor minorZero();
   static Patch patchZero();
 
-  static Version normalVersion();
-  static Version startVersion();
-  static Version highVersion();
-  static Version randomVersion();
-  static Version absoluteJsonDataVersion();
+  static Version versionWithMajor1Minor1Patch0();
+  static Version versionWithMajor0Minor0Patch0();
+  static Version versionWithMajor2Minor1Patch0();
+  static Version versionWithMajor1Minor2Patch0();
+  static Version versionWithMajor1Minor1Patch1();
+
+  static Version versionEmpty();
+
+  static VersionJson buildVersionJson(Version version);
 };

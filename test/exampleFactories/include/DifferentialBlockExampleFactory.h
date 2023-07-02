@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -38,7 +38,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class DifferentialBlockExampleFactory {
  public:
-
   static DifferentialBlock differentialBlockWithThreePositiveDifferentialValues();
   static DifferentialBlock differentialBlockWithThreeMixedDifferentialValues();
   static DifferentialBlock differentialBlockWithThreeNegativeDifferentialValues();
@@ -47,22 +46,25 @@ class DifferentialBlockExampleFactory {
 
   static DifferentialBlocks differentialBlocksWithThreeMixedDifferentialBlocks();
 
-//  static DifferentialValues expectedDifferentialValues1();
-//  static DifferentialValues expectedDifferentialValues2();
-//  static DifferentialValues expectedDifferentialValues3();
-//  static DifferentialValues expectedDifferentialValues4();
-//
-//  static DifferentialBlock expectedDifferentialBlock1();
-//  static DifferentialBlock expectedDifferentialBlock2();
-//  static DifferentialBlock expectedDifferentialBlock3();
-//  static DifferentialBlock expectedDifferentialBlock4();
-//
-//  static std::vector<DifferentialBlock> normalDifferentialBlocks();
-//  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg1();
-//  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg2();
-//  static std::vector<DifferentialBlock> differentialJsonDataBlockAcc();
+  //  static DifferentialValues expectedDifferentialValues1();
+  //  static DifferentialValues expectedDifferentialValues2();
+  //  static DifferentialValues expectedDifferentialValues3();
+  //  static DifferentialValues expectedDifferentialValues4();
+  //
+  //  static DifferentialBlock expectedDifferentialBlock1();
+  //  static DifferentialBlock expectedDifferentialBlock2();
+  //  static DifferentialBlock expectedDifferentialBlock3();
+  //  static DifferentialBlock expectedDifferentialBlock4();
+  //
+  //  static std::vector<DifferentialBlock> normalDifferentialBlocks();
+  //  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg1();
+  //  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg2();
+  //  static std::vector<DifferentialBlock> differentialJsonDataBlockAcc();
 
   static DifferentialBlocks differentialBlocksForTestSwitchTo();
   static DifferentialBlocks differentialBlocksForTestSerialize();
-  static DifferentialBlockJson buildDifferentialBlockJson(DifferentialValuesJson differentialValuesJson);
+  //  static DifferentialBlockJson buildDifferentialBlockJson(DifferentialValuesJson differentialValuesJson);
+
+  static DifferentialBlocksJson buildDifferentialBlocksJson(DifferentialBlocks differentialBlocks);
+  static DifferentialBlockJson buildDifferentialBlockJson(DifferentialBlock differentialBlock);
 };

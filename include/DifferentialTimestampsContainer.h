@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -43,6 +43,10 @@ using Interval = uint32_t;
 using BlockIntervals = std::vector<Interval>;
 using TimestampsIntervals = std::vector<Interval>;
 using DifferentialTimestampsContainerJson = Json::Value;
+
+using UnixTimestampJson = Json::Value;
+using BlockIntervalsJson = Json::Value;
+using TimestampsIntervalsJson = Json::Value;
 
 class DifferentialTimestampsContainer final {
  public:
