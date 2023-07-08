@@ -42,15 +42,7 @@ class AbsoluteBlockExampleFactory {
   static AbsoluteBlock absoluteBlockWithThreeNegativeAbsoluteValues();
   static AbsoluteBlock absoluteBlockWithOneAbsoluteValue();
   static AbsoluteBlock absoluteBlockWithEmptyAbsoluteValue();
-
-  //  static AbsoluteBlock absoluteBlock();
-  //  static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
-  //  static AbsoluteBlock absoluteJsonDataBlockAcc();
-  //  static AbsoluteBlock absoluteJsonDataBlockPpg1();
-  //  static AbsoluteBlock absoluteJsonDataBlockPpg2();
-
-  //  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson);
-  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock);
-
   static AbsoluteBlock absoluteBlockForTestSwitchTo();
+
+  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock);
 };

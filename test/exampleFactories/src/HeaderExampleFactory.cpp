@@ -103,34 +103,3 @@ HeaderJson HeaderExampleFactory::buildHeaderJson(Header header) {
   headerJson["data_form"] = Header::dataFormToString(header.getDataForm());
   return headerJson;
 }
-
-//
-// Header HeaderExampleFactory::normalHeaderWithPositiveTimeZoneOffset_min() {
-//  Version version = VersionExampleFactory::randomVersion();
-//  return Header(version, HeaderExampleFactory::positiveTimeZoneOffset_min(), DataForm::DATA_FORM_DIFFERENTIAL);
-//}
-//
-// Header HeaderExampleFactory::normalHeaderWithNegativeTimeZoneOffset_min() {
-//  Version version = VersionExampleFactory::randomVersion();
-//  return Header(version, HeaderExampleFactory::negativeTimeZoneOffset_min(), DataForm::DATA_FORM_DIFFERENTIAL);
-//}
-//
-// Header HeaderExampleFactory::normalHeaderWithNoTimeZoneOffset_min() {
-//  Version version = VersionExampleFactory::randomVersion();
-//  return Header(version, HeaderExampleFactory::noTimeZoneOffset_min(), DataForm::DATA_FORM_DIFFERENTIAL);
-//}
-//
-// Header HeaderExampleFactory::headerWithMaxTimeZoneOffset_min() {
-//  Version version = VersionExampleFactory::randomVersion();
-//  return Header(version, HeaderExampleFactory::maxTimeZoneOffset_min(), DataForm::DATA_FORM_DIFFERENTIAL);
-//}
-//
-// Header HeaderExampleFactory::headerWithMinTimeZoneOffset_min() {
-//  Version version = VersionExampleFactory::randomVersion();
-//  return Header(version, HeaderExampleFactory::minTimeZoneOffset_min(), DataForm::DATA_FORM_DIFFERENTIAL);
-//}
-//
-// Header HeaderExampleFactory::absoluteJsonDataHeader() {
-//  Version version = VersionExampleFactory::absoluteJsonDataVersion();
-//  return Header(version, HeaderExampleFactory::noTimeZoneOffset_min(), DataForm::DATA_FORM_DIFFERENTIAL);
-//}

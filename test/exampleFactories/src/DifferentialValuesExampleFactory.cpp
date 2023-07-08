@@ -53,22 +53,6 @@ DifferentialValues DifferentialValuesExampleFactory::differentialValuesEmpty() {
   return {};
 }
 
-// DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues1() {
-//   return {38763, 8, 9, 13, -9, -4, 0, 3, 7, -8};
-// }
-//
-// DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues2() {
-//   return {46321, 6, -9, -2, -3, 0, 0, 23};
-// }
-//
-// DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues3() {
-//   return {58772, 2, 1, 1, -3};
-// }
-//
-// DifferentialValues DifferentialValuesExampleFactory::expectedDifferentialValues4() {
-//   return {19982, 0, -4};
-// }
-
 DifferentialValuesJson DifferentialValuesExampleFactory::buildDifferentialValuesJson(DifferentialValues differentialValues) {
   DifferentialValuesJson differentialValuesJson(Json::arrayValue);
   for (auto& differentialValue : differentialValues) {

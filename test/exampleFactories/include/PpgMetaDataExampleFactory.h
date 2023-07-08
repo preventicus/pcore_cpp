@@ -44,7 +44,6 @@ class PpgMetaDataExampleFactory {
   static PpgMetaData ppgMetaDataWithWavelength100();
   static PpgMetaData ppgMetaDataWithWavelength0();
   static PpgMetaData ppgMetaDataNotSet();
+
   static PpgMetaDataJson buildPpgMetaDataJson(PpgMetaData ppgMetaData);
-  //  static PpgMetaDataJson buildPpgMetaDataJson(ProtobufColor color);
-  //  static PpgMetaDataJson buildPpgMetaDataJson(Wavelength wavelength_nm);
 };

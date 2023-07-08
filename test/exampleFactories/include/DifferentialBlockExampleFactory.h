@@ -45,25 +45,8 @@ class DifferentialBlockExampleFactory {
   static DifferentialBlock differentialBlockWithEmptyDifferentialValues();
 
   static DifferentialBlocks differentialBlocksWithThreeMixedDifferentialBlocks();
-
-  //  static DifferentialValues expectedDifferentialValues1();
-  //  static DifferentialValues expectedDifferentialValues2();
-  //  static DifferentialValues expectedDifferentialValues3();
-  //  static DifferentialValues expectedDifferentialValues4();
-  //
-  //  static DifferentialBlock expectedDifferentialBlock1();
-  //  static DifferentialBlock expectedDifferentialBlock2();
-  //  static DifferentialBlock expectedDifferentialBlock3();
-  //  static DifferentialBlock expectedDifferentialBlock4();
-  //
-  //  static std::vector<DifferentialBlock> normalDifferentialBlocks();
-  //  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg1();
-  //  static std::vector<DifferentialBlock> differentialJsonDataBlockPpg2();
-  //  static std::vector<DifferentialBlock> differentialJsonDataBlockAcc();
-
   static DifferentialBlocks differentialBlocksForTestSwitchTo();
   static DifferentialBlocks differentialBlocksForTestSerialize();
-  //  static DifferentialBlockJson buildDifferentialBlockJson(DifferentialValuesJson differentialValuesJson);
 
   static DifferentialBlocksJson buildDifferentialBlocksJson(DifferentialBlocks differentialBlocks);
   static DifferentialBlockJson buildDifferentialBlockJson(DifferentialBlock differentialBlock);

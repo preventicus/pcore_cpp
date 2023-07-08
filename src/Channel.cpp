@@ -81,7 +81,7 @@ Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType
         }
       }()) {
   if (protobufSensorType == ProtobufSensorType::SENSOR_TYPE_NONE) {
-    throw std::runtime_error("Sensortype is not set");
+    throw std::runtime_error("SensorType is not set");
   }
 }
 

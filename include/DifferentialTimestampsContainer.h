@@ -71,8 +71,6 @@ class DifferentialTimestampsContainer final {
   void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer);
 
  private:
-  void deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
-
   UnixTimestamp firstUnixTimestamp_ms;
   BlockIntervals blockIntervals_ms;
   TimestampsIntervals timestampsIntervals_ms;

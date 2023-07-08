@@ -47,25 +47,8 @@ class SensorExampleFactory {
   static Sensor sensorPpgWithTwoChannelsInDifferentialForm();
   static Sensor sensorAccWithTwoChannelsInDifferentialForm();
   static Sensor sensorEmpty();
-
   static Sensor sensorForSwitchDataFromTestInAbsoluteForm();
   static Sensor sensorForSwitchDataFromTestInDifferentialForm();
 
   static SensorJson buildSensorJson(Sensor sensor, DataForm dataForm);
-
-  //  static Sensor normalSensor();
-  //  static Sensor sensorWithOneUnixAndOneValue();
-  //  static Sensor sensorWithNUllUnixAndNUllValue();
-  //  static Sensor sensorWithOneUnixAndOneValueInLastBlock();
-  //  static Sensor sensorWithEqualTimestampsInterval();
-  //  static Sensor comparableSensor();
-  //  static Sensor absoluteJsonDataPpgSensor();
-  //  static Sensor absoluteJsonDataAccSensor();
-  //  static Sensor differentialJsonDataPpgSensor();
-  //  static Sensor differentialJsonDataAccSensor();
-  //
-  //  static Sensors normalVectorWithSensors();
-  //  static Sensors comparableVectorWithSensors();
-  //  static Sensors vectorWithAbsoluteJsonDataSensor();
-  //  static Sensors vectorWithDifferentialJsonDataSensor();
 };

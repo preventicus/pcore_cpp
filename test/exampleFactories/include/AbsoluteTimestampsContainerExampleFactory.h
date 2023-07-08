@@ -44,17 +44,5 @@ class AbsoluteTimestampsContainerExampleFactory {
   static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestampsEmpty();
   static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
 
-  //  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerPgg();
-  //  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerAcc();
-  //  static AbsoluteTimestampsContainer absoluteTimestampsNormal();
-  //  static AbsoluteTimestampsContainer absoluteUNixTimestampBlockWithOneUnixInLastBlock();
-  //  static AbsoluteTimestampsContainer absoluteTimestampsTwoElement();
-  //  static AbsoluteTimestampsContainer absoluteTimestampsOneElement();
-  //  static AbsoluteTimestampsContainer absoluteTimestamps0();
-  //  static AbsoluteTimestampsContainer normalAbsoluteTimestamps();
-  //  static AbsoluteTimestampsContainer absoluteTimestampsBlockWithEqualTimestampIntervals();
-
   static AbsoluteTimestampsContainerJson buildAbsoluteTimestampsContainerJson(AbsoluteTimestampsContainer absoluteTimestampsContainer);
-
-  //  static AbsoluteTimestampsContainer buildAbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps);
 };

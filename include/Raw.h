@@ -54,7 +54,5 @@ class Raw final {
   void switchDataForm(DataForm currentDataForm);
 
  private:
-  void deserialize(const ProtobufRaw& protobufRaw);
-
   Sensors sensors;
 };

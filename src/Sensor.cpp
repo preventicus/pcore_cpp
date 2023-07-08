@@ -282,8 +282,8 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
                             return default Values for emptyBlock
    * blockIdxs.size = 1 -> case 1 : just one Block with one timestamps
                             return firstTimestamps, BlockIntervals_ms = {0}, timestampsInterval_ms{0}
-   *                       case 2 : one Block with certain amount of timestmaps with same timedifferences
-                            return firstTimestamps, BlockInterval_ms  = {0}, timetsampsIntervals_ms with one value (BestCase)
+   *                       case 2 : one Block with certain amount of timestamps with same time differences
+                            return firstTimestamps, BlockInterval_ms  = {0}, timestampsIntervals_ms with one value (BestCase)
    * blockIdxs.size > 1 -> case 1: normal condition (Last block hold at least 2 Timestamps)
                             return calculate differentialTimestamps
    *                       case 2: the last Block hold just one Timestamp
