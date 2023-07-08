@@ -62,7 +62,6 @@ class Sensor final {
   UnixTimestamp getLastUnixTimestamp(DataForm dataForm);
   Duration getDuration(DataForm dataForm);
 
-  bool isEqual(Sensor& Sensor);
   // bool isSet();
   SensorJson toJson(DataForm dataForm);
   void serialize(ProtobufSensor* protobufSensor);
@@ -70,6 +69,9 @@ class Sensor final {
 
   static ProtobufSensorType senorTypeFromString(SensorTypeString senorTypeString);
   static SensorTypeString senorTypeToString(ProtobufSensorType protobufSensorType);
+
+  bool operator==(const Sensor& sensor) const;
+  bool operator!=(const Sensor& sensor) const;
 
  private:
   AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer& differentialTimestampsContainer);

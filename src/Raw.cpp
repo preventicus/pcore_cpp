@@ -63,16 +63,20 @@ Sensors Raw::getSensors() {
   return this->sensors;
 }
 
-bool Raw::isEqual(Raw& raw) {
+bool Raw::operator==(const Raw& raw) const {
   if (this->sensors.size() != raw.sensors.size()) {
     return false;
   }
   for (size_t i = 0; i < this->sensors.size(); i++) {
-    if (!this->sensors[i].isEqual(raw.sensors[i])) {
+    if (this->sensors[i] != raw.sensors[i]) {
       return false;
     }
   }
   return true;
+}
+
+bool Raw::operator!=(const Raw& raw) const {
+  return !(*this == raw);
 }
 
 void Raw::serialize(ProtobufRaw* protobufRaw) {

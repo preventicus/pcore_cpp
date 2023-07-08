@@ -64,11 +64,13 @@ class Channel final {
   AccMetaData getAccMetaData();
   PpgMetaData getPpgMetaData();
 
-  bool isEqual(Channel& channel);
   bool hasAccMetaData();
   bool hasPpgMetaData();
   bool hasDifferentialBlocks();
   bool hasAbsoluteBlock();
+
+  bool operator==(const Channel& channel) const;
+  bool operator!=(const Channel& channel) const;
 
   ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType);
   void serialize(ProtobufChannel* protobufChannel);

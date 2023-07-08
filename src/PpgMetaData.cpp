@@ -76,8 +76,12 @@ bool PpgMetaData::isSet() {
   return !(this->color == ProtobufColor::COLOR_NONE && this->wavelength_nm == 0);
 }
 
-bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
+bool PpgMetaData::operator==(const PpgMetaData& ppgMetaData) const {
   return this->color == ppgMetaData.color && this->wavelength_nm == ppgMetaData.wavelength_nm;
+}
+
+bool PpgMetaData::operator!=(const PpgMetaData& ppgMetaData) const {
+  return this->color != ppgMetaData.color || this->wavelength_nm != ppgMetaData.wavelength_nm;
 }
 
 PpgMetaDataJson PpgMetaData::toJson() {

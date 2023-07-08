@@ -98,10 +98,16 @@ TimestampsIntervals DifferentialTimestampsContainer::getTimestampsIntervals() {
   return this->timestampsIntervals_ms;
 }
 
-bool DifferentialTimestampsContainer::isEqual(DifferentialTimestampsContainer& differentialTimestampsContainer) {
+bool DifferentialTimestampsContainer::operator==(const DifferentialTimestampsContainer& differentialTimestampsContainer) const {
   return this->firstUnixTimestamp_ms == differentialTimestampsContainer.firstUnixTimestamp_ms &&
          this->blockIntervals_ms == differentialTimestampsContainer.blockIntervals_ms &&
          this->timestampsIntervals_ms == differentialTimestampsContainer.timestampsIntervals_ms;
+}
+
+bool DifferentialTimestampsContainer::operator!=(const DifferentialTimestampsContainer& differentialTimestampsContainer) const {
+  return this->firstUnixTimestamp_ms != differentialTimestampsContainer.firstUnixTimestamp_ms ||
+         this->blockIntervals_ms != differentialTimestampsContainer.blockIntervals_ms ||
+         this->timestampsIntervals_ms != differentialTimestampsContainer.timestampsIntervals_ms;
 }
 
 UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock(BlockIdx& blockIdx) {

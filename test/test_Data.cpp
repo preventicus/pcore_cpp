@@ -38,44 +38,44 @@ TEST(DataTest, TestGetRaw) {
   auto data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   auto raw2 = data.getRaw();
-  EXPECT_TRUE(raw1.isEqual(raw2));
+  EXPECT_TRUE(raw1 == raw2);
 }
 
 TEST(DataTest, TestGetHeader) {
   auto data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   auto header2 = data.getHeader();
-  EXPECT_TRUE(header1.isEqual(header2));
+  EXPECT_TRUE(header1 == header2);
 }
 
 TEST(DataTest, TestIsEqualWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto data2 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
-  EXPECT_TRUE(data1.isEqual(data2));
+  EXPECT_TRUE(data1 == data2);
 }
 
 TEST(DataTest, TestIsEqualWithDataEmpty) {
   auto data1 = DataExampleFactory::dataEmpty();
   auto data2 = DataExampleFactory::dataEmpty();
-  EXPECT_TRUE(data1.isEqual(data2));
+  EXPECT_TRUE(data1 == data2);
 }
 
 TEST(DataTest, TestIsEqualWithDataEmptyAndDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto data2 = DataExampleFactory::dataEmpty();
-  EXPECT_FALSE(data1.isEqual(data2));
+  EXPECT_FALSE(data1 == data2);
 }
 
 TEST(DataTest, TestIsEqualWithDifferentHeader) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto data2 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive();
-  EXPECT_FALSE(data1.isEqual(data2));
+  EXPECT_FALSE(data1 == data2);
 }
 
 TEST(DataTest, TestIsEqualWithDifferentRaw) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto data2 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
-  EXPECT_FALSE(data1.isEqual(data2));
+  EXPECT_FALSE(data1 == data2);
 }
 
 TEST(DataTest, TestSerializeWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
@@ -83,7 +83,7 @@ TEST(DataTest, TestSerializeWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZon
   ProtobufData protobufData;
   data1.serialize(&protobufData);
   auto data2 = Data(protobufData);
-  EXPECT_TRUE(data1.isEqual(data2));
+  EXPECT_TRUE(data1 == data2);
 }
 
 TEST(DataTest, TestSerializeNoThrow) {
@@ -102,14 +102,14 @@ TEST(DataTest, TestSwitchDataFormWithDataInAbsoluteForm) {
   auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
   data.switchDataForm();
   auto dataInDifferentialForm = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
-  EXPECT_TRUE(data.isEqual(dataInDifferentialForm));
+  EXPECT_TRUE(data == dataInDifferentialForm);
 }
 
 TEST(DataTest, TestSwitchDataFormWithDataInDifferentialForm) {
   auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
   data.switchDataForm();
   auto dataInAbsoluteForm = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
-  EXPECT_TRUE(data.isEqual(dataInAbsoluteForm));
+  EXPECT_TRUE(data == dataInAbsoluteForm);
 }
 
 TEST(DataTest, TestToJsonWithDataEmpty) {

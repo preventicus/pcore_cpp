@@ -61,31 +61,31 @@ TEST(DifferentialTimestampsTest, TestGetTimestampsIntervals) {
 TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerWithThreeBlocks) {
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
-  EXPECT_TRUE(differentialTimestampsContainer1.isEqual(differentialTimestampsContainer2));
+  EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerEmpty) {
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
-  EXPECT_TRUE(differentialTimestampsContainer1.isEqual(differentialTimestampsContainer2));
+  EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerEmptyAndDifferentialTimestampsContainerWithThreeBlocks) {
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
-  EXPECT_FALSE(differentialTimestampsContainer1.isEqual(differentialTimestampsContainer2));
+  EXPECT_FALSE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerWithTwoBlocksAndDifferentialTimestampsContainerWithThreeBlocks) {
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithTwoBlocks();
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
-  EXPECT_FALSE(differentialTimestampsContainer1.isEqual(differentialTimestampsContainer2));
+  EXPECT_FALSE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerWithBigBlocksAndDifferentialTimestampsContainerWithThreeBlocks) {
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithBigBlocks();
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
-  EXPECT_FALSE(differentialTimestampsContainer1.isEqual(differentialTimestampsContainer2));
+  EXPECT_FALSE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContainerWithThreeBlocks) {
@@ -93,7 +93,7 @@ TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContaine
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer;
   differentialTimestampsContainer1.serialize(&protobufDifferentialTimestampContainer);
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer);
-  EXPECT_TRUE(differentialTimestampsContainer1.isEqual(differentialTimestampsContainer2));
+  EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContainerEmpty) {
@@ -101,7 +101,7 @@ TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContaine
   ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer;
   differentialTimestampsContainer1.serialize(&protobufDifferentialTimestampContainer);
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer);
-  EXPECT_TRUE(differentialTimestampsContainer1.isEqual(differentialTimestampsContainer2));
+  EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeNoThrow) {

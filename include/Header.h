@@ -53,13 +53,15 @@ class Header final {
   Version getVersion();
   DataForm getDataForm();
 
-  bool isEqual(Header& header);
   HeaderJson toJson(DataForm dataForm);
   void serialize(ProtobufHeader* protobufHeader);
   void switchDataForm();
 
   static DataForm dataFormFromString(DataFormString dataFormString);
   static DataFormString dataFormToString(DataForm dataForm);
+
+  bool operator==(const Header& header) const;
+  bool operator!=(const Header& header) const;
 
  private:
   void checkTimeZoneOffset();

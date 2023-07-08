@@ -57,8 +57,12 @@ Patch Version::getPatch() {
   return this->patch;
 }
 
-bool Version::isEqual(Version& version) {
+bool Version::operator==(const Version& version) const {
   return this->major == version.major && this->minor == version.minor && this->patch == version.patch;
+}
+
+bool Version::operator!=(const Version& version) const {
+  return this->major != version.major || this->minor != version.minor || this->patch != version.patch;
 }
 
 void Version::serialize(ProtobufVersion* protobufVersion) {

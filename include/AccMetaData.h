@@ -57,9 +57,11 @@ class AccMetaData final {
   bool hasNorm();
   bool hasCoordinate();
   bool isSet();
-  bool isEqual(AccMetaData& AccMetaData);
   AccMetaDataJson toJson();
   void serialize(ProtobufAccMetaData* protobufAccMetaData);
+
+  bool operator==(const AccMetaData& accMetaData) const;
+  bool operator!=(const AccMetaData& accMetaData) const;
 
   static ProtobufCoordinate protobufCoordinateFromString(ProtobufCoordinateString protobufCoordinateString);
   static ProtobufCoordinateString protobufCoordinateToString(ProtobufCoordinate protobufCoordinate);

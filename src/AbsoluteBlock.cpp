@@ -56,8 +56,12 @@ bool AbsoluteBlock::isSet() {
   return !this->absoluteValues.empty();
 }
 
-bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
-  return this->absoluteValues == block.absoluteValues;
+bool AbsoluteBlock::operator==(const AbsoluteBlock& absoluteBlock) const {
+  return this->absoluteValues == absoluteBlock.absoluteValues;
+}
+
+bool AbsoluteBlock::operator!=(const AbsoluteBlock& absoluteBlock) const {
+  return this->absoluteValues != absoluteBlock.absoluteValues;
 }
 
 AbsoluteBlockJson AbsoluteBlock::toJson() {

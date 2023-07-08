@@ -52,37 +52,37 @@ TEST(VersionTest, TestGetPatch) {
 TEST(VersionTest, TestIsEqualWithVersionWithMajor2Minor1Patch0) {
   auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   auto version2 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
-  EXPECT_TRUE(version1.isEqual(version2));
+  EXPECT_TRUE(version1 == version2);
 }
 
 TEST(VersionTest, TestIsEqualWithVersionEmpty) {
   auto version1 = VersionExampleFactory::versionEmpty();
   auto version2 = VersionExampleFactory::versionEmpty();
-  EXPECT_TRUE(version1.isEqual(version2));
+  EXPECT_TRUE(version1 == version2);
 }
 
 TEST(VersionTest, TestIsEqualWithVersionEmptyAndVersionWithMajor1Minor1Patch0) {
   auto version1 = VersionExampleFactory::versionEmpty();
   auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
-  EXPECT_FALSE(version1.isEqual(version2));
+  EXPECT_FALSE(version1 == version2);
 }
 
 TEST(VersionTest, TestIsEqualWithVersionWithMajor2Minor1Patch0AndVersionWithMajor1Minor1Patch0) {
   auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
-  EXPECT_FALSE(version1.isEqual(version2));
+  EXPECT_FALSE(version1 == version2);
 }
 
 TEST(VersionTest, TestIsEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch0) {
   auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
   auto version2 = VersionExampleFactory::versionWithMajor1Minor2Patch0();
-  EXPECT_FALSE(version1.isEqual(version2));
+  EXPECT_FALSE(version1 == version2);
 }
 
 TEST(VersionTest, TestIsEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch1) {
   auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
   auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch1();
-  EXPECT_FALSE(version1.isEqual(version2));
+  EXPECT_FALSE(version1 == version2);
 }
 
 TEST(VersionTest, TestToJsonWithVersionWithMajor1Minor1Patch0) {
@@ -104,7 +104,7 @@ TEST(VersionTest, TestSerializeWithVersionEmpty) {
   ProtobufVersion protobufData;
   version1.serialize(&protobufData);
   auto version2 = Version(protobufData);
-  EXPECT_TRUE(version1.isEqual(version2));
+  EXPECT_TRUE(version1 == version2);
 }
 
 TEST(VersionTest, TestSerializeWithVersionWithMajor2Minor1Patch0) {
@@ -112,7 +112,7 @@ TEST(VersionTest, TestSerializeWithVersionWithMajor2Minor1Patch0) {
   ProtobufVersion protobufData;
   version1.serialize(&protobufData);
   auto version2 = Version(protobufData);
-  EXPECT_TRUE(version1.isEqual(version2));
+  EXPECT_TRUE(version1 == version2);
 }
 
 TEST(VersionTest, TestSerializeNoThrow) {

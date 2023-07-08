@@ -67,8 +67,12 @@ bool DifferentialBlock::isSet() {
   return !this->differentialValues.empty();
 }
 
-bool DifferentialBlock::isEqual(DifferentialBlock& differentialBlock) {
+bool DifferentialBlock::operator==(const DifferentialBlock& differentialBlock) const {
   return this->differentialValues == differentialBlock.differentialValues;
+}
+
+bool DifferentialBlock::operator!=(const DifferentialBlock& differentialBlock) const {
+  return this->differentialValues != differentialBlock.differentialValues;
 }
 
 void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentialBlock) {

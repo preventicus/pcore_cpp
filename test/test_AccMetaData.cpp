@@ -55,43 +55,43 @@ TEST(AccMetaDataTest, TestSetAndGetEmptyConstructor) {
 TEST(AccMetaDataTest, TestIsEqualCoordinateWithAccMetaDataWithCoordinateX) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsEqualCoordinateWithAccMetaDataWithCoordinateY) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsEqualCoordinateWithAccMetaDataWithCoordinateZ) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsNotEqualCoordinate) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
-  EXPECT_FALSE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_FALSE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsCoordinateWithNorm) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
-  EXPECT_FALSE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_FALSE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsEqualNormEuclidean) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsEqualNotSet) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataNotSet();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataNotSet();
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsSetWithAccMetaDataWithCoordinateX) {
@@ -124,7 +124,7 @@ TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateX) {
   ProtobufAccMetaData protobufAccMetaData;
   accMetaData1.serialize(&protobufAccMetaData);
   auto accMetaData2 = AccMetaData(protobufAccMetaData);
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateY) {
@@ -132,7 +132,7 @@ TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateY) {
   ProtobufAccMetaData protobufAccMetaData;
   accMetaData1.serialize(&protobufAccMetaData);
   auto accMetaData2 = AccMetaData(protobufAccMetaData);
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateZ) {
@@ -140,7 +140,7 @@ TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateZ) {
   ProtobufAccMetaData protobufAccMetaData;
   accMetaData1.serialize(&protobufAccMetaData);
   auto accMetaData2 = AccMetaData(protobufAccMetaData);
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithNormEuclideanDifferencesNorm) {
@@ -148,7 +148,7 @@ TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithNormEuclideanDifferencesNo
   ProtobufAccMetaData protobufAccMetaData;
   accMetaData1.serialize(&protobufAccMetaData);
   auto accMetaData2 = AccMetaData(protobufAccMetaData);
-  EXPECT_TRUE(accMetaData1.isEqual(accMetaData2));
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeNoThrow) {

@@ -72,8 +72,12 @@ bool AccMetaData::isSet() {
   return this->hasNorm() || this->hasCoordinate();
 }
 
-bool AccMetaData::isEqual(AccMetaData& AccMetaData) {
-  return this->coordinate == AccMetaData.coordinate && this->norm == AccMetaData.norm;
+bool AccMetaData::operator==(const AccMetaData& accMetaData) const {
+  return this->coordinate == accMetaData.coordinate && this->norm == accMetaData.norm;
+}
+
+bool AccMetaData::operator!=(const AccMetaData& accMetaData) const {
+  return this->coordinate != accMetaData.coordinate || this->norm != accMetaData.norm;
 }
 
 void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {

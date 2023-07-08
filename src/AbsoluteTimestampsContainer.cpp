@@ -51,8 +51,12 @@ UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps() {
   return this->unixTimestamps_ms;
 }
 
-bool AbsoluteTimestampsContainer::isEqual(AbsoluteTimestampsContainer& absoluteTimestampsContainer) {
+bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
   return this->unixTimestamps_ms == absoluteTimestampsContainer.unixTimestamps_ms;
+}
+
+bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
+  return this->unixTimestamps_ms != absoluteTimestampsContainer.unixTimestamps_ms;
 }
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() {

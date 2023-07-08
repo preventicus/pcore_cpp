@@ -111,17 +111,21 @@ AbsoluteTimestampsContainer Sensor::getAbsoluteTimestamps() {
   return this->absoluteTimestampsContainer;
 }
 
-bool Sensor::isEqual(Sensor& sensor) {
+bool Sensor::operator==(const Sensor& sensor) const {
   if (this->channels.size() != sensor.channels.size()) {
     return false;
   }
   for (size_t i = 0; i < this->channels.size(); i++) {
-    if (!this->channels[i].isEqual(sensor.channels[i])) {
+    if (this->channels[i] != sensor.channels[i]) {
       return false;
     }
   }
-  return this->sensorType == sensor.sensorType && this->differentialTimestampsContainer.isEqual(sensor.differentialTimestampsContainer) &&
-         this->absoluteTimestampsContainer.isEqual(sensor.absoluteTimestampsContainer);
+  return this->sensorType == sensor.sensorType && this->differentialTimestampsContainer == sensor.differentialTimestampsContainer &&
+         this->absoluteTimestampsContainer == sensor.absoluteTimestampsContainer;
+}
+
+bool Sensor::operator!=(const Sensor& sensor) const {
+  return !(*this == sensor);
 }
 
 // bool Sensor::isSet() {

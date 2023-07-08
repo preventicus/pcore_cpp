@@ -49,31 +49,31 @@ TEST(AbsoluteBlockTest, TestGetWithAbsoluteBlockWithEmptyAbsoluteValue) {
 TEST(AbsoluteBlockTest, TestIsEqualWithThreeMixedAbsoluteValues) {
   auto absoluteBlock1 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
   auto absoluteBlock2 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
-  EXPECT_TRUE(absoluteBlock1.isEqual(absoluteBlock2));
+  EXPECT_TRUE(absoluteBlock1 == absoluteBlock2);
 }
 
 TEST(AbsoluteBlockTest, TestIsEqualWithThreeMixedAbsoluteValuesAndThreeNegativeAbsoluteValues) {
   auto absoluteBlock1 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
   auto absoluteBlock2 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeNegativeAbsoluteValues();
-  EXPECT_FALSE(absoluteBlock1.isEqual(absoluteBlock2));
+  EXPECT_FALSE(absoluteBlock1 == absoluteBlock2);
 }
 
 TEST(AbsoluteBlockTest, TestIsEqualWithEmptyBlocks) {
   auto absoluteBlock1 = AbsoluteBlockExampleFactory::absoluteBlockWithEmptyAbsoluteValue();
   auto absoluteBlock2 = AbsoluteBlockExampleFactory::absoluteBlockWithEmptyAbsoluteValue();
-  EXPECT_TRUE(absoluteBlock1.isEqual(absoluteBlock2));
+  EXPECT_TRUE(absoluteBlock1 == absoluteBlock2);
 }
 
 TEST(AbsoluteBlockTest, TestIsEqualWithThreeMixedAbsoluteValuesAndEmptyAbsoluteValue) {
   auto absoluteBlock1 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
   auto absoluteBlock2 = AbsoluteBlockExampleFactory::absoluteBlockWithEmptyAbsoluteValue();
-  EXPECT_FALSE(absoluteBlock1.isEqual(absoluteBlock2));
+  EXPECT_FALSE(absoluteBlock1 == absoluteBlock2);
 }
 
 TEST(AbsoluteBlockTest, TestIsEqualWithThreeMixedAbsoluteValuesAndOneAbsoluteValue) {
   auto absoluteBlock1 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
   auto absoluteBlock2 = AbsoluteBlockExampleFactory::absoluteBlockWithOneAbsoluteValue();
-  EXPECT_FALSE(absoluteBlock1.isEqual(absoluteBlock2));
+  EXPECT_FALSE(absoluteBlock1 == absoluteBlock2);
 }
 
 TEST(AbsoluteBlockTest, TestToJsonWithAbsoluteValuesWithThreePositiveElements) {

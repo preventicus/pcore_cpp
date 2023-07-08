@@ -118,18 +118,21 @@ PpgMetaData Channel::getPpgMetaData() {
   return this->ppgMetaData;
 }
 
-bool Channel::isEqual(Channel& channel) {
+bool Channel::operator==(const Channel& channel) const {
   if (this->differentialBlocks.size() != channel.differentialBlocks.size()) {
     return false;
   }
   auto numberOfElements = this->differentialBlocks.size();
   for (size_t i = 0; i < numberOfElements; i++) {
-    if (!this->differentialBlocks[i].isEqual(channel.differentialBlocks[i])) {
+    if (this->differentialBlocks[i] != channel.differentialBlocks[i]) {
       return false;
     }
   }
-  return this->accMetaData.isEqual(channel.accMetaData) && this->ppgMetaData.isEqual(channel.ppgMetaData) &&
-         this->absoluteBlock.isEqual(channel.absoluteBlock);
+  return this->accMetaData == channel.accMetaData && this->ppgMetaData == channel.ppgMetaData && this->absoluteBlock == channel.absoluteBlock;
+}
+
+bool Channel::operator!=(const Channel& channel) const {
+  return !(*this == channel);
 }
 
 bool Channel::hasAccMetaData() {

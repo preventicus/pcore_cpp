@@ -49,8 +49,12 @@ Header Data::getHeader() {
   return this->header;
 }
 
-bool Data::isEqual(Data& data) {
-  return this->header.isEqual(data.header) && this->raw.isEqual(data.raw);
+bool Data::operator==(const Data& data) const {
+  return this->header == data.header && this->raw == data.raw;
+}
+
+bool Data::operator!=(const Data& data) const {
+  return this->header != data.header || this->raw != data.raw;
 }
 
 void Data::serialize(ProtobufData* protobufData) {

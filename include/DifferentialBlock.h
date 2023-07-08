@@ -52,9 +52,11 @@ class DifferentialBlock final {
 
   DifferentialValues getDifferentialValues();
   bool isSet();
-  bool isEqual(DifferentialBlock& differentialBlock);
   DifferentialBlockJson toJson();
   void serialize(ProtobufDifferentialBlock* differentialBlock);
+
+  bool operator==(const DifferentialBlock& differentialBlock) const;
+  bool operator!=(const DifferentialBlock& differentialBlock) const;
 
  private:
   DifferentialValues differentialValues;

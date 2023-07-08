@@ -49,10 +49,12 @@ class Data final {
 
   Raw getRaw();
   Header getHeader();
-  bool isEqual(Data& data);
   DataJson toJson(DataForm dataForm);
   void serialize(ProtobufData* protobufData);
   void switchDataForm();
+
+  bool operator==(const Data& data) const;
+  bool operator!=(const Data& data) const;
 
  private:
   Header header;

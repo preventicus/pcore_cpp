@@ -48,10 +48,12 @@ class Raw final {
   Raw();
 
   Sensors getSensors();
-  bool isEqual(Raw& protobufRaw);
   RawJson toJson(DataForm dataForm);
   void serialize(ProtobufRaw* protobufRaw);
   void switchDataForm(DataForm currentDataForm);
+
+  bool operator==(const Raw& raw) const;
+  bool operator!=(const Raw& raw) const;
 
  private:
   Sensors sensors;

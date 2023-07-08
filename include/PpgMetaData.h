@@ -55,11 +55,13 @@ class PpgMetaData final {
   bool hasColor();
   bool hasWavelength();
   bool isSet();
-  bool isEqual(PpgMetaData& ppgMetaData);
   PpgMetaDataJson toJson();
   void serialize(ProtobufPpgMetaData* protobufPpgMetaData);
   static ProtobufColorString protobufColorToString(ProtobufColor protobufColor);
   static ProtobufColor protobufColorFromString(ProtobufColorString protobufColorString);
+
+  bool operator==(const PpgMetaData& ppgMetaData) const;
+  bool operator!=(const PpgMetaData& ppgMetaData) const;
 
  private:
   ProtobufColor color;

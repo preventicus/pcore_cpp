@@ -45,7 +45,7 @@ TEST(HeaderTest, TestGetVersion) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto version1 = VersionExampleFactory::versionWithMajor0Minor0Patch0();
   auto version2 = header.getVersion();
-  EXPECT_TRUE(version1.isEqual(version2));
+  EXPECT_TRUE(version1 == version2);
 }
 
 TEST(HeaderTest, TestGetDataForm) {
@@ -58,37 +58,37 @@ TEST(HeaderTest, TestGetDataForm) {
 TEST(HeaderTest, TestIsEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
-  EXPECT_TRUE(header1.isEqual(header2));
+  EXPECT_TRUE(header1 == header2);
 }
 
 TEST(HeaderTest, TestIsEqualWithHeaderEmpty) {
   auto header1 = HeaderExampleFactory::headerEmpty();
   auto header2 = HeaderExampleFactory::headerEmpty();
-  EXPECT_TRUE(header1.isEqual(header2));
+  EXPECT_TRUE(header1 == header2);
 }
 
 TEST(HeaderTest, TestIsEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderEmpty) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerEmpty();
-  EXPECT_FALSE(header1.isEqual(header2));
+  EXPECT_FALSE(header1 == header2);
 }
 
 TEST(HeaderTest, TestIsEqualWithHeaderWithDifferentVersions) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
-  EXPECT_FALSE(header1.isEqual(header2));
+  EXPECT_FALSE(header1 == header2);
 }
 
 TEST(HeaderTest, TestIsEqualWithHeaderWithDifferentTimeZoneOffset) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
-  EXPECT_FALSE(header1.isEqual(header2));
+  EXPECT_FALSE(header1 == header2);
 }
 
 TEST(HeaderTest, TestIsEqualWithHeaderWithDifferentDataForm) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
-  EXPECT_FALSE(header1.isEqual(header2));
+  EXPECT_FALSE(header1 == header2);
 }
 
 TEST(HeaderTest, TestToJsonWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
@@ -110,7 +110,7 @@ TEST(HeaderTest, TestSerializeWithHeaderWithVersionWithMajor2Minor1Patch0AndTime
   ProtobufHeader protobufHeader;
   header1.serialize(&protobufHeader);
   auto header2 = Header(protobufHeader);
-  EXPECT_TRUE(header1.isEqual(header2));
+  EXPECT_TRUE(header1 == header2);
 }
 
 TEST(HeaderTest, TestSerializeNoThrow) {

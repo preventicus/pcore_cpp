@@ -66,8 +66,12 @@ DataForm Header::getDataForm() {
   return this->dataForm;
 }
 
-bool Header::isEqual(Header& header) {
-  return this->timeZoneOffset_min == header.timeZoneOffset_min && this->version.isEqual(header.version) && this->dataForm == header.dataForm;
+bool Header::operator==(const Header& header) const {
+  return this->timeZoneOffset_min == header.timeZoneOffset_min && this->version == header.version && this->dataForm == header.dataForm;
+}
+
+bool Header::operator!=(const Header& header) const {
+  return this->timeZoneOffset_min != header.timeZoneOffset_min || this->version != header.version || this->dataForm != header.dataForm;
 }
 
 void Header::serialize(ProtobufHeader* protobufHeader) {
