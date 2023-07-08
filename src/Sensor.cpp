@@ -230,7 +230,8 @@ BlockIdxs Sensor::findBlockIdxs() {
   bool isNewBlock = true;
   blockIdxs.push_back(0);
   UnixTimestamps absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
-  for (size_t i = 1; i < absoluteUnixTimestamps.size(); i++) {
+  auto numberOfElements = absoluteUnixTimestamps.size();
+  for (size_t i = 1; i < numberOfElements; i++) {
     Interval timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
     if (isNewBlock) {
       referenceTimeDifference = timeDifference;
@@ -251,9 +252,17 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(DifferentialTime
   BlockIntervals blockIntervals_ms = differentialTimestampsContainer.getBlockIntervals();
   UnixTimestamp absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp();
 
-  for (size_t i = 0; i < blockIntervals_ms.size(); i++) {
+  size_t numberOfElements = 0;
+  for (auto& differentialBlockOfFirstChannel : differentialBlocksOfFirstChannel) {
+    numberOfElements += differentialBlockOfFirstChannel.getDifferentialValues().size();
+  }
+  unixTimestamps_ms.reserve(numberOfElements);
+
+  auto numberOfBlockIntervals = blockIntervals_ms.size();
+  for (size_t i = 0; i < numberOfBlockIntervals; i++) {
     absoluteUnixTimestamp += blockIntervals_ms[i];
-    for (size_t j = 0; j < differentialBlocksOfFirstChannel[i].getDifferentialValues().size(); j++) {
+    auto numberOfDifferentialValues = differentialBlocksOfFirstChannel[i].getDifferentialValues().size();
+    for (size_t j = 0; j < numberOfDifferentialValues; j++) {
       unixTimestamps_ms.push_back(absoluteUnixTimestamp + j * timestampsIntervals_ms[i]);
     }
   }
@@ -297,7 +306,8 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
 
   blockIntervals_ms.push_back(0);
   timestampsIntervals_ms.push_back(absoluteUnixTimestamps[1] - firstUnixTimestamp_ms);
-  for (size_t i = 1; i < blockIdxs.size() - 1; i++) {
+  auto numberOfIntervals = blockIdxs.size() - 1;
+  for (size_t i = 1; i < numberOfIntervals; i++) {
     const BlockIdx previousBlockIdx = blockIdxs[i - 1];
     const BlockIdx currentBlockIdx = blockIdxs[i];
     timestampsIntervals_ms.push_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
