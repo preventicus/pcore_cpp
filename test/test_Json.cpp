@@ -36,13 +36,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Data.h"
 #include "DataExampleFactory.h"
 
-class JsonTest : public ::testing::Test {
- protected:
-  std::string static getJsonPath(std::string nameFromJson) { return "./../../test/JsonTestData/" + nameFromJson; }
-};
-
-TEST_F(JsonTest, TestToJsonAbsoluteForm) {
-  std::ifstream file(JsonTest_TestToJsonAbsoluteForm_Test::getJsonPath("absolute_pcore.json"));
+TEST(JsonTest, TestToJsonAbsoluteForm) {
+  std::ifstream file("./../../test/JsonTestData/absolute_pcore.json");
   Json::Value inputJson;
   file >> inputJson;
 
@@ -58,8 +53,8 @@ TEST_F(JsonTest, TestToJsonAbsoluteForm) {
   EXPECT_TRUE(inputJson.toStyledString() == outputJson.toStyledString());
 }
 
-TEST_F(JsonTest, TestToJsonDifferentialForm) {
-  std::ifstream file(this->getJsonPath("differential_pcore.json"));
+TEST(JsonTest, TestToJsonDifferentialForm) {
+  std::ifstream file("./../../test/JsonTestData/differential_pcore.json");
   Json::Value inputJson;
   file >> inputJson;
   ProtobufData protobufData;

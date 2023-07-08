@@ -34,68 +34,61 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "DifferentialBlockExampleFactory.h"
 
-class DifferentialBlockTest : public ::testing::Test {
- protected:
-  DifferentialValues differentialValuesEmpty = DifferentialValuesExampleFactory::differentialValuesEmpty();
-  DifferentialValues differentialValuesOneElement = DifferentialValuesExampleFactory::differentialValuesOneElement();
-  DifferentialValues differentialValuesWithThreePositiveElements = DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements();
-  DifferentialValues differentialValuesWithThreeNegativeElements = DifferentialValuesExampleFactory::differentialValuesWithThreeNegativeElements();
-  DifferentialValues differentialValuesWithThreeMixedElements = DifferentialValuesExampleFactory::differentialValuesWithThreeMixedElements();
-};
-
-TEST_F(DifferentialBlockTest, TestGetWithDifferentialBlockWithThreePositiveDifferentialValues) {
+TEST(DifferentialBlockTest, TestGetWithDifferentialBlockWithThreePositiveDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues();
-  EXPECT_EQ(differentialBlock.getDifferentialValues(), this->differentialValuesWithThreePositiveElements);
+  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements();
+  EXPECT_EQ(differentialBlock.getDifferentialValues(), differentialValues);
 }
 
-TEST_F(DifferentialBlockTest, TestGetWithDifferentialBlockWithEmptyDifferentialValues) {
+TEST(DifferentialBlockTest, TestGetWithDifferentialBlockWithEmptyDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
-  EXPECT_EQ(differentialBlock.getDifferentialValues(), this->differentialValuesEmpty);
+  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesEmpty();
+  EXPECT_EQ(differentialBlock.getDifferentialValues(), differentialValues);
 }
 
-TEST_F(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDifferentialValues) {
+TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDifferentialValues) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   DifferentialBlock differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   EXPECT_TRUE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestIsEqualWithdifferentialBlockWithThreeMixedDifferentialValuesAndThreeNegativeDifferentialValues) {
+TEST(DifferentialBlockTest, TestIsEqualWithdifferentialBlockWithThreeMixedDifferentialValuesAndThreeNegativeDifferentialValues) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   DifferentialBlock differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
   EXPECT_FALSE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestIsEmptyWithEmptyBlock) {
+TEST(DifferentialBlockTest, TestIsEmptyWithEmptyBlock) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   DifferentialBlock differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   EXPECT_TRUE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestIsEmptyWithDifferentialBlockWithThreeMixedDifferentialValuesAndEmptyBlock) {
+TEST(DifferentialBlockTest, TestIsEmptyWithDifferentialBlockWithThreeMixedDifferentialValuesAndEmptyBlock) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   DifferentialBlock differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   EXPECT_FALSE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestIsBlocksWithDifferentSize) {
+TEST(DifferentialBlockTest, TestIsBlocksWithDifferentSize) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   DifferentialBlock differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   EXPECT_FALSE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeNoThrow) {
+TEST(DifferentialBlockTest, TestSerializeNoThrow) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   ProtobufDifferentialBlock protobufDifferentialBlocks;
   EXPECT_NO_THROW(differentialBlock.serialize(&protobufDifferentialBlocks));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeThrow) {
+TEST(DifferentialBlockTest, TestSerializeThrow) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   ProtobufDifferentialBlock* protobufData = nullptr;
   EXPECT_THROW(differentialBlock.serialize(protobufData), std::invalid_argument);
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreePositiveDifferentialValues) {
+TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreePositiveDifferentialValues) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues();
   ProtobufDifferentialBlock protobufDifferentialBlocks;
   differentialBlock1.serialize(&protobufDifferentialBlocks);
@@ -103,7 +96,7 @@ TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreePositiv
   EXPECT_TRUE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithEmptyDifferentialValues) {
+TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithEmptyDifferentialValues) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   ProtobufDifferentialBlock protobufDifferentialBlocks;
   differentialBlock1.serialize(&protobufDifferentialBlocks);
@@ -111,7 +104,7 @@ TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithEmptyDiffere
   EXPECT_TRUE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithOneDifferentialValues) {
+TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithOneDifferentialValues) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   ProtobufDifferentialBlock protobufDifferentialBlocks;
   differentialBlock1.serialize(&protobufDifferentialBlocks);
@@ -119,7 +112,7 @@ TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithOneDifferent
   EXPECT_TRUE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeNegativeDifferentialValues) {
+TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeNegativeDifferentialValues) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
   ProtobufDifferentialBlock protobufDifferentialBlocks;
   differentialBlock1.serialize(&protobufDifferentialBlocks);
@@ -127,7 +120,7 @@ TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeNegativ
   EXPECT_TRUE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeMixedDifferentialValues) {
+TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeMixedDifferentialValues) {
   DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   ProtobufDifferentialBlock protobufDifferentialBlocks;
   differentialBlock1.serialize(&protobufDifferentialBlocks);
@@ -135,47 +128,47 @@ TEST_F(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeMixedDi
   EXPECT_TRUE(differentialBlock1.isEqual(differentialBlock2));
 }
 
-TEST_F(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreePositiveDifferentialValues) {
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreePositiveDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues();
   DifferentialBlockJson differentialBlockJson1 = differentialBlock.toJson();
   DifferentialBlockJson differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
   EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
 }
 
-TEST_F(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeMixedDifferentialValues) {
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeMixedDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   DifferentialBlockJson differentialBlockJson1 = differentialBlock.toJson();
   DifferentialBlockJson differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
   EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
 }
 
-TEST_F(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeNegativeDifferentialValues) {
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeNegativeDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
   DifferentialBlockJson differentialBlockJson1 = differentialBlock.toJson();
   DifferentialBlockJson differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
   EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
 }
 
-TEST_F(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithEmptyDifferentialValues) {
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithEmptyDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   DifferentialBlockJson differentialBlockJson1 = differentialBlock.toJson();
   DifferentialBlockJson differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
   EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
 }
 
-TEST_F(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithOneDifferentialValues) {
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithOneDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   DifferentialBlockJson differentialBlockJson1 = differentialBlock.toJson();
   DifferentialBlockJson differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
   EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
 }
 
-TEST_F(DifferentialBlockTest, TestIsSetWithDifferentialBlockWithOneDifferentialValues) {
+TEST(DifferentialBlockTest, TestIsSetWithDifferentialBlockWithOneDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   EXPECT_TRUE(differentialBlock.isSet());
 }
 
-TEST_F(DifferentialBlockTest, TestIsSetWithDifferentialBlockWithEmptyDifferentialValues) {
+TEST(DifferentialBlockTest, TestIsSetWithDifferentialBlockWithEmptyDifferentialValues) {
   DifferentialBlock differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   EXPECT_FALSE(differentialBlock.isSet());
 }
