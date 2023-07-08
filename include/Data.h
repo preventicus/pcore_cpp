@@ -42,9 +42,9 @@ using DataJson = Json::Value;
 
 class Data final {
  public:
-  Data(Raw& raw, Header& header);
-  Data(const ProtobufData& protobufData);
-  Data(DataJson& dataJson);
+  explicit Data(Raw& raw, Header& header);
+  explicit Data(const ProtobufData& protobufData);
+  explicit Data(DataJson& dataJson);
   Data();
 
   Raw getRaw();

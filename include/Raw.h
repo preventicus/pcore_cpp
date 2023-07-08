@@ -42,9 +42,9 @@ using RawJson = Json::Value;
 
 class Raw final {
  public:
-  Raw(Sensors& sensors);
-  Raw(const ProtobufRaw& protobufRaw);
-  Raw(RawJson& rawJson, DataForm dataForm);
+  explicit Raw(Sensors& sensors);
+  explicit Raw(const ProtobufRaw& protobufRaw);
+  explicit Raw(RawJson& rawJson, DataForm dataForm);
   Raw();
 
   Sensors getSensors();

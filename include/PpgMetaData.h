@@ -44,10 +44,10 @@ using ProtobufColorString = std::string;
 
 class PpgMetaData final {
  public:
-  PpgMetaData(ProtobufColor color);
-  PpgMetaData(Wavelength wavelength_nm);
-  PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);
-  PpgMetaData(PpgMetaDataJson& ppgMetaData);
+  explicit PpgMetaData(ProtobufColor color);
+  explicit PpgMetaData(Wavelength wavelength_nm);
+  explicit PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);
+  explicit PpgMetaData(PpgMetaDataJson& ppgMetaData);
   PpgMetaData();
 
   ProtobufColor getColor();

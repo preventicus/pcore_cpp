@@ -46,10 +46,10 @@ using ProtobufNormString = std::string;
 
 class AccMetaData final {
  public:
-  AccMetaData(ProtobufNorm norm);
-  AccMetaData(ProtobufCoordinate coordinate);
-  AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);
-  AccMetaData(AccMetaDataJson& accMetaDataJson);
+  explicit AccMetaData(ProtobufNorm norm);
+  explicit AccMetaData(ProtobufCoordinate coordinate);
+  explicit AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);
+  explicit AccMetaData(AccMetaDataJson& accMetaDataJson);
   AccMetaData();
 
   ProtobufCoordinate getCoordinate();

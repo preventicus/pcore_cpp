@@ -51,12 +51,12 @@ using DifferentialBlocks = std::vector<DifferentialBlock>;
 
 class Channel final {
  public:
-  Channel(AccMetaData& accMetadata, AbsoluteBlock& absoluteBlock);
-  Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock);
-  Channel(PpgMetaData& ppgMetaData, DifferentialBlocks& differentialBlocks);
-  Channel(AccMetaData& accMetaData, DifferentialBlocks& differentialBlocks);
-  Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm);
-  Channel(const ProtobufChannel& protobufChannel);
+  explicit Channel(AccMetaData& accMetadata, AbsoluteBlock& absoluteBlock);
+  explicit Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock);
+  explicit Channel(PpgMetaData& ppgMetaData, DifferentialBlocks& differentialBlocks);
+  explicit Channel(AccMetaData& accMetaData, DifferentialBlocks& differentialBlocks);
+  explicit Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm);
+  explicit Channel(const ProtobufChannel& protobufChannel);
   Channel();
 
   DifferentialBlocks getDifferentialBlocks();

@@ -46,9 +46,9 @@ using PatchJson = Json::Value;
 
 class Version final {
  public:
-  Version(Major major, Minor minor, Patch patch);
-  Version(const ProtobufVersion& protobufVersion);
-  Version(VersionJson& jsonVersion);
+  explicit Version(Major major, Minor minor, Patch patch);
+  explicit Version(const ProtobufVersion& protobufVersion);
+  explicit Version(VersionJson& jsonVersion);
   Version();
 
   Major getMajor();

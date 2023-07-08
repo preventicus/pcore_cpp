@@ -48,10 +48,10 @@ using ChannelsJson = Json::Value;
 
 class Sensor final {
  public:
-  Sensor(Channels& channels, DifferentialTimestampsContainer& differentialTimestampsContainer, ProtobufSensorType protobufSensorType);
-  Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestampsContainer, ProtobufSensorType protobufSensorType);
-  Sensor(SensorJson& sensorJson, DataForm dataForm);
-  Sensor(const ProtobufSensor& protobufSensor);
+  explicit Sensor(Channels& channels, DifferentialTimestampsContainer& differentialTimestampsContainer, ProtobufSensorType protobufSensorType);
+  explicit Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestampsContainer, ProtobufSensorType protobufSensorType);
+  explicit Sensor(SensorJson& sensorJson, DataForm dataForm);
+  explicit Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
 
   ProtobufSensorType getSensorType();

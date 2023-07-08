@@ -50,11 +50,11 @@ using TimestampsIntervalsJson = Json::Value;
 
 class DifferentialTimestampsContainer final {
  public:
-  DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
-                                  BlockIntervals& blockIntervals_ms,
-                                  TimestampsIntervals& timestampsIntervals_ms);
-  DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
-  DifferentialTimestampsContainer(DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
+  explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
+                                           BlockIntervals& blockIntervals_ms,
+                                           TimestampsIntervals& timestampsIntervals_ms);
+  explicit DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
+  explicit DifferentialTimestampsContainer(DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
   DifferentialTimestampsContainer();
 
   UnixTimestamp getFirstUnixTimestamp();

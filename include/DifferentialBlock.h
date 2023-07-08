@@ -45,9 +45,9 @@ using DifferentialBlockJson = Json::Value;
 
 class DifferentialBlock final {
  public:
-  DifferentialBlock(DifferentialValues& differentialValues);
-  DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock);
-  DifferentialBlock(DifferentialBlockJson& differentialBlockJson);
+  explicit DifferentialBlock(DifferentialValues& differentialValues);
+  explicit DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock);
+  explicit DifferentialBlock(DifferentialBlockJson& differentialBlockJson);
   DifferentialBlock();
 
   DifferentialValues getDifferentialValues();

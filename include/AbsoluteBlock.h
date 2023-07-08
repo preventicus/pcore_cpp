@@ -42,8 +42,8 @@ using AbsoluteBlockJson = Json::Value;
 
 class AbsoluteBlock final {
  public:
-  AbsoluteBlock(AbsoluteValues& absoluteValues);
-  AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
+  explicit AbsoluteBlock(AbsoluteValues& absoluteValues);
+  explicit AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
   AbsoluteBlock();
 
   AbsoluteValues getAbsoluteValues();
