@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glueck, Steve Merschel 2023
+Created by Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,25 +32,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <json/json.h>
-#include <vector>
+#include "AbsoluteBlock.h"
 
-using AbsoluteValue = int32_t;
-using AbsoluteValues = std::vector<AbsoluteValue>;
-using AbsoluteValuesJson = Json::Value;
-using AbsoluteBlockJson = Json::Value;
-
-class AbsoluteBlock final {
+class AbsoluteValuesExampleFactory {
  public:
-  AbsoluteBlock(AbsoluteValues& absoluteValues);
-  AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
-  AbsoluteBlock();
+  static AbsoluteValues absoluteValuesWithThreePositiveElements();
+  static AbsoluteValues absoluteValuesWithThreeMixedElements();
+  static AbsoluteValues absoluteValuesWithThreeNegativeElements();
+  static AbsoluteValues absoluteValuesWithOneElement();
+  static AbsoluteValues absoluteValuesEmpty();
+  static AbsoluteValues absoluteValuesForTestSwitchTo();
+  static AbsoluteValues absoluteValues();
+  static AbsoluteValues absoluteJsonDataValuesPpg1();
+  static AbsoluteValues absoluteJsonDataValuesPpg2();
+  static AbsoluteValues absoluteJsonDataValuesAcc();
+  static AbsoluteValues absoluteValuesWithOneValueInLastBlock();
 
-  AbsoluteValues getAbsoluteValues();
-  bool isSet();
-  bool isEqual(AbsoluteBlock& block);
-  AbsoluteBlockJson toJson();
-
- private:
-  AbsoluteValues absoluteValues;
+  static AbsoluteValuesJson buildAbsoluteValuesJson(AbsoluteValues absoluteValues);
 };

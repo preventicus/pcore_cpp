@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,26 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "PpgMetaDataExampleFactory.h"
 
-Wavelength PpgMetaDataExampleFactory::normalWavelength_nm() {
-  return 255;
-}
-
-Wavelength PpgMetaDataExampleFactory::comparableWavelength_nm() {
-  return 100;
-}
-
-Wavelength PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1() {
-  return 450;
-}
-
-Wavelength PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2() {
-  return 660;
-}
-
-Wavelength PpgMetaDataExampleFactory::noWavelength_nm() {
-  return 0;
-}
-
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorGreen() {
   return PpgMetaData(ProtobufColor::COLOR_GREEN);
 }
@@ -65,22 +45,32 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorRed() {
   return PpgMetaData(ProtobufColor::COLOR_RED);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithWavelength() {
-  return PpgMetaData(PpgMetaDataExampleFactory::normalWavelength_nm());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithColorNone() {
+  return PpgMetaData(ProtobufColor::COLOR_NONE);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithComparableWavelength() {
-  return PpgMetaData(PpgMetaDataExampleFactory::comparableWavelength_nm());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0() {
+  return PpgMetaData(0);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::absoluteJsonDataPpg1() {
-  return PpgMetaData(PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255() {
+  return PpgMetaData(255);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::absoluteJsonDataPpg2() {
-  return PpgMetaData(PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100() {
+  return PpgMetaData(100);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
   return PpgMetaData();
+}
+
+PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgMetaData) {
+  PpgMetaDataJson ppgMetaDataJson;
+  if (ppgMetaData.hasWavelength()) {
+    ppgMetaDataJson["wavelength_nm"] = ppgMetaData.getWavelength();
+  } else if (ppgMetaData.hasColor()) {
+    ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(ppgMetaData.getColor());
+  }
+  return ppgMetaDataJson;
 }

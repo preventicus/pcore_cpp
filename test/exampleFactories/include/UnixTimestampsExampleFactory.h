@@ -32,25 +32,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <json/json.h>
-#include <vector>
+#include "AbsoluteTimestampsContainer.h"
 
-using AbsoluteValue = int32_t;
-using AbsoluteValues = std::vector<AbsoluteValue>;
-using AbsoluteValuesJson = Json::Value;
-using AbsoluteBlockJson = Json::Value;
-
-class AbsoluteBlock final {
+class UnixTimestampsExampleFactory {
  public:
-  AbsoluteBlock(AbsoluteValues& absoluteValues);
-  AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
-  AbsoluteBlock();
+  static UnixTimestamps unixTimestampsWithThreeSmallTimestamps_ms();
+  static UnixTimestamps unixTimestampsWithThreeBigTimestamps_ms();
+  static UnixTimestamps unixTimestampsWithOneBigTimestamp_ms();
+  static UnixTimestamps unixTimestampsWithTimestamp0_ms();
+  static UnixTimestamps unixTimestampsEmpty_ms();
+  static UnixTimestamps unixTimestampsWithFiveDifferentialTimestamps_ms();
+  static UnixTimestamps unixTimestampsForSwitchDataFormTest_ms();
 
-  AbsoluteValues getAbsoluteValues();
-  bool isSet();
-  bool isEqual(AbsoluteBlock& block);
-  AbsoluteBlockJson toJson();
+  static UnixTimestamp firstTimestamp_ms();
+  static UnixTimestamp firstTimestampEmpty_ms();
+  static UnixTimestamp lastTimestamp_ms();
+  static UnixTimestamp firstUnixTimestampForSwitchDataFormTest_ms();
 
- private:
-  AbsoluteValues absoluteValues;
+  static UnixTimestampsJson buildUnixTimestampsJson(UnixTimestamps unixTimestamps_ms);
 };

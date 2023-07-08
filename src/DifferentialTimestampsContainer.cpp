@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -31,10 +31,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 #include "DifferentialTimestampsContainer.h"
-
-using UnixTimestampJson = Json::Value;
-using BlockIntervalsJson = Json::Value;
-using TimestampsIntervalsJson = Json::Value;
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
                                                                  BlockIntervals& blockIntervals_ms,
@@ -122,6 +118,9 @@ UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBloc
 UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock(BlockIdx& blockIdx,
                                                                                  UnixTimestamp firstUnixTimestampInBlock_ms,
                                                                                  DifferentialBlock& lastDifferentialBlock) {
+  if (this->timestampsIntervals_ms.size() <= blockIdx) {
+    throw std::invalid_argument("blockIdx is bigger than size of timestampsInterval");
+  }
   return firstUnixTimestampInBlock_ms + lastDifferentialBlock.getDifferentialValues().size() * this->timestampsIntervals_ms[blockIdx];
 }
 

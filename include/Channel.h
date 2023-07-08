@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -46,6 +46,8 @@ using ProtobufSensorType = com::preventicus::pcore::SensorType;
 using BlockIdxs = std::vector<BlockIdx>;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 using ChannelJson = Json::Value;
+using DifferentialBlocksJson = Json::Value;
+using DifferentialBlocks = std::vector<DifferentialBlock>;
 
 class Channel final {
  public:
@@ -63,6 +65,11 @@ class Channel final {
   PpgMetaData getPpgMetaData();
 
   bool isEqual(Channel& channel);
+  bool hasAccMetaData();
+  bool hasPpgMetaData();
+  bool hasDifferentialBlocks();
+  bool hasAbsoluteBlock();
+
   ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType);
   void serialize(ProtobufChannel* protobufChannel);
   void switchDataForm(BlockIdxs& blockIdxs);

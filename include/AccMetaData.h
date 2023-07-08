@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -54,6 +54,8 @@ class AccMetaData final {
 
   ProtobufCoordinate getCoordinate();
   ProtobufNorm getNorm();
+  bool hasNorm();
+  bool hasCoordinate();
   bool isSet();
   bool isEqual(AccMetaData& AccMetaData);
   AccMetaDataJson toJson();

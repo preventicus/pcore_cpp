@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,9 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Channel.h"
-
-using DifferentialBlocksJson = Json::Value;
-using DifferentialBlocks = std::vector<DifferentialBlock>;
 
 Channel::Channel(AccMetaData& accMetaData, AbsoluteBlock& absoluteBlock)
     : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(absoluteBlock) {}
@@ -130,6 +127,22 @@ bool Channel::isEqual(Channel& channel) {
   }
   return this->accMetaData.isEqual(channel.accMetaData) && this->ppgMetaData.isEqual(channel.ppgMetaData) &&
          this->absoluteBlock.isEqual(channel.absoluteBlock);
+}
+
+bool Channel::hasAccMetaData() {
+  return this->accMetaData.isSet();
+}
+
+bool Channel::hasPpgMetaData() {
+  return this->ppgMetaData.isSet();
+}
+
+bool Channel::hasDifferentialBlocks() {
+  return !this->differentialBlocks.empty();
+}
+
+bool Channel::hasAbsoluteBlock() {
+  return this->absoluteBlock.isSet();
 }
 
 void Channel::serialize(ProtobufChannel* protobufChannel) {

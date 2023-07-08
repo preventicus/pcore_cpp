@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -60,8 +60,16 @@ ProtobufNorm AccMetaData::getNorm() {
   return this->norm;
 }
 
+bool AccMetaData::hasNorm() {
+  return this->norm != ProtobufNorm::NORM_NONE;
+}
+
+bool AccMetaData::hasCoordinate() {
+  return this->coordinate != ProtobufCoordinate::COORDINATE_NONE;
+}
+
 bool AccMetaData::isSet() {
-  return !(this->coordinate == ProtobufCoordinate::COORDINATE_NONE && this->norm == ProtobufNorm::NORM_NONE);
+  return this->hasNorm() || this->hasCoordinate();
 }
 
 bool AccMetaData::isEqual(AccMetaData& AccMetaData) {

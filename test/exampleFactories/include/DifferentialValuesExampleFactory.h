@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glueck, Steve Merschel 2023
+Created by Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,25 +32,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <json/json.h>
-#include <vector>
+#include "Channel.h"
+#include "DifferentialBlock.h"
 
-using AbsoluteValue = int32_t;
-using AbsoluteValues = std::vector<AbsoluteValue>;
-using AbsoluteValuesJson = Json::Value;
-using AbsoluteBlockJson = Json::Value;
-
-class AbsoluteBlock final {
+class DifferentialValuesExampleFactory {
  public:
-  AbsoluteBlock(AbsoluteValues& absoluteValues);
-  AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
-  AbsoluteBlock();
+  static DifferentialValues differentialValuesWithThreePositiveElements();
+  static DifferentialValues differentialValuesWithThreeMixedElements();
+  static DifferentialValues differentialValuesWithThreeNegativeElements();
+  static DifferentialValues differentialValuesOneElement();
+  static DifferentialValues differentialValuesEmpty();
 
-  AbsoluteValues getAbsoluteValues();
-  bool isSet();
-  bool isEqual(AbsoluteBlock& block);
-  AbsoluteBlockJson toJson();
-
- private:
-  AbsoluteValues absoluteValues;
+  static DifferentialValuesJson buildDifferentialValuesJson(DifferentialValues differentialValues);
 };

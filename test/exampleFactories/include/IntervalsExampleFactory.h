@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glueck, Steve Merschel 2023
+Created by Steve Mersche 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,25 +32,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <json/json.h>
-#include <vector>
+#include "DifferentialTimestampsContainer.h"
 
-using AbsoluteValue = int32_t;
-using AbsoluteValues = std::vector<AbsoluteValue>;
-using AbsoluteValuesJson = Json::Value;
-using AbsoluteBlockJson = Json::Value;
-
-class AbsoluteBlock final {
+class IntervalsExampleFactory {
  public:
-  AbsoluteBlock(AbsoluteValues& absoluteValues);
-  AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
-  AbsoluteBlock();
+  static BlockIntervals blockIntervalsWithThreeMixedIntervals();
+  static TimestampsIntervals timestampsIntervalsWithThreeZeroIntervals();
+  static BlockIntervals blockIntervalsEmpty();
+  static TimestampsIntervals timestampsIntervalsEmpty();
+  static BlockIntervals blockIntervalsWithTwoMixedIntervals();
+  static TimestampsIntervals timestampsIntervalsWithTwoMixedIntervals();
+  static BlockIntervals blockIntervalsWithThreeBigIntervals();
+  static TimestampsIntervals timestampsIntervalsWithThreeBigIntervals();
+  static BlockIntervals blockIntervalsForSwitchDataFormTest();
+  static TimestampsIntervals timestampsIntervalsForSwitchDataFromTest();
 
-  AbsoluteValues getAbsoluteValues();
-  bool isSet();
-  bool isEqual(AbsoluteBlock& block);
-  AbsoluteBlockJson toJson();
-
- private:
-  AbsoluteValues absoluteValues;
+  static TimestampsIntervalsJson buildTimestampsIntervalsJson(TimestampsIntervals timestampsIntervals);
+  static BlockIntervalsJson buildBlockIntervalsJson(BlockIntervals blockIntervals);
 };

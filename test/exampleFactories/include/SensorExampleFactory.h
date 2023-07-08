@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -41,19 +41,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class SensorExampleFactory {
  public:
-  static Sensor normalSensor();
-  static Sensor sensorWithOneUnixAndOneValue();
-  static Sensor sensorWithNUllUnixAndNUllValue();
-  static Sensor sensorWithOneUnixAndOneValueInLastBlock();
-  static Sensor sensorWithEqualTimestampsInterval();
-  static Sensor comparableSensor();
-  static Sensor absoluteJsonDataPpgSensor();
-  static Sensor absoluteJsonDataAccSensor();
-  static Sensor differentialJsonDataPpgSensor();
-  static Sensor differentialJsonDataAccSensor();
+  static Sensor sensorPpgWithTwoChannelsInAbsoluteForm();
+  static Sensor sensorPpgWithOneChannelsInAbsoluteForm();
+  static Sensor sensorAccWithTwoChannelsInAbsoluteForm();
+  static Sensor sensorPpgWithTwoChannelsInDifferentialForm();
+  static Sensor sensorAccWithTwoChannelsInDifferentialForm();
+  static Sensor sensorEmpty();
 
-  static Sensors normalVectorWithSensors();
-  static Sensors comparableVectorWithSensors();
-  static Sensors vectorWithAbsoluteJsonDataSensor();
-  static Sensors vectorWithDifferentialJsonDataSensor();
+  static Sensor sensorForSwitchDataFromTestInAbsoluteForm();
+  static Sensor sensorForSwitchDataFromTestInDifferentialForm();
+
+  static SensorJson buildSensorJson(Sensor sensor, DataForm dataForm);
+
+  //  static Sensor normalSensor();
+  //  static Sensor sensorWithOneUnixAndOneValue();
+  //  static Sensor sensorWithNUllUnixAndNUllValue();
+  //  static Sensor sensorWithOneUnixAndOneValueInLastBlock();
+  //  static Sensor sensorWithEqualTimestampsInterval();
+  //  static Sensor comparableSensor();
+  //  static Sensor absoluteJsonDataPpgSensor();
+  //  static Sensor absoluteJsonDataAccSensor();
+  //  static Sensor differentialJsonDataPpgSensor();
+  //  static Sensor differentialJsonDataAccSensor();
+  //
+  //  static Sensors normalVectorWithSensors();
+  //  static Sensors comparableVectorWithSensors();
+  //  static Sensors vectorWithAbsoluteJsonDataSensor();
+  //  static Sensors vectorWithDifferentialJsonDataSensor();
 };

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -40,6 +40,7 @@ using ProtobufHeader = com::preventicus::pcore::Data_Header;
 using TimeZoneOffset = int32_t;
 using HeaderJson = Json::Value;
 using DataFormString = std::string;
+using TimeZoneOffsetJson = Json::Value;
 
 class Header final {
  public:

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,84 +33,176 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "SensorExampleFactory.h"
 
-Sensor SensorExampleFactory::normalSensor() {
-  Channels normalVectorChannel = ChannelExampleFactory::normalVectorWithChannel();
-  DifferentialTimestampsContainer normalDifferentialTimestamps = DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps();
-  return Sensor(normalVectorChannel, normalDifferentialTimestamps, ProtobufSensorType::SENSOR_TYPE_ACC);
+Sensor SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm() {
+  Channels channels;
+  channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData());
+  channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData());
+  AbsoluteTimestampsContainer absoluteTimestampsContainer =
+      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
-Sensor SensorExampleFactory::comparableSensor() {
-  Channels comparableVectorChannel = ChannelExampleFactory::comparableVectorWithChannel();
-  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps();
-  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+Sensor SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm() {
+  Channels channels;
+  channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData());
+  AbsoluteTimestampsContainer absoluteTimestampsContainer =
+      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
-Sensor SensorExampleFactory::sensorWithOneUnixAndOneValue() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithOneValueBlock();
-  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsOneElement();
-  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+Sensor SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm() {
+  Channels channels;
+  channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
+  channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
+  AbsoluteTimestampsContainer absoluteTimestampsContainer =
+      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_ACC);
 }
 
-Sensor SensorExampleFactory::sensorWithNUllUnixAndNUllValue() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithNUllValueBlock();
-  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsEmpty();
-  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
-}
-
-Sensor SensorExampleFactory::sensorWithOneUnixAndOneValueInLastBlock() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithOneValueInLastBlock();
-  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteUNixTimestampBlockWithOneUnixInLastBlock();
-  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
-}
-
-Sensor SensorExampleFactory::sensorWithEqualTimestampsInterval() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithEqualTimestampIntervals();
-  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsBlockWithEqualTimestampIntervals();
-  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
-}
-
-Sensor SensorExampleFactory::absoluteJsonDataPpgSensor() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithAbsoluteJsonDataPpgChannel();
-  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerPgg();
-  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
-}
-
-Sensor SensorExampleFactory::absoluteJsonDataAccSensor() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithAbsoluteJsonDataAccChannel();
-  AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerAcc();
-  return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_ACC);
-}
-
-Sensor SensorExampleFactory::differentialJsonDataPpgSensor() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithDifferentialJsonDataPpgChannel();
+Sensor SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm() {
+  Channels channels;
+  channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData());
+  channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData());
   DifferentialTimestampsContainer differentialTimestampsContainer =
-      DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerPpg();
-  return Sensor(comparableVectorChannel, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
+      DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  return Sensor(channels, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
-Sensor SensorExampleFactory::differentialJsonDataAccSensor() {
-  Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithDifferentialJsonDataAccChannel();
+Sensor SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm() {
+  Channels channels;
+  channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData());
+  channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData());
   DifferentialTimestampsContainer differentialTimestampsContainer =
-      DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerAcc();
-  return Sensor(comparableVectorChannel, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_ACC);
+      DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  return Sensor(channels, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_ACC);
 }
 
-Sensors SensorExampleFactory::normalVectorWithSensors() {
-  Sensors sensors = {SensorExampleFactory::normalSensor()};
-  return sensors;
+Sensor SensorExampleFactory::sensorEmpty() {
+  return Sensor();
 }
 
-Sensors SensorExampleFactory::comparableVectorWithSensors() {
-  Sensors sensors = {SensorExampleFactory::comparableSensor()};
-  return sensors;
+Sensor SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm() {
+  Channels channels;
+  channels.push_back(ChannelExampleFactory::channelWithAbsoluteValuesForTestSwitchTo());
+  AbsoluteTimestampsContainer absoluteTimestampsContainer =
+      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
+  return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
-Sensors SensorExampleFactory::vectorWithAbsoluteJsonDataSensor() {
-  Sensors sensors = {SensorExampleFactory::absoluteJsonDataPpgSensor(), SensorExampleFactory::absoluteJsonDataAccSensor()};
-  return sensors;
+Sensor SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm() {
+  Channels channels;
+  channels.push_back(ChannelExampleFactory::channelWithDifferentialValuesForTestSwitchTo());
+  DifferentialTimestampsContainer differentialTimestampsContainer =
+      DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerForSwitchDataFormTest();
+  return Sensor(channels, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
-Sensors SensorExampleFactory::vectorWithDifferentialJsonDataSensor() {
-  Sensors sensors = {SensorExampleFactory::differentialJsonDataPpgSensor(), SensorExampleFactory::differentialJsonDataAccSensor()};
-  return sensors;
+SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataForm) {
+  SensorJson sensorJson;
+  ChannelsJson channelsJson;
+  switch (dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      AbsoluteTimestampsContainer absoluteTimestampsContainer = sensor.getAbsoluteTimestamps();
+      sensorJson["absolute_timestamps_container"] =
+          AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
+      break;
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      DifferentialTimestampsContainer differentialTimestampsContainer = sensor.getDifferentialTimestamps();
+      sensorJson["differential_timestamps_container"] =
+          DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
+      break;
+    }
+    case DATA_FORM_NONE:
+      return sensorJson;
+  }
+  Channels channels = sensor.getChannels();
+  for (auto& channel : channels) {
+    channelsJson.append(ChannelExampleFactory::buildChannelJson(channel));
+  }
+  sensorJson["channels"] = channelsJson;
+  sensorJson["sensor_type"] = Sensor::senorTypeToString(sensor.getSensorType());
+  return sensorJson;
 }
+
+// Sensor SensorExampleFactory::normalSensor() {
+//   Channels normalVectorChannel = ChannelExampleFactory::normalVectorWithChannel();
+//   DifferentialTimestampsContainer normalDifferentialTimestamps = DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps();
+//   return Sensor(normalVectorChannel, normalDifferentialTimestamps, ProtobufSensorType::SENSOR_TYPE_ACC);
+// }
+//
+// Sensor SensorExampleFactory::comparableSensor() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::comparableVectorWithChannel();
+//   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps();
+//   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+// }
+//
+// Sensor SensorExampleFactory::sensorWithOneUnixAndOneValue() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithOneValueBlock();
+//   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsOneElement();
+//   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+// }
+//
+// Sensor SensorExampleFactory::sensorWithNUllUnixAndNUllValue() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithNUllValueBlock();
+//   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsEmpty();
+//   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+// }
+//
+// Sensor SensorExampleFactory::sensorWithOneUnixAndOneValueInLastBlock() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithOneValueInLastBlock();
+//   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteUNixTimestampBlockWithOneUnixInLastBlock();
+//   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+// }
+//
+// Sensor SensorExampleFactory::sensorWithEqualTimestampsInterval() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithEqualTimestampIntervals();
+//   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsBlockWithEqualTimestampIntervals();
+//   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+// }
+//
+// Sensor SensorExampleFactory::absoluteJsonDataPpgSensor() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithAbsoluteJsonDataPpgChannel();
+//   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerPgg();
+//   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_PPG);
+// }
+//
+// Sensor SensorExampleFactory::absoluteJsonDataAccSensor() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithAbsoluteJsonDataAccChannel();
+//   AbsoluteTimestampsContainer absoluteTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerAcc();
+//   return Sensor(comparableVectorChannel, absoluteTimestamps, ProtobufSensorType::SENSOR_TYPE_ACC);
+// }
+//
+// Sensor SensorExampleFactory::differentialJsonDataPpgSensor() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithDifferentialJsonDataPpgChannel();
+//   DifferentialTimestampsContainer differentialTimestampsContainer =
+//       DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerPpg();
+//   return Sensor(comparableVectorChannel, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
+// }
+//
+// Sensor SensorExampleFactory::differentialJsonDataAccSensor() {
+//   Channels comparableVectorChannel = ChannelExampleFactory::normalVectorWithDifferentialJsonDataAccChannel();
+//   DifferentialTimestampsContainer differentialTimestampsContainer =
+//       DifferentialTimestampsContainerExampleFactory::differentiaJsonDataTimestampsContainerAcc();
+//   return Sensor(comparableVectorChannel, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_ACC);
+// }
+//
+// Sensors SensorExampleFactory::normalVectorWithSensors() {
+//   Sensors sensors = {SensorExampleFactory::normalSensor()};
+//   return sensors;
+// }
+//
+// Sensors SensorExampleFactory::comparableVectorWithSensors() {
+//   Sensors sensors = {SensorExampleFactory::comparableSensor()};
+//   return sensors;
+// }
+//
+// Sensors SensorExampleFactory::vectorWithAbsoluteJsonDataSensor() {
+//   Sensors sensors = {SensorExampleFactory::absoluteJsonDataPpgSensor(), SensorExampleFactory::absoluteJsonDataAccSensor()};
+//   return sensors;
+// }
+//
+// Sensors SensorExampleFactory::vectorWithDifferentialJsonDataSensor() {
+//   Sensors sensors = {SensorExampleFactory::differentialJsonDataPpgSensor(), SensorExampleFactory::differentialJsonDataAccSensor()};
+//   return sensors;
+// }

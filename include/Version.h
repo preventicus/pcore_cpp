@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -40,6 +40,9 @@ using Major = uint32_t;
 using Minor = uint32_t;
 using Patch = uint32_t;
 using VersionJson = Json::Value;
+using MajorJson = Json::Value;
+using MinorJson = Json::Value;
+using PatchJson = Json::Value;
 
 class Version final {
  public:

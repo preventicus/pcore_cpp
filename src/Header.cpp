@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,8 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Header.h"
-
-using TimeZoneOffsetJson = Json::Value;
 
 Header::Header(Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
     : timeZoneOffset_min(timeZoneOffset_min), version(version), dataForm(dataForm) {

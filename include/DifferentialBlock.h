@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -40,6 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using ProtobufDifferentialBlock = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;
 using DifferentialValue = int32_t;
 using DifferentialValues = std::vector<DifferentialValue>;
+using DifferentialValuesJson = Json::Value;
 using DifferentialBlockJson = Json::Value;
 
 class DifferentialBlock final {
@@ -50,6 +51,7 @@ class DifferentialBlock final {
   DifferentialBlock();
 
   DifferentialValues getDifferentialValues();
+  bool isSet();
   bool isEqual(DifferentialBlock& differentialBlock);
   DifferentialBlockJson toJson();
   void serialize(ProtobufDifferentialBlock* differentialBlock);

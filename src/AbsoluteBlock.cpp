@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,8 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteBlock.h"
 
-using AbsoluteValuesJson = Json::Value;
-
 AbsoluteBlock::AbsoluteBlock(AbsoluteValues& absoluteValues) : absoluteValues(absoluteValues) {}
 
 AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson)
@@ -54,16 +52,23 @@ AbsoluteValues AbsoluteBlock::getAbsoluteValues() {
   return this->absoluteValues;
 }
 
+bool AbsoluteBlock::isSet() {
+  return !this->absoluteValues.empty();
+}
+
 bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
   return this->absoluteValues == block.absoluteValues;
 }
 
 AbsoluteBlockJson AbsoluteBlock::toJson() {
-  AbsoluteBlockJson absoluteBlock;
+  AbsoluteBlockJson absoluteBlockJson;
+  if (!isSet()) {
+    return absoluteBlockJson;
+  }
   AbsoluteValuesJson absoluteValuesJson(Json::arrayValue);
   for (auto& absoluteValue : this->absoluteValues) {
     absoluteValuesJson.append(absoluteValue);
   }
-  absoluteBlock["absolute_values"] = absoluteValuesJson;
-  return absoluteBlock;
+  absoluteBlockJson["absolute_values"] = absoluteValuesJson;
+  return absoluteBlockJson;
 }

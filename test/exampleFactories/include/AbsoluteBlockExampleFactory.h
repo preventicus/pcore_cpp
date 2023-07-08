@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,28 +33,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "AbsoluteBlock.h"
+#include "AbsoluteValuesExampleFactory.h"
 
 class AbsoluteBlockExampleFactory {
  public:
-  static AbsoluteValues absoluteValuesNormal();
-  static AbsoluteValues absoluteValuesTwoElements();
-  static AbsoluteValues absoluteValuesOneElement();
-  static AbsoluteValues absoluteValues0Element();
-  static AbsoluteValues absoluteValuesEmpty();
-  static AbsoluteValues absoluteValues();
-  static AbsoluteValues absoluteJsonDataValuesPpg1();
-  static AbsoluteValues absoluteJsonDataValuesPpg2();
-  static AbsoluteValues absoluteJsonDataValuesAcc();
-  static AbsoluteValues absoluteValuesWithOneValueInLastBlock();
+  static AbsoluteBlock absoluteBlockWithThreePositiveAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithThreeMixedAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithThreeNegativeAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithOneAbsoluteValue();
+  static AbsoluteBlock absoluteBlockWithEmptyAbsoluteValue();
 
-  static AbsoluteBlock absoluteBlock();
-  static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
-  static AbsoluteBlock absoluteJsonDataBlockAcc();
-  static AbsoluteBlock absoluteJsonDataBlockPpg1();
-  static AbsoluteBlock absoluteJsonDataBlockPpg2();
-  static AbsoluteBlock absoluteBlockNormal();
-  static AbsoluteBlock absoluteBlockTwoElement();
-  static AbsoluteBlock absoluteBlockOneElement();
-  static AbsoluteBlock absoluteBlock0Element();
-  static AbsoluteBlock absoluteBlockEmpty();
+  //  static AbsoluteBlock absoluteBlock();
+  //  static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
+  //  static AbsoluteBlock absoluteJsonDataBlockAcc();
+  //  static AbsoluteBlock absoluteJsonDataBlockPpg1();
+  //  static AbsoluteBlock absoluteJsonDataBlockPpg2();
+
+  //  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteValuesJson& absoluteValuesJson);
+  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock);
+
+  static AbsoluteBlock absoluteBlockForTestSwitchTo();
 };

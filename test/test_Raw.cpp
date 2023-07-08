@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -36,72 +36,100 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class RawTest : public ::testing::Test {
  protected:
-  Raw normalRawWithAccMetaData1 = RawExampleFactory::normalRaw();
-  Raw normalRawWithAccMetaData2 = RawExampleFactory::normalRaw();
-  Raw comparableRawWithPpgMetaData1 = RawExampleFactory::comparableRaw();
-  Raw comparableRawWithPpgMetaData2 = RawExampleFactory::comparableRaw();
 };
 
-TEST_F(RawTest, TestGetMethodeRaw) {
-  Sensors sensors = this->normalRawWithAccMetaData1.getSensors();
-  Sensors comparableSensors = SensorExampleFactory::normalVectorWithSensors();
-  for (size_t i = 0; i < sensors.size(); i++) {
-    EXPECT_TRUE(sensors[i].isEqual(comparableSensors[i]));
-  }
+TEST_F(RawTest, TestGetSensorWithSensorPpgWithTwoChannelsInDifferentialForm) {
+  Sensor sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  Raw raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  Sensors sensors = raw.getSensors();
+  EXPECT_EQ(sensors.size(), 1);
+  EXPECT_TRUE(sensors[0].isEqual(sensor));
 }
 
-TEST_F(RawTest, CompareEqualNormalRaw) {
-  EXPECT_TRUE(this->normalRawWithAccMetaData1.isEqual(this->normalRawWithAccMetaData2));
-}
-
-TEST_F(RawTest, CompareDifferentRaw) {
-  EXPECT_FALSE(this->normalRawWithAccMetaData1.isEqual(this->comparableRawWithPpgMetaData1));
-}
-
-TEST_F(RawTest, CompareEqualComparableRaw) {
-  EXPECT_TRUE(this->comparableRawWithPpgMetaData1.isEqual(this->comparableRawWithPpgMetaData2));
-}
-
-TEST_F(RawTest, TestSerializeAndDeserializeNormalRaw) {
-  ProtobufRaw protobufRaw;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw);
-  Raw raw = Raw(protobufRaw);
-  EXPECT_TRUE(this->normalRawWithAccMetaData1.isEqual(raw));
-}
-
-TEST_F(RawTest, TestSerializeAndDeserializeComparableRaw) {
-  ProtobufRaw protobufRaw;
-  this->comparableRawWithPpgMetaData1.serialize(&protobufRaw);
-  Raw raw = Raw(protobufRaw);
-  EXPECT_TRUE(this->comparableRawWithPpgMetaData1.isEqual(raw));
-}
-
-TEST_F(RawTest, TestSerializeAndDeserializeEqualDifferentRaw) {
-  ProtobufRaw protobufRaw1;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw1);
-  Raw raw1 = Raw(protobufRaw1);
-  ProtobufRaw protobufRaw2;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw2);
-  Raw raw2 = Raw(protobufRaw2);
+TEST_F(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
+  Raw raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  Raw raw2 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
   EXPECT_TRUE(raw1.isEqual(raw2));
 }
 
-TEST_F(RawTest, TestSerializeAndDeserializeTwoDifferentRaw) {
-  ProtobufRaw protobufRaw1;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw1);
-  Raw raw1 = Raw(protobufRaw1);
-  ProtobufRaw protobufRaw2;
-  this->comparableRawWithPpgMetaData1.serialize(&protobufRaw2);
-  Raw raw2 = Raw(protobufRaw2);
+TEST_F(RawTest, TestIsEqualWithRawEmpty) {
+  Raw raw1 = RawExampleFactory::rawEmpty();
+  Raw raw2 = RawExampleFactory::rawEmpty();
+  EXPECT_TRUE(raw1.isEqual(raw2));
+}
+
+TEST_F(RawTest, TestIsEqualWithRawWithOneSensorAndRawWithTwoSensors) {
+  Raw raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  Raw raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   EXPECT_FALSE(raw1.isEqual(raw2));
 }
 
-TEST_F(RawTest, CheckRawPtr) {
-  ProtobufRaw protobufRaw1;
-  EXPECT_NO_THROW(this->normalRawWithAccMetaData1.serialize(&protobufRaw1));
+TEST_F(RawTest, TestIsEqualWithRawEmptyAndRawWithOneSensors) {
+  Raw raw1 = RawExampleFactory::rawEmpty();
+  Raw raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(raw1.isEqual(raw2));
 }
 
-TEST_F(RawTest, CheckRawNullPtr) {
-  ProtobufRaw* protobufRaw1 = nullptr;
-  EXPECT_THROW(this->normalRawWithAccMetaData1.serialize(protobufRaw1), std::invalid_argument);
+TEST_F(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  Raw raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  Raw raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(raw1.isEqual(raw2));
+}
+
+TEST_F(RawTest, TestSerializeWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  Raw raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  ProtobufRaw protobufRaw;
+  raw1.serialize(&protobufRaw);
+  Raw raw2 = Raw(protobufRaw);
+  EXPECT_TRUE(raw1.isEqual(raw2));
+}
+
+TEST_F(RawTest, TestSerializeWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm) {
+  Raw raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  ProtobufRaw protobufRaw;
+  raw1.serialize(&protobufRaw);
+  Raw raw2 = Raw(protobufRaw);
+  EXPECT_TRUE(raw1.isEqual(raw2));
+}
+
+TEST_F(RawTest, TestSerializeWithRawWithOneSensorsAccWithTwoChannelsInDifferentialForm) {
+  Raw raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
+  ProtobufRaw protobufRaw;
+  raw1.serialize(&protobufRaw);
+  Raw raw2 = Raw(protobufRaw);
+  EXPECT_TRUE(raw1.isEqual(raw2));
+}
+
+TEST_F(RawTest, TestSerializeWithRawEmpty) {
+  Raw raw1 = RawExampleFactory::rawEmpty();
+  ProtobufRaw protobufRaw;
+  raw1.serialize(&protobufRaw);
+  Raw raw2 = Raw(protobufRaw);
+  EXPECT_TRUE(raw1.isEqual(raw2));
+}
+
+TEST_F(RawTest, TestSerializeNoThrow) {
+  Raw raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  ProtobufRaw protobufRaw;
+  EXPECT_NO_THROW(raw.serialize(&protobufRaw));
+}
+
+TEST_F(RawTest, TestSerializeThrow) {
+  Raw raw = RawExampleFactory::rawEmpty();
+  ProtobufRaw* protobufRaw = nullptr;
+  EXPECT_THROW(raw.serialize(protobufRaw), std::invalid_argument);
+}
+
+TEST_F(RawTest, TestSwitchDataFormWithRawForSwitschDataFormTestInAbsoluteForm) {
+  Raw raw = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
+  raw.switchDataForm(DataForm::DATA_FORM_ABSOLUTE);
+  Raw rawInDifferentialForm = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
+  EXPECT_TRUE(raw.isEqual(rawInDifferentialForm));
+}
+
+TEST_F(RawTest, TestSwitchDataFormWith) {
+  Raw raw = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
+  raw.switchDataForm(DataForm::DATA_FORM_DIFFERENTIAL);
+  Raw rawInAbsoluteForm = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
+  EXPECT_TRUE(raw.isEqual(rawInAbsoluteForm));
 }

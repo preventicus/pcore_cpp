@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -69,22 +69,37 @@ Patch VersionExampleFactory::patchZero() {
   return 0;
 }
 
-Version VersionExampleFactory::normalVersion() {
+Version VersionExampleFactory::versionWithMajor1Minor1Patch0() {
+  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
+}
+
+Version VersionExampleFactory::versionWithMajor1Minor2Patch0() {
+  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorTwo(), VersionExampleFactory::patchZero());
+}
+
+Version VersionExampleFactory::versionWithMajor1Minor1Patch1() {
   return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchOne());
 }
 
-Version VersionExampleFactory::startVersion() {
+Version VersionExampleFactory::versionWithMajor0Minor0Patch0() {
   return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorZero(), VersionExampleFactory::patchZero());
 }
 
-Version VersionExampleFactory::highVersion() {
-  return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorTwo(), VersionExampleFactory::patchTwo());
-}
-
-Version VersionExampleFactory::randomVersion() {
+Version VersionExampleFactory::versionWithMajor2Minor1Patch0() {
   return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
 }
 
-Version VersionExampleFactory::absoluteJsonDataVersion() {
-  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
+Version VersionExampleFactory::versionEmpty() {
+  return Version();
+}
+
+VersionJson VersionExampleFactory::buildVersionJson(Version version) {
+  MajorJson majorJson(version.getMajor());
+  MinorJson minorJson(version.getMinor());
+  PatchJson patchJson(version.getPatch());
+  VersionJson versionJson;
+  versionJson["major"] = majorJson;
+  versionJson["minor"] = minorJson;
+  versionJson["patch"] = patchJson;
+  return versionJson;
 }

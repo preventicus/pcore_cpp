@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,94 +33,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteTimestampsContainerExampleFactory.h"
 
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::unixTimestampsNormal_ms() {
-  return {1, 2, 3};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::unixTimestampsTwoElements_ms() {
-  return {1, 2};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms() {
-  return {1675732790147};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::unixTimestamps0_ms() {
-  return {0};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::unixTimestampsEmpty_ms() {
-  return {};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsPpg() {
-  return {1675423476214, 1675423484760, 1675423490027, 1675423494521, 1675423500121, 1675423506321, 1675423513156};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsAcc() {
-  return {1675423476210, 1675423484770, 1675423490028, 1675423494520, 1675423500131, 1675423506381};
-}
-
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsNormal() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestampsNormal_ms();
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps() {
+  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestamps_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsTwoElement() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestampsTwoElements_ms();
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps() {
+  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsOneElement() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms();
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithOneBigTimestamp() {
+  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestamp_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestamps0() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestamps0_ms();
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestamp0() {
+  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsEmpty() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::unixTimestampsEmpty_ms();
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsEmpty() {
+  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsEmpty_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::normalUnixTimestamps_ms() {
-  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790227, 1675732790267, 1675732790307,
-          1675732790347, 1675732790467, 1675732790507, 1675732790547, 1675732790587, 1675732790627, 1675732790667, 1675732790707, 1675732790747,
-          1675732790867, 1675732790947, 1675732791027, 1675732791107, 1675732791187, 1675732791347, 1675732791387, 1675732791427};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock() {
-  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790287};
-}
-
-UnixTimestamps AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals() {
-  return {1675732789987, 1675732790027, 1675732790067, 1675732790107, 1675732790147, 1675732790187, 1675732790227};
-}
-
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::normalUnixTimestamps_ms();
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest() {
+  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTest_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteUNixTimestampBlockWithOneUnixInLastBlock() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock();
-  return AbsoluteTimestampsContainer(unixTimestamps);
-}
-
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerPgg() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsPpg();
-  return AbsoluteTimestampsContainer(unixTimestamps);
-}
-
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataTimestampsContainerAcc() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteJsonDataUNixTimestampsAcc();
-  return AbsoluteTimestampsContainer(unixTimestamps);
-}
-
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsBlockWithEqualTimestampIntervals() {
-  UnixTimestamps unixTimestamps = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals();
-  return AbsoluteTimestampsContainer(unixTimestamps);
+AbsoluteTimestampsContainerJson AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(
+    AbsoluteTimestampsContainer absoluteTimestampsContainer) {
+  UnixTimestamps unixTimestamps = absoluteTimestampsContainer.getUnixTimestamps();
+  AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
+  absoluteTimestampsContainerJson["unix_timestamps_ms"] = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
+  return absoluteTimestampsContainerJson;
 }

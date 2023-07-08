@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -62,6 +62,14 @@ ProtobufColor PpgMetaData::getColor() {
 
 Wavelength PpgMetaData::getWavelength() {
   return this->wavelength_nm;
+}
+
+bool PpgMetaData::hasColor() {
+  return this->color != ProtobufColor::COLOR_NONE;
+}
+
+bool PpgMetaData::hasWavelength() {
+  return this->wavelength_nm > 0;
 }
 
 bool PpgMetaData::isSet() {

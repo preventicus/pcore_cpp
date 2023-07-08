@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,22 +33,61 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "RawExampleFactory.h"
 
-Raw RawExampleFactory::normalRaw() {
-  Sensors sensors = SensorExampleFactory::normalVectorWithSensors();
+Raw RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm() {
+  Sensors sensors;
+  sensors.push_back(SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm());
   return Raw(sensors);
 }
 
-Raw RawExampleFactory::comparableRaw() {
-  Sensors sensors = SensorExampleFactory::comparableVectorWithSensors();
+Raw RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm() {
+  Sensors sensors;
+  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm());
   return Raw(sensors);
 }
 
-Raw RawExampleFactory::absoluteJsonDataRaw() {
-  Sensors sensors = SensorExampleFactory::vectorWithAbsoluteJsonDataSensor();
+Raw RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm() {
+  Sensors sensors;
+  sensors.push_back(SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm());
   return Raw(sensors);
 }
 
-Raw RawExampleFactory::differentialJsonDataRaw() {
-  Sensors sensors = SensorExampleFactory::vectorWithDifferentialJsonDataSensor();
+Raw RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm() {
+  Sensors sensors;
+  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
   return Raw(sensors);
+}
+
+Raw RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm() {
+  Sensors sensors;
+  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
+  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
+  return Raw(sensors);
+}
+
+Raw RawExampleFactory::rawEmpty() {
+  return Raw();
+}
+
+Raw RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm() {
+  Sensors sensors;
+  sensors.push_back(SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm());
+  return Raw(sensors);
+}
+
+Raw RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm() {
+  Sensors sensors;
+  sensors.push_back(SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm());
+  return Raw(sensors);
+}
+
+RawJson RawExampleFactory::buildRawJson(Raw raw, DataForm dataForm) {
+  RawJson rawJson;
+  SensorsJson sensorsJson(Json::arrayValue);
+  Sensors sensors = raw.getSensors();
+  for (auto& sensor : sensors) {
+    SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor, dataForm);
+    sensorsJson.append(sensorJson);
+  }
+  rawJson["sensors"] = sensorsJson;
+  return rawJson;
 }

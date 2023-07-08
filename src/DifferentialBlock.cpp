@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,8 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DifferentialBlock.h"
 
-using DifferentialValuesJson = Json::Value;
-
 DifferentialBlock::DifferentialBlock(DifferentialValues& differentialValues) : differentialValues(differentialValues) {}
 
 DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock)
@@ -63,6 +61,10 @@ DifferentialBlock::DifferentialBlock() : differentialValues({}){};
 
 DifferentialValues DifferentialBlock::getDifferentialValues() {
   return this->differentialValues;
+}
+
+bool DifferentialBlock::isSet() {
+  return !this->differentialValues.empty();
 }
 
 bool DifferentialBlock::isEqual(DifferentialBlock& differentialBlock) {

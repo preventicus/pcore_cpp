@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -34,6 +34,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AccMetaDataExampleFactory.h"
 #include "AccMetaData.h"
 
+AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(AccMetaData accMetaData) {
+  AccMetaDataJson accMetaDataJson;
+  if (accMetaData.hasCoordinate()) {
+    accMetaDataJson["coordinate"] = AccMetaData::protobufCoordinateToString(accMetaData.getCoordinate());
+  } else if (accMetaData.hasNorm()) {
+    accMetaDataJson["norm"] = AccMetaData::protobufNormToString(accMetaData.getNorm());
+  }
+  return accMetaDataJson;
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm() {
+  return AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormNone() {
+  return AccMetaData(ProtobufNorm::NORM_NONE);
+}
+
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateX() {
   return AccMetaData(ProtobufCoordinate::COORDINATE_X);
 }
@@ -46,8 +64,8 @@ AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateZ() {
   return AccMetaData(ProtobufCoordinate::COORDINATE_Z);
 }
 
-AccMetaData AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm() {
-  return AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateNone() {
+  return AccMetaData(ProtobufCoordinate::COORDINATE_NONE);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataNotSet() {
