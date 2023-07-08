@@ -37,8 +37,10 @@ Raw::Raw(Sensors& sensors) : sensors(sensors) {}
 
 Raw::Raw(const ProtobufRaw& protobufRaw)
     : sensors([&]() {
+        auto protobufSensors = protobufRaw.sensors();
         Sensors sensors{};
-        for (auto& protobufSensor : protobufRaw.sensors()) {
+        sensors.reserve(protobufSensors.size());
+        for (auto& protobufSensor : protobufSensors) {
           sensors.push_back(Sensor(protobufSensor));
         }
         return sensors;

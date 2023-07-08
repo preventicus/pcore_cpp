@@ -89,8 +89,10 @@ Channel::Channel(const ProtobufChannel& protobufChannel)
     : ppgMetaData(PpgMetaData(protobufChannel.ppg_metadata())),
       accMetaData(AccMetaData(protobufChannel.acc_metadata())),
       differentialBlocks([&]() {
+        auto protobufDifferentialBlocks = protobufChannel.differential_blocks();
         DifferentialBlocks differentialBlocks{};
-        for (auto& protobufDifferentialBlock : protobufChannel.differential_blocks()) {
+        differentialBlocks.reserve(protobufDifferentialBlocks.size());
+        for (auto& protobufDifferentialBlock : protobufDifferentialBlocks) {
           differentialBlocks.push_back(DifferentialBlock(protobufDifferentialBlock));
         }
         return differentialBlocks;
@@ -120,7 +122,8 @@ bool Channel::isEqual(Channel& channel) {
   if (this->differentialBlocks.size() != channel.differentialBlocks.size()) {
     return false;
   }
-  for (size_t i = 0; i < this->differentialBlocks.size(); i++) {
+  auto numberOfElements = this->differentialBlocks.size();
+  for (size_t i = 0; i < numberOfElements; i++) {
     if (!this->differentialBlocks[i].isEqual(channel.differentialBlocks[i])) {
       return false;
     }
@@ -227,6 +230,11 @@ DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockI
 
 AbsoluteBlock Channel::calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks) {
   AbsoluteValues absoluteValues = {};
+  size_t numberOfElements = 0;
+  for (auto& differentialBlock : differentialBlocks) {
+    numberOfElements += differentialBlock.getDifferentialValues().size();
+  }
+  absoluteValues.reserve(numberOfElements);
   for (auto& differentialBlock : differentialBlocks) {
     AbsoluteValue absoluteValue = 0;
     for (auto& differentialValue : differentialBlock.getDifferentialValues()) {

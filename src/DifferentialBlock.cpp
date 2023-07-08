@@ -75,8 +75,8 @@ void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentia
   if (protobufDifferentialBlock == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
   }
-  for (auto& differentialValues : this->differentialValues) {
-    protobufDifferentialBlock->add_differential_values(differentialValues);
+  for (auto& differentialValue : this->differentialValues) {
+    protobufDifferentialBlock->add_differential_values(differentialValue);
   }
 }
 
