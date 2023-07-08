@@ -198,8 +198,8 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteB
   if (numberOfBlocks == 0) {
     return differentialBlocks;
   }
-  AbsoluteValues absoluteValues = absoluteBlock.getAbsoluteValues();
-  size_t numberOfAbsoluteValues = absoluteValues.size();
+  auto absoluteValues = absoluteBlock.getAbsoluteValues();
+  auto numberOfAbsoluteValues = absoluteValues.size();
   BlockIdx fromBlockIdx = 0;
   BlockIdx toBlockIdx = numberOfAbsoluteValues > 1 ? numberOfAbsoluteValues - 1 : 0;
   if (numberOfBlocks == 1) {

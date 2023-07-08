@@ -34,20 +34,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DataExampleFactory.h"
 
 Data DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive() {
-  Raw raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
-  Header header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   return Data(raw, header);
 }
 
 Data DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative() {
-  Raw raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
-  Header header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
   return Data(raw, header);
 }
 
 Data DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative() {
-  Raw raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
-  Header header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   return Data(raw, header);
 }
 
@@ -56,21 +56,21 @@ Data DataExampleFactory::dataEmpty() {
 }
 
 Data DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm() {
-  Raw raw = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
-  Header header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
+  auto raw = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   return Data(raw, header);
 }
 
 Data DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm() {
-  Raw raw = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
-  Header header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  auto raw = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   return Data(raw, header);
 }
 
 Json::Value DataExampleFactory::buildDataJson(Data data) {
   DataJson dataJson;
-  Header header = data.getHeader();
-  Raw raw = data.getRaw();
+  auto header = data.getHeader();
+  auto raw = data.getRaw();
   dataJson["header"] = HeaderExampleFactory::buildHeaderJson(header);
   dataJson["raw"] = RawExampleFactory::buildRawJson(raw, header.getDataForm());
   Json::Value json;

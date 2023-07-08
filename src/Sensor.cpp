@@ -201,11 +201,11 @@ UnixTimestamp Sensor::getLastUnixTimestamp(DataForm dataForm) {
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       // TODO use isSet methode
-      const TimestampsIntervals timestampsIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
-      const BlockIntervals blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
-      DifferentialBlocks differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
-      const size_t nLastBlock = differentialBlocksOfFirstChannel[differentialBlocksOfFirstChannel.size() - 1].getDifferentialValues().size();
-      UnixTimestamp absoluteUnixTimestamp = this->getFirstUnixTimestamp(dataForm);
+      const auto timestampsIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
+      const auto blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
+      auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
+      const auto nLastBlock = differentialBlocksOfFirstChannel[differentialBlocksOfFirstChannel.size() - 1].getDifferentialValues().size();
+      auto absoluteUnixTimestamp = this->getFirstUnixTimestamp(dataForm);
       for (auto& blockInterval_ms : blockIntervals_ms) {
         absoluteUnixTimestamp += blockInterval_ms;
       }
@@ -229,7 +229,7 @@ BlockIdxs Sensor::findBlockIdxs() {
   Interval referenceTimeDifference = 0;
   bool isNewBlock = true;
   blockIdxs.push_back(0);
-  UnixTimestamps absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
+  auto absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
   auto numberOfElements = absoluteUnixTimestamps.size();
   for (size_t i = 1; i < numberOfElements; i++) {
     Interval timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
@@ -246,16 +246,16 @@ BlockIdxs Sensor::findBlockIdxs() {
 }
 
 AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(DifferentialTimestampsContainer& differentialTimestampsContainer) {
-  UnixTimestamps unixTimestamps_ms = {};
-  DifferentialBlocks differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
-  TimestampsIntervals timestampsIntervals_ms = differentialTimestampsContainer.getTimestampsIntervals();
-  BlockIntervals blockIntervals_ms = differentialTimestampsContainer.getBlockIntervals();
-  UnixTimestamp absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp();
+  auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
+  auto timestampsIntervals_ms = differentialTimestampsContainer.getTimestampsIntervals();
+  auto blockIntervals_ms = differentialTimestampsContainer.getBlockIntervals();
+  auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp();
 
   size_t numberOfElements = 0;
   for (auto& differentialBlockOfFirstChannel : differentialBlocksOfFirstChannel) {
     numberOfElements += differentialBlockOfFirstChannel.getDifferentialValues().size();
   }
+  UnixTimestamps unixTimestamps_ms = {};
   unixTimestamps_ms.reserve(numberOfElements);
 
   auto numberOfBlockIntervals = blockIntervals_ms.size();
@@ -272,7 +272,7 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(DifferentialTime
 DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(AbsoluteTimestampsContainer& absoluteTimestampsContainer,
                                                                         BlockIdxs& blockIdxs) {
   DifferentialTimestampsContainer differentialTimestampsContainer;
-  size_t numberOfBlocks = blockIdxs.size();
+  auto numberOfBlocks = blockIdxs.size();
   BlockIntervals blockIntervals_ms = {};
   TimestampsIntervals timestampsIntervals_ms = {};
   UnixTimestamp firstUnixTimestamp_ms = 0;
@@ -294,7 +294,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
     return differentialTimestampsContainer;
   }
 
-  UnixTimestamps absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps();
+  auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps();
   firstUnixTimestamp_ms = absoluteUnixTimestamps[0];
   if (numberOfBlocks == 1) {
     Interval timestampsInterval = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;

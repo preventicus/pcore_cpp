@@ -34,40 +34,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteBlockExampleFactory.h"
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithThreePositiveAbsoluteValues() {
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreePositiveElements();
+  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreePositiveElements();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues() {
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreeMixedElements();
+  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreeMixedElements();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithThreeNegativeAbsoluteValues() {
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreeNegativeElements();
+  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreeNegativeElements();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithOneAbsoluteValue() {
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithOneElement();
+  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithOneElement();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithEmptyAbsoluteValue() {
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesEmpty();
+  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesEmpty();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForTestSwitchTo() {
-  AbsoluteValues absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesForTestSwitchTo();
+  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesForTestSwitchTo();
   return AbsoluteBlock(absoluteValues);
 }
 
 AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock) {
   AbsoluteBlockJson absoluteBlockJson;
   if (absoluteBlock.isSet()) {
-    AbsoluteValues absoluteValues = absoluteBlock.getAbsoluteValues();
-    AbsoluteValuesJson absoluteValuesJson = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(absoluteValues);
+    auto absoluteValues = absoluteBlock.getAbsoluteValues();
+    auto absoluteValuesJson = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(absoluteValues);
     absoluteBlockJson["absolute_values"] = absoluteValuesJson;
   }
   return absoluteBlockJson;

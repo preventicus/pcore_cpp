@@ -37,16 +37,14 @@ Sensor SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm() {
   Channels channels;
   channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData());
   channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData());
-  AbsoluteTimestampsContainer absoluteTimestampsContainer =
-      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
 Sensor SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm() {
   Channels channels;
   channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData());
-  AbsoluteTimestampsContainer absoluteTimestampsContainer =
-      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
@@ -54,8 +52,7 @@ Sensor SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm() {
   Channels channels;
   channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
   channels.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
-  AbsoluteTimestampsContainer absoluteTimestampsContainer =
-      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_ACC);
 }
 
@@ -63,8 +60,7 @@ Sensor SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm() {
   Channels channels;
   channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData());
   channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData());
-  DifferentialTimestampsContainer differentialTimestampsContainer =
-      DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   return Sensor(channels, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
@@ -72,8 +68,7 @@ Sensor SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm() {
   Channels channels;
   channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData());
   channels.push_back(ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData());
-  DifferentialTimestampsContainer differentialTimestampsContainer =
-      DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   return Sensor(channels, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_ACC);
 }
 
@@ -84,16 +79,14 @@ Sensor SensorExampleFactory::sensorEmpty() {
 Sensor SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm() {
   Channels channels;
   channels.push_back(ChannelExampleFactory::channelWithAbsoluteValuesForTestSwitchTo());
-  AbsoluteTimestampsContainer absoluteTimestampsContainer =
-      AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
   return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
 Sensor SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm() {
   Channels channels;
   channels.push_back(ChannelExampleFactory::channelWithDifferentialValuesForTestSwitchTo());
-  DifferentialTimestampsContainer differentialTimestampsContainer =
-      DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerForSwitchDataFormTest();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerForSwitchDataFormTest();
   return Sensor(channels, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
@@ -102,13 +95,13 @@ SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataFor
   ChannelsJson channelsJson;
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      AbsoluteTimestampsContainer absoluteTimestampsContainer = sensor.getAbsoluteTimestamps();
+      auto absoluteTimestampsContainer = sensor.getAbsoluteTimestamps();
       sensorJson["absolute_timestamps_container"] =
           AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
-      DifferentialTimestampsContainer differentialTimestampsContainer = sensor.getDifferentialTimestamps();
+      auto differentialTimestampsContainer = sensor.getDifferentialTimestamps();
       sensorJson["differential_timestamps_container"] =
           DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
       break;

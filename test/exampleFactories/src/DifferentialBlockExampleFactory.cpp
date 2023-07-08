@@ -34,27 +34,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialBlockExampleFactory.h"
 
 DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues() {
-  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements();
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements();
   return DifferentialBlock(differentialValues);
 }
 
 DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues() {
-  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreeMixedElements();
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreeMixedElements();
   return DifferentialBlock(differentialValues);
 }
 
 DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues() {
-  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreeNegativeElements();
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreeNegativeElements();
   return DifferentialBlock(differentialValues);
 }
 
 DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues() {
-  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesOneElement();
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesOneElement();
   return DifferentialBlock(differentialValues);
 }
 
 DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues() {
-  DifferentialValues differentialValues = DifferentialValuesExampleFactory::differentialValuesEmpty();
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesEmpty();
   return DifferentialBlock(differentialValues);
 }
 
@@ -88,8 +88,8 @@ DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJ
 }
 
 DifferentialBlockJson DifferentialBlockExampleFactory::buildDifferentialBlockJson(DifferentialBlock differentialBlock) {
-  DifferentialValues differentialValues = differentialBlock.getDifferentialValues();
-  DifferentialValuesJson differentialValuesJson = DifferentialValuesExampleFactory::buildDifferentialValuesJson(differentialValues);
+  auto differentialValues = differentialBlock.getDifferentialValues();
+  auto differentialValuesJson = DifferentialValuesExampleFactory::buildDifferentialValuesJson(differentialValues);
   DifferentialBlockJson differentialBlockJson;
   differentialBlockJson["differential_values"] = differentialValuesJson;
   return differentialBlockJson;

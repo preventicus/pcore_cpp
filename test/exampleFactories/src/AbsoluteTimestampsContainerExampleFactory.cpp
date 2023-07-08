@@ -34,38 +34,38 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteTimestampsContainerExampleFactory.h"
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps() {
-  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestamps_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestamps_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps() {
-  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithOneBigTimestamp() {
-  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestamp_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestamp_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestamp0() {
-  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsEmpty() {
-  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsEmpty_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsEmpty_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest() {
-  UnixTimestamps unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTest_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTest_ms();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(
     AbsoluteTimestampsContainer absoluteTimestampsContainer) {
-  UnixTimestamps unixTimestamps = absoluteTimestampsContainer.getUnixTimestamps();
+  auto unixTimestamps = absoluteTimestampsContainer.getUnixTimestamps();
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
   absoluteTimestampsContainerJson["unix_timestamps_ms"] = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
   return absoluteTimestampsContainerJson;
