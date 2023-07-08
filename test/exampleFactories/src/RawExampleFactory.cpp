@@ -35,32 +35,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Raw RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm() {
   Sensors sensors;
-  sensors.push_back(SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm());
+  sensors.emplace_back(SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm());
   return Raw(sensors);
 }
 
 Raw RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm() {
   Sensors sensors;
-  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm());
+  sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm());
   return Raw(sensors);
 }
 
 Raw RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm() {
   Sensors sensors;
-  sensors.push_back(SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm());
+  sensors.emplace_back(SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm());
   return Raw(sensors);
 }
 
 Raw RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm() {
   Sensors sensors;
-  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
+  sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
   return Raw(sensors);
 }
 
 Raw RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm() {
   Sensors sensors;
-  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
-  sensors.push_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
+  sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
+  sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
   return Raw(sensors);
 }
 
@@ -70,13 +70,13 @@ Raw RawExampleFactory::rawEmpty() {
 
 Raw RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm() {
   Sensors sensors;
-  sensors.push_back(SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm());
+  sensors.emplace_back(SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm());
   return Raw(sensors);
 }
 
 Raw RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm() {
   Sensors sensors;
-  sensors.push_back(SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm());
+  sensors.emplace_back(SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm());
   return Raw(sensors);
 }
 

@@ -58,7 +58,7 @@ Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType
             DifferentialBlocks differentialBlocks;
             differentialBlocks.reserve(differentialBlocksJson.size());
             for (auto& differentialBlockJson : differentialBlocksJson) {
-              differentialBlocks.push_back(DifferentialBlock(differentialBlockJson));
+              differentialBlocks.emplace_back(DifferentialBlock(differentialBlockJson));
             }
             return differentialBlocks;
           }
@@ -93,7 +93,7 @@ Channel::Channel(const ProtobufChannel& protobufChannel)
         DifferentialBlocks differentialBlocks{};
         differentialBlocks.reserve(protobufDifferentialBlocks.size());
         for (auto& protobufDifferentialBlock : protobufDifferentialBlocks) {
-          differentialBlocks.push_back(DifferentialBlock(protobufDifferentialBlock));
+          differentialBlocks.emplace_back(DifferentialBlock(protobufDifferentialBlock));
         }
         return differentialBlocks;
       }()),
@@ -203,19 +203,20 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteB
   BlockIdx fromBlockIdx = 0;
   BlockIdx toBlockIdx = numberOfAbsoluteValues > 1 ? numberOfAbsoluteValues - 1 : 0;
   if (numberOfBlocks == 1) {
-    differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx,
-                                                               absoluteValues));  // toIdx = 0  would create a DifferentialBlock with a absoluteValue.
+    differentialBlocks.emplace_back(
+        this->createDifferentialBlock(fromBlockIdx, toBlockIdx,
+                                      absoluteValues));  // toIdx = 0  would create a DifferentialBlock with a absoluteValue.
     return differentialBlocks;
   }
 
   for (size_t i = 0; i < numberOfBlocks - 1; i++) {  // calculate DifferentialBlocks for all blockIdxs except last Idx
     fromBlockIdx = blockIdxs[i];
     toBlockIdx = blockIdxs[i + 1] - 1;
-    differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
+    differentialBlocks.emplace_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
   }
   fromBlockIdx = numberOfAbsoluteValues - 1 == blockIdxs[numberOfBlocks - 1] ? numberOfAbsoluteValues - 1 : blockIdxs[numberOfBlocks - 1];
   toBlockIdx = numberOfAbsoluteValues - 1;
-  differentialBlocks.push_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
+  differentialBlocks.emplace_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
   return differentialBlocks;
 }
 
@@ -223,7 +224,7 @@ DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockI
   DifferentialValues differentialValues = {};
   differentialValues.push_back(absoluteValues[fromBlockIdx]);
   for (size_t i = fromBlockIdx + 1; i <= toBlockIdx; i++) {
-    differentialValues.push_back(absoluteValues[i] - absoluteValues[i - 1]);
+    differentialValues.emplace_back(absoluteValues[i] - absoluteValues[i - 1]);
   }
   return DifferentialBlock(differentialValues);
 }

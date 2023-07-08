@@ -46,7 +46,7 @@ Sensor::Sensor(SensorJson& sensorJson, DataForm dataForm)
         Channels channels;
         channels.reserve(channelsJson.size());
         for (auto& channelJson : channelsJson) {
-          channels.push_back(Channel(channelJson, this->sensorType, dataForm));
+          channels.emplace_back(Channel(channelJson, this->sensorType, dataForm));
         }
         return channels;
       }()),
@@ -82,7 +82,7 @@ Sensor::Sensor(const ProtobufSensor& protobufSensor)
       channels([&]() {
         Channels channels;
         for (auto& channel : protobufSensor.channels()) {
-          channels.push_back(Channel(channel));
+          channels.emplace_back(Channel(channel));
         }
         return channels;
       }()),
@@ -263,7 +263,7 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(DifferentialTime
     absoluteUnixTimestamp += blockIntervals_ms[i];
     auto numberOfDifferentialValues = differentialBlocksOfFirstChannel[i].getDifferentialValues().size();
     for (size_t j = 0; j < numberOfDifferentialValues; j++) {
-      unixTimestamps_ms.push_back(absoluteUnixTimestamp + j * timestampsIntervals_ms[i]);
+      unixTimestamps_ms.emplace_back(absoluteUnixTimestamp + j * timestampsIntervals_ms[i]);
     }
   }
   return AbsoluteTimestampsContainer(unixTimestamps_ms);
@@ -298,26 +298,26 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(Absolute
   firstUnixTimestamp_ms = absoluteUnixTimestamps[0];
   if (numberOfBlocks == 1) {
     Interval timestampsInterval = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
-    timestampsIntervals_ms.push_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsInterval);
+    timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsInterval);
     blockIntervals_ms.push_back(0);
     differentialTimestampsContainer = DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
     return differentialTimestampsContainer;
   }
 
   blockIntervals_ms.push_back(0);
-  timestampsIntervals_ms.push_back(absoluteUnixTimestamps[1] - firstUnixTimestamp_ms);
+  timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps[1] - firstUnixTimestamp_ms);
   auto numberOfIntervals = blockIdxs.size() - 1;
   for (size_t i = 1; i < numberOfIntervals; i++) {
     const BlockIdx previousBlockIdx = blockIdxs[i - 1];
     const BlockIdx currentBlockIdx = blockIdxs[i];
-    timestampsIntervals_ms.push_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
-    blockIntervals_ms.push_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
+    timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
+    blockIntervals_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
   }
-  blockIntervals_ms.push_back(absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
-  timestampsIntervals_ms.push_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1]
-                                       ? 0
-                                       : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] -
-                                             absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
+  blockIntervals_ms.emplace_back(absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
+  timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1]
+                                          ? 0
+                                          : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] -
+                                                absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
   differentialTimestampsContainer = DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
   return differentialTimestampsContainer;
 }

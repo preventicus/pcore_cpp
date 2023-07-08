@@ -41,7 +41,7 @@ Raw::Raw(const ProtobufRaw& protobufRaw)
         Sensors sensors{};
         sensors.reserve(protobufSensors.size());
         for (auto& protobufSensor : protobufSensors) {
-          sensors.push_back(Sensor(protobufSensor));
+          sensors.emplace_back(Sensor(protobufSensor));
         }
         return sensors;
       }()) {}
@@ -52,7 +52,7 @@ Raw::Raw(RawJson& rawJson, DataForm dataForm)
         SensorsJson sensorsJson = rawJson["sensors"];
         sensors.reserve(sensorsJson.size());
         for (auto& sensorJson : sensorsJson) {
-          sensors.push_back(Sensor(sensorJson, dataForm));
+          sensors.emplace_back(Sensor(sensorJson, dataForm));
         }
         return sensors;
       }()) {}

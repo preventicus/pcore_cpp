@@ -54,7 +54,7 @@ Channel ChannelExampleFactory::channelWithAbsoluteBlockForNotEqualTest() {
 Channel ChannelExampleFactory::channelWithDifferentialBlocksForNotEqualTest() {
   auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
   DifferentialBlocks differentialBlocks;
-  differentialBlocks.push_back(DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues());
+  differentialBlocks.emplace_back(DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues());
   return Channel(ppgMetaData, differentialBlocks);
 }
 

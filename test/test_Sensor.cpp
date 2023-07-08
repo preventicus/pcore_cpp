@@ -38,8 +38,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 TEST(SensorTest, TestGetChannelsMethodWithSensorAccWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
   Channels channels1;
-  channels1.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
-  channels1.push_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
+  channels1.emplace_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
+  channels1.emplace_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
   auto channels2 = sensor.getChannels();
   for (size_t i = 0; i < channels1.size(); i++) {
     EXPECT_TRUE(channels1[i].isEqual(channels2[i]));

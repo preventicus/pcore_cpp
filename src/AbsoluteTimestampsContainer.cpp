@@ -40,7 +40,7 @@ AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampsConta
         UnixTimestamps unixTimestamps_ms;
         unixTimestamps_ms.reserve(unixTimestampsJson.size());
         for (auto& unixTimestampJson : unixTimestampsJson) {
-          unixTimestamps_ms.push_back(unixTimestampJson.asUInt64());
+          unixTimestamps_ms.emplace_back(unixTimestampJson.asUInt64());
         }
         return unixTimestamps_ms;
       }()) {}

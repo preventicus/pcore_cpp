@@ -52,7 +52,7 @@ DifferentialBlock::DifferentialBlock(DifferentialBlockJson& differentialBlockJso
         DifferentialValues differentialValues = {};
         differentialValues.reserve(differentialValuesJson.size());
         for (auto& differentialValueJson : differentialValuesJson) {
-          differentialValues.push_back(differentialValueJson.asInt());
+          differentialValues.emplace_back(differentialValueJson.asInt());
         }
         return differentialValues;
       }()) {}

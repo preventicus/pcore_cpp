@@ -70,7 +70,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(DifferentialTim
         BlockIntervals blockIntervals_ms = {};
         blockIntervals_ms.reserve(blockIntervalsJson.size());
         for (auto& blockIntervalJson : blockIntervalsJson) {
-          blockIntervals_ms.push_back(blockIntervalJson.asUInt());
+          blockIntervals_ms.emplace_back(blockIntervalJson.asUInt());
         }
         return blockIntervals_ms;
       }()),
@@ -79,7 +79,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(DifferentialTim
         TimestampsIntervals timestampsIntervals_ms = {};
         timestampsIntervals_ms.reserve(timestampsIntervalsJson.size());
         for (auto& timestampsIntervalJson : timestampsIntervalsJson) {
-          timestampsIntervals_ms.push_back(timestampsIntervalJson.asUInt());
+          timestampsIntervals_ms.emplace_back(timestampsIntervalJson.asUInt());
         }
         return timestampsIntervals_ms;
       }()) {}

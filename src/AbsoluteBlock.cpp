@@ -41,7 +41,7 @@ AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson)
         AbsoluteValues absoluteValues;
         absoluteValues.reserve(absoluteValuesJson.size());
         for (auto& absoluteValueJson : absoluteValuesJson) {
-          absoluteValues.push_back(absoluteValueJson.asInt());
+          absoluteValues.emplace_back(absoluteValueJson.asInt());
         }
         return absoluteValues;
       }()) {}
