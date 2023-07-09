@@ -33,9 +33,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteBlock.h"
 
-AbsoluteBlock::AbsoluteBlock(AbsoluteValues& absoluteValues) : absoluteValues(absoluteValues) {}
+#include <utility>
 
-AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson)
+AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) : absoluteValues(std::move(absoluteValues)) {}
+
+AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson)
     : absoluteValues([&]() {
         AbsoluteValuesJson absoluteValuesJson = absoluteBlockJson["absolute_values"];
         AbsoluteValues absoluteValues;

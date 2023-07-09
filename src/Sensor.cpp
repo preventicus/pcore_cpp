@@ -33,13 +33,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Sensor.h"
 
-Sensor::Sensor(Channels& channels, DifferentialTimestampsContainer& differentialTimestampsContainer, ProtobufSensorType sensorType)
-    : sensorType(sensorType), channels(channels), differentialTimestampsContainer(differentialTimestampsContainer) {}
+#include <utility>
 
-Sensor::Sensor(Channels& channels, AbsoluteTimestampsContainer& absoluteTimestampsContainer, ProtobufSensorType sensorType)
-    : sensorType(sensorType), channels(channels), absoluteTimestampsContainer(absoluteTimestampsContainer) {}
+Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensorType sensorType)
+    : sensorType(sensorType), channels(std::move(channels)), differentialTimestampsContainer(std::move(differentialTimestampsContainer)) {}
 
-Sensor::Sensor(SensorJson& sensorJson, DataForm dataForm)
+Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensorType sensorType)
+    : sensorType(sensorType), channels(std::move(channels)), absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)) {}
+
+Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
     : sensorType(Sensor::senorTypeFromString(sensorJson["sensor_type"].asString())),
       channels([&]() {
         ChannelsJson channelsJson = sensorJson["channels"];

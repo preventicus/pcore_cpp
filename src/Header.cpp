@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Header.h"
 
-Header::Header(Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
+Header::Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
     : timeZoneOffset_min(timeZoneOffset_min), version(version), dataForm(dataForm) {
   this->checkTimeZoneOffset();
 }
@@ -45,7 +45,7 @@ Header::Header(const ProtobufHeader& protobufHeader)
   this->checkTimeZoneOffset();
 }
 
-Header::Header(HeaderJson& headerJson)
+Header::Header(const HeaderJson& headerJson)
     : timeZoneOffset_min(headerJson["time_zone_offset_min"].asInt()),
       version(Version(headerJson["version"])),
       dataForm(Header::dataFormFromString(headerJson["data_form"].asString())) {

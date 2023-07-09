@@ -37,7 +37,7 @@ AccMetaData::AccMetaData(ProtobufCoordinate coordinate) : coordinate(coordinate)
 
 AccMetaData::AccMetaData(ProtobufNorm norm) : coordinate(ProtobufCoordinate::COORDINATE_NONE), norm(norm) {}
 
-AccMetaData::AccMetaData(AccMetaDataJson& accMetaDataJson)
+AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
     : coordinate(AccMetaData::protobufCoordinateFromString(accMetaDataJson["coordinate"].asString())),
       norm(AccMetaData::protobufNormFromString(accMetaDataJson["norm"].asString())) {
   if (this->norm != ProtobufNorm::NORM_NONE & this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {

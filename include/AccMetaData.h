@@ -49,7 +49,7 @@ class AccMetaData final {
   explicit AccMetaData(ProtobufNorm norm);
   explicit AccMetaData(ProtobufCoordinate coordinate);
   explicit AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);
-  explicit AccMetaData(AccMetaDataJson& accMetaDataJson);
+  explicit AccMetaData(const AccMetaDataJson& accMetaDataJson);
   AccMetaData();
 
   ProtobufCoordinate getCoordinate() const;

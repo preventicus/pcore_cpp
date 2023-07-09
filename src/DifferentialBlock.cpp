@@ -33,7 +33,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DifferentialBlock.h"
 
-DifferentialBlock::DifferentialBlock(DifferentialValues& differentialValues) : differentialValues(differentialValues) {}
+#include <utility>
+
+DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) : differentialValues(std::move(differentialValues)) {}
 
 DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock)
     : differentialValues([&]() {
@@ -46,7 +48,7 @@ DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDi
         return differentialValues;
       }()) {}
 
-DifferentialBlock::DifferentialBlock(DifferentialBlockJson& differentialBlockJson)
+DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson)
     : differentialValues([&]() {
         DifferentialValuesJson differentialValuesJson = differentialBlockJson["differential_values"];
         DifferentialValues differentialValues = {};

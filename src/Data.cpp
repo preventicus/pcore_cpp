@@ -33,11 +33,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Data.h"
 
-Data::Data(Raw& raw, Header& header) : header(header), raw(raw) {}
+#include <utility>
+
+Data::Data(Raw raw, const Header& header) : header(header), raw(std::move(raw)) {}
 
 Data::Data(const ProtobufData& protobufData) : header(Header(protobufData.header())), raw(Raw(protobufData.raw())) {}
 
-Data::Data(DataJson& dataJson) : header(Header(dataJson["header"])), raw(Raw(dataJson["raw"], header.getDataForm())) {}
+Data::Data(const DataJson& dataJson) : header(Header(dataJson["header"])), raw(Raw(dataJson["raw"], header.getDataForm())) {}
 
 Data::Data() : header(Header()), raw(Raw()) {}
 

@@ -32,9 +32,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AbsoluteTimestampsContainer.h"
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms) : unixTimestamps_ms(std::move(unixTimestamps_ms)) {}
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
     : unixTimestamps_ms([&]() {
         UnixTimestampsJson unixTimestampsJson = absoluteTimestampsContainerJson["unix_timestamps_ms"];
         UnixTimestamps unixTimestamps_ms;

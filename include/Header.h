@@ -44,9 +44,9 @@ using TimeZoneOffsetJson = Json::Value;
 
 class Header final {
  public:
-  explicit Header(Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
+  explicit Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
   explicit Header(const ProtobufHeader& protobufHeader);
-  explicit Header(HeaderJson& header);
+  explicit Header(const HeaderJson& header);
   Header();
 
   TimeZoneOffset getTimeZoneOffset() const;

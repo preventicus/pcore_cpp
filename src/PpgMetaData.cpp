@@ -39,7 +39,7 @@ PpgMetaData::PpgMetaData(ProtobufColor color) : color(color), wavelength_nm(0) {
 
 PpgMetaData::PpgMetaData(Wavelength wavelength_nm) : color(ProtobufColor::COLOR_NONE), wavelength_nm(wavelength_nm) {}
 
-PpgMetaData::PpgMetaData(PpgMetaDataJson& ppgMetaDataJson)
+PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
     : color(PpgMetaData::protobufColorFromString(ppgMetaDataJson["color"].asString())), wavelength_nm([&]() {
         if (ppgMetaDataJson["wavelength_nm"].asInt() < 0) {
           throw std::invalid_argument("wavelength_nm is negative in json.");

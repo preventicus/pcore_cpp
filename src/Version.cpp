@@ -35,7 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
 
-Version::Version(VersionJson& versionJson)
+Version::Version(const VersionJson& versionJson)
     : major(this->getVersionPartsFromJson(versionJson, "major")),
       minor(this->getVersionPartsFromJson(versionJson, "minor")),
       patch(this->getVersionPartsFromJson(versionJson, "patch")) {}

@@ -48,7 +48,7 @@ class Version final {
  public:
   explicit Version(Major major, Minor minor, Patch patch);
   explicit Version(const ProtobufVersion& protobufVersion);
-  explicit Version(VersionJson& jsonVersion);
+  explicit Version(const VersionJson& jsonVersion);
   Version();
 
   Major getMajor() const;

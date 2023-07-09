@@ -33,19 +33,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Channel.h"
 
-Channel::Channel(AccMetaData& accMetaData, AbsoluteBlock& absoluteBlock)
-    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(absoluteBlock) {}
+#include <utility>
 
-Channel::Channel(PpgMetaData& ppgMetaData, AbsoluteBlock& absoluteBlock)
-    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(DifferentialBlocks()), absoluteBlock(absoluteBlock) {}
+Channel::Channel(const AccMetaData& accMetaData, AbsoluteBlock absoluteBlock)
+    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(std::move(absoluteBlock)) {}
 
-Channel::Channel(AccMetaData& accMetaData, DifferentialBlocks& differentialBlocks)
-    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(differentialBlocks), absoluteBlock(AbsoluteBlock()) {}
+Channel::Channel(const PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock)
+    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(DifferentialBlocks()), absoluteBlock(std::move(absoluteBlock)) {}
 
-Channel::Channel(PpgMetaData& ppgMetaData, DifferentialBlocks& differentialBlocks)
-    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(differentialBlocks), absoluteBlock(AbsoluteBlock()) {}
+Channel::Channel(const AccMetaData& accMetaData, DifferentialBlocks differentialBlocks)
+    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(std::move(differentialBlocks)), absoluteBlock(AbsoluteBlock()) {}
 
-Channel::Channel(ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm)
+Channel::Channel(const PpgMetaData& ppgMetaData, DifferentialBlocks differentialBlocks)
+    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(std::move(differentialBlocks)), absoluteBlock(AbsoluteBlock()) {}
+
+Channel::Channel(const ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm)
     : ppgMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG ? PpgMetaData(channelJson["ppg_metadata"]) : PpgMetaData()),
       accMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC ? AccMetaData(channelJson["acc_metadata"]) : AccMetaData()),
       differentialBlocks([&]() {
@@ -223,7 +225,9 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& abs
   return differentialBlocks;
 }
 
-DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx, const BlockIdx toBlockIdx, const AbsoluteValues& absoluteValues) const {
+DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx,
+                                                   const BlockIdx toBlockIdx,
+                                                   const AbsoluteValues& absoluteValues) const {
   DifferentialValues differentialValues = {};
   differentialValues.push_back(absoluteValues[fromBlockIdx]);
   for (size_t i = fromBlockIdx + 1; i <= toBlockIdx; i++) {

@@ -47,7 +47,7 @@ class PpgMetaData final {
   explicit PpgMetaData(ProtobufColor color);
   explicit PpgMetaData(Wavelength wavelength_nm);
   explicit PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);
-  explicit PpgMetaData(PpgMetaDataJson& ppgMetaData);
+  explicit PpgMetaData(const PpgMetaDataJson& ppgMetaData);
   PpgMetaData();
 
   ProtobufColor getColor() const;

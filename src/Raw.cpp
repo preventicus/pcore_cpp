@@ -33,7 +33,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Raw.h"
 
-Raw::Raw(Sensors& sensors) : sensors(sensors) {}
+#include <utility>
+
+Raw::Raw(Sensors sensors) : sensors(std::move(sensors)) {}
 
 Raw::Raw(const ProtobufRaw& protobufRaw)
     : sensors([&]() {
@@ -46,7 +48,7 @@ Raw::Raw(const ProtobufRaw& protobufRaw)
         return sensors;
       }()) {}
 
-Raw::Raw(RawJson& rawJson, DataForm dataForm)
+Raw::Raw(const RawJson& rawJson, DataForm dataForm)
     : sensors([&]() {
         Sensors sensors;
         SensorsJson sensorsJson = rawJson["sensors"];

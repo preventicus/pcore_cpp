@@ -42,8 +42,8 @@ using UnixTimestampsJson = Json::Value;
 
 class AbsoluteTimestampsContainer final {
  public:
-  explicit AbsoluteTimestampsContainer(UnixTimestamps& unixTimestamps_ms);
-  explicit AbsoluteTimestampsContainer(AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson);
+  explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms);
+  explicit AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson);
   AbsoluteTimestampsContainer();
 
   UnixTimestamps getUnixTimestamps() const;

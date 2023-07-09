@@ -32,10 +32,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "DifferentialTimestampsContainer.h"
 
+#include <utility>
+
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
-                                                                 BlockIntervals& blockIntervals_ms,
-                                                                 TimestampsIntervals& timestampsIntervals_ms)
-    : firstUnixTimestamp_ms(firstUnixTimestamp_ms), blockIntervals_ms(blockIntervals_ms), timestampsIntervals_ms(timestampsIntervals_ms) {}
+                                                                 BlockIntervals blockIntervals_ms,
+                                                                 TimestampsIntervals timestampsIntervals_ms)
+    : firstUnixTimestamp_ms(firstUnixTimestamp_ms),
+      blockIntervals_ms(std::move(blockIntervals_ms)),
+      timestampsIntervals_ms(std::move(timestampsIntervals_ms)) {}
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer)
     : firstUnixTimestamp_ms(protobufDifferentialTimestampContainer.first_timestamp_ms()),
@@ -58,7 +62,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufD
         return timestampsIntervals_ms;
       }()) {}
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
     : firstUnixTimestamp_ms([&]() {
         if (differentialTimestampsContainerJson["first_timestamp_ms"].asInt64() < 0) {
           throw std::invalid_argument("firstUnixTimestamp_ms is negative in json");
