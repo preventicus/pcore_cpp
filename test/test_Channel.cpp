@@ -124,6 +124,66 @@ TEST(ChannelTest, TestIsEqualChannelEmpty) {
   EXPECT_TRUE(channel1 == channel2);
 }
 
+TEST(ChannelTest, TestIsNotEqualWithChannelWithAbsoluteBlockAndAccMetaData) {
+  auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  auto channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  EXPECT_FALSE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithChannelWithAbsoluteBlockAndPpgMetaData) {
+  auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  auto channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_FALSE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithChannelWithDifferentialBlocksAndAccMetaData) {
+  auto channel1 = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
+  auto channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
+  EXPECT_FALSE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithChannelWithDifferentialBlocksAndPpgMetaData) {
+  auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  auto channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_FALSE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithNotEqualAbsoluteBlockInMetaData) {
+  auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  auto channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  EXPECT_TRUE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithAbsoluteBlockAndDifferentialBlocks) {
+  auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  auto channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_TRUE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithNotEqualInBlocksAndMetaData) {
+  auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  auto channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_TRUE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithNotEqualInAbsoluteBlock) {
+  auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockForNotEqualTest();
+  auto channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_TRUE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualWithNotEqualInDifferentialBlock) {
+  auto channel1 = ChannelExampleFactory::channelWithDifferentialBlocksForNotEqualTest();
+  auto channel2 = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_TRUE(channel1 != channel2);
+}
+
+TEST(ChannelTest, TestIsNotEqualChannelEmpty) {
+  auto channel1 = Channel();
+  auto channel2 = Channel();
+  EXPECT_FALSE(channel1 != channel2);
+}
+
 TEST(ChannelTest, TestSwitchTo) {
   BlockIdxs blockIdxs = {0, 11, 20};
   auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForTestSwitchTo();

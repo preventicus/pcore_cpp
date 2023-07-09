@@ -85,6 +85,42 @@ TEST(VersionTest, TestIsEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajo
   EXPECT_FALSE(version1 == version2);
 }
 
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor2Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  EXPECT_FALSE(version1 != version2);
+}
+
+TEST(VersionTest, TestIsNotEqualWithVersionEmpty) {
+  auto version1 = VersionExampleFactory::versionEmpty();
+  auto version2 = VersionExampleFactory::versionEmpty();
+  EXPECT_FALSE(version1 != version2);
+}
+
+TEST(VersionTest, TestIsNotEqualWithVersionEmptyAndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionEmpty();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  EXPECT_TRUE(version1 != version2);
+}
+
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor2Minor1Patch0AndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  EXPECT_TRUE(version1 != version2);
+}
+
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor2Patch0();
+  EXPECT_TRUE(version1 != version2);
+}
+
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch1) {
+  auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch1();
+  EXPECT_TRUE(version1 != version2);
+}
+
 TEST(VersionTest, TestToJsonWithVersionWithMajor1Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor1Minor1Patch0();
   auto versionJson1 = VersionExampleFactory::buildVersionJson(version);

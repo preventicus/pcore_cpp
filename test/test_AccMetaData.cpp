@@ -70,13 +70,13 @@ TEST(AccMetaDataTest, TestIsEqualCoordinateWithAccMetaDataWithCoordinateZ) {
   EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
-TEST(AccMetaDataTest, TestIsNotEqualCoordinate) {
+TEST(AccMetaDataTest, TestIsEqualDifferentCoordinate) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
   EXPECT_FALSE(accMetaData1 == accMetaData2);
 }
 
-TEST(AccMetaDataTest, TestIsCoordinateWithNorm) {
+TEST(AccMetaDataTest, TestIsEqualCoordinateWithNorm) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
   EXPECT_FALSE(accMetaData1 == accMetaData2);
@@ -92,6 +92,48 @@ TEST(AccMetaDataTest, TestIsEqualNotSet) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataNotSet();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_TRUE(accMetaData1 == accMetaData2);
+}
+
+TEST(AccMetaDataTest, TestIsNotEqualCoordinateWithAccMetaDataWithCoordinateX) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  EXPECT_FALSE(accMetaData1 != accMetaData2);
+}
+
+TEST(AccMetaDataTest, TestIsNotEqualCoordinateWithAccMetaDataWithCoordinateY) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
+  auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
+  EXPECT_FALSE(accMetaData1 != accMetaData2);
+}
+
+TEST(AccMetaDataTest, TestIsNotEqualCoordinateWithAccMetaDataWithCoordinateZ) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
+  auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
+  EXPECT_FALSE(accMetaData1 != accMetaData2);
+}
+
+TEST(AccMetaDataTest, TestIsNotEqualDifferentCoordinate) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
+  EXPECT_TRUE(accMetaData1 != accMetaData2);
+}
+
+TEST(AccMetaDataTest, TestIsNotEqualCoordinateWithNorm) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
+  EXPECT_TRUE(accMetaData1 != accMetaData2);
+}
+
+TEST(AccMetaDataTest, TestIsNotEqualNormEuclidean) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
+  auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
+  EXPECT_FALSE(accMetaData1 != accMetaData2);
+}
+
+TEST(AccMetaDataTest, TestIsNotEqualNotSet) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataNotSet();
+  auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataNotSet();
+  EXPECT_FALSE(accMetaData1 != accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestIsSetWithAccMetaDataWithCoordinateX) {

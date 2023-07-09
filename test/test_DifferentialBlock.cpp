@@ -58,22 +58,52 @@ TEST(DifferentialBlockTest, TestIsEqualWithdifferentialBlockWithThreeMixedDiffer
   EXPECT_FALSE(differentialBlock1 == differentialBlock2);
 }
 
-TEST(DifferentialBlockTest, TestIsEmptyWithEmptyBlock) {
+TEST(DifferentialBlockTest, TestIsEqualWithEmptyBlock) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 
-TEST(DifferentialBlockTest, TestIsEmptyWithDifferentialBlockWithThreeMixedDifferentialValuesAndEmptyBlock) {
+TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDifferentialValuesAndEmptyBlock) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
   EXPECT_FALSE(differentialBlock1 == differentialBlock2);
 }
 
-TEST(DifferentialBlockTest, TestIsBlocksWithDifferentSize) {
+TEST(DifferentialBlockTest, TestIsEqualWithBlocksWithDifferentSize) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   EXPECT_FALSE(differentialBlock1 == differentialBlock2);
+}
+
+TEST(DifferentialBlockTest, TestIsNotEqualWithDifferentialBlockWithThreeMixedDifferentialValues) {
+  auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
+  auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
+  EXPECT_FALSE(differentialBlock1 != differentialBlock2);
+}
+
+TEST(DifferentialBlockTest, TestIsNotEqualWithdifferentialBlockWithThreeMixedDifferentialValuesAndThreeNegativeDifferentialValues) {
+  auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
+  auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
+  EXPECT_TRUE(differentialBlock1 != differentialBlock2);
+}
+
+TEST(DifferentialBlockTest, TestIsNotEqualWithEmptyBlock) {
+  auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
+  auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
+  EXPECT_FALSE(differentialBlock1 != differentialBlock2);
+}
+
+TEST(DifferentialBlockTest, TestIsNotEqualWithDifferentialBlockWithThreeMixedDifferentialValuesAndEmptyBlock) {
+  auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
+  auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
+  EXPECT_TRUE(differentialBlock1 != differentialBlock2);
+}
+
+TEST(DifferentialBlockTest, TestIsNotEqualWithBlocksWithDifferentSize) {
+  auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
+  auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
+  EXPECT_TRUE(differentialBlock1 != differentialBlock2);
 }
 
 TEST(DifferentialBlockTest, TestSerializeNoThrow) {

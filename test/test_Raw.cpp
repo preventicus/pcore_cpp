@@ -72,6 +72,36 @@ TEST(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteFormAnd
   EXPECT_FALSE(raw1 == raw2);
 }
 
+TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawEmpty) {
+  auto raw1 = RawExampleFactory::rawEmpty();
+  auto raw2 = RawExampleFactory::rawEmpty();
+  EXPECT_FALSE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAndRawWithTwoSensors) {
+  auto raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawEmptyAndRawWithOneSensors) {
+  auto raw1 = RawExampleFactory::rawEmpty();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw1 != raw2);
+}
+
 TEST(RawTest, TestSerializeWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   ProtobufRaw protobufRaw;

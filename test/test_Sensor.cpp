@@ -179,6 +179,42 @@ TEST(SensorTest, TestIsEqualWithSensorPpgWithOneChannelsInAbsoluteFormAndSensorP
   EXPECT_FALSE(sensor1 == sensor2);
 }
 
+TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorEmpty) {
+  auto sensor1 = SensorExampleFactory::sensorEmpty();
+  auto sensor2 = SensorExampleFactory::sensorEmpty();
+  EXPECT_FALSE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorEmptyAndSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorEmpty();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialFormAndSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialFormAndSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorPpgWithOneChannelsInAbsoluteFormAndSensorPpgWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
 TEST(SensorTest, TestToJsonWithSensorPpgWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor, DataForm::DATA_FORM_ABSOLUTE);

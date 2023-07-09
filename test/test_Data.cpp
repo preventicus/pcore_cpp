@@ -78,6 +78,36 @@ TEST(DataTest, TestIsEqualWithDifferentRaw) {
   EXPECT_FALSE(data1 == data2);
 }
 
+TEST(DataTest, TestIsNotEqualWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+  auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  auto data2 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  EXPECT_FALSE(data1 != data2);
+}
+
+TEST(DataTest, TestIsNotEqualWithDataEmpty) {
+  auto data1 = DataExampleFactory::dataEmpty();
+  auto data2 = DataExampleFactory::dataEmpty();
+  EXPECT_FALSE(data1 != data2);
+}
+
+TEST(DataTest, TestIsNotEqualWithDataEmptyAndDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+  auto data1 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  auto data2 = DataExampleFactory::dataEmpty();
+  EXPECT_TRUE(data1 != data2);
+}
+
+TEST(DataTest, TestIsNotEqualWithDifferentHeader) {
+  auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  auto data2 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive();
+  EXPECT_TRUE(data1 != data2);
+}
+
+TEST(DataTest, TestIsNotEqualWithDifferentRaw) {
+  auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  auto data2 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  EXPECT_TRUE(data1 != data2);
+}
+
 TEST(DataTest, TestSerializeWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   ProtobufData protobufData;
