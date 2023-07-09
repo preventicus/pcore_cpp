@@ -69,7 +69,8 @@ bool Raw::operator==(const Raw& raw) const {
   if (this->sensors.size() != raw.sensors.size()) {
     return false;
   }
-  for (size_t i = 0; i < this->sensors.size(); i++) {
+  const auto numberOfSensors = this->sensors.size();
+  for (size_t i = 0; i < numberOfSensors; i++) {
     if (this->sensors[i] != raw.sensors[i]) {
       return false;
     }

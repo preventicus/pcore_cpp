@@ -278,7 +278,6 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
 
 DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
                                                                         const BlockIdxs& blockIdxs) const {
-  DifferentialTimestampsContainer differentialTimestampsContainer;
   const auto numberOfBlocks = blockIdxs.size();
   BlockIntervals blockIntervals_ms = {};
   TimestampsIntervals timestampsIntervals_ms = {};
@@ -297,8 +296,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
                             return calculate differentialTimestamps  + last timestampsInterval_ms.pushback(0)
   */
   if (numberOfBlocks == 0) {
-    differentialTimestampsContainer = DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-    return differentialTimestampsContainer;
+    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
   }
 
   const auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps();
@@ -307,8 +305,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
     Interval timestampsInterval = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
     timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsInterval);
     blockIntervals_ms.push_back(0);
-    differentialTimestampsContainer = DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-    return differentialTimestampsContainer;
+    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
   }
 
   blockIntervals_ms.push_back(0);
@@ -325,8 +322,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
                                           ? 0
                                           : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] -
                                                 absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
-  differentialTimestampsContainer = DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
-  return differentialTimestampsContainer;
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
 }
 
 SensorJson Sensor::toJson(const DataForm dataForm) const {
