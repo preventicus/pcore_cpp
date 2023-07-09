@@ -59,11 +59,11 @@ DifferentialBlock::DifferentialBlock(DifferentialBlockJson& differentialBlockJso
 
 DifferentialBlock::DifferentialBlock() : differentialValues({}){};
 
-DifferentialValues DifferentialBlock::getDifferentialValues() {
+DifferentialValues DifferentialBlock::getDifferentialValues() const {
   return this->differentialValues;
 }
 
-bool DifferentialBlock::isSet() {
+bool DifferentialBlock::isSet() const {
   return !this->differentialValues.empty();
 }
 
@@ -75,7 +75,7 @@ bool DifferentialBlock::operator!=(const DifferentialBlock& differentialBlock) c
   return this->differentialValues != differentialBlock.differentialValues;
 }
 
-void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentialBlock) {
+void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentialBlock) const {
   if (protobufDifferentialBlock == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
   }
@@ -84,7 +84,7 @@ void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentia
   }
 }
 
-DifferentialBlockJson DifferentialBlock::toJson() {
+DifferentialBlockJson DifferentialBlock::toJson() const {
   DifferentialValuesJson differentialValuesJson(Json::arrayValue);
   for (auto& differentialValue : this->differentialValues) {
     differentialValuesJson.append(differentialValue);

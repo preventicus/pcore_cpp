@@ -52,13 +52,13 @@ class AccMetaData final {
   explicit AccMetaData(AccMetaDataJson& accMetaDataJson);
   AccMetaData();
 
-  ProtobufCoordinate getCoordinate();
-  ProtobufNorm getNorm();
-  bool hasNorm();
-  bool hasCoordinate();
-  bool isSet();
-  AccMetaDataJson toJson();
-  void serialize(ProtobufAccMetaData* protobufAccMetaData);
+  ProtobufCoordinate getCoordinate() const;
+  ProtobufNorm getNorm() const;
+  bool hasNorm() const;
+  bool hasCoordinate() const;
+  bool isSet() const;
+  AccMetaDataJson toJson() const;
+  void serialize(ProtobufAccMetaData* protobufAccMetaData) const;
 
   bool operator==(const AccMetaData& accMetaData) const;
   bool operator!=(const AccMetaData& accMetaData) const;

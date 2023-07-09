@@ -45,15 +45,15 @@ Version::Version(const ProtobufVersion& protobufVersion)
 
 Version::Version() : major(0), minor(0), patch(0) {}
 
-Major Version::getMajor() {
+Major Version::getMajor() const {
   return this->major;
 }
 
-Minor Version::getMinor() {
+Minor Version::getMinor() const {
   return this->minor;
 }
 
-Patch Version::getPatch() {
+Patch Version::getPatch() const {
   return this->patch;
 }
 
@@ -65,7 +65,7 @@ bool Version::operator!=(const Version& version) const {
   return this->major != version.major || this->minor != version.minor || this->patch != version.patch;
 }
 
-void Version::serialize(ProtobufVersion* protobufVersion) {
+void Version::serialize(ProtobufVersion* protobufVersion) const {
   if (protobufVersion == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufVersion is a null pointer");
   }
@@ -74,7 +74,7 @@ void Version::serialize(ProtobufVersion* protobufVersion) {
   protobufVersion->set_patch(this->patch);
 }
 
-VersionJson Version::toJson() {
+VersionJson Version::toJson() const {
   MajorJson majorJson(this->major);
   MinorJson minorJson(this->minor);
   PatchJson patchJson(this->patch);
@@ -85,7 +85,7 @@ VersionJson Version::toJson() {
   return versionJson;
 }
 
-Major Version::getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey) {
+Major Version::getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey) const {
   if (versionJson[jsonKey].asInt() < 0) {
     throw std::invalid_argument(jsonKey + " is negative in json.");
   }

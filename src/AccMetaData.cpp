@@ -52,23 +52,23 @@ AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData)
 
 AccMetaData::AccMetaData() : coordinate(ProtobufCoordinate::COORDINATE_NONE), norm(ProtobufNorm::NORM_NONE) {}
 
-ProtobufCoordinate AccMetaData::getCoordinate() {
+ProtobufCoordinate AccMetaData::getCoordinate() const {
   return this->coordinate;
 }
 
-ProtobufNorm AccMetaData::getNorm() {
+ProtobufNorm AccMetaData::getNorm() const {
   return this->norm;
 }
 
-bool AccMetaData::hasNorm() {
+bool AccMetaData::hasNorm() const {
   return this->norm != ProtobufNorm::NORM_NONE;
 }
 
-bool AccMetaData::hasCoordinate() {
+bool AccMetaData::hasCoordinate() const {
   return this->coordinate != ProtobufCoordinate::COORDINATE_NONE;
 }
 
-bool AccMetaData::isSet() {
+bool AccMetaData::isSet() const {
   return this->hasNorm() || this->hasCoordinate();
 }
 
@@ -80,7 +80,7 @@ bool AccMetaData::operator!=(const AccMetaData& accMetaData) const {
   return this->coordinate != accMetaData.coordinate || this->norm != accMetaData.norm;
 }
 
-void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
+void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) const {
   if (protobufAccMetaData == nullptr) {
     throw std::invalid_argument("protobufAccMetaData is a null pointer");
   }
@@ -95,7 +95,7 @@ void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
   }
 }
 
-Json::Value AccMetaData::toJson() {
+Json::Value AccMetaData::toJson() const {
   AccMetaDataJson accMetaDataJson;
   if (this->norm != ProtobufNorm::NORM_NONE) {
     accMetaDataJson["norm"] = AccMetaData::protobufNormToString(this->norm);

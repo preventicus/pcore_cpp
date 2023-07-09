@@ -59,7 +59,7 @@ Raw::Raw(RawJson& rawJson, DataForm dataForm)
 
 Raw::Raw() : sensors({}) {}
 
-Sensors Raw::getSensors() {
+Sensors Raw::getSensors() const {
   return this->sensors;
 }
 
@@ -79,7 +79,7 @@ bool Raw::operator!=(const Raw& raw) const {
   return !(*this == raw);
 }
 
-void Raw::serialize(ProtobufRaw* protobufRaw) {
+void Raw::serialize(ProtobufRaw* protobufRaw) const {
   if (protobufRaw == nullptr) {
     throw std::invalid_argument("protobufRaw is a null pointer");
   }
@@ -95,7 +95,7 @@ void Raw::switchDataForm(DataForm currentDataForm) {
   }
 }
 
-RawJson Raw::toJson(DataForm dataForm) {
+RawJson Raw::toJson(DataForm dataForm) const {
   RawJson rawJson;
   SensorsJson sensorsJson(Json::arrayValue);
   for (auto& sensor : this->sensors) {

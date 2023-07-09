@@ -57,17 +57,17 @@ class DifferentialTimestampsContainer final {
   explicit DifferentialTimestampsContainer(DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
   DifferentialTimestampsContainer();
 
-  UnixTimestamp getFirstUnixTimestamp();
-  BlockIntervals getBlockIntervals();
-  TimestampsIntervals getTimestampsIntervals();
+  UnixTimestamp getFirstUnixTimestamp() const;
+  BlockIntervals getBlockIntervals() const;
+  TimestampsIntervals getTimestampsIntervals() const;
 
-  DifferentialTimestampsContainerJson toJson();
-  UnixTimestamp calculateFirstUnixTimestampInBlock(BlockIdx& blockIdx);
+  DifferentialTimestampsContainerJson toJson() const;
+  UnixTimestamp calculateFirstUnixTimestampInBlock(BlockIdx& blockIdx) const;
   UnixTimestamp calculateLastUnixTimestampInBlock(BlockIdx& blockIdx,
                                                   UnixTimestamp firstUnixTimestampInBlock_ms,
-                                                  DifferentialBlock& lastDifferentialBlock);
+                                                  DifferentialBlock& lastDifferentialBlock) const;
 
-  void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer);
+  void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer) const;
 
   bool operator==(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
   bool operator!=(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;

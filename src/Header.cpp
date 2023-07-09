@@ -54,15 +54,15 @@ Header::Header(HeaderJson& headerJson)
 
 Header::Header() : timeZoneOffset_min(0), version(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
 
-TimeZoneOffset Header::getTimeZoneOffset() {
+TimeZoneOffset Header::getTimeZoneOffset() const {
   return this->timeZoneOffset_min;
 }
 
-Version Header::getVersion() {
+Version Header::getVersion() const {
   return this->version;
 }
 
-DataForm Header::getDataForm() {
+DataForm Header::getDataForm() const {
   return this->dataForm;
 }
 
@@ -74,7 +74,7 @@ bool Header::operator!=(const Header& header) const {
   return this->timeZoneOffset_min != header.timeZoneOffset_min || this->version != header.version || this->dataForm != header.dataForm;
 }
 
-void Header::serialize(ProtobufHeader* protobufHeader) {
+void Header::serialize(ProtobufHeader* protobufHeader) const {
   if (protobufHeader == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufHeader is a null pointer");
   }
@@ -100,7 +100,7 @@ void Header::switchDataForm() {
   }
 }
 
-HeaderJson Header::toJson(DataForm dataForm) {
+HeaderJson Header::toJson(DataForm dataForm) const {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
   headerJson["time_zone_offset_min"] = timeZoneOffset_min;
@@ -109,7 +109,7 @@ HeaderJson Header::toJson(DataForm dataForm) {
   return headerJson;
 }
 
-void Header::checkTimeZoneOffset() {
+void Header::checkTimeZoneOffset() const {
   if (840 < this->timeZoneOffset_min || this->timeZoneOffset_min < -720) {
     throw std::invalid_argument("timeZoneOffset must be between -720 and 840");
   }

@@ -47,10 +47,10 @@ class Data final {
   explicit Data(DataJson& dataJson);
   Data();
 
-  Raw getRaw();
-  Header getHeader();
-  DataJson toJson(DataForm dataForm);
-  void serialize(ProtobufData* protobufData);
+  Raw getRaw() const;
+  Header getHeader() const;
+  DataJson toJson(DataForm dataForm) const;
+  void serialize(ProtobufData* protobufData) const;
   void switchDataForm();
 
   bool operator==(const Data& data) const;

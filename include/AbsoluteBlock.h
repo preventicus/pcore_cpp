@@ -46,9 +46,9 @@ class AbsoluteBlock final {
   explicit AbsoluteBlock(AbsoluteBlockJson& absoluteBlock);
   AbsoluteBlock();
 
-  AbsoluteValues getAbsoluteValues();
-  bool isSet();
-  AbsoluteBlockJson toJson();
+  AbsoluteValues getAbsoluteValues() const;
+  bool isSet() const;
+  AbsoluteBlockJson toJson() const;
 
   bool operator==(const AbsoluteBlock& absoluteBlock) const;
   bool operator!=(const AbsoluteBlock& absoluteBlock) const;

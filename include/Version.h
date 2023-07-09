@@ -51,17 +51,17 @@ class Version final {
   explicit Version(VersionJson& jsonVersion);
   Version();
 
-  Major getMajor();
-  Minor getMinor();
-  Patch getPatch();
-  VersionJson toJson();
-  void serialize(ProtobufVersion* protobufVersion);
+  Major getMajor() const;
+  Minor getMinor() const;
+  Patch getPatch() const;
+  VersionJson toJson() const;
+  void serialize(ProtobufVersion* protobufVersion) const;
 
   bool operator==(const Version& version) const;
   bool operator!=(const Version& version) const;
 
  private:
-  Major getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey);
+  Major getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey) const;
 
   Major major;
   Minor minor;

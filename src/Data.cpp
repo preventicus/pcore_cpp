@@ -41,11 +41,11 @@ Data::Data(DataJson& dataJson) : header(Header(dataJson["header"])), raw(Raw(dat
 
 Data::Data() : header(Header()), raw(Raw()) {}
 
-Raw Data::getRaw() {
+Raw Data::getRaw() const {
   return this->raw;
 }
 
-Header Data::getHeader() {
+Header Data::getHeader() const {
   return this->header;
 }
 
@@ -57,7 +57,7 @@ bool Data::operator!=(const Data& data) const {
   return this->header != data.header || this->raw != data.raw;
 }
 
-void Data::serialize(ProtobufData* protobufData) {
+void Data::serialize(ProtobufData* protobufData) const {
   if (protobufData == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufData is a null pointer");
   }
@@ -75,7 +75,7 @@ void Data::switchDataForm() {
   this->header.switchDataForm();
 }
 
-Json::Value Data::toJson(DataForm dataForm) {
+Json::Value Data::toJson(DataForm dataForm) const {
   DataJson data;
   data["header"] = this->header.toJson(dataForm);
   data["raw"] = this->raw.toJson(dataForm);

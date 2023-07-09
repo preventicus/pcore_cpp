@@ -48,11 +48,11 @@ AbsoluteBlock::AbsoluteBlock(AbsoluteBlockJson& absoluteBlockJson)
 
 AbsoluteBlock::AbsoluteBlock() : absoluteValues({}) {}
 
-AbsoluteValues AbsoluteBlock::getAbsoluteValues() {
+AbsoluteValues AbsoluteBlock::getAbsoluteValues() const {
   return this->absoluteValues;
 }
 
-bool AbsoluteBlock::isSet() {
+bool AbsoluteBlock::isSet() const {
   return !this->absoluteValues.empty();
 }
 
@@ -64,7 +64,7 @@ bool AbsoluteBlock::operator!=(const AbsoluteBlock& absoluteBlock) const {
   return this->absoluteValues != absoluteBlock.absoluteValues;
 }
 
-AbsoluteBlockJson AbsoluteBlock::toJson() {
+AbsoluteBlockJson AbsoluteBlock::toJson() const {
   AbsoluteBlockJson absoluteBlockJson;
   if (!isSet()) {
     return absoluteBlockJson;

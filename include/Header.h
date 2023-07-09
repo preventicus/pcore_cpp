@@ -49,12 +49,12 @@ class Header final {
   explicit Header(HeaderJson& header);
   Header();
 
-  TimeZoneOffset getTimeZoneOffset();
-  Version getVersion();
-  DataForm getDataForm();
+  TimeZoneOffset getTimeZoneOffset() const;
+  Version getVersion() const;
+  DataForm getDataForm() const;
 
-  HeaderJson toJson(DataForm dataForm);
-  void serialize(ProtobufHeader* protobufHeader);
+  HeaderJson toJson(DataForm dataForm) const;
+  void serialize(ProtobufHeader* protobufHeader) const;
   void switchDataForm();
 
   static DataForm dataFormFromString(DataFormString dataFormString);
@@ -64,7 +64,7 @@ class Header final {
   bool operator!=(const Header& header) const;
 
  private:
-  void checkTimeZoneOffset();
+  void checkTimeZoneOffset() const;
   TimeZoneOffset timeZoneOffset_min;
   Version version;
   DataForm dataForm;

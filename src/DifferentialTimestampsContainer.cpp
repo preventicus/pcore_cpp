@@ -86,15 +86,15 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(DifferentialTim
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer() : firstUnixTimestamp_ms(0), blockIntervals_ms({}), timestampsIntervals_ms({}) {}
 
-UnixTimestamp DifferentialTimestampsContainer::getFirstUnixTimestamp() {
+UnixTimestamp DifferentialTimestampsContainer::getFirstUnixTimestamp() const {
   return this->firstUnixTimestamp_ms;
 }
 
-BlockIntervals DifferentialTimestampsContainer::getBlockIntervals() {
+BlockIntervals DifferentialTimestampsContainer::getBlockIntervals() const {
   return this->blockIntervals_ms;
 }
 
-TimestampsIntervals DifferentialTimestampsContainer::getTimestampsIntervals() {
+TimestampsIntervals DifferentialTimestampsContainer::getTimestampsIntervals() const {
   return this->timestampsIntervals_ms;
 }
 
@@ -110,7 +110,7 @@ bool DifferentialTimestampsContainer::operator!=(const DifferentialTimestampsCon
          this->timestampsIntervals_ms != differentialTimestampsContainer.timestampsIntervals_ms;
 }
 
-UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock(BlockIdx& blockIdx) {
+UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock(BlockIdx& blockIdx) const {
   if (this->blockIntervals_ms.size() <= blockIdx) {  // toDo : FOR-325
     throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
   }
@@ -123,14 +123,14 @@ UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBloc
 
 UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock(BlockIdx& blockIdx,
                                                                                  UnixTimestamp firstUnixTimestampInBlock_ms,
-                                                                                 DifferentialBlock& lastDifferentialBlock) {
+                                                                                 DifferentialBlock& lastDifferentialBlock) const {
   if (this->timestampsIntervals_ms.size() <= blockIdx) {
     throw std::invalid_argument("blockIdx is bigger than size of timestampsInterval");
   }
   return firstUnixTimestampInBlock_ms + lastDifferentialBlock.getDifferentialValues().size() * this->timestampsIntervals_ms[blockIdx];
 }
 
-DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() {
+DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() const {
   DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
   UnixTimestampJson firstUnixTimestampJson(Json::uintValue);
   BlockIntervalsJson blockIntervalsJson(Json::arrayValue);
@@ -148,7 +148,7 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() {
   return differentialTimestampsContainerJson;
 }
 
-void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) {
+void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) const {
   if (protobufDifferentialTimestampContainer == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialTimestampContainer is a null pointer");
   }

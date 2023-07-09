@@ -59,28 +59,28 @@ class Channel final {
   explicit Channel(const ProtobufChannel& protobufChannel);
   Channel();
 
-  DifferentialBlocks getDifferentialBlocks();
-  AbsoluteBlock getAbsoluteBlock();
-  AccMetaData getAccMetaData();
-  PpgMetaData getPpgMetaData();
+  DifferentialBlocks getDifferentialBlocks() const;
+  AbsoluteBlock getAbsoluteBlock() const;
+  AccMetaData getAccMetaData() const;
+  PpgMetaData getPpgMetaData() const;
 
-  bool hasAccMetaData();
-  bool hasPpgMetaData();
-  bool hasDifferentialBlocks();
-  bool hasAbsoluteBlock();
+  bool hasAccMetaData() const;
+  bool hasPpgMetaData() const;
+  bool hasDifferentialBlocks() const;
+  bool hasAbsoluteBlock() const;
 
   bool operator==(const Channel& channel) const;
   bool operator!=(const Channel& channel) const;
 
-  ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType);
-  void serialize(ProtobufChannel* protobufChannel);
+  ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) const;
+  void serialize(ProtobufChannel* protobufChannel) const;
   void switchDataForm(BlockIdxs& blockIdxs);
   void switchDataForm();
 
  private:
-  DifferentialBlocks calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs);
-  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues);
-  AbsoluteBlock calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks);
+  DifferentialBlocks calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs) const;
+  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues) const;
+  AbsoluteBlock calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks) const;
 
   PpgMetaData ppgMetaData;
   AccMetaData accMetaData;

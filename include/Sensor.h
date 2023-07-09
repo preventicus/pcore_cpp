@@ -54,17 +54,17 @@ class Sensor final {
   explicit Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
 
-  ProtobufSensorType getSensorType();
-  Channels getChannels();
-  DifferentialTimestampsContainer getDifferentialTimestamps();
-  AbsoluteTimestampsContainer getAbsoluteTimestamps();
-  UnixTimestamp getFirstUnixTimestamp(DataForm dataForm);
-  UnixTimestamp getLastUnixTimestamp(DataForm dataForm);
-  Duration getDuration(DataForm dataForm);
+  ProtobufSensorType getSensorType() const;
+  Channels getChannels() const;
+  DifferentialTimestampsContainer getDifferentialTimestamps() const;
+  AbsoluteTimestampsContainer getAbsoluteTimestamps() const;
+  UnixTimestamp getFirstUnixTimestamp(DataForm dataForm) const;
+  UnixTimestamp getLastUnixTimestamp(DataForm dataForm) const;
+  Duration getDuration(DataForm dataForm) const;
 
   // bool isSet();
-  SensorJson toJson(DataForm dataForm);
-  void serialize(ProtobufSensor* protobufSensor);
+  SensorJson toJson(DataForm dataForm) const;
+  void serialize(ProtobufSensor* protobufSensor) const;
   void switchDataForm(DataForm currentDataForm);
 
   static ProtobufSensorType senorTypeFromString(SensorTypeString senorTypeString);
@@ -74,9 +74,10 @@ class Sensor final {
   bool operator!=(const Sensor& sensor) const;
 
  private:
-  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer& differentialTimestampsContainer);
-  DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer& absoluteTimestampsContainer, BlockIdxs& blockIdxs);
-  BlockIdxs findBlockIdxs();
+  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer& differentialTimestampsContainer) const;
+  DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer& absoluteTimestampsContainer,
+                                                                  BlockIdxs& blockIdxs) const;
+  BlockIdxs findBlockIdxs() const;
 
   ProtobufSensorType sensorType;
   Channels channels;

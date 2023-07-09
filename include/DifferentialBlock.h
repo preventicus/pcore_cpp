@@ -50,10 +50,10 @@ class DifferentialBlock final {
   explicit DifferentialBlock(DifferentialBlockJson& differentialBlockJson);
   DifferentialBlock();
 
-  DifferentialValues getDifferentialValues();
-  bool isSet();
-  DifferentialBlockJson toJson();
-  void serialize(ProtobufDifferentialBlock* differentialBlock);
+  DifferentialValues getDifferentialValues() const;
+  bool isSet() const;
+  DifferentialBlockJson toJson() const;
+  void serialize(ProtobufDifferentialBlock* differentialBlock) const;
 
   bool operator==(const DifferentialBlock& differentialBlock) const;
   bool operator!=(const DifferentialBlock& differentialBlock) const;

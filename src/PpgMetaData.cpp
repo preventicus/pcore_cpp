@@ -56,23 +56,23 @@ PpgMetaData::PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData)
 
 PpgMetaData::PpgMetaData() : color(ProtobufColor::COLOR_NONE), wavelength_nm(0) {}
 
-ProtobufColor PpgMetaData::getColor() {
+ProtobufColor PpgMetaData::getColor() const {
   return this->color;
 }
 
-Wavelength PpgMetaData::getWavelength() {
+Wavelength PpgMetaData::getWavelength() const {
   return this->wavelength_nm;
 }
 
-bool PpgMetaData::hasColor() {
+bool PpgMetaData::hasColor() const {
   return this->color != ProtobufColor::COLOR_NONE;
 }
 
-bool PpgMetaData::hasWavelength() {
+bool PpgMetaData::hasWavelength() const {
   return this->wavelength_nm > 0;
 }
 
-bool PpgMetaData::isSet() {
+bool PpgMetaData::isSet() const {
   return !(this->color == ProtobufColor::COLOR_NONE && this->wavelength_nm == 0);
 }
 
@@ -84,7 +84,7 @@ bool PpgMetaData::operator!=(const PpgMetaData& ppgMetaData) const {
   return this->color != ppgMetaData.color || this->wavelength_nm != ppgMetaData.wavelength_nm;
 }
 
-PpgMetaDataJson PpgMetaData::toJson() {
+PpgMetaDataJson PpgMetaData::toJson() const {
   PpgMetaDataJson ppgMetaDataJson;
   WavelegthJson wavelengthJson(this->wavelength_nm);
   if (this->wavelength_nm != 0) {
@@ -96,7 +96,7 @@ PpgMetaDataJson PpgMetaData::toJson() {
   return ppgMetaDataJson;
 }
 
-void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) {
+void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) const {
   if (protobufPpgMetaData == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufPpgMetaData is a null pointer");
   }

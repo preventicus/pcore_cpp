@@ -47,7 +47,7 @@ AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(AbsoluteTimestampsConta
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestamps_ms({}) {}
 
-UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps() {
+UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps() const {
   return this->unixTimestamps_ms;
 }
 
@@ -59,7 +59,7 @@ bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& 
   return this->unixTimestamps_ms != absoluteTimestampsContainer.unixTimestamps_ms;
 }
 
-AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() {
+AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
   UnixTimestampsJson unixTimestampsJson(Json::arrayValue);
   for (auto& unixTimestamp_ms : this->unixTimestamps_ms) {

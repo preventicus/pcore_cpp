@@ -102,19 +102,19 @@ Channel::Channel(const ProtobufChannel& protobufChannel)
 Channel::Channel()
     : ppgMetaData(PpgMetaData()), accMetaData(AccMetaData()), differentialBlocks(DifferentialBlocks()), absoluteBlock(AbsoluteBlock()) {}
 
-DifferentialBlocks Channel::getDifferentialBlocks() {
+DifferentialBlocks Channel::getDifferentialBlocks() const {
   return this->differentialBlocks;
 }
 
-AbsoluteBlock Channel::getAbsoluteBlock() {
+AbsoluteBlock Channel::getAbsoluteBlock() const {
   return this->absoluteBlock;
 }
 
-AccMetaData Channel::getAccMetaData() {
+AccMetaData Channel::getAccMetaData() const {
   return this->accMetaData;
 }
 
-PpgMetaData Channel::getPpgMetaData() {
+PpgMetaData Channel::getPpgMetaData() const {
   return this->ppgMetaData;
 }
 
@@ -135,23 +135,23 @@ bool Channel::operator!=(const Channel& channel) const {
   return !(*this == channel);
 }
 
-bool Channel::hasAccMetaData() {
+bool Channel::hasAccMetaData() const {
   return this->accMetaData.isSet();
 }
 
-bool Channel::hasPpgMetaData() {
+bool Channel::hasPpgMetaData() const {
   return this->ppgMetaData.isSet();
 }
 
-bool Channel::hasDifferentialBlocks() {
+bool Channel::hasDifferentialBlocks() const {
   return !this->differentialBlocks.empty();
 }
 
-bool Channel::hasAbsoluteBlock() {
+bool Channel::hasAbsoluteBlock() const {
   return this->absoluteBlock.isSet();
 }
 
-void Channel::serialize(ProtobufChannel* protobufChannel) {
+void Channel::serialize(ProtobufChannel* protobufChannel) const {
   if (protobufChannel == nullptr) {
     throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
   }
@@ -183,7 +183,7 @@ void Channel::switchDataForm() {
   this->differentialBlocks = DifferentialBlocks();
 }
 
-DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs) {
+DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs) const {
   DifferentialBlocks differentialBlocks = {};
   size_t numberOfBlocks = blockIdxs.size();
   /*
@@ -223,7 +223,7 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteB
   return differentialBlocks;
 }
 
-DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues) {
+DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues) const {
   DifferentialValues differentialValues = {};
   differentialValues.push_back(absoluteValues[fromBlockIdx]);
   for (size_t i = fromBlockIdx + 1; i <= toBlockIdx; i++) {
@@ -232,7 +232,7 @@ DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockI
   return DifferentialBlock(differentialValues);
 }
 
-AbsoluteBlock Channel::calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks) {
+AbsoluteBlock Channel::calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks) const {
   AbsoluteValues absoluteValues = {};
   size_t numberOfElements = 0;
   for (auto& differentialBlock : differentialBlocks) {
@@ -249,7 +249,7 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(DifferentialBlocks& differentialBl
   return AbsoluteBlock(absoluteValues);
 }
 
-ChannelJson Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) {
+ChannelJson Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) const {
   ChannelJson channelJson;
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
