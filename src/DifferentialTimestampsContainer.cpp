@@ -110,7 +110,7 @@ bool DifferentialTimestampsContainer::operator!=(const DifferentialTimestampsCon
          this->timestampsIntervals_ms != differentialTimestampsContainer.timestampsIntervals_ms;
 }
 
-UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock(BlockIdx& blockIdx) const {
+UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const {
   if (this->blockIntervals_ms.size() <= blockIdx) {  // toDo : FOR-325
     throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
   }
@@ -121,9 +121,9 @@ UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBloc
   return firstUnixTimestampInBlock_ms;
 }
 
-UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock(BlockIdx& blockIdx,
-                                                                                 UnixTimestamp firstUnixTimestampInBlock_ms,
-                                                                                 DifferentialBlock& lastDifferentialBlock) const {
+UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock(const BlockIdx& blockIdx,
+                                                                                 const UnixTimestamp firstUnixTimestampInBlock_ms,
+                                                                                 const DifferentialBlock& lastDifferentialBlock) const {
   if (this->timestampsIntervals_ms.size() <= blockIdx) {
     throw std::invalid_argument("blockIdx is bigger than size of timestampsInterval");
   }

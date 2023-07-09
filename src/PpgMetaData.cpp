@@ -111,7 +111,7 @@ void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) const {
   }
 }
 
-ProtobufColorString PpgMetaData::protobufColorToString(ProtobufColor protobufColor) {
+ProtobufColorString PpgMetaData::protobufColorToString(const ProtobufColor protobufColor) {
   switch (protobufColor) {
     case ProtobufColor::COLOR_RED: {
       return "COLOR_RED";
@@ -128,7 +128,7 @@ ProtobufColorString PpgMetaData::protobufColorToString(ProtobufColor protobufCol
   }
 }
 
-ProtobufColor PpgMetaData::protobufColorFromString(ProtobufColorString protobufColorString) {
+ProtobufColor PpgMetaData::protobufColorFromString(const ProtobufColorString protobufColorString) {
   if (protobufColorString == "COLOR_RED") {
     return ProtobufColor::COLOR_RED;
   } else if (protobufColorString == "COLOR_BLUE") {

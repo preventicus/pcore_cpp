@@ -33,8 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AccMetaData.h"
 
-using CoordinateJson = Json::Value;
-
 AccMetaData::AccMetaData(ProtobufCoordinate coordinate) : coordinate(coordinate), norm(ProtobufNorm::NORM_NONE) {}
 
 AccMetaData::AccMetaData(ProtobufNorm norm) : coordinate(ProtobufCoordinate::COORDINATE_NONE), norm(norm) {}
@@ -106,7 +104,7 @@ Json::Value AccMetaData::toJson() const {
   return accMetaDataJson;
 }
 
-ProtobufCoordinateString AccMetaData::protobufCoordinateToString(ProtobufCoordinate protobufCoordinate) {
+ProtobufCoordinateString AccMetaData::protobufCoordinateToString(const ProtobufCoordinate protobufCoordinate) {
   switch (protobufCoordinate) {
     case ProtobufCoordinate::COORDINATE_X: {
       return "COORDINATE_X";
@@ -123,7 +121,7 @@ ProtobufCoordinateString AccMetaData::protobufCoordinateToString(ProtobufCoordin
   }
 }
 
-ProtobufCoordinate AccMetaData::protobufCoordinateFromString(ProtobufCoordinateString protobufCoordinateString) {
+ProtobufCoordinate AccMetaData::protobufCoordinateFromString(const ProtobufCoordinateString protobufCoordinateString) {
   if (protobufCoordinateString == "COORDINATE_X") {
     return ProtobufCoordinate::COORDINATE_X;
   } else if (protobufCoordinateString == "COORDINATE_Y") {
@@ -135,7 +133,7 @@ ProtobufCoordinate AccMetaData::protobufCoordinateFromString(ProtobufCoordinateS
   }
 }
 
-ProtobufNormString AccMetaData::protobufNormToString(ProtobufNorm protobufNorm) {
+ProtobufNormString AccMetaData::protobufNormToString(const ProtobufNorm protobufNorm) {
   switch (protobufNorm) {
     case ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM: {
       return "NORM_EUCLIDEAN_DIFFERENCES_NORM";
@@ -146,7 +144,7 @@ ProtobufNormString AccMetaData::protobufNormToString(ProtobufNorm protobufNorm) 
   }
 }
 
-ProtobufNorm AccMetaData::protobufNormFromString(ProtobufNormString protobufNormString) {
+ProtobufNorm AccMetaData::protobufNormFromString(const ProtobufNormString protobufNormString) {
   if (protobufNormString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
     return ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
   } else {

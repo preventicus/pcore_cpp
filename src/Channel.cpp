@@ -122,7 +122,7 @@ bool Channel::operator==(const Channel& channel) const {
   if (this->differentialBlocks.size() != channel.differentialBlocks.size()) {
     return false;
   }
-  auto numberOfElements = this->differentialBlocks.size();
+  const auto numberOfElements = this->differentialBlocks.size();
   for (size_t i = 0; i < numberOfElements; i++) {
     if (this->differentialBlocks[i] != channel.differentialBlocks[i]) {
       return false;
@@ -173,7 +173,7 @@ void Channel::serialize(ProtobufChannel* protobufChannel) const {
   }
 }
 
-void Channel::switchDataForm(BlockIdxs& blockIdxs) {
+void Channel::switchDataForm(const BlockIdxs& blockIdxs) {
   this->differentialBlocks = this->calculateDifferentialBlocks(this->absoluteBlock, blockIdxs);
   this->absoluteBlock = AbsoluteBlock();
 }
@@ -183,9 +183,9 @@ void Channel::switchDataForm() {
   this->differentialBlocks = DifferentialBlocks();
 }
 
-DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs) const {
+DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const {
   DifferentialBlocks differentialBlocks = {};
-  size_t numberOfBlocks = blockIdxs.size();
+  const auto numberOfBlocks = blockIdxs.size();
   /*
   * blockIdxs.size = 0 -> no values are included
                             return default value for emptyBlock
@@ -201,8 +201,8 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteB
   if (numberOfBlocks == 0) {
     return differentialBlocks;
   }
-  auto absoluteValues = absoluteBlock.getAbsoluteValues();
-  auto numberOfAbsoluteValues = absoluteValues.size();
+  const auto absoluteValues = absoluteBlock.getAbsoluteValues();
+  const auto numberOfAbsoluteValues = absoluteValues.size();
   BlockIdx fromBlockIdx = 0;
   BlockIdx toBlockIdx = numberOfAbsoluteValues > 1 ? numberOfAbsoluteValues - 1 : 0;
   if (numberOfBlocks == 1) {
@@ -223,7 +223,7 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(AbsoluteBlock& absoluteB
   return differentialBlocks;
 }
 
-DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues) const {
+DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx, const BlockIdx toBlockIdx, const AbsoluteValues& absoluteValues) const {
   DifferentialValues differentialValues = {};
   differentialValues.push_back(absoluteValues[fromBlockIdx]);
   for (size_t i = fromBlockIdx + 1; i <= toBlockIdx; i++) {
@@ -232,7 +232,7 @@ DifferentialBlock Channel::createDifferentialBlock(BlockIdx fromBlockIdx, BlockI
   return DifferentialBlock(differentialValues);
 }
 
-AbsoluteBlock Channel::calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks) const {
+AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const {
   AbsoluteValues absoluteValues = {};
   size_t numberOfElements = 0;
   for (auto& differentialBlock : differentialBlocks) {
@@ -249,7 +249,7 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(DifferentialBlocks& differentialBl
   return AbsoluteBlock(absoluteValues);
 }
 
-ChannelJson Channel::toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) const {
+ChannelJson Channel::toJson(const DataForm dataForm, const ProtobufSensorType protobufSensorType) const {
   ChannelJson channelJson;
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {

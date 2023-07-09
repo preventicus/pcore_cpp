@@ -74,9 +74,9 @@ class Sensor final {
   bool operator!=(const Sensor& sensor) const;
 
  private:
-  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(DifferentialTimestampsContainer& differentialTimestampsContainer) const;
-  DifferentialTimestampsContainer calculateDifferentialTimestamps(AbsoluteTimestampsContainer& absoluteTimestampsContainer,
-                                                                  BlockIdxs& blockIdxs) const;
+  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
+  DifferentialTimestampsContainer calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
+                                                                  const BlockIdxs& blockIdxs) const;
   BlockIdxs findBlockIdxs() const;
 
   ProtobufSensorType sensorType;

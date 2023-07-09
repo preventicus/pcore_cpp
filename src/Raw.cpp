@@ -89,13 +89,13 @@ void Raw::serialize(ProtobufRaw* protobufRaw) const {
   }
 }
 
-void Raw::switchDataForm(DataForm currentDataForm) {
+void Raw::switchDataForm(const DataForm currentDataForm) {
   for (auto& sensor : this->sensors) {
     sensor.switchDataForm(currentDataForm);
   }
 }
 
-RawJson Raw::toJson(DataForm dataForm) const {
+RawJson Raw::toJson(const DataForm dataForm) const {
   RawJson rawJson;
   SensorsJson sensorsJson(Json::arrayValue);
   for (auto& sensor : this->sensors) {

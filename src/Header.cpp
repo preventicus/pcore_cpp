@@ -100,7 +100,7 @@ void Header::switchDataForm() {
   }
 }
 
-HeaderJson Header::toJson(DataForm dataForm) const {
+HeaderJson Header::toJson(const DataForm dataForm) const {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
   headerJson["time_zone_offset_min"] = timeZoneOffset_min;
@@ -115,7 +115,7 @@ void Header::checkTimeZoneOffset() const {
   }
 }
 
-DataForm Header::dataFormFromString(DataFormString dataFormString) {
+DataForm Header::dataFormFromString(const DataFormString dataFormString) {
   if (dataFormString == "DATA_FORM_ABSOLUTE") {
     return DataForm::DATA_FORM_ABSOLUTE;
   } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {
@@ -125,7 +125,7 @@ DataForm Header::dataFormFromString(DataFormString dataFormString) {
   }
 }
 
-DataFormString Header::dataFormToString(DataForm dataForm) {
+DataFormString Header::dataFormToString(const DataForm dataForm) {
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       return "DATA_FORM_ABSOLUTE";

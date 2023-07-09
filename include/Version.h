@@ -61,7 +61,7 @@ class Version final {
   bool operator!=(const Version& version) const;
 
  private:
-  Major getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey) const;
+  Major getVersionPartsFromJson(const VersionJson& versionJson, std::string jsonKey) const;
 
   Major major;
   Minor minor;

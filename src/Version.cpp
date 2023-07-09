@@ -85,7 +85,7 @@ VersionJson Version::toJson() const {
   return versionJson;
 }
 
-Major Version::getVersionPartsFromJson(VersionJson& versionJson, std::string jsonKey) const {
+Major Version::getVersionPartsFromJson(const VersionJson& versionJson, const std::string jsonKey) const {
   if (versionJson[jsonKey].asInt() < 0) {
     throw std::invalid_argument(jsonKey + " is negative in json.");
   }

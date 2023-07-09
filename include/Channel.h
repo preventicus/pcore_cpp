@@ -74,13 +74,13 @@ class Channel final {
 
   ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) const;
   void serialize(ProtobufChannel* protobufChannel) const;
-  void switchDataForm(BlockIdxs& blockIdxs);
+  void switchDataForm(const BlockIdxs& blockIdxs);
   void switchDataForm();
 
  private:
-  DifferentialBlocks calculateDifferentialBlocks(AbsoluteBlock& absoluteBlock, BlockIdxs& blockIdxs) const;
-  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, AbsoluteValues& absoluteValues) const;
-  AbsoluteBlock calculateAbsoluteBlock(DifferentialBlocks& differentialBlocks) const;
+  DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const;
+  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, const AbsoluteValues& absoluteValues) const;
+  AbsoluteBlock calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const;
 
   PpgMetaData ppgMetaData;
   AccMetaData accMetaData;
