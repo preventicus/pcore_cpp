@@ -36,9 +36,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
 
 Version::Version(const VersionJson& versionJson)
-    : major(this->getVersionPartsFromJson(versionJson, "major")),
-      minor(this->getVersionPartsFromJson(versionJson, "minor")),
-      patch(this->getVersionPartsFromJson(versionJson, "patch")) {}
+    : major(this->getVersionPartsFromJson(versionJson, PcoreJsonKey::major)),
+      minor(this->getVersionPartsFromJson(versionJson, PcoreJsonKey::minor)),
+      patch(this->getVersionPartsFromJson(versionJson, PcoreJsonKey::patch)) {}
 
 Version::Version(const ProtobufVersion& protobufVersion)
     : major(protobufVersion.major()), minor(protobufVersion.minor()), patch(protobufVersion.patch()) {}
@@ -79,9 +79,9 @@ VersionJson Version::toJson() const {
   MinorJson minorJson(this->minor);
   PatchJson patchJson(this->patch);
   VersionJson versionJson;
-  versionJson["major"] = majorJson;
-  versionJson["minor"] = minorJson;
-  versionJson["patch"] = patchJson;
+  versionJson[PcoreJsonKey::major] = majorJson;
+  versionJson[PcoreJsonKey::minor] = minorJson;
+  versionJson[PcoreJsonKey::patch] = patchJson;
   return versionJson;
 }
 

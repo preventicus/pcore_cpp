@@ -51,7 +51,7 @@ Raw::Raw(const ProtobufRaw& protobufRaw)
 Raw::Raw(const RawJson& rawJson, DataForm dataForm)
     : sensors([&]() {
         Sensors sensors;
-        SensorsJson sensorsJson = rawJson["sensors"];
+        SensorsJson sensorsJson = rawJson[PcoreJsonKey::sensors];
         sensors.reserve(sensorsJson.size());
         for (auto& sensorJson : sensorsJson) {
           sensors.emplace_back(Sensor(sensorJson, dataForm));
@@ -104,6 +104,6 @@ RawJson Raw::toJson(const DataForm currentDataForm) const {
   for (auto& sensor : this->sensors) {
     sensorsJson.append(sensor.toJson(currentDataForm));
   }
-  rawJson["sensors"] = sensorsJson;
+  rawJson[PcoreJsonKey::sensors] = sensorsJson;
   return rawJson;
 }

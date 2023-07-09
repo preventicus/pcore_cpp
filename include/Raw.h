@@ -32,10 +32,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "PcoreJsonKey.h"
 #include "Sensor.h"
 #include "protobuf/pcore.pb.h"
-using SensorsJson = Json::Value;
 
+using SensorsJson = Json::Value;
 using ProtobufRaw = com::preventicus::pcore::Raw;
 using Sensors = std::vector<Sensor>;
 using RawJson = Json::Value;

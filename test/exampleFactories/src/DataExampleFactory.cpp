@@ -71,9 +71,9 @@ Json::Value DataExampleFactory::buildDataJson(Data data) {
   DataJson dataJson;
   auto header = data.getHeader();
   auto raw = data.getRaw();
-  dataJson["header"] = HeaderExampleFactory::buildHeaderJson(header);
-  dataJson["raw"] = RawExampleFactory::buildRawJson(raw, header.getDataForm());
+  dataJson[PcoreJsonKey::header] = HeaderExampleFactory::buildHeaderJson(header);
+  dataJson[PcoreJsonKey::raw] = RawExampleFactory::buildRawJson(raw, header.getDataForm());
   Json::Value json;
-  json["data"] = dataJson;
+  json[PcoreJsonKey::data] = dataJson;
   return json;
 }

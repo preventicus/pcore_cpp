@@ -75,8 +75,8 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactor
   auto blockDifferencesJson = DifferencesExampleFactory::buildBlockDifferencesJson(blockDifferences);
   auto timestampsDifferencesJson = DifferencesExampleFactory::buildTimestampsDifferencesJson(timestampsDifferences);
   DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
-  differentialTimestampsContainerJson["first_unix_timestamp_ms"] = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
-  differentialTimestampsContainerJson["block_differences_ms"] = blockDifferencesJson;
-  differentialTimestampsContainerJson["timestamps_differences_ms"] = timestampsDifferencesJson;
+  differentialTimestampsContainerJson[PcoreJsonKey::first_unix_timestamp_ms] = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
+  differentialTimestampsContainerJson[PcoreJsonKey::block_differences_ms] = blockDifferencesJson;
+  differentialTimestampsContainerJson[PcoreJsonKey::timestamps_differences_ms] = timestampsDifferencesJson;
   return differentialTimestampsContainerJson;
 }

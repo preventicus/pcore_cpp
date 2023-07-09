@@ -42,9 +42,9 @@ Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestamps
     : sensorType(sensorType), channels(std::move(channels)), absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)) {}
 
 Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
-    : sensorType(Sensor::senorTypeFromString(sensorJson["sensor_type"].asString())),
+    : sensorType(Sensor::senorTypeFromString(sensorJson[PcoreJsonKey::sensor_type].asString())),
       channels([&]() {
-        ChannelsJson channelsJson = sensorJson["channels"];
+        ChannelsJson channelsJson = sensorJson[PcoreJsonKey::channels];
         Channels channels;
         channels.reserve(channelsJson.size());
         for (auto& channelJson : channelsJson) {
@@ -330,11 +330,11 @@ SensorJson Sensor::toJson(const DataForm currentDataForm) const {
 
   switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      sensorJson["absolute_timestamps_container"] = this->absoluteTimestampsContainer.toJson();
+      sensorJson[PcoreJsonKey::absolute_timestamps_container] = this->absoluteTimestampsContainer.toJson();
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
-      sensorJson["differential_timestamps_container"] = this->differentialTimestampsContainer.toJson();
+      sensorJson[PcoreJsonKey::differential_timestamps_container] = this->differentialTimestampsContainer.toJson();
       break;
     }
     default: {
@@ -346,8 +346,8 @@ SensorJson Sensor::toJson(const DataForm currentDataForm) const {
     channelsJson.append(channel.toJson(currentDataForm, this->sensorType));
   }
 
-  sensorJson["channels"] = channelsJson;
-  sensorJson["sensor_type"] = Sensor::senorTypeToString(this->sensorType);
+  sensorJson[PcoreJsonKey::channels] = channelsJson;
+  sensorJson[PcoreJsonKey::sensor_type] = Sensor::senorTypeToString(this->sensorType);
   return sensorJson;
 }
 

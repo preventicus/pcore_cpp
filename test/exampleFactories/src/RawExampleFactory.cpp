@@ -88,6 +88,6 @@ RawJson RawExampleFactory::buildRawJson(Raw raw, DataForm dataForm) {
     SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor, dataForm);
     sensorsJson.append(sensorJson);
   }
-  rawJson["sensors"] = sensorsJson;
+  rawJson[PcoreJsonKey::sensors] = sensorsJson;
   return rawJson;
 }

@@ -64,13 +64,13 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufD
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
     : firstUnixTimestamp_ms([&]() {
-        if (differentialTimestampsContainerJson["first_unix_timestamp_ms"].asInt64() < 0) {
+        if (differentialTimestampsContainerJson[PcoreJsonKey::first_unix_timestamp_ms].asInt64() < 0) {
           throw std::invalid_argument("firstUnixTimestamp_ms is negative in json");
         }
-        return differentialTimestampsContainerJson["first_unix_timestamp_ms"].asUInt64();
+        return differentialTimestampsContainerJson[PcoreJsonKey::first_unix_timestamp_ms].asUInt64();
       }()),
       blockDifferences_ms([&]() {
-        BlockDifferencesJson blockDifferencesJson = differentialTimestampsContainerJson["block_differences_ms"];
+        BlockDifferencesJson blockDifferencesJson = differentialTimestampsContainerJson[PcoreJsonKey::block_differences_ms];
         BlockDifferences blockDifferences_ms = {};
         blockDifferences_ms.reserve(blockDifferencesJson.size());
         for (auto& blockDifferenceJson : blockDifferencesJson) {
@@ -79,7 +79,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const Different
         return blockDifferences_ms;
       }()),
       timestampsDifferences_ms([&]() {
-        TimestampsDifferencesJson timestampsDifferencesJson = differentialTimestampsContainerJson["timestamps_differences_ms"];
+        TimestampsDifferencesJson timestampsDifferencesJson = differentialTimestampsContainerJson[PcoreJsonKey::timestamps_differences_ms];
         TimestampsDifferences timestampsDifferences_ms = {};
         timestampsDifferences_ms.reserve(timestampsDifferencesJson.size());
         for (auto& timestampsDifferenceJson : timestampsDifferencesJson) {
@@ -147,9 +147,9 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() co
     timestampsDifferencesJson.append(timestampsDifference);
   }
   firstUnixTimestampJson = this->firstUnixTimestamp_ms;
-  differentialTimestampsContainerJson["first_unix_timestamp_ms"] = firstUnixTimestampJson;
-  differentialTimestampsContainerJson["block_differences_ms"] = blockDifferencesJson;
-  differentialTimestampsContainerJson["timestamps_differences_ms"] = timestampsDifferencesJson;
+  differentialTimestampsContainerJson[PcoreJsonKey::first_unix_timestamp_ms] = firstUnixTimestampJson;
+  differentialTimestampsContainerJson[PcoreJsonKey::block_differences_ms] = blockDifferencesJson;
+  differentialTimestampsContainerJson[PcoreJsonKey::timestamps_differences_ms] = timestampsDifferencesJson;
   return differentialTimestampsContainerJson;
 }
 

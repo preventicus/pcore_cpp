@@ -98,8 +98,8 @@ VersionJson VersionExampleFactory::buildVersionJson(Version version) {
   MinorJson minorJson(version.getMinor());
   PatchJson patchJson(version.getPatch());
   VersionJson versionJson;
-  versionJson["major"] = majorJson;
-  versionJson["minor"] = minorJson;
-  versionJson["patch"] = patchJson;
+  versionJson[PcoreJsonKey::major] = majorJson;
+  versionJson[PcoreJsonKey::minor] = minorJson;
+  versionJson[PcoreJsonKey::patch] = patchJson;
   return versionJson;
 }

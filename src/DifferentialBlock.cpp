@@ -50,7 +50,7 @@ DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDi
 
 DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson)
     : differentialValues([&]() {
-        DifferentialValuesJson differentialValuesJson = differentialBlockJson["differential_values"];
+        DifferentialValuesJson differentialValuesJson = differentialBlockJson[PcoreJsonKey::differential_values];
         DifferentialValues differentialValues = {};
         differentialValues.reserve(differentialValuesJson.size());
         for (auto& differentialValueJson : differentialValuesJson) {
@@ -92,6 +92,6 @@ DifferentialBlockJson DifferentialBlock::toJson() const {
     differentialValuesJson.append(differentialValue);
   }
   DifferentialBlockJson differentialBlockJson;
-  differentialBlockJson["differential_values"] = differentialValuesJson;
+  differentialBlockJson[PcoreJsonKey::differential_values] = differentialValuesJson;
   return differentialBlockJson;
 }

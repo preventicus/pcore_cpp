@@ -37,9 +37,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(AccMetaData accMetaData) {
   AccMetaDataJson accMetaDataJson;
   if (accMetaData.hasCoordinate()) {
-    accMetaDataJson["coordinate"] = AccMetaData::protobufCoordinateToString(accMetaData.getCoordinate());
+    accMetaDataJson[PcoreJsonKey::coordinate] = AccMetaData::protobufCoordinateToString(accMetaData.getCoordinate());
   } else if (accMetaData.hasNorm()) {
-    accMetaDataJson["norm"] = AccMetaData::protobufNormToString(accMetaData.getNorm());
+    accMetaDataJson[PcoreJsonKey::norm] = AccMetaData::protobufNormToString(accMetaData.getNorm());
   }
   return accMetaDataJson;
 }

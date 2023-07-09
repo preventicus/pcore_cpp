@@ -39,7 +39,7 @@ AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) : absoluteValues(std
 
 AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson)
     : absoluteValues([&]() {
-        AbsoluteValuesJson absoluteValuesJson = absoluteBlockJson["absolute_values"];
+        AbsoluteValuesJson absoluteValuesJson = absoluteBlockJson[PcoreJsonKey::absolute_values];
         AbsoluteValues absoluteValues;
         absoluteValues.reserve(absoluteValuesJson.size());
         for (auto& absoluteValueJson : absoluteValuesJson) {
@@ -75,6 +75,6 @@ AbsoluteBlockJson AbsoluteBlock::toJson() const {
   for (auto& absoluteValue : this->absoluteValues) {
     absoluteValuesJson.append(absoluteValue);
   }
-  absoluteBlockJson["absolute_values"] = absoluteValuesJson;
+  absoluteBlockJson[PcoreJsonKey::absolute_values] = absoluteValuesJson;
   return absoluteBlockJson;
 }

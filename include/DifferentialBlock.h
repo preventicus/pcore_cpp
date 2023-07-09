@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <json/json.h>
 #include <vector>
 #include "AbsoluteBlock.h"
+#include "PcoreJsonKey.h"
 #include "protobuf/pcore_raw.pb.h"
 
 using ProtobufDifferentialBlock = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;

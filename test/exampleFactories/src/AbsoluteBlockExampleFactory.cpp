@@ -68,7 +68,7 @@ AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteBl
   if (absoluteBlock.isSet()) {
     auto absoluteValues = absoluteBlock.getAbsoluteValues();
     auto absoluteValuesJson = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(absoluteValues);
-    absoluteBlockJson["absolute_values"] = absoluteValuesJson;
+    absoluteBlockJson[PcoreJsonKey::absolute_values] = absoluteValuesJson;
   }
   return absoluteBlockJson;
 }

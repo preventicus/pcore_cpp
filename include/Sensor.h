@@ -36,6 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteTimestampsContainer.h"
 #include "Channel.h"
 #include "DifferentialTimestampsContainer.h"
+#include "PcoreJsonKey.h"
 #include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 

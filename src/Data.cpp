@@ -39,7 +39,7 @@ Data::Data(Raw raw, const Header& header) : header(header), raw(std::move(raw)) 
 
 Data::Data(const ProtobufData& protobufData) : header(Header(protobufData.header())), raw(Raw(protobufData.raw())) {}
 
-Data::Data(const DataJson& dataJson) : header(Header(dataJson["header"])), raw(Raw(dataJson["raw"], header.getDataForm())) {}
+Data::Data(const DataJson& dataJson) : header(Header(dataJson[PcoreJsonKey::header])), raw(Raw(dataJson[PcoreJsonKey::raw], header.getDataForm())) {}
 
 Data::Data() : header(Header()), raw(Raw()) {}
 
@@ -79,9 +79,9 @@ void Data::switchDataForm() {
 
 Json::Value Data::toJson() const {
   DataJson data;
-  data["header"] = this->header.toJson();
-  data["raw"] = this->raw.toJson(this->header.getDataForm());
+  data[PcoreJsonKey::header] = this->header.toJson();
+  data[PcoreJsonKey::raw] = this->raw.toJson(this->header.getDataForm());
   Json::Value json;
-  json["data"] = data;
+  json[PcoreJsonKey::data] = data;
   return json;
 }

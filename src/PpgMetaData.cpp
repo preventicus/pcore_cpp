@@ -40,11 +40,11 @@ PpgMetaData::PpgMetaData(ProtobufColor color) : color(color), wavelength_nm(0) {
 PpgMetaData::PpgMetaData(Wavelength wavelength_nm) : color(ProtobufColor::COLOR_NONE), wavelength_nm(wavelength_nm) {}
 
 PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
-    : color(PpgMetaData::protobufColorFromString(ppgMetaDataJson["color"].asString())), wavelength_nm([&]() {
-        if (ppgMetaDataJson["wavelength_nm"].asInt() < 0) {
+    : color(PpgMetaData::protobufColorFromString(ppgMetaDataJson[PcoreJsonKey::color].asString())), wavelength_nm([&]() {
+        if (ppgMetaDataJson[PcoreJsonKey::wavelength_nm].asInt() < 0) {
           throw std::invalid_argument("wavelength_nm is negative in json.");
         }
-        return ppgMetaDataJson["wavelength_nm"].asUInt();
+        return ppgMetaDataJson[PcoreJsonKey::wavelength_nm].asUInt();
       }()) {
   if (this->wavelength_nm != 0 & this->color != ProtobufColor::COLOR_NONE) {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
@@ -88,10 +88,10 @@ PpgMetaDataJson PpgMetaData::toJson() const {
   PpgMetaDataJson ppgMetaDataJson;
   WavelegthJson wavelengthJson(this->wavelength_nm);
   if (this->wavelength_nm != 0) {
-    ppgMetaDataJson["wavelength_nm"] = wavelengthJson;
+    ppgMetaDataJson[PcoreJsonKey::wavelength_nm] = wavelengthJson;
   }
   if (this->color != ProtobufColor::COLOR_NONE) {
-    ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(this->color);
+    ppgMetaDataJson[PcoreJsonKey::color] = PpgMetaData::protobufColorToString(this->color);
   }
   return ppgMetaDataJson;
 }

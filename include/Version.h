@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <json/json.h>
+#include "PcoreJsonKey.h"
 #include "protobuf/pcore_version.pb.h"
 
 using ProtobufVersion = com::preventicus::pcore::Version;
@@ -43,7 +44,6 @@ using VersionJson = Json::Value;
 using MajorJson = Json::Value;
 using MinorJson = Json::Value;
 using PatchJson = Json::Value;
-using JsonKey = std::string;
 
 class Version final {
  public:

@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <json/json.h>
 #include <vector>
+#include "PcoreJsonKey.h"
 #include "UnixTimestamp.h"
 
 using UnixTimestamps = std::vector<UnixTimestamp>;

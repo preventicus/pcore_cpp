@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "PcoreJsonKey.h"
 #include "json/json.h"
 #include "protobuf/pcore_coordinate.pb.h"
 #include "protobuf/pcore_norm.pb.h"

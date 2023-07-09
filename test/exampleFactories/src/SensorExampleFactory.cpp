@@ -96,13 +96,13 @@ SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataFor
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       auto absoluteTimestampsContainer = sensor.getAbsoluteTimestampsContainer();
-      sensorJson["absolute_timestamps_container"] =
+      sensorJson[PcoreJsonKey::absolute_timestamps_container] =
           AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       auto differentialTimestampsContainer = sensor.getDifferentialTimestampsContainer();
-      sensorJson["differential_timestamps_container"] =
+      sensorJson[PcoreJsonKey::differential_timestamps_container] =
           DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
       break;
     }
@@ -113,7 +113,7 @@ SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataFor
   for (auto& channel : channels) {
     channelsJson.append(ChannelExampleFactory::buildChannelJson(channel));
   }
-  sensorJson["channels"] = channelsJson;
-  sensorJson["sensor_type"] = Sensor::senorTypeToString(sensor.getSensorType());
+  sensorJson[PcoreJsonKey::channels] = channelsJson;
+  sensorJson[PcoreJsonKey::sensor_type] = Sensor::senorTypeToString(sensor.getSensorType());
   return sensorJson;
 }

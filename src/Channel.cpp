@@ -48,15 +48,15 @@ Channel::Channel(const PpgMetaData& ppgMetaData, DifferentialBlocks differential
     : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(std::move(differentialBlocks)), absoluteBlock(AbsoluteBlock()) {}
 
 Channel::Channel(const ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm)
-    : ppgMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG ? PpgMetaData(channelJson["ppg_metadata"]) : PpgMetaData()),
-      accMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC ? AccMetaData(channelJson["acc_metadata"]) : AccMetaData()),
+    : ppgMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_PPG ? PpgMetaData(channelJson[PcoreJsonKey::ppg_metadata]) : PpgMetaData()),
+      accMetaData(protobufSensorType == ProtobufSensorType::SENSOR_TYPE_ACC ? AccMetaData(channelJson[PcoreJsonKey::acc_metadata]) : AccMetaData()),
       differentialBlocks([&]() {
         switch (dataForm) {
           case DATA_FORM_ABSOLUTE: {
             return DifferentialBlocks();
           }
           case DATA_FORM_DIFFERENTIAL: {
-            DifferentialBlocksJson differentialBlocksJson = channelJson["differential_blocks"];
+            DifferentialBlocksJson differentialBlocksJson = channelJson[PcoreJsonKey::differential_blocks];
             DifferentialBlocks differentialBlocks;
             differentialBlocks.reserve(differentialBlocksJson.size());
             for (auto& differentialBlockJson : differentialBlocksJson) {
@@ -72,7 +72,7 @@ Channel::Channel(const ChannelJson& channelJson, ProtobufSensorType protobufSens
       absoluteBlock([&]() {
         switch (dataForm) {
           case DATA_FORM_ABSOLUTE: {
-            return AbsoluteBlock(channelJson["absolute_block"]);
+            return AbsoluteBlock(channelJson[PcoreJsonKey::absolute_block]);
           }
           case DATA_FORM_DIFFERENTIAL: {
             return AbsoluteBlock();
@@ -259,14 +259,14 @@ ChannelJson Channel::toJson(const DataForm currentDataForm, const ProtobufSensor
   switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       AbsoluteBlockJson absoluteBlockJson(this->absoluteBlock.toJson());
-      channelJson["absolute_block"] = absoluteBlockJson;
+      channelJson[PcoreJsonKey::absolute_block] = absoluteBlockJson;
       switch (protobufSensorType) {
         case ProtobufSensorType::SENSOR_TYPE_PPG: {
-          channelJson["ppg_metadata"] = this->ppgMetaData.toJson();
+          channelJson[PcoreJsonKey::ppg_metadata] = this->ppgMetaData.toJson();
           break;
         }
         case ProtobufSensorType::SENSOR_TYPE_ACC: {
-          channelJson["acc_metadata"] = this->accMetaData.toJson();
+          channelJson[PcoreJsonKey::acc_metadata] = this->accMetaData.toJson();
           break;
         }
         default: {
@@ -280,14 +280,14 @@ ChannelJson Channel::toJson(const DataForm currentDataForm, const ProtobufSensor
       for (auto& differentialBlock : this->differentialBlocks) {
         differentialBlocksJson.append(differentialBlock.toJson());
       }
-      channelJson["differential_blocks"] = differentialBlocksJson;
+      channelJson[PcoreJsonKey::differential_blocks] = differentialBlocksJson;
       switch (protobufSensorType) {
         case ProtobufSensorType::SENSOR_TYPE_PPG: {
-          channelJson["ppg_metadata"] = this->ppgMetaData.toJson();
+          channelJson[PcoreJsonKey::ppg_metadata] = this->ppgMetaData.toJson();
           break;
         }
         case ProtobufSensorType::SENSOR_TYPE_ACC: {
-          channelJson["acc_metadata"] = this->accMetaData.toJson();
+          channelJson[PcoreJsonKey::acc_metadata] = this->accMetaData.toJson();
           break;
         }
         default: {

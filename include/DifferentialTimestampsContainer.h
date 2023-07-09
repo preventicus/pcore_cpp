@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include "BlockIdx.h"
 #include "DifferentialBlock.h"
+#include "PcoreJsonKey.h"
 #include "UnixTimestamp.h"
 #include "protobuf/pcore_raw.pb.h"
 

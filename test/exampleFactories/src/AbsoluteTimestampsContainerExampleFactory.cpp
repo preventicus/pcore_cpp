@@ -67,6 +67,6 @@ AbsoluteTimestampsContainerJson AbsoluteTimestampsContainerExampleFactory::build
     AbsoluteTimestampsContainer absoluteTimestampsContainer) {
   auto unixTimestamps = absoluteTimestampsContainer.getUnixTimestamps_ms();
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
-  absoluteTimestampsContainerJson["unix_timestamps_ms"] = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
+  absoluteTimestampsContainerJson[PcoreJsonKey::unix_timestamps_ms] = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
   return absoluteTimestampsContainerJson;
 }
