@@ -211,12 +211,12 @@ UnixTimestamp Sensor::getLastUnixTimestamp_ms(DataForm currentDataForm) const {
       const auto timestampsDifferences_ms = this->differentialTimestampsContainer.getTimestampsDifferences_ms();
       const auto blockDifferences_ms = this->differentialTimestampsContainer.getBlockDifferences_ms();
       const auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
-      const auto nLastBlock = differentialBlocksOfFirstChannel[differentialBlocksOfFirstChannel.size() - 1].getDifferentialValues().size();
+      const auto nLastBlock = differentialBlocksOfFirstChannel.back().getDifferentialValues().size();
       auto absoluteUnixTimestamp = this->getFirstUnixTimestamp_ms(currentDataForm);
       for (auto& blockDifference_ms : blockDifferences_ms) {
         absoluteUnixTimestamp += blockDifference_ms;
       }
-      return absoluteUnixTimestamp + timestampsDifferences_ms[timestampsDifferences_ms.size() - 1] * (nLastBlock - 1);
+      return absoluteUnixTimestamp + timestampsDifferences_ms.back() * (nLastBlock - 1);
     }
     case DataForm::DATA_FORM_NONE: {
       throw std::invalid_argument("currentDataForm is none");
@@ -317,11 +317,10 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
     timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
     blockDifferences_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
   }
-  blockDifferences_ms.emplace_back(absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
-  timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1]
-                                            ? 0
-                                            : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] -
-                                                  absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
+  const auto lastBlockIdx = blockIdxs.back();
+  blockDifferences_ms.emplace_back(absoluteUnixTimestamps[lastBlockIdx] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
+  timestampsDifferences_ms.emplace_back(
+      absoluteUnixTimestamps.size() - 1 == lastBlockIdx ? 0 : absoluteUnixTimestamps[lastBlockIdx + 1] - absoluteUnixTimestamps[lastBlockIdx]);
   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
 }
 

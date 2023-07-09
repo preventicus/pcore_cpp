@@ -219,7 +219,8 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& abs
     toBlockIdx = blockIdxs[i + 1] - 1;
     differentialBlocks.emplace_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
   }
-  fromBlockIdx = numberOfAbsoluteValues - 1 == blockIdxs[numberOfBlocks - 1] ? numberOfAbsoluteValues - 1 : blockIdxs[numberOfBlocks - 1];
+  const auto lastBlockIdx = blockIdxs.back();
+  fromBlockIdx = numberOfAbsoluteValues - 1 == lastBlockIdx ? numberOfAbsoluteValues - 1 : lastBlockIdx;
   toBlockIdx = numberOfAbsoluteValues - 1;
   differentialBlocks.emplace_back(this->createDifferentialBlock(fromBlockIdx, toBlockIdx, absoluteValues));
   return differentialBlocks;
