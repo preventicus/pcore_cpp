@@ -78,14 +78,14 @@ Sensor SensorExampleFactory::sensorEmpty() {
 
 Sensor SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm() {
   Channels channels;
-  channels.emplace_back(ChannelExampleFactory::channelWithAbsoluteValuesForTestSwitchTo());
+  channels.emplace_back(ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest());
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
   return Sensor(channels, absoluteTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
 
 Sensor SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm() {
   Channels channels;
-  channels.emplace_back(ChannelExampleFactory::channelWithDifferentialValuesForTestSwitchTo());
+  channels.emplace_back(ChannelExampleFactory::channelWithDifferentialValuesForSwitchDataFormTest());
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerForSwitchDataFormTest();
   return Sensor(channels, differentialTimestampsContainer, ProtobufSensorType::SENSOR_TYPE_PPG);
 }
@@ -95,13 +95,13 @@ SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataFor
   ChannelsJson channelsJson;
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      auto absoluteTimestampsContainer = sensor.getAbsoluteTimestamps();
+      auto absoluteTimestampsContainer = sensor.getAbsoluteTimestampsContainer();
       sensorJson["absolute_timestamps_container"] =
           AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
-      auto differentialTimestampsContainer = sensor.getDifferentialTimestamps();
+      auto differentialTimestampsContainer = sensor.getDifferentialTimestampsContainer();
       sensorJson["differential_timestamps_container"] =
           DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
       break;

@@ -37,19 +37,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 TEST(PpgMetaDataTest, TestSetAndGetColor) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   EXPECT_EQ(ppgMetaData.getColor(), ProtobufColor::COLOR_GREEN);
-  EXPECT_EQ(ppgMetaData.getWavelength(), 0);
+  EXPECT_EQ(ppgMetaData.getWavelength_nm(), 0);
 }
 
 TEST(PpgMetaDataTest, TestSetAndGetWavelength) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   EXPECT_EQ(ppgMetaData.getColor(), ProtobufColor::COLOR_NONE);
-  EXPECT_EQ(ppgMetaData.getWavelength(), 255);
+  EXPECT_EQ(ppgMetaData.getWavelength_nm(), 255);
 }
 
 TEST(PpgMetaDataTest, TestSetAndGetEmptyConstructor) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
   EXPECT_EQ(ppgMetaData.getColor(), ProtobufColor::COLOR_NONE);
-  EXPECT_EQ(ppgMetaData.getWavelength(), 0);
+  EXPECT_EQ(ppgMetaData.getWavelength_nm(), 0);
 }
 
 TEST(PpgMetaDataTest, TestIsSetWithPpgMetaDataWithWavelength255) {

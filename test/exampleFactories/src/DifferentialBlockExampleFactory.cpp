@@ -64,7 +64,7 @@ DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksWithThreeM
           DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues()};
 }
 
-DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksForTestSwitchTo() {
+DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest() {
   DifferentialValues differentialValues1 = {1000, 8415, 678, -7682, -8979, -2021, 6795, 9364, 3324, -5773, -9561};
   DifferentialValues differentialValues2 = {-9000, 4634, 9568, 5704, -3403, -9382, -6735, 2104, 9009};
   DifferentialValues differentialValues3 = {10129, -762, -8456, -8373, -594, 7732, 8950};

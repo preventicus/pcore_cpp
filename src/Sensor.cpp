@@ -105,11 +105,11 @@ Channels Sensor::getChannels() const {
   return this->channels;
 }
 
-DifferentialTimestampsContainer Sensor::getDifferentialTimestamps() const {
+DifferentialTimestampsContainer Sensor::getDifferentialTimestampsContainer() const {
   return this->differentialTimestampsContainer;
 }
 
-AbsoluteTimestampsContainer Sensor::getAbsoluteTimestamps() const {
+AbsoluteTimestampsContainer Sensor::getAbsoluteTimestampsContainer() const {
   return this->absoluteTimestampsContainer;
 }
 
@@ -176,10 +176,10 @@ void Sensor::switchDataForm(const DataForm currentDataForm) {
   }
 }
 
-UnixTimestamp Sensor::getFirstUnixTimestamp(const DataForm dataForm) const {
-  switch (dataForm) {
+UnixTimestamp Sensor::getFirstUnixTimestamp_ms(DataForm currentDataForm) const {
+  switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
+      UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps_ms();
       if (unixTimestamps.empty()) {  // TODO use is set methode of absoluteTimestampsContainer
         throw std::runtime_error("absoluteTimestampsContainer is not set");
       } else {
@@ -188,18 +188,18 @@ UnixTimestamp Sensor::getFirstUnixTimestamp(const DataForm dataForm) const {
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       // TODO use isSet methode
-      return this->differentialTimestampsContainer.getFirstUnixTimestamp();
+      return this->differentialTimestampsContainer.getFirstUnixTimestamp_ms();
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::invalid_argument("dataForm is none");
+      throw std::invalid_argument("currentDataForm is none");
     }
   }
 }
 
-UnixTimestamp Sensor::getLastUnixTimestamp(const DataForm dataForm) const {
-  switch (dataForm) {
+UnixTimestamp Sensor::getLastUnixTimestamp_ms(DataForm currentDataForm) const {
+  switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
+      UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps_ms();
       if (unixTimestamps.empty()) {  // TODO use is set methode of absoluteTimestampsContainer
         throw std::runtime_error("absoluteTimestampsContainer is not set");
       } else {
@@ -208,38 +208,38 @@ UnixTimestamp Sensor::getLastUnixTimestamp(const DataForm dataForm) const {
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       // TODO use isSet methode
-      const auto timestampsIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
-      const auto blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
+      const auto timestampsDifferences_ms = this->differentialTimestampsContainer.getTimestampsDifferences_ms();
+      const auto blockDifferences_ms = this->differentialTimestampsContainer.getBlockDifferences_ms();
       const auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
       const auto nLastBlock = differentialBlocksOfFirstChannel[differentialBlocksOfFirstChannel.size() - 1].getDifferentialValues().size();
-      auto absoluteUnixTimestamp = this->getFirstUnixTimestamp(dataForm);
-      for (auto& blockInterval_ms : blockIntervals_ms) {
-        absoluteUnixTimestamp += blockInterval_ms;
+      auto absoluteUnixTimestamp = this->getFirstUnixTimestamp_ms(currentDataForm);
+      for (auto& blockDifference_ms : blockDifferences_ms) {
+        absoluteUnixTimestamp += blockDifference_ms;
       }
-      return absoluteUnixTimestamp + timestampsIntervals_ms[timestampsIntervals_ms.size() - 1] * (nLastBlock - 1);
+      return absoluteUnixTimestamp + timestampsDifferences_ms[timestampsDifferences_ms.size() - 1] * (nLastBlock - 1);
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::invalid_argument("dataForm is none");
+      throw std::invalid_argument("currentDataForm is none");
     }
   }
 }
 
-Duration Sensor::getDuration(const DataForm dataForm) const {
-  return this->getLastUnixTimestamp(dataForm) - this->getFirstUnixTimestamp(dataForm);
+Duration Sensor::getDuration_ms(DataForm currentDataForm) const {
+  return this->getLastUnixTimestamp_ms(currentDataForm) - this->getFirstUnixTimestamp_ms(currentDataForm);
 }
 
 BlockIdxs Sensor::findBlockIdxs() const {
   BlockIdxs blockIdxs = {};
-  if (this->absoluteTimestampsContainer.getUnixTimestamps().size() == 0) {  // TODO use is set
+  if (this->absoluteTimestampsContainer.getUnixTimestamps_ms().size() == 0) {  // TODO use is set
     return blockIdxs;
   }
-  Interval referenceTimeDifference = 0;
+  Difference referenceTimeDifference = 0;
   bool isNewBlock = true;
   blockIdxs.push_back(0);
-  const auto absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
+  const auto absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps_ms();
   const auto numberOfElements = absoluteUnixTimestamps.size();
   for (size_t i = 1; i < numberOfElements; i++) {
-    const Interval timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
+    const Difference timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
     if (isNewBlock) {
       referenceTimeDifference = timeDifference;
       isNewBlock = false;
@@ -254,9 +254,9 @@ BlockIdxs Sensor::findBlockIdxs() const {
 
 AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const {
   const auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
-  const auto timestampsIntervals_ms = differentialTimestampsContainer.getTimestampsIntervals();
-  const auto blockIntervals_ms = differentialTimestampsContainer.getBlockIntervals();
-  auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp();
+  const auto timestampsDifferences_ms = differentialTimestampsContainer.getTimestampsDifferences_ms();
+  const auto blockDifferences_ms = differentialTimestampsContainer.getBlockDifferences_ms();
+  auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
 
   size_t numberOfElements = 0;
   for (auto& differentialBlockOfFirstChannel : differentialBlocksOfFirstChannel) {
@@ -265,12 +265,12 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
   UnixTimestamps unixTimestamps_ms = {};
   unixTimestamps_ms.reserve(numberOfElements);
 
-  const auto numberOfBlockIntervals = blockIntervals_ms.size();
-  for (size_t i = 0; i < numberOfBlockIntervals; i++) {
-    absoluteUnixTimestamp += blockIntervals_ms[i];
+  const auto numberOfBlockDifferences = blockDifferences_ms.size();
+  for (size_t i = 0; i < numberOfBlockDifferences; i++) {
+    absoluteUnixTimestamp += blockDifferences_ms[i];
     const auto numberOfDifferentialValues = differentialBlocksOfFirstChannel[i].getDifferentialValues().size();
     for (size_t j = 0; j < numberOfDifferentialValues; j++) {
-      unixTimestamps_ms.emplace_back(absoluteUnixTimestamp + j * timestampsIntervals_ms[i]);
+      unixTimestamps_ms.emplace_back(absoluteUnixTimestamp + j * timestampsDifferences_ms[i]);
     }
   }
   return AbsoluteTimestampsContainer(unixTimestamps_ms);
@@ -279,57 +279,57 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
 DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
                                                                         const BlockIdxs& blockIdxs) const {
   const auto numberOfBlocks = blockIdxs.size();
-  BlockIntervals blockIntervals_ms = {};
-  TimestampsIntervals timestampsIntervals_ms = {};
+  BlockDifferences blockDifferences_ms = {};
+  TimestampsDifferences timestampsDifferences_ms = {};
   UnixTimestamp firstUnixTimestamp_ms = 0;
 
   /*
    * blockIdxs.size = 0 -> no timestamps are included
                             return default Values for emptyBlock
    * blockIdxs.size = 1 -> case 1 : just one Block with one timestamps
-                            return firstTimestamps, BlockIntervals_ms = {0}, timestampsInterval_ms{0}
+                            return firstTimestamps, BlockDifferences_ms = {0}, timestampsDifference_ms{0}
    *                       case 2 : one Block with certain amount of timestamps with same time differences
-                            return firstTimestamps, BlockInterval_ms  = {0}, timestampsIntervals_ms with one value (BestCase)
+                            return firstTimestamps, BlockDifference_ms  = {0}, timestampsDifferences_ms with one value (BestCase)
    * blockIdxs.size > 1 -> case 1: normal condition (Last block hold at least 2 Timestamps)
                             return calculate differentialTimestamps
    *                       case 2: the last Block hold just one Timestamp
-                            return calculate differentialTimestamps  + last timestampsInterval_ms.pushback(0)
+                            return calculate differentialTimestamps  + last timestampsDifference_ms.pushback(0)
   */
   if (numberOfBlocks == 0) {
-    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
+    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
   }
 
-  const auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps();
+  const auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps_ms();
   firstUnixTimestamp_ms = absoluteUnixTimestamps[0];
   if (numberOfBlocks == 1) {
-    Interval timestampsInterval = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
-    timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsInterval);
-    blockIntervals_ms.push_back(0);
-    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
+    Difference timestampsDifference = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
+    timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsDifference);
+    blockDifferences_ms.push_back(0);
+    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
   }
 
-  blockIntervals_ms.push_back(0);
-  timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps[1] - firstUnixTimestamp_ms);
-  const auto numberOfIntervals = blockIdxs.size() - 1;
-  for (size_t i = 1; i < numberOfIntervals; i++) {
+  blockDifferences_ms.push_back(0);
+  timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps[1] - firstUnixTimestamp_ms);
+  const auto numberOfDifferences = blockIdxs.size() - 1;
+  for (size_t i = 1; i < numberOfDifferences; i++) {
     const BlockIdx previousBlockIdx = blockIdxs[i - 1];
     const BlockIdx currentBlockIdx = blockIdxs[i];
-    timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
-    blockIntervals_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
+    timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
+    blockDifferences_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
   }
-  blockIntervals_ms.emplace_back(absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
-  timestampsIntervals_ms.emplace_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1]
-                                          ? 0
-                                          : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] -
-                                                absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals_ms, timestampsIntervals_ms);
+  blockDifferences_ms.emplace_back(absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
+  timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps.size() - 1 == blockIdxs[numberOfBlocks - 1]
+                                            ? 0
+                                            : absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1] + 1] -
+                                                  absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 1]]);
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
 }
 
-SensorJson Sensor::toJson(const DataForm dataForm) const {
+SensorJson Sensor::toJson(const DataForm currentDataForm) const {
   SensorJson sensorJson;
   ChannelsJson channelsJson(Json::arrayValue);
 
-  switch (dataForm) {
+  switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       sensorJson["absolute_timestamps_container"] = this->absoluteTimestampsContainer.toJson();
       break;
@@ -344,7 +344,7 @@ SensorJson Sensor::toJson(const DataForm dataForm) const {
   }
 
   for (auto& channel : this->channels) {
-    channelsJson.append(channel.toJson(dataForm, this->sensorType));
+    channelsJson.append(channel.toJson(currentDataForm, this->sensorType));
   }
 
   sensorJson["channels"] = channelsJson;

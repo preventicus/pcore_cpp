@@ -68,7 +68,7 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
 PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgMetaData) {
   PpgMetaDataJson ppgMetaDataJson;
   if (ppgMetaData.hasWavelength()) {
-    ppgMetaDataJson["wavelength_nm"] = ppgMetaData.getWavelength();
+    ppgMetaDataJson["wavelength_nm"] = ppgMetaData.getWavelength_nm();
   } else if (ppgMetaData.hasColor()) {
     ppgMetaDataJson["color"] = PpgMetaData::protobufColorToString(ppgMetaData.getColor());
   }

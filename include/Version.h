@@ -43,6 +43,7 @@ using VersionJson = Json::Value;
 using MajorJson = Json::Value;
 using MinorJson = Json::Value;
 using PatchJson = Json::Value;
+using JsonKey = std::string;
 
 class Version final {
  public:
@@ -61,7 +62,7 @@ class Version final {
   bool operator!=(const Version& version) const;
 
  private:
-  [[nodiscard]] Major getVersionPartsFromJson(const VersionJson& versionJson, std::string jsonKey) const;
+  [[nodiscard]] Major getVersionPartsFromJson(const VersionJson& versionJson, JsonKey jsonKey) const;
 
   Major major;
   Minor minor;

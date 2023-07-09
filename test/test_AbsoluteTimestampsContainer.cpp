@@ -38,13 +38,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 TEST(AbsoluteTimestampsContainerTest, TestGetUnixTimestampsWithThreeBigTimestamps) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
-  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps(), unixTimestamps);
+  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps_ms(), unixTimestamps);
 }
 
 TEST(AbsoluteTimestampsContainerTest, TestGetUnixTimestampsWithAbsoluteTimestampsEmpty) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsEmpty();
   auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsEmpty_ms();
-  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps(), unixTimestamps);
+  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps_ms(), unixTimestamps);
 }
 
 TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithThreeBigTimestampsAndThreeBigTimestamps) {

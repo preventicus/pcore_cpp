@@ -58,8 +58,8 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithEmptyAbsoluteValue()
   return AbsoluteBlock(absoluteValues);
 }
 
-AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForTestSwitchTo() {
-  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesForTestSwitchTo();
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest() {
+  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesForSwitchDataFormTest();
   return AbsoluteBlock(absoluteValues);
 }
 

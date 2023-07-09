@@ -253,9 +253,9 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differen
   return AbsoluteBlock(absoluteValues);
 }
 
-ChannelJson Channel::toJson(const DataForm dataForm, const ProtobufSensorType protobufSensorType) const {
+ChannelJson Channel::toJson(const DataForm currentDataForm, const ProtobufSensorType protobufSensorType) const {
   ChannelJson channelJson;
-  switch (dataForm) {
+  switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       AbsoluteBlockJson absoluteBlockJson(this->absoluteBlock.toJson());
       channelJson["absolute_block"] = absoluteBlockJson;

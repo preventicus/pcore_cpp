@@ -31,60 +31,60 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "IntervalsExampleFactory.h"
+#include "DifferencesExampleFactory.h"
 
-BlockIntervals IntervalsExampleFactory::blockIntervalsWithThreeMixedIntervals() {
+BlockDifferences DifferencesExampleFactory::blockDifferencesWithThreeMixedDifferences() {
   return {0, 8, 5};
 }
 
-TimestampsIntervals IntervalsExampleFactory::timestampsIntervalsWithThreeZeroIntervals() {
+TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesWithThreeZeroDifferences() {
   return {0, 0, 0};
 }
 
-BlockIntervals IntervalsExampleFactory::blockIntervalsEmpty() {
+BlockDifferences DifferencesExampleFactory::blockDifferencesEmpty() {
   return {};
 }
 
-TimestampsIntervals IntervalsExampleFactory::timestampsIntervalsEmpty() {
+TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesEmpty() {
   return {};
 }
 
-BlockIntervals IntervalsExampleFactory::blockIntervalsWithTwoMixedIntervals() {
+BlockDifferences DifferencesExampleFactory::blockDifferencesWithTwoMixedDifferences() {
   return {0, 1};
 }
 
-TimestampsIntervals IntervalsExampleFactory::timestampsIntervalsWithTwoMixedIntervals() {
+TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesWithTwoMixedDifferences() {
   return {30, 29};
 }
 
-BlockIntervals IntervalsExampleFactory::blockIntervalsWithThreeBigIntervals() {
+BlockDifferences DifferencesExampleFactory::blockDifferencesWithThreeBigDifferences() {
   return {0, 5000, 74389};
 }
 
-TimestampsIntervals IntervalsExampleFactory::timestampsIntervalsWithThreeBigIntervals() {
+TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesWithThreeBigDifferences() {
   return {30823, 3139, 297238};
 }
 
-BlockIntervals IntervalsExampleFactory::blockIntervalsForSwitchDataFormTest() {
+BlockDifferences DifferencesExampleFactory::blockDifferencesForSwitchDataFormTest() {
   return {0, 441, 359};
 }
 
-TimestampsIntervals IntervalsExampleFactory::timestampsIntervalsForSwitchDataFromTest() {
+TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesForSwitchDataFromTest() {
   return {40, 40, 40};
 }
 
-TimestampsIntervalsJson IntervalsExampleFactory::buildTimestampsIntervalsJson(TimestampsIntervals timestampsIntervals) {
-  TimestampsIntervalsJson timestampsIntervalsJson(Json::arrayValue);
-  for (auto& timestampsInterval : timestampsIntervals) {
-    timestampsIntervalsJson.append(timestampsInterval);
+TimestampsDifferencesJson DifferencesExampleFactory::buildTimestampsDifferencesJson(TimestampsDifferences timestampsDifferences) {
+  TimestampsDifferencesJson timestampsDifferencesJson(Json::arrayValue);
+  for (auto& timestampsDifference : timestampsDifferences) {
+    timestampsDifferencesJson.append(timestampsDifference);
   }
-  return timestampsIntervalsJson;
+  return timestampsDifferencesJson;
 }
 
-BlockIntervalsJson IntervalsExampleFactory::buildBlockIntervalsJson(BlockIntervals blockIntervals) {
-  BlockIntervalsJson blockIntervalsJson(Json::arrayValue);
-  for (auto& blockInterval_ms : blockIntervals) {
-    blockIntervalsJson.append(blockInterval_ms);
+BlockDifferencesJson DifferencesExampleFactory::buildBlockDifferencesJson(BlockDifferences blockDifferences) {
+  BlockDifferencesJson blockDifferencesJson(Json::arrayValue);
+  for (auto& blockDifference_ms : blockDifferences) {
+    blockDifferencesJson.append(blockDifference_ms);
   }
-  return blockIntervalsJson;
+  return blockDifferencesJson;
 }

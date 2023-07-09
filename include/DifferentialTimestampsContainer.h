@@ -39,27 +39,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 
 using ProtobufDifferentialTimestampContainer = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
-using Interval = uint32_t;
-using BlockIntervals = std::vector<Interval>;
-using TimestampsIntervals = std::vector<Interval>;
+using Difference = uint32_t;
+using BlockDifferences = std::vector<Difference>;
+using TimestampsDifferences = std::vector<Difference>;
 using DifferentialTimestampsContainerJson = Json::Value;
 
 using UnixTimestampJson = Json::Value;
-using BlockIntervalsJson = Json::Value;
-using TimestampsIntervalsJson = Json::Value;
+using BlockDifferencesJson = Json::Value;
+using TimestampsDifferencesJson = Json::Value;
 
 class DifferentialTimestampsContainer final {
  public:
   explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
-                                           BlockIntervals blockIntervals_ms,
-                                           TimestampsIntervals timestampsIntervals_ms);
+                                           BlockDifferences blockDifferences_ms,
+                                           TimestampsDifferences timestampsDifferences_ms);
   explicit DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
   explicit DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
   DifferentialTimestampsContainer();
 
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp() const;
-  [[nodiscard]] BlockIntervals getBlockIntervals() const;
-  [[nodiscard]] TimestampsIntervals getTimestampsIntervals() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
+  [[nodiscard]] BlockDifferences getBlockDifferences_ms() const;
+  [[nodiscard]] TimestampsDifferences getTimestampsDifferences_ms() const;
 
   [[nodiscard]] DifferentialTimestampsContainerJson toJson() const;
   [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const;
@@ -74,6 +74,6 @@ class DifferentialTimestampsContainer final {
 
  private:
   UnixTimestamp firstUnixTimestamp_ms;
-  BlockIntervals blockIntervals_ms;
-  TimestampsIntervals timestampsIntervals_ms;
+  BlockDifferences blockDifferences_ms;
+  TimestampsDifferences timestampsDifferences_ms;
 };

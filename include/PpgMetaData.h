@@ -51,7 +51,7 @@ class PpgMetaData final {
   PpgMetaData();
 
   [[nodiscard]] ProtobufColor getColor() const;
-  [[nodiscard]] Wavelength getWavelength() const;
+  [[nodiscard]] Wavelength getWavelength_nm() const;
   [[nodiscard]] bool hasColor() const;
   [[nodiscard]] bool hasWavelength() const;
   [[nodiscard]] bool isSet() const;

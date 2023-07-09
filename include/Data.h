@@ -49,7 +49,7 @@ class Data final {
 
   [[nodiscard]] Raw getRaw() const;
   [[nodiscard]] Header getHeader() const;
-  [[nodiscard]] DataJson toJson(DataForm dataForm) const;
+  [[nodiscard]] DataJson toJson() const;
   void serialize(ProtobufData* protobufData) const;
   void switchDataForm();
 

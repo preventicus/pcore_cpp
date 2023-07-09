@@ -60,7 +60,7 @@ ProtobufColor PpgMetaData::getColor() const {
   return this->color;
 }
 
-Wavelength PpgMetaData::getWavelength() const {
+Wavelength PpgMetaData::getWavelength_nm() const {
   return this->wavelength_nm;
 }
 

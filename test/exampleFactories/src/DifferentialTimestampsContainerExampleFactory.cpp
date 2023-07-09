@@ -32,15 +32,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DifferentialTimestampsContainerExampleFactory.h"
-#include "IntervalsExampleFactory.h"
+#include "DifferencesExampleFactory.h"
 #include "UnixTimestampsExampleFactory.h"
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks() {
   auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
-  auto blockIntervals = IntervalsExampleFactory::blockIntervalsWithThreeMixedIntervals();
-  auto timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsWithThreeZeroIntervals();
+  auto blockDifferences = DifferencesExampleFactory::blockDifferencesWithThreeMixedDifferences();
+  auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesWithThreeZeroDifferences();
 
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty() {
@@ -49,34 +49,34 @@ DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::d
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithTwoBlocks() {
   auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
-  auto blockIntervals = IntervalsExampleFactory::blockIntervalsWithTwoMixedIntervals();
-  auto timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsWithTwoMixedIntervals();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
+  auto blockDifferences = DifferencesExampleFactory::blockDifferencesWithTwoMixedDifferences();
+  auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesWithTwoMixedDifferences();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithBigBlocks() {
   auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
-  auto blockIntervals = IntervalsExampleFactory::blockIntervalsWithThreeBigIntervals();
-  auto timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsWithThreeBigIntervals();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
+  auto blockDifferences = DifferencesExampleFactory::blockDifferencesWithThreeBigDifferences();
+  auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesWithThreeBigDifferences();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerForSwitchDataFormTest() {
   auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormTest_ms();
-  auto blockIntervals = IntervalsExampleFactory::blockIntervalsForSwitchDataFormTest();
-  auto timestampsIntervals = IntervalsExampleFactory::timestampsIntervalsForSwitchDataFromTest();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockIntervals, timestampsIntervals);
+  auto blockDifferences = DifferencesExampleFactory::blockDifferencesForSwitchDataFormTest();
+  auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesForSwitchDataFromTest();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(
     DifferentialTimestampsContainer differentialTimestampsContainer) {
-  auto blockIntervals = differentialTimestampsContainer.getBlockIntervals();
-  auto timestampsIntervals = differentialTimestampsContainer.getTimestampsIntervals();
-  auto blockIntervalsJson = IntervalsExampleFactory::buildBlockIntervalsJson(blockIntervals);
-  auto timestampsIntervalsJson = IntervalsExampleFactory::buildTimestampsIntervalsJson(timestampsIntervals);
+  auto blockDifferences = differentialTimestampsContainer.getBlockDifferences_ms();
+  auto timestampsDifferences = differentialTimestampsContainer.getTimestampsDifferences_ms();
+  auto blockDifferencesJson = DifferencesExampleFactory::buildBlockDifferencesJson(blockDifferences);
+  auto timestampsDifferencesJson = DifferencesExampleFactory::buildTimestampsDifferencesJson(timestampsDifferences);
   DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
-  differentialTimestampsContainerJson["first_timestamp_ms"] = differentialTimestampsContainer.getFirstUnixTimestamp();
-  differentialTimestampsContainerJson["block_intervals_ms"] = blockIntervalsJson;
-  differentialTimestampsContainerJson["timestamps_intervals_ms"] = timestampsIntervalsJson;
+  differentialTimestampsContainerJson["first_unix_timestamp_ms"] = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
+  differentialTimestampsContainerJson["block_differences_ms"] = blockDifferencesJson;
+  differentialTimestampsContainerJson["timestamps_differences_ms"] = timestampsDifferencesJson;
   return differentialTimestampsContainerJson;
 }

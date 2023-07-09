@@ -34,32 +34,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Header.h"
 
 Header::Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
-    : timeZoneOffset_min(timeZoneOffset_min), version(version), dataForm(dataForm) {
+    : timeZoneOffset_min(timeZoneOffset_min), pcoreVersion(version), dataForm(dataForm) {
   this->checkTimeZoneOffset();
 }
 
 Header::Header(const ProtobufHeader& protobufHeader)
     : timeZoneOffset_min(protobufHeader.time_zone_offset_min()),
-      version(Version(protobufHeader.pcore_version())),
+      pcoreVersion(Version(protobufHeader.pcore_version())),
       dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {
   this->checkTimeZoneOffset();
 }
 
 Header::Header(const HeaderJson& headerJson)
     : timeZoneOffset_min(headerJson["time_zone_offset_min"].asInt()),
-      version(Version(headerJson["version"])),
+      pcoreVersion(Version(headerJson["pcore_version"])),
       dataForm(Header::dataFormFromString(headerJson["data_form"].asString())) {
   this->checkTimeZoneOffset();
 }
 
-Header::Header() : timeZoneOffset_min(0), version(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
+Header::Header() : timeZoneOffset_min(0), pcoreVersion(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
 
 TimeZoneOffset Header::getTimeZoneOffset() const {
   return this->timeZoneOffset_min;
 }
 
-Version Header::getVersion() const {
-  return this->version;
+Version Header::getPcoreVersion() const {
+  return this->pcoreVersion;
 }
 
 DataForm Header::getDataForm() const {
@@ -67,11 +67,11 @@ DataForm Header::getDataForm() const {
 }
 
 bool Header::operator==(const Header& header) const {
-  return this->timeZoneOffset_min == header.timeZoneOffset_min && this->version == header.version && this->dataForm == header.dataForm;
+  return this->timeZoneOffset_min == header.timeZoneOffset_min && this->pcoreVersion == header.pcoreVersion && this->dataForm == header.dataForm;
 }
 
 bool Header::operator!=(const Header& header) const {
-  return this->timeZoneOffset_min != header.timeZoneOffset_min || this->version != header.version || this->dataForm != header.dataForm;
+  return this->timeZoneOffset_min != header.timeZoneOffset_min || this->pcoreVersion != header.pcoreVersion || this->dataForm != header.dataForm;
 }
 
 void Header::serialize(ProtobufHeader* protobufHeader) const {
@@ -80,7 +80,7 @@ void Header::serialize(ProtobufHeader* protobufHeader) const {
   }
   protobufHeader->set_time_zone_offset_min(this->timeZoneOffset_min);
   ProtobufVersion protobufVersion;
-  this->version.serialize(&protobufVersion);
+  this->pcoreVersion.serialize(&protobufVersion);
   protobufHeader->mutable_pcore_version()->CopyFrom(protobufVersion);
 }
 
@@ -100,12 +100,12 @@ void Header::switchDataForm() {
   }
 }
 
-HeaderJson Header::toJson(const DataForm dataForm) const {
+HeaderJson Header::toJson() const {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
   headerJson["time_zone_offset_min"] = timeZoneOffset_min;
-  headerJson["version"] = this->version.toJson();
-  headerJson["data_form"] = Header::dataFormToString(dataForm);
+  headerJson["pcore_version"] = this->pcoreVersion.toJson();
+  headerJson["data_form"] = Header::dataFormToString(this->dataForm);
   return headerJson;
 }
 

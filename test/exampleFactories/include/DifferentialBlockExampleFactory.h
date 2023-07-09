@@ -45,7 +45,7 @@ class DifferentialBlockExampleFactory {
   static DifferentialBlock differentialBlockWithEmptyDifferentialValues();
 
   static DifferentialBlocks differentialBlocksWithThreeMixedDifferentialBlocks();
-  static DifferentialBlocks differentialBlocksForTestSwitchTo();
+  static DifferentialBlocks differentialBlocksForSwitchDataFormTest();
   static DifferentialBlocks differentialBlocksForTestSerialize();
 
   static DifferentialBlocksJson buildDifferentialBlocksJson(DifferentialBlocks differentialBlocks);

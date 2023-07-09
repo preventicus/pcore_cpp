@@ -145,20 +145,20 @@ TEST(DataTest, TestSwitchDataFormWithDataInDifferentialForm) {
 TEST(DataTest, TestToJsonWithDataEmpty) {
   auto data = DataExampleFactory::dataEmpty();
   auto dataJson1 = DataExampleFactory::buildDataJson(data);
-  auto dataJson2 = data.toJson(DataForm::DATA_FORM_NONE);
+  auto dataJson2 = data.toJson();
   EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
 }
 
 TEST(DataTest, TestToJsonWithDataInAbsoluteForm) {
   auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
   auto dataJson1 = DataExampleFactory::buildDataJson(data);
-  auto dataJson2 = data.toJson(DataForm::DATA_FORM_ABSOLUTE);
+  auto dataJson2 = data.toJson();
   EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
 }
 
 TEST(DataTest, TestToJsonWithDataInDifferentialForm) {
   auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
   auto dataJson1 = DataExampleFactory::buildDataJson(data);
-  auto dataJson2 = data.toJson(DataForm::DATA_FORM_DIFFERENTIAL);
+  auto dataJson2 = data.toJson();
   EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
 }

@@ -47,7 +47,7 @@ TEST(JsonTest, TestToJsonAbsoluteForm) {
 
   auto dataFromProtobuf = Data(protobufData);
   dataFromProtobuf.switchDataForm();
-  auto outputJson = dataFromProtobuf.toJson(DataForm::DATA_FORM_ABSOLUTE);
+  auto outputJson = dataFromProtobuf.toJson();
 
   EXPECT_TRUE(inputJson.toStyledString() == outputJson.toStyledString());
 }
@@ -58,6 +58,6 @@ TEST(JsonTest, TestToJsonDifferentialForm) {
   file >> inputJson;
   ProtobufData protobufData;
   Data(inputJson["data"]).serialize(&protobufData);
-  auto outputJson = Data(protobufData).toJson(DataForm::DATA_FORM_DIFFERENTIAL);
+  auto outputJson = Data(protobufData).toJson();
   EXPECT_TRUE(inputJson.toStyledString() == outputJson.toStyledString());
 }

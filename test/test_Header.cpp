@@ -44,7 +44,7 @@ TEST(HeaderTest, TestGetTimeZoneOffset) {
 TEST(HeaderTest, TestGetVersion) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto version1 = VersionExampleFactory::versionWithMajor0Minor0Patch0();
-  auto version2 = header.getVersion();
+  auto version2 = header.getPcoreVersion();
   EXPECT_TRUE(version1 == version2);
 }
 
@@ -130,14 +130,14 @@ TEST(HeaderTest, TestIsNotEqualWithHeaderWithDifferentDataForm) {
 TEST(HeaderTest, TestToJsonWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto headerJson1 = HeaderExampleFactory::buildHeaderJson(header);
-  auto headerJson2 = header.toJson(DataForm::DATA_FORM_ABSOLUTE);
+  auto headerJson2 = header.toJson();
   EXPECT_TRUE(headerJson1.toStyledString() == headerJson2.toStyledString());
 }
 
 TEST(HeaderTest, TestToJsonWithHeaderEmpty) {
   auto header = HeaderExampleFactory::headerEmpty();
   auto headerJson1 = HeaderExampleFactory::buildHeaderJson(header);
-  auto headerJson2 = header.toJson(DataForm::DATA_FORM_NONE);
+  auto headerJson2 = header.toJson();
   EXPECT_TRUE(headerJson1.toStyledString() == headerJson2.toStyledString());
 }
 

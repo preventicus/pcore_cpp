@@ -48,7 +48,7 @@ class Raw final {
   Raw();
 
   [[nodiscard]] Sensors getSensors() const;
-  [[nodiscard]] RawJson toJson(DataForm dataForm) const;
+  [[nodiscard]] RawJson toJson(DataForm currentDataForm) const;
   void serialize(ProtobufRaw* protobufRaw) const;
   void switchDataForm(DataForm currentDataForm);
 

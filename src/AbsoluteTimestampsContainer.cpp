@@ -47,7 +47,7 @@ AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestamp
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestamps_ms({}) {}
 
-UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps() const {
+UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps_ms() const {
   return this->unixTimestamps_ms;
 }
 

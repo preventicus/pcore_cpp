@@ -50,10 +50,10 @@ class Header final {
   Header();
 
   [[nodiscard]] TimeZoneOffset getTimeZoneOffset() const;
-  [[nodiscard]] Version getVersion() const;
+  [[nodiscard]] Version getPcoreVersion() const;
   [[nodiscard]] DataForm getDataForm() const;
 
-  [[nodiscard]] HeaderJson toJson(DataForm dataForm) const;
+  [[nodiscard]] HeaderJson toJson() const;
   void serialize(ProtobufHeader* protobufHeader) const;
   void switchDataForm();
 
@@ -66,6 +66,6 @@ class Header final {
  private:
   void checkTimeZoneOffset() const;
   TimeZoneOffset timeZoneOffset_min;
-  Version version;
+  Version pcoreVersion;
   DataForm dataForm;
 };

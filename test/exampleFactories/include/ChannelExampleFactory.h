@@ -42,8 +42,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class ChannelExampleFactory {
  public:
-  static Channel channelWithAbsoluteValuesForTestSwitchTo();
-  static Channel channelWithDifferentialValuesForTestSwitchTo();
+  static Channel channelWithAbsoluteValuesForSwitchDataFormTest();
+  static Channel channelWithDifferentialValuesForSwitchDataFormTest();
   static Channel channelWithAbsoluteBlockForNotEqualTest();
   static Channel channelWithDifferentialBlocksForNotEqualTest();
   static Channel channelWithAbsoluteBlockAndPpgMetaData();

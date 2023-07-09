@@ -77,10 +77,10 @@ void Data::switchDataForm() {
   this->header.switchDataForm();
 }
 
-Json::Value Data::toJson(const DataForm dataForm) const {
+Json::Value Data::toJson() const {
   DataJson data;
-  data["header"] = this->header.toJson(dataForm);
-  data["raw"] = this->raw.toJson(dataForm);
+  data["header"] = this->header.toJson();
+  data["raw"] = this->raw.toJson(this->header.getDataForm());
   Json::Value json;
   json["data"] = data;
   return json;

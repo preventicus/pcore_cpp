@@ -53,7 +53,7 @@ AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesEmpty() {
   return {};
 }
 
-AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesForTestSwitchTo() {
+AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesForSwitchDataFormTest() {
   return {1000,  9415, 10093, 2411,  -6568, -8589, -1794, 7570, 10894, 5121,  -4440, -9000, -4366, 5202,
           10906, 7503, -1879, -8614, -6510, 2499,  10129, 9367, 911,   -7462, -8056, -324,  8626};
 }

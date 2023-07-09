@@ -42,7 +42,7 @@ class AbsoluteBlockExampleFactory {
   static AbsoluteBlock absoluteBlockWithThreeNegativeAbsoluteValues();
   static AbsoluteBlock absoluteBlockWithOneAbsoluteValue();
   static AbsoluteBlock absoluteBlockWithEmptyAbsoluteValue();
-  static AbsoluteBlock absoluteBlockForTestSwitchTo();
+  static AbsoluteBlock absoluteBlockForSwitchDataFormTest();
 
   static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock);
 };

@@ -98,11 +98,11 @@ void Raw::switchDataForm(const DataForm currentDataForm) {
   }
 }
 
-RawJson Raw::toJson(const DataForm dataForm) const {
+RawJson Raw::toJson(const DataForm currentDataForm) const {
   RawJson rawJson;
   SensorsJson sensorsJson(Json::arrayValue);
   for (auto& sensor : this->sensors) {
-    sensorsJson.append(sensor.toJson(dataForm));
+    sensorsJson.append(sensor.toJson(currentDataForm));
   }
   rawJson["sensors"] = sensorsJson;
   return rawJson;

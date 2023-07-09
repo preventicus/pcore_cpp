@@ -33,15 +33,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ChannelExampleFactory.h"
 
-Channel ChannelExampleFactory::channelWithAbsoluteValuesForTestSwitchTo() {
+Channel ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest() {
   auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
-  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForTestSwitchTo();
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest();
   return Channel(ppgMetaData, absoluteBlock);
 }
 
-Channel ChannelExampleFactory::channelWithDifferentialValuesForTestSwitchTo() {
+Channel ChannelExampleFactory::channelWithDifferentialValuesForSwitchDataFormTest() {
   auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
-  auto differentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForTestSwitchTo();
+  auto differentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest();
   return Channel(ppgMetaData, differentialBlocks);
 }
 

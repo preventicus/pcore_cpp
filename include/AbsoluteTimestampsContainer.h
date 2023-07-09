@@ -46,7 +46,7 @@ class AbsoluteTimestampsContainer final {
   explicit AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson);
   AbsoluteTimestampsContainer();
 
-  [[nodiscard]] UnixTimestamps getUnixTimestamps() const;
+  [[nodiscard]] UnixTimestamps getUnixTimestamps_ms() const;
   [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const;
 
   bool operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;

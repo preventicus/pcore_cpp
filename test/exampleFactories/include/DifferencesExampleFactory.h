@@ -34,19 +34,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "DifferentialTimestampsContainer.h"
 
-class IntervalsExampleFactory {
+class DifferencesExampleFactory {
  public:
-  static BlockIntervals blockIntervalsWithThreeMixedIntervals();
-  static TimestampsIntervals timestampsIntervalsWithThreeZeroIntervals();
-  static BlockIntervals blockIntervalsEmpty();
-  static TimestampsIntervals timestampsIntervalsEmpty();
-  static BlockIntervals blockIntervalsWithTwoMixedIntervals();
-  static TimestampsIntervals timestampsIntervalsWithTwoMixedIntervals();
-  static BlockIntervals blockIntervalsWithThreeBigIntervals();
-  static TimestampsIntervals timestampsIntervalsWithThreeBigIntervals();
-  static BlockIntervals blockIntervalsForSwitchDataFormTest();
-  static TimestampsIntervals timestampsIntervalsForSwitchDataFromTest();
+  static BlockDifferences blockDifferencesWithThreeMixedDifferences();
+  static TimestampsDifferences timestampsDifferencesWithThreeZeroDifferences();
+  static BlockDifferences blockDifferencesEmpty();
+  static TimestampsDifferences timestampsDifferencesEmpty();
+  static BlockDifferences blockDifferencesWithTwoMixedDifferences();
+  static TimestampsDifferences timestampsDifferencesWithTwoMixedDifferences();
+  static BlockDifferences blockDifferencesWithThreeBigDifferences();
+  static TimestampsDifferences timestampsDifferencesWithThreeBigDifferences();
+  static BlockDifferences blockDifferencesForSwitchDataFormTest();
+  static TimestampsDifferences timestampsDifferencesForSwitchDataFromTest();
 
-  static TimestampsIntervalsJson buildTimestampsIntervalsJson(TimestampsIntervals timestampsIntervals);
-  static BlockIntervalsJson buildBlockIntervalsJson(BlockIntervals blockIntervals);
+  static TimestampsDifferencesJson buildTimestampsDifferencesJson(TimestampsDifferences timestampsDifferences);
+  static BlockDifferencesJson buildBlockDifferencesJson(BlockDifferences blockDifferences);
 };

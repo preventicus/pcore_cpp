@@ -56,14 +56,14 @@ class Sensor final {
 
   [[nodiscard]] ProtobufSensorType getSensorType() const;
   [[nodiscard]] Channels getChannels() const;
-  [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestamps() const;
-  [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestamps() const;
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp(DataForm dataForm) const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestamp(DataForm dataForm) const;
-  [[nodiscard]] Duration getDuration(DataForm dataForm) const;
+  [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const;
+  [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms(DataForm currentDataForm) const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms(DataForm currentDataForm) const;
+  [[nodiscard]] Duration getDuration_ms(DataForm currentDataForm) const;
 
   // bool isSet();
-  [[nodiscard]] SensorJson toJson(DataForm dataForm) const;
+  [[nodiscard]] SensorJson toJson(DataForm currentDataForm) const;
   void serialize(ProtobufSensor* protobufSensor) const;
   void switchDataForm(DataForm currentDataForm);
 

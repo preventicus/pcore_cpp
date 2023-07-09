@@ -184,13 +184,13 @@ TEST(ChannelTest, TestIsNotEqualChannelEmpty) {
   EXPECT_FALSE(channel1 != channel2);
 }
 
-TEST(ChannelTest, TestSwitchTo) {
+TEST(ChannelTest, TestSwitchDataForm) {
   BlockIdxs blockIdxs = {0, 11, 20};
-  auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForTestSwitchTo();
+  auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest();
   channelWithAbsoluteBlock.switchDataForm(blockIdxs);
   auto absoluteBlockEmpty = AbsoluteBlock();
   EXPECT_TRUE(channelWithAbsoluteBlock.getAbsoluteBlock() == absoluteBlockEmpty);
-  auto expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForTestSwitchTo();
+  auto expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest();
   auto actualDifferentialBlocks = channelWithAbsoluteBlock.getDifferentialBlocks();
   auto actualDifferentialBlocksSize = actualDifferentialBlocks.size();
   EXPECT_EQ(actualDifferentialBlocksSize, expectedDifferentialBlocks.size());
@@ -198,10 +198,10 @@ TEST(ChannelTest, TestSwitchTo) {
     EXPECT_TRUE(actualDifferentialBlocks[i] == expectedDifferentialBlocks[i]);
   }
 
-  auto channelWithDifferentialBlocks = ChannelExampleFactory::channelWithDifferentialValuesForTestSwitchTo();
+  auto channelWithDifferentialBlocks = ChannelExampleFactory::channelWithDifferentialValuesForSwitchDataFormTest();
   channelWithDifferentialBlocks.switchDataForm();
   EXPECT_EQ(channelWithDifferentialBlocks.getDifferentialBlocks().size(), 0);
-  auto expectedAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForTestSwitchTo();
+  auto expectedAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest();
   auto actualAbsoluteBlock = channelWithDifferentialBlocks.getAbsoluteBlock();
   EXPECT_TRUE(actualAbsoluteBlock == expectedAbsoluteBlock);
 }

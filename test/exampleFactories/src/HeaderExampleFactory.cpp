@@ -99,7 +99,7 @@ HeaderJson HeaderExampleFactory::buildHeaderJson(Header header) {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(header.getTimeZoneOffset());
   headerJson["time_zone_offset_min"] = timeZoneOffset_min;
-  headerJson["version"] = VersionExampleFactory::buildVersionJson(header.getVersion());
+  headerJson["pcore_version"] = VersionExampleFactory::buildVersionJson(header.getPcoreVersion());
   headerJson["data_form"] = Header::dataFormToString(header.getDataForm());
   return headerJson;
 }
