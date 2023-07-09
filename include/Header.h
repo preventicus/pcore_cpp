@@ -49,11 +49,11 @@ class Header final {
   explicit Header(const HeaderJson& header);
   Header();
 
-  TimeZoneOffset getTimeZoneOffset() const;
-  Version getVersion() const;
-  DataForm getDataForm() const;
+  [[nodiscard]] TimeZoneOffset getTimeZoneOffset() const;
+  [[nodiscard]] Version getVersion() const;
+  [[nodiscard]] DataForm getDataForm() const;
 
-  HeaderJson toJson(DataForm dataForm) const;
+  [[nodiscard]] HeaderJson toJson(DataForm dataForm) const;
   void serialize(ProtobufHeader* protobufHeader) const;
   void switchDataForm();
 

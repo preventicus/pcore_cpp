@@ -47,9 +47,9 @@ class Data final {
   explicit Data(const DataJson& dataJson);
   Data();
 
-  Raw getRaw() const;
-  Header getHeader() const;
-  DataJson toJson(DataForm dataForm) const;
+  [[nodiscard]] Raw getRaw() const;
+  [[nodiscard]] Header getHeader() const;
+  [[nodiscard]] DataJson toJson(DataForm dataForm) const;
   void serialize(ProtobufData* protobufData) const;
   void switchDataForm();
 

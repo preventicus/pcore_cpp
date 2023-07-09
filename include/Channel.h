@@ -59,28 +59,28 @@ class Channel final {
   explicit Channel(const ProtobufChannel& protobufChannel);
   Channel();
 
-  DifferentialBlocks getDifferentialBlocks() const;
-  AbsoluteBlock getAbsoluteBlock() const;
-  AccMetaData getAccMetaData() const;
-  PpgMetaData getPpgMetaData() const;
+  [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const;
+  [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const;
+  [[nodiscard]] AccMetaData getAccMetaData() const;
+  [[nodiscard]] PpgMetaData getPpgMetaData() const;
 
-  bool hasAccMetaData() const;
-  bool hasPpgMetaData() const;
-  bool hasDifferentialBlocks() const;
-  bool hasAbsoluteBlock() const;
+  [[nodiscard]] bool hasAccMetaData() const;
+  [[nodiscard]] bool hasPpgMetaData() const;
+  [[nodiscard]] bool hasDifferentialBlocks() const;
+  [[nodiscard]] bool hasAbsoluteBlock() const;
 
   bool operator==(const Channel& channel) const;
   bool operator!=(const Channel& channel) const;
 
-  ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) const;
+  [[nodiscard]] ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) const;
   void serialize(ProtobufChannel* protobufChannel) const;
   void switchDataForm(const BlockIdxs& blockIdxs);
   void switchDataForm();
 
  private:
-  DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const;
-  DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, const AbsoluteValues& absoluteValues) const;
-  AbsoluteBlock calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const;
+  [[nodiscard]] DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const;
+  [[nodiscard]] DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, const AbsoluteValues& absoluteValues) const;
+  [[nodiscard]] AbsoluteBlock calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const;
 
   PpgMetaData ppgMetaData;
   AccMetaData accMetaData;

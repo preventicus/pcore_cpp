@@ -95,12 +95,12 @@ TEST(SensorTest, TestGetFirstUnixTimestampWithSensorAccWithTwoChannelsInAbsolute
 
 TEST(SensorTest, TestGetFirstUnixTimestampThrowRuntimeError) {
   auto sensor = SensorExampleFactory::sensorEmpty();
-  EXPECT_THROW(sensor.getFirstUnixTimestamp(DataForm::DATA_FORM_ABSOLUTE), std::runtime_error);
+  EXPECT_THROW(std::ignore = sensor.getFirstUnixTimestamp(DataForm::DATA_FORM_ABSOLUTE), std::runtime_error);
 }
 
 TEST(SensorTest, TestGetFirstUnixTimestampThrowInvalideArgument) {
   auto sensor = SensorExampleFactory::sensorEmpty();
-  EXPECT_THROW(sensor.getFirstUnixTimestamp(DataForm::DATA_FORM_NONE), std::invalid_argument);
+  EXPECT_THROW(std::ignore = sensor.getFirstUnixTimestamp(DataForm::DATA_FORM_NONE), std::invalid_argument);
 }
 
 TEST(SensorTest, TestGetLastUnixTimestampWithSensorAccWithTwoChannelsInAbsoluteForm) {
@@ -119,12 +119,12 @@ TEST(SensorTest, TestGetLastUnixTimestampWithSensorAccWithTwoChannelsInDifferent
 
 TEST(SensorTest, TestGetLastUnixTimestampThrowRuntimeError) {
   auto sensor = SensorExampleFactory::sensorEmpty();
-  EXPECT_THROW(sensor.getLastUnixTimestamp(DataForm::DATA_FORM_ABSOLUTE), std::runtime_error);
+  EXPECT_THROW(std::ignore = sensor.getLastUnixTimestamp(DataForm::DATA_FORM_ABSOLUTE), std::runtime_error);
 }
 
 TEST(SensorTest, TestGetLastUnixTimestampThrowInvalidArgument) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
-  EXPECT_THROW(sensor.getLastUnixTimestamp(DataForm::DATA_FORM_NONE), std::invalid_argument);
+  EXPECT_THROW(std::ignore = sensor.getLastUnixTimestamp(DataForm::DATA_FORM_NONE), std::invalid_argument);
 }
 
 TEST(SensorTest, TestGetDurationWithSensorAccWithTwoChannelsInDifferentialForm) {

@@ -50,12 +50,12 @@ class PpgMetaData final {
   explicit PpgMetaData(const PpgMetaDataJson& ppgMetaData);
   PpgMetaData();
 
-  ProtobufColor getColor() const;
-  Wavelength getWavelength() const;
-  bool hasColor() const;
-  bool hasWavelength() const;
-  bool isSet() const;
-  PpgMetaDataJson toJson() const;
+  [[nodiscard]] ProtobufColor getColor() const;
+  [[nodiscard]] Wavelength getWavelength() const;
+  [[nodiscard]] bool hasColor() const;
+  [[nodiscard]] bool hasWavelength() const;
+  [[nodiscard]] bool isSet() const;
+  [[nodiscard]] PpgMetaDataJson toJson() const;
 
   void serialize(ProtobufPpgMetaData* protobufPpgMetaData) const;
 

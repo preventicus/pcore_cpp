@@ -54,16 +54,16 @@ class Sensor final {
   explicit Sensor(const ProtobufSensor& protobufSensor);
   Sensor();
 
-  ProtobufSensorType getSensorType() const;
-  Channels getChannels() const;
-  DifferentialTimestampsContainer getDifferentialTimestamps() const;
-  AbsoluteTimestampsContainer getAbsoluteTimestamps() const;
-  UnixTimestamp getFirstUnixTimestamp(DataForm dataForm) const;
-  UnixTimestamp getLastUnixTimestamp(DataForm dataForm) const;
-  Duration getDuration(DataForm dataForm) const;
+  [[nodiscard]] ProtobufSensorType getSensorType() const;
+  [[nodiscard]] Channels getChannels() const;
+  [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestamps() const;
+  [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestamps() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp(DataForm dataForm) const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestamp(DataForm dataForm) const;
+  [[nodiscard]] Duration getDuration(DataForm dataForm) const;
 
   // bool isSet();
-  SensorJson toJson(DataForm dataForm) const;
+  [[nodiscard]] SensorJson toJson(DataForm dataForm) const;
   void serialize(ProtobufSensor* protobufSensor) const;
   void switchDataForm(DataForm currentDataForm);
 
@@ -74,10 +74,10 @@ class Sensor final {
   bool operator!=(const Sensor& sensor) const;
 
  private:
-  AbsoluteTimestampsContainer calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
-  DifferentialTimestampsContainer calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
-                                                                  const BlockIdxs& blockIdxs) const;
-  BlockIdxs findBlockIdxs() const;
+  [[nodiscard]] AbsoluteTimestampsContainer calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
+  [[nodiscard]] DifferentialTimestampsContainer calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
+                                                                                const BlockIdxs& blockIdxs) const;
+  [[nodiscard]] BlockIdxs findBlockIdxs() const;
 
   ProtobufSensorType sensorType;
   Channels channels;

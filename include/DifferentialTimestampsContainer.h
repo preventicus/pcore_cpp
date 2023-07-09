@@ -57,15 +57,15 @@ class DifferentialTimestampsContainer final {
   explicit DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
   DifferentialTimestampsContainer();
 
-  UnixTimestamp getFirstUnixTimestamp() const;
-  BlockIntervals getBlockIntervals() const;
-  TimestampsIntervals getTimestampsIntervals() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp() const;
+  [[nodiscard]] BlockIntervals getBlockIntervals() const;
+  [[nodiscard]] TimestampsIntervals getTimestampsIntervals() const;
 
-  DifferentialTimestampsContainerJson toJson() const;
-  UnixTimestamp calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const;
-  UnixTimestamp calculateLastUnixTimestampInBlock(const BlockIdx& blockIdx,
-                                                  UnixTimestamp firstUnixTimestampInBlock_ms,
-                                                  const DifferentialBlock& lastDifferentialBlock) const;
+  [[nodiscard]] DifferentialTimestampsContainerJson toJson() const;
+  [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const;
+  [[nodiscard]] UnixTimestamp calculateLastUnixTimestampInBlock(const BlockIdx& blockIdx,
+                                                                UnixTimestamp firstUnixTimestampInBlock_ms,
+                                                                const DifferentialBlock& lastDifferentialBlock) const;
 
   void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer) const;
 

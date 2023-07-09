@@ -34,7 +34,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include <fstream>
 #include "Data.h"
-#include "DataExampleFactory.h"
 
 TEST(JsonTest, TestToJsonAbsoluteForm) {
   std::ifstream file("./../../test/JsonTestData/absolute_pcore.json");
