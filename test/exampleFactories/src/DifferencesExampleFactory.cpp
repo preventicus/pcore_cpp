@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DifferencesExampleFactory.h"
+#include "PcoreJson.h"
 
 BlockDifferences DifferencesExampleFactory::blockDifferencesWithThreeMixedDifferences() {
   return {0, 8, 5};

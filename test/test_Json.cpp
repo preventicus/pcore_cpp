@@ -40,7 +40,7 @@ TEST(JsonTest, TestToJsonAbsoluteForm) {
   Json::Value inputJson;
   file >> inputJson;
 
-  auto dataFromJson = Data(inputJson[PcoreJsonKey::data]);
+  auto dataFromJson = Data(inputJson[PcoreJson::Key::data]);
   dataFromJson.switchDataForm();
   DataProtobuf dataProtobuf;
   dataFromJson.serialize(&dataProtobuf);
@@ -57,7 +57,7 @@ TEST(JsonTest, TestToJsonDifferentialForm) {
   Json::Value inputJson;
   file >> inputJson;
   DataProtobuf dataProtobuf;
-  Data(inputJson[PcoreJsonKey::data]).serialize(&dataProtobuf);
+  Data(inputJson[PcoreJson::Key::data]).serialize(&dataProtobuf);
   auto outputJson = Data(dataProtobuf).toJson();
   EXPECT_TRUE(inputJson.toStyledString() == outputJson.toStyledString());
 }

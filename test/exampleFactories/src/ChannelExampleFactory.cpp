@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "ChannelExampleFactory.h"
+#include "PcoreJson.h"
 
 Channel ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest() {
   auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
@@ -90,24 +91,24 @@ ChannelJson ChannelExampleFactory::buildChannelJson(Channel channel) {
   ChannelJson channelJson;
   if (channel.hasAbsoluteBlock() && channel.hasAccMetaData()) {
     auto absoluteBlock = channel.getAbsoluteBlock();
-    channelJson[PcoreJsonKey::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
+    channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
     auto accMetaData = channel.getAccMetaData();
-    channelJson[PcoreJsonKey::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
   } else if (channel.hasAbsoluteBlock() && channel.hasPpgMetaData()) {
     auto absoluteBlock = channel.getAbsoluteBlock();
-    channelJson[PcoreJsonKey::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
+    channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
     auto ppgMetaData = channel.getPpgMetaData();
-    channelJson[PcoreJsonKey::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
   } else if (channel.hasDifferentialBlocks() && channel.hasAccMetaData()) {
     auto differentialBlocks = channel.getDifferentialBlocks();
-    channelJson[PcoreJsonKey::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(differentialBlocks);
+    channelJson[PcoreJson::Key::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(differentialBlocks);
     auto accMetaData = channel.getAccMetaData();
-    channelJson[PcoreJsonKey::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
   } else if (channel.hasDifferentialBlocks() && channel.hasPpgMetaData()) {
     auto differentialBlocks = channel.getDifferentialBlocks();
-    channelJson[PcoreJsonKey::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(differentialBlocks);
+    channelJson[PcoreJson::Key::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(differentialBlocks);
     auto ppgMetaData = channel.getPpgMetaData();
-    channelJson[PcoreJsonKey::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
   }
   return channelJson;
 }

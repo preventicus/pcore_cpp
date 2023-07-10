@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AbsoluteValuesExampleFactory.h"
+#include "PcoreJson.h"
 
 AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithThreePositiveElements() {
   return {1, 2, 3};

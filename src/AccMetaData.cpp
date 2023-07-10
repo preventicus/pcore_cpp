@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AccMetaData.h"
+#include "PcoreJson.h"
 
 using namespace PCore;
 
@@ -40,8 +41,8 @@ AccMetaData::AccMetaData(CoordinateProtobuf coordinate) : coordinate(coordinate)
 AccMetaData::AccMetaData(NormProtobuf norm) : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(norm) {}
 
 AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
-    : coordinate(AccMetaData::coordinateProtobufFromString(accMetaDataJson[PcoreJsonKey::coordinate].asString())),
-      norm(AccMetaData::normProtobufFromString(accMetaDataJson[PcoreJsonKey::norm].asString())) {
+    : coordinate(AccMetaData::coordinateProtobufFromString(accMetaDataJson[PcoreJson::Key::coordinate].asString())),
+      norm(AccMetaData::normProtobufFromString(accMetaDataJson[PcoreJson::Key::norm].asString())) {
   if (this->norm != NormProtobuf::NORM_NONE & this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
     throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
   }
@@ -98,10 +99,10 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
 Json::Value AccMetaData::toJson() const {
   AccMetaDataJson accMetaDataJson;
   if (this->norm != NormProtobuf::NORM_NONE) {
-    accMetaDataJson[PcoreJsonKey::norm] = AccMetaData::normProtobufToString(this->norm);
+    accMetaDataJson[PcoreJson::Key::norm] = AccMetaData::normProtobufToString(this->norm);
   }
   if (this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
-    accMetaDataJson[PcoreJsonKey::coordinate] = AccMetaData::coordinateProtobufToString(this->coordinate);
+    accMetaDataJson[PcoreJson::Key::coordinate] = AccMetaData::coordinateProtobufToString(this->coordinate);
   }
   return accMetaDataJson;
 }

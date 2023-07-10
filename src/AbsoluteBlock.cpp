@@ -33,21 +33,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AbsoluteBlock.h"
 #include <utility>
+#include "PcoreJson.h"
 
 using namespace PCore;
 
 AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) : absoluteValues(std::move(absoluteValues)) {}
 
 AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson)
-    : absoluteValues([&]() {
-        AbsoluteValuesJson absoluteValuesJson = absoluteBlockJson[PcoreJsonKey::absolute_values];
-        AbsoluteValues absoluteValues;
-        absoluteValues.reserve(absoluteValuesJson.size());
-        for (auto& absoluteValueJson : absoluteValuesJson) {
-          absoluteValues.emplace_back(absoluteValueJson.asInt());
-        }
-        return absoluteValues;
-      }()) {}
+    : absoluteValues(PcoreJson::Convert::Json2Vector<AbsoluteValue>(absoluteBlockJson, PcoreJson::Key::absolute_values)) {}
 
 AbsoluteBlock::AbsoluteBlock() : absoluteValues({}) {}
 
@@ -72,10 +65,6 @@ AbsoluteBlockJson AbsoluteBlock::toJson() const {
   if (!isSet()) {
     return absoluteBlockJson;
   }
-  AbsoluteValuesJson absoluteValuesJson(Json::arrayValue);
-  for (auto& absoluteValue : this->absoluteValues) {
-    absoluteValuesJson.append(absoluteValue);
-  }
-  absoluteBlockJson[PcoreJsonKey::absolute_values] = absoluteValuesJson;
+  absoluteBlockJson[PcoreJson::Key::absolute_values] = PcoreJson::Convert::Vector2Json(this->absoluteValues);
   return absoluteBlockJson;
 }

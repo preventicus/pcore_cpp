@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "HeaderExampleFactory.h"
+#include "PcoreJson.h"
 
 TimeZoneOffset HeaderExampleFactory::timeZoneOffsetPositive_min() {
   return 120;
@@ -98,8 +99,8 @@ Header HeaderExampleFactory::headerEmpty() {
 HeaderJson HeaderExampleFactory::buildHeaderJson(Header header) {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(header.getTimeZoneOffset());
-  headerJson[PcoreJsonKey::time_zone_offset_min] = timeZoneOffset_min;
-  headerJson[PcoreJsonKey::pcore_version] = VersionExampleFactory::buildVersionJson(header.getPcoreVersion());
-  headerJson[PcoreJsonKey::data_form] = Header::dataFormToString(header.getDataForm());
+  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffset_min;
+  headerJson[PcoreJson::Key::pcore_version] = VersionExampleFactory::buildVersionJson(header.getPcoreVersion());
+  headerJson[PcoreJson::Key::data_form] = Header::dataFormToString(header.getDataForm());
   return headerJson;
 }

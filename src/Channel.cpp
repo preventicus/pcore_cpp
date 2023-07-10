@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Channel.h"
 #include <utility>
+#include "PcoreJson.h"
 
 Channel::Channel(const AccMetaData& accMetaData, AbsoluteBlock absoluteBlock)
     : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(std::move(absoluteBlock)) {}
@@ -47,21 +48,15 @@ Channel::Channel(const PpgMetaData& ppgMetaData, DifferentialBlocks differential
     : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(std::move(differentialBlocks)), absoluteBlock(AbsoluteBlock()) {}
 
 Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm)
-    : ppgMetaData(sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_PPG ? PpgMetaData(channelJson[PcoreJsonKey::ppg_metadata]) : PpgMetaData()),
-      accMetaData(sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_ACC ? AccMetaData(channelJson[PcoreJsonKey::acc_metadata]) : AccMetaData()),
+    : ppgMetaData(sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_PPG ? PpgMetaData(channelJson[PcoreJson::Key::ppg_metadata]) : PpgMetaData()),
+      accMetaData(sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_ACC ? AccMetaData(channelJson[PcoreJson::Key::acc_metadata]) : AccMetaData()),
       differentialBlocks([&]() {
         switch (dataForm) {
           case DATA_FORM_ABSOLUTE: {
             return DifferentialBlocks();
           }
           case DATA_FORM_DIFFERENTIAL: {
-            DifferentialBlocksJson differentialBlocksJson = channelJson[PcoreJsonKey::differential_blocks];
-            DifferentialBlocks differentialBlocks;
-            differentialBlocks.reserve(differentialBlocksJson.size());
-            for (auto& differentialBlockJson : differentialBlocksJson) {
-              differentialBlocks.emplace_back(DifferentialBlock(differentialBlockJson));
-            }
-            return differentialBlocks;
+            return PcoreJson::Convert::Json2Vector<DifferentialBlock>(channelJson, PcoreJson::Key::differential_blocks);
           }
           default: {
             throw std::runtime_error("DataForm is NONE");
@@ -71,7 +66,7 @@ Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypePr
       absoluteBlock([&]() {
         switch (dataForm) {
           case DATA_FORM_ABSOLUTE: {
-            return AbsoluteBlock(channelJson[PcoreJsonKey::absolute_block]);
+            return AbsoluteBlock(channelJson[PcoreJson::Key::absolute_block]);
           }
           case DATA_FORM_DIFFERENTIAL: {
             return AbsoluteBlock();
@@ -258,14 +253,14 @@ ChannelJson Channel::toJson(const DataForm currentDataForm, const SensorTypeProt
   switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       AbsoluteBlockJson absoluteBlockJson(this->absoluteBlock.toJson());
-      channelJson[PcoreJsonKey::absolute_block] = absoluteBlockJson;
+      channelJson[PcoreJson::Key::absolute_block] = absoluteBlockJson;
       switch (sensorTypeProtobuf) {
         case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
-          channelJson[PcoreJsonKey::ppg_metadata] = this->ppgMetaData.toJson();
+          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
           break;
         }
         case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
-          channelJson[PcoreJsonKey::acc_metadata] = this->accMetaData.toJson();
+          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
           break;
         }
         default: {
@@ -275,18 +270,14 @@ ChannelJson Channel::toJson(const DataForm currentDataForm, const SensorTypeProt
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
-      DifferentialBlocksJson differentialBlocksJson(Json::arrayValue);
-      for (auto& differentialBlock : this->differentialBlocks) {
-        differentialBlocksJson.append(differentialBlock.toJson());
-      }
-      channelJson[PcoreJsonKey::differential_blocks] = differentialBlocksJson;
+      channelJson[PcoreJson::Key::differential_blocks] = PcoreJson::Convert::Vector2Json(this->differentialBlocks);
       switch (sensorTypeProtobuf) {
         case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
-          channelJson[PcoreJsonKey::ppg_metadata] = this->ppgMetaData.toJson();
+          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
           break;
         }
         case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
-          channelJson[PcoreJsonKey::acc_metadata] = this->accMetaData.toJson();
+          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
           break;
         }
         default: {

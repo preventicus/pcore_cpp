@@ -32,7 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include "PcoreJsonKey.h"
 #include "Sensor.h"
 #include "protobuf/pcore.pb.h"
 

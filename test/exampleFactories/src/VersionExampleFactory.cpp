@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "VersionExampleFactory.h"
+#include "PcoreJson.h"
 
 Major VersionExampleFactory::majorOne() {
   return 1;
@@ -98,8 +99,8 @@ VersionJson VersionExampleFactory::buildVersionJson(Version version) {
   MinorJson minorJson(version.getMinor());
   PatchJson patchJson(version.getPatch());
   VersionJson versionJson;
-  versionJson[PcoreJsonKey::major] = majorJson;
-  versionJson[PcoreJsonKey::minor] = minorJson;
-  versionJson[PcoreJsonKey::patch] = patchJson;
+  versionJson[PcoreJson::Key::major] = majorJson;
+  versionJson[PcoreJson::Key::minor] = minorJson;
+  versionJson[PcoreJson::Key::patch] = patchJson;
   return versionJson;
 }

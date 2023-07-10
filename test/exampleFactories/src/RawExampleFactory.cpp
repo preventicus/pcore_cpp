@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "RawExampleFactory.h"
+#include "PcoreJson.h"
 
 Raw RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm() {
   Sensors sensors;
@@ -88,6 +89,6 @@ RawJson RawExampleFactory::buildRawJson(Raw raw, DataForm dataForm) {
     SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor, dataForm);
     sensorsJson.append(sensorJson);
   }
-  rawJson[PcoreJsonKey::sensors] = sensorsJson;
+  rawJson[PcoreJson::Key::sensors] = sensorsJson;
   return rawJson;
 }

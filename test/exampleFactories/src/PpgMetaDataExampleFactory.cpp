@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "PpgMetaDataExampleFactory.h"
+#include "PcoreJson.h"
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorGreen() {
   return PpgMetaData(ColorProtobuf::COLOR_GREEN);
@@ -68,9 +69,9 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
 PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgMetaData) {
   PpgMetaDataJson ppgMetaDataJson;
   if (ppgMetaData.hasWavelength()) {
-    ppgMetaDataJson[PcoreJsonKey::wavelength_nm] = ppgMetaData.getWavelength_nm();
+    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = ppgMetaData.getWavelength_nm();
   } else if (ppgMetaData.hasColor()) {
-    ppgMetaDataJson[PcoreJsonKey::color] = PpgMetaData::colorProtobufToString(ppgMetaData.getColor());
+    ppgMetaDataJson[PcoreJson::Key::color] = PpgMetaData::colorProtobufToString(ppgMetaData.getColor());
   }
   return ppgMetaDataJson;
 }

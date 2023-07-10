@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Raw.h"
 #include <utility>
+#include "PcoreJson.h"
 
 Raw::Raw(Sensors sensors) : sensors(std::move(sensors)) {}
 
@@ -47,16 +48,7 @@ Raw::Raw(const RawProtobuf& rawProtobuf)
         return sensors;
       }()) {}
 
-Raw::Raw(const RawJson& rawJson, DataForm dataForm)
-    : sensors([&]() {
-        Sensors sensors;
-        SensorsJson sensorsJson = rawJson[PcoreJsonKey::sensors];
-        sensors.reserve(sensorsJson.size());
-        for (auto& sensorJson : sensorsJson) {
-          sensors.emplace_back(Sensor(sensorJson, dataForm));
-        }
-        return sensors;
-      }()) {}
+Raw::Raw(const RawJson& rawJson, DataForm dataForm) : sensors(PcoreJson::Convert::Json2Vector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)) {}
 
 Raw::Raw() : sensors({}) {}
 
@@ -99,10 +91,6 @@ void Raw::switchDataForm(const DataForm currentDataForm) {
 
 RawJson Raw::toJson(const DataForm currentDataForm) const {
   RawJson rawJson;
-  SensorsJson sensorsJson(Json::arrayValue);
-  for (auto& sensor : this->sensors) {
-    sensorsJson.append(sensor.toJson(currentDataForm));
-  }
-  rawJson[PcoreJsonKey::sensors] = sensorsJson;
+  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::Vector2Json(this->sensors, currentDataForm);
   return rawJson;
 }

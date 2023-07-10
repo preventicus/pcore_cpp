@@ -38,7 +38,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "BlockIdx.h"
 #include "DataForm.h"
 #include "DifferentialBlock.h"
-#include "PcoreJsonKey.h"
 #include "PpgMetaData.h"
 #include "protobuf/pcore_raw.pb.h"
 

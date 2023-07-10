@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DifferentialBlockExampleFactory.h"
+#include "PcoreJson.h"
 
 DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues() {
   auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements();
@@ -91,6 +92,6 @@ DifferentialBlockJson DifferentialBlockExampleFactory::buildDifferentialBlockJso
   auto differentialValues = differentialBlock.getDifferentialValues();
   auto differentialValuesJson = DifferentialValuesExampleFactory::buildDifferentialValuesJson(differentialValues);
   DifferentialBlockJson differentialBlockJson;
-  differentialBlockJson[PcoreJsonKey::differential_values] = differentialValuesJson;
+  differentialBlockJson[PcoreJson::Key::differential_values] = differentialValuesJson;
   return differentialBlockJson;
 }

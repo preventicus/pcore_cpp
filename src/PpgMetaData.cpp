@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "PpgMetaData.h"
+#include "PcoreJson.h"
 
 using namespace PCore;
 
@@ -42,11 +43,11 @@ PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) : color(colorProtobuf), wa
 PpgMetaData::PpgMetaData(Wavelength wavelength_nm) : color(ColorProtobuf::COLOR_NONE), wavelength_nm(wavelength_nm) {}
 
 PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
-    : color(PpgMetaData::colorProtobufFromString(ppgMetaDataJson[PcoreJsonKey::color].asString())), wavelength_nm([&]() {
-        if (ppgMetaDataJson[PcoreJsonKey::wavelength_nm].asInt() < 0) {
+    : color(PpgMetaData::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString())), wavelength_nm([&]() {
+        if (ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asInt() < 0) {
           throw std::invalid_argument("wavelength_nm is negative in json.");
         }
-        return ppgMetaDataJson[PcoreJsonKey::wavelength_nm].asUInt();
+        return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
       }()) {
   if (this->wavelength_nm != 0 & this->color != ColorProtobuf::COLOR_NONE) {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
@@ -90,10 +91,10 @@ PpgMetaDataJson PpgMetaData::toJson() const {
   PpgMetaDataJson ppgMetaDataJson;
   WavelegthJson wavelengthJson(this->wavelength_nm);
   if (this->wavelength_nm != 0) {
-    ppgMetaDataJson[PcoreJsonKey::wavelength_nm] = wavelengthJson;
+    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
   }
   if (this->color != ColorProtobuf::COLOR_NONE) {
-    ppgMetaDataJson[PcoreJsonKey::color] = PpgMetaData::colorProtobufToString(this->color);
+    ppgMetaDataJson[PcoreJson::Key::color] = PpgMetaData::colorProtobufToString(this->color);
   }
   return ppgMetaDataJson;
 }

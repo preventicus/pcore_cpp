@@ -33,12 +33,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Data.h"
 #include <utility>
+#include "PcoreJson.h"
 
 Data::Data(Raw raw, const Header& header) : header(header), raw(std::move(raw)) {}
 
 Data::Data(const DataProtobuf& DataProtobuf) : header(Header(DataProtobuf.header())), raw(Raw(DataProtobuf.raw())) {}
 
-Data::Data(const DataJson& dataJson) : header(Header(dataJson[PcoreJsonKey::header])), raw(Raw(dataJson[PcoreJsonKey::raw], header.getDataForm())) {}
+Data::Data(const DataJson& dataJson)
+    : header(Header(dataJson[PcoreJson::Key::header])), raw(Raw(dataJson[PcoreJson::Key::raw], header.getDataForm())) {}
 
 Data::Data() : header(Header()), raw(Raw()) {}
 
@@ -78,9 +80,9 @@ void Data::switchDataForm() {
 
 Json::Value Data::toJson() const {
   DataJson data;
-  data[PcoreJsonKey::header] = this->header.toJson();
-  data[PcoreJsonKey::raw] = this->raw.toJson(this->header.getDataForm());
+  data[PcoreJson::Key::header] = this->header.toJson();
+  data[PcoreJson::Key::raw] = this->raw.toJson(this->header.getDataForm());
   Json::Value json;
-  json[PcoreJsonKey::data] = data;
+  json[PcoreJson::Key::data] = data;
   return json;
 }

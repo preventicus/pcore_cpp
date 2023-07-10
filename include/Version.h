@@ -33,7 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <json/json.h>
-#include "PcoreJsonKey.h"
 #include "protobuf/pcore_version.pb.h"
 
 using VersionProtobuf = com::preventicus::pcore::Version;
@@ -63,8 +62,6 @@ class Version final {
   bool operator!=(const Version& version) const;
 
  private:
-  [[nodiscard]] Major getVersionPartsFromJson(const VersionJson& versionJson, JsonKey jsonKey) const;
-
   Major major;
   Minor minor;
   Patch patch;

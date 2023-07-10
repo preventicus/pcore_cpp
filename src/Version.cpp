@@ -32,15 +32,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Version.h"
+#include "PcoreJson.h"
 
 using namespace PCore;
 
 Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
 
 Version::Version(const VersionJson& versionJson)
-    : major(this->getVersionPartsFromJson(versionJson, PcoreJsonKey::major)),
-      minor(this->getVersionPartsFromJson(versionJson, PcoreJsonKey::minor)),
-      patch(this->getVersionPartsFromJson(versionJson, PcoreJsonKey::patch)) {}
+    : major(PcoreJson::Convert::Json2Value<Major>(versionJson, PcoreJson::Key::major)),
+      minor(PcoreJson::Convert::Json2Value<Minor>(versionJson, PcoreJson::Key::minor)),
+      patch(PcoreJson::Convert::Json2Value<Patch>(versionJson, PcoreJson::Key::patch)) {}
 
 Version::Version(const VersionProtobuf& versionProtobuf)
     : major(versionProtobuf.major()), minor(versionProtobuf.minor()), patch(versionProtobuf.patch()) {}
@@ -81,15 +82,8 @@ VersionJson Version::toJson() const {
   MinorJson minorJson(this->minor);
   PatchJson patchJson(this->patch);
   VersionJson versionJson;
-  versionJson[PcoreJsonKey::major] = majorJson;
-  versionJson[PcoreJsonKey::minor] = minorJson;
-  versionJson[PcoreJsonKey::patch] = patchJson;
+  versionJson[PcoreJson::Key::major] = majorJson;
+  versionJson[PcoreJson::Key::minor] = minorJson;
+  versionJson[PcoreJson::Key::patch] = patchJson;
   return versionJson;
-}
-
-Major Version::getVersionPartsFromJson(const VersionJson& versionJson, const JsonKey jsonKey) const {
-  if (versionJson[jsonKey].asInt() < 0) {
-    throw std::invalid_argument(jsonKey + " is negative in json.");
-  }
-  return versionJson[jsonKey].asUInt();
 }

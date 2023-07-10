@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "Header.h"
-#include "PcoreJsonKey.h"
+#include "PcoreJson.h"
 #include "Raw.h"
 #include "protobuf/pcore.pb.h"
 

@@ -35,16 +35,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include "BlockIdx.h"
 #include "DifferentialBlock.h"
-#include "PcoreJsonKey.h"
 #include "UnixTimestamp.h"
 #include "protobuf/pcore_raw.pb.h"
 
 using namespace PCore;
 
 using DifferentialTimestampContainerProtobuf = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
-using Difference = uint32_t;
-using BlockDifferences = std::vector<Difference>;
-using TimestampsDifferences = std::vector<Difference>;
+using TimeDifference = uint32_t;
+using BlockDifferences = std::vector<TimeDifference>;
+using TimestampsDifferences = std::vector<TimeDifference>;
 using DifferentialTimestampsContainerJson = Json::Value;
 
 using UnixTimestampJson = Json::Value;

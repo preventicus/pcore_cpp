@@ -33,13 +33,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AccMetaDataExampleFactory.h"
 #include "AccMetaData.h"
+#include "PcoreJson.h"
 
 AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(AccMetaData accMetaData) {
   AccMetaDataJson accMetaDataJson;
   if (accMetaData.hasCoordinate()) {
-    accMetaDataJson[PcoreJsonKey::coordinate] = AccMetaData::coordinateProtobufToString(accMetaData.getCoordinate());
+    accMetaDataJson[PcoreJson::Key::coordinate] = AccMetaData::coordinateProtobufToString(accMetaData.getCoordinate());
   } else if (accMetaData.hasNorm()) {
-    accMetaDataJson[PcoreJsonKey::norm] = AccMetaData::normProtobufToString(accMetaData.getNorm());
+    accMetaDataJson[PcoreJson::Key::norm] = AccMetaData::normProtobufToString(accMetaData.getNorm());
   }
   return accMetaDataJson;
 }

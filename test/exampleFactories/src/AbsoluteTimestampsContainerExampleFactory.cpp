@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AbsoluteTimestampsContainerExampleFactory.h"
+#include "PcoreJson.h"
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps() {
   auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestamps_ms();
@@ -67,6 +68,6 @@ AbsoluteTimestampsContainerJson AbsoluteTimestampsContainerExampleFactory::build
     AbsoluteTimestampsContainer absoluteTimestampsContainer) {
   auto unixTimestamps = absoluteTimestampsContainer.getUnixTimestamps_ms();
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
-  absoluteTimestampsContainerJson[PcoreJsonKey::unix_timestamps_ms] = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
+  absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
   return absoluteTimestampsContainerJson;
 }

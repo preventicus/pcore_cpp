@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DifferentialValuesExampleFactory.h"
+#include "PcoreJson.h"
 
 DifferentialValues DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements() {
   return {30, 32, 54};

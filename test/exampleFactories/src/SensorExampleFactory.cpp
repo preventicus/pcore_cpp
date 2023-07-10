@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "SensorExampleFactory.h"
+#include "PcoreJson.h"
 
 Sensor SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm() {
   Channels channels;
@@ -96,13 +97,13 @@ SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataFor
   switch (dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       auto absoluteTimestampsContainer = sensor.getAbsoluteTimestampsContainer();
-      sensorJson[PcoreJsonKey::absolute_timestamps_container] =
+      sensorJson[PcoreJson::Key::absolute_timestamps_container] =
           AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       auto differentialTimestampsContainer = sensor.getDifferentialTimestampsContainer();
-      sensorJson[PcoreJsonKey::differential_timestamps_container] =
+      sensorJson[PcoreJson::Key::differential_timestamps_container] =
           DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
       break;
     }
@@ -113,7 +114,7 @@ SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataFor
   for (auto& channel : channels) {
     channelsJson.append(ChannelExampleFactory::buildChannelJson(channel));
   }
-  sensorJson[PcoreJsonKey::channels] = channelsJson;
-  sensorJson[PcoreJsonKey::sensor_type] = Sensor::senorTypeToString(sensor.getSensorType());
+  sensorJson[PcoreJson::Key::channels] = channelsJson;
+  sensorJson[PcoreJson::Key::sensor_type] = Sensor::senorTypeToString(sensor.getSensorType());
   return sensorJson;
 }

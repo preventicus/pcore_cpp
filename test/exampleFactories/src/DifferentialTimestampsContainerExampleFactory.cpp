@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DifferentialTimestampsContainerExampleFactory.h"
 #include "DifferencesExampleFactory.h"
+#include "PcoreJson.h"
 #include "UnixTimestampsExampleFactory.h"
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks() {
@@ -75,8 +76,8 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactor
   auto blockDifferencesJson = DifferencesExampleFactory::buildBlockDifferencesJson(blockDifferences);
   auto timestampsDifferencesJson = DifferencesExampleFactory::buildTimestampsDifferencesJson(timestampsDifferences);
   DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
-  differentialTimestampsContainerJson[PcoreJsonKey::first_unix_timestamp_ms] = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
-  differentialTimestampsContainerJson[PcoreJsonKey::block_differences_ms] = blockDifferencesJson;
-  differentialTimestampsContainerJson[PcoreJsonKey::timestamps_differences_ms] = timestampsDifferencesJson;
+  differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms] = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
+  differentialTimestampsContainerJson[PcoreJson::Key::block_differences_ms] = blockDifferencesJson;
+  differentialTimestampsContainerJson[PcoreJson::Key::timestamps_differences_ms] = timestampsDifferencesJson;
   return differentialTimestampsContainerJson;
 }

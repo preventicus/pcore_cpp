@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AbsoluteBlockExampleFactory.h"
+#include "PcoreJson.h"
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithThreePositiveAbsoluteValues() {
   auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreePositiveElements();
@@ -68,7 +69,7 @@ AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteBl
   if (absoluteBlock.isSet()) {
     auto absoluteValues = absoluteBlock.getAbsoluteValues();
     auto absoluteValuesJson = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(absoluteValues);
-    absoluteBlockJson[PcoreJsonKey::absolute_values] = absoluteValuesJson;
+    absoluteBlockJson[PcoreJson::Key::absolute_values] = absoluteValuesJson;
   }
   return absoluteBlockJson;
 }

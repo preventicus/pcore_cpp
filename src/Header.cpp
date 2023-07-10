@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Header.h"
+#include "PcoreJson.h"
 
 Header::Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
     : timeZoneOffset_min(timeZoneOffset_min), pcoreVersion(version), dataForm(dataForm) {
@@ -46,9 +47,9 @@ Header::Header(const HeaderProtobuf& headerProtobuf)
 }
 
 Header::Header(const HeaderJson& headerJson)
-    : timeZoneOffset_min(headerJson[PcoreJsonKey::time_zone_offset_min].asInt()),
-      pcoreVersion(Version(headerJson[PcoreJsonKey::pcore_version])),
-      dataForm(Header::dataFormFromString(headerJson[PcoreJsonKey::data_form].asString())) {
+    : timeZoneOffset_min(headerJson[PcoreJson::Key::time_zone_offset_min].asInt()),
+      pcoreVersion(Version(headerJson[PcoreJson::Key::pcore_version])),
+      dataForm(Header::dataFormFromString(headerJson[PcoreJson::Key::data_form].asString())) {
   this->checkTimeZoneOffset();
 }
 
@@ -103,9 +104,9 @@ void Header::switchDataForm() {
 HeaderJson Header::toJson() const {
   HeaderJson headerJson;
   TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
-  headerJson[PcoreJsonKey::time_zone_offset_min] = timeZoneOffset_min;
-  headerJson[PcoreJsonKey::pcore_version] = this->pcoreVersion.toJson();
-  headerJson[PcoreJsonKey::data_form] = Header::dataFormToString(this->dataForm);
+  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffset_min;
+  headerJson[PcoreJson::Key::pcore_version] = this->pcoreVersion.toJson();
+  headerJson[PcoreJson::Key::data_form] = Header::dataFormToString(this->dataForm);
   return headerJson;
 }
 

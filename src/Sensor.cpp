@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Sensor.h"
 #include <utility>
+#include "PcoreJson.h"
 
 Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
     : sensorType(sensorTypeProtobuf), channels(std::move(channels)), differentialTimestampsContainer(std::move(differentialTimestampsContainer)) {}
@@ -41,16 +42,8 @@ Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestamps
     : sensorType(sensorTypeProtobuf), channels(std::move(channels)), absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)) {}
 
 Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
-    : sensorType(Sensor::senorTypeFromString(sensorJson[PcoreJsonKey::sensor_type].asString())),
-      channels([&]() {
-        ChannelsJson channelsJson = sensorJson[PcoreJsonKey::channels];
-        Channels channels;
-        channels.reserve(channelsJson.size());
-        for (auto& channelJson : channelsJson) {
-          channels.emplace_back(Channel(channelJson, this->sensorType, dataForm));
-        }
-        return channels;
-      }()),
+    : sensorType(Sensor::senorTypeFromString(sensorJson[PcoreJson::Key::sensor_type].asString())),
+      channels(PcoreJson::Convert::Json2Vector<Channel>(sensorJson, PcoreJson::Key::channels, this->sensorType, dataForm)),
       differentialTimestampsContainer([&]() {
         switch (dataForm) {
           case DataForm::DATA_FORM_ABSOLUTE: {
@@ -232,13 +225,13 @@ BlockIdxs Sensor::findBlockIdxs() const {
   if (this->absoluteTimestampsContainer.getUnixTimestamps_ms().size() == 0) {  // TODO use is set
     return blockIdxs;
   }
-  Difference referenceTimeDifference = 0;
+  TimeDifference referenceTimeDifference = 0;
   bool isNewBlock = true;
   blockIdxs.push_back(0);
   const auto absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps_ms();
   const auto numberOfElements = absoluteUnixTimestamps.size();
   for (size_t i = 1; i < numberOfElements; i++) {
-    const Difference timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
+    const TimeDifference timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
     if (isNewBlock) {
       referenceTimeDifference = timeDifference;
       isNewBlock = false;
@@ -301,7 +294,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
   const auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps_ms();
   firstUnixTimestamp_ms = absoluteUnixTimestamps[0];
   if (numberOfBlocks == 1) {
-    Difference timestampsDifference = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
+    TimeDifference timestampsDifference = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
     timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsDifference);
     blockDifferences_ms.push_back(0);
     return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
@@ -325,15 +318,14 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
 
 SensorJson Sensor::toJson(const DataForm currentDataForm) const {
   SensorJson sensorJson;
-  ChannelsJson channelsJson(Json::arrayValue);
 
   switch (currentDataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      sensorJson[PcoreJsonKey::absolute_timestamps_container] = this->absoluteTimestampsContainer.toJson();
+      sensorJson[PcoreJson::Key::absolute_timestamps_container] = this->absoluteTimestampsContainer.toJson();
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
-      sensorJson[PcoreJsonKey::differential_timestamps_container] = this->differentialTimestampsContainer.toJson();
+      sensorJson[PcoreJson::Key::differential_timestamps_container] = this->differentialTimestampsContainer.toJson();
       break;
     }
     default: {
@@ -341,12 +333,8 @@ SensorJson Sensor::toJson(const DataForm currentDataForm) const {
     }
   }
 
-  for (auto& channel : this->channels) {
-    channelsJson.append(channel.toJson(currentDataForm, this->sensorType));
-  }
-
-  sensorJson[PcoreJsonKey::channels] = channelsJson;
-  sensorJson[PcoreJsonKey::sensor_type] = Sensor::senorTypeToString(this->sensorType);
+  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::Vector2Json(this->channels, currentDataForm, this->sensorType);
+  sensorJson[PcoreJson::Key::sensor_type] = Sensor::senorTypeToString(this->sensorType);
   return sensorJson;
 }
 

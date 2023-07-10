@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DataExampleFactory.h"
+#include "PcoreJson.h"
 
 Data DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive() {
   auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
@@ -71,9 +72,9 @@ Json::Value DataExampleFactory::buildDataJson(Data data) {
   DataJson dataJson;
   auto header = data.getHeader();
   auto raw = data.getRaw();
-  dataJson[PcoreJsonKey::header] = HeaderExampleFactory::buildHeaderJson(header);
-  dataJson[PcoreJsonKey::raw] = RawExampleFactory::buildRawJson(raw, header.getDataForm());
+  dataJson[PcoreJson::Key::header] = HeaderExampleFactory::buildHeaderJson(header);
+  dataJson[PcoreJson::Key::raw] = RawExampleFactory::buildRawJson(raw, header.getDataForm());
   Json::Value json;
-  json[PcoreJsonKey::data] = dataJson;
+  json[PcoreJson::Key::data] = dataJson;
   return json;
 }

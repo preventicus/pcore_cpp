@@ -32,21 +32,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AbsoluteTimestampsContainer.h"
+#include "PcoreJson.h"
 
 using namespace PCore;
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms) : unixTimestamps_ms(std::move(unixTimestamps_ms)) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
-    : unixTimestamps_ms([&]() {
-        UnixTimestampsJson unixTimestampsJson = absoluteTimestampsContainerJson[PcoreJsonKey::unix_timestamps_ms];
-        UnixTimestamps unixTimestamps_ms;
-        unixTimestamps_ms.reserve(unixTimestampsJson.size());
-        for (auto& unixTimestampJson : unixTimestampsJson) {
-          unixTimestamps_ms.emplace_back(unixTimestampJson.asUInt64());
-        }
-        return unixTimestamps_ms;
-      }()) {}
+    : unixTimestamps_ms(PcoreJson::Convert::Json2Vector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms)) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestamps_ms({}) {}
 
@@ -64,10 +57,6 @@ bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& 
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
-  UnixTimestampsJson unixTimestampsJson(Json::arrayValue);
-  for (auto& unixTimestamp_ms : this->unixTimestamps_ms) {
-    unixTimestampsJson.append(unixTimestamp_ms);
-  }
-  absoluteTimestampsContainerJson[PcoreJsonKey::unix_timestamps_ms] = unixTimestampsJson;
+  absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = PcoreJson::Convert::Vector2Json(this->unixTimestamps_ms);
   return absoluteTimestampsContainerJson;
 }
