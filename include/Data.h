@@ -37,20 +37,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Raw.h"
 #include "protobuf/pcore.pb.h"
 
-using ProtobufData = com::preventicus::pcore::Data;
+using DataProtobuf = com::preventicus::pcore::Data;
 using DataJson = Json::Value;
 
 class Data final {
  public:
   explicit Data(Raw raw, const Header& header);
-  explicit Data(const ProtobufData& protobufData);
+  explicit Data(const DataProtobuf& DataProtobuf);
   explicit Data(const DataJson& dataJson);
   Data();
 
   [[nodiscard]] Raw getRaw() const;
   [[nodiscard]] Header getHeader() const;
   [[nodiscard]] DataJson toJson() const;
-  void serialize(ProtobufData* protobufData) const;
+  void serialize(DataProtobuf* dataProtobuf) const;
   void switchDataForm();
 
   bool operator==(const Data& data) const;

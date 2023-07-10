@@ -35,11 +35,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <utility>
 
-Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensorType sensorType)
-    : sensorType(sensorType), channels(std::move(channels)), differentialTimestampsContainer(std::move(differentialTimestampsContainer)) {}
+Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
+    : sensorType(sensorTypeProtobuf), channels(std::move(channels)), differentialTimestampsContainer(std::move(differentialTimestampsContainer)) {}
 
-Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensorType sensorType)
-    : sensorType(sensorType), channels(std::move(channels)), absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)) {}
+Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
+    : sensorType(sensorTypeProtobuf), channels(std::move(channels)), absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)) {}
 
 Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
     : sensorType(Sensor::senorTypeFromString(sensorJson[PcoreJsonKey::sensor_type].asString())),
@@ -79,25 +79,25 @@ Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
         }
       }()) {}
 
-Sensor::Sensor(const ProtobufSensor& protobufSensor)
-    : sensorType(protobufSensor.sensor_type()),
+Sensor::Sensor(const SensorProtobuf& sensorProtobuf)
+    : sensorType(sensorProtobuf.sensor_type()),
       channels([&]() {
         Channels channels;
-        for (auto& channel : protobufSensor.channels()) {
+        for (auto& channel : sensorProtobuf.channels()) {
           channels.emplace_back(Channel(channel));
         }
         return channels;
       }()),
-      differentialTimestampsContainer(DifferentialTimestampsContainer(protobufSensor.differential_timestamps_container())),
+      differentialTimestampsContainer(DifferentialTimestampsContainer(sensorProtobuf.differential_timestamps_container())),
       absoluteTimestampsContainer(AbsoluteTimestampsContainer()) {}
 
 Sensor::Sensor()
-    : sensorType(ProtobufSensorType::SENSOR_TYPE_NONE),
+    : sensorType(SensorTypeProtobuf::SENSOR_TYPE_NONE),
       channels({}),
       differentialTimestampsContainer(DifferentialTimestampsContainer()),
       absoluteTimestampsContainer(AbsoluteTimestampsContainer()) {}
 
-ProtobufSensorType Sensor::getSensorType() const {
+SensorTypeProtobuf Sensor::getSensorType() const {
   return this->sensorType;
 }
 
@@ -132,23 +132,23 @@ bool Sensor::operator!=(const Sensor& sensor) const {
 }
 
 // bool Sensor::isSet() {
-//   return this->channels.empty() && this->sensorType == ProtobufSensorType::SENSOR_TYPE_NONE && ( !this->absoluteTimestampsContainer.isSet() &&
+//   return this->channels.empty() && this->sensorType == SensorTypeProtobuf::SENSOR_TYPE_NONE && ( !this->absoluteTimestampsContainer.isSet() &&
 //   !this->differentialTimestampsContainer.isSet() );
 // }
 
-void Sensor::serialize(ProtobufSensor* protobufSensor) const {
-  if (protobufSensor == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufSensor is a null pointer");
+void Sensor::serialize(SensorProtobuf* sensorProtobuf) const {
+  if (sensorProtobuf == nullptr) {
+    throw std::invalid_argument("Error in serialize: sensorProtobuf is a null pointer");
   }
   for (auto& channel : this->channels) {
-    ProtobufChannel* protobufChannel = protobufSensor->add_channels();
-    channel.serialize(protobufChannel);
+    auto* channelProtobuf = sensorProtobuf->add_channels();
+    channel.serialize(channelProtobuf);
   }
 
-  protobufSensor->set_sensor_type(this->sensorType);
-  ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer;
-  this->differentialTimestampsContainer.serialize(&protobufDifferentialTimestampContainer);
-  protobufSensor->mutable_differential_timestamps_container()->CopyFrom(protobufDifferentialTimestampContainer);
+  sensorProtobuf->set_sensor_type(this->sensorType);
+  DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
+  this->differentialTimestampsContainer.serialize(&differentialTimestampContainerProtobuf);
+  sensorProtobuf->mutable_differential_timestamps_container()->CopyFrom(differentialTimestampContainerProtobuf);
 }
 
 void Sensor::switchDataForm(const DataForm currentDataForm) {
@@ -351,22 +351,22 @@ SensorJson Sensor::toJson(const DataForm currentDataForm) const {
   return sensorJson;
 }
 
-ProtobufSensorType Sensor::senorTypeFromString(const SensorTypeString senorTypeString) {
+SensorTypeProtobuf Sensor::senorTypeFromString(const SensorTypeString senorTypeString) {
   if (senorTypeString == "SENSOR_TYPE_PPG") {
-    return ProtobufSensorType::SENSOR_TYPE_PPG;
+    return SensorTypeProtobuf::SENSOR_TYPE_PPG;
   } else if (senorTypeString == "SENSOR_TYPE_ACC") {
-    return ProtobufSensorType::SENSOR_TYPE_ACC;
+    return SensorTypeProtobuf::SENSOR_TYPE_ACC;
   } else {
-    return ProtobufSensorType::SENSOR_TYPE_NONE;
+    return SensorTypeProtobuf::SENSOR_TYPE_NONE;
   }
 }
 
-SensorTypeString Sensor::senorTypeToString(const ProtobufSensorType protobufSensorType) {
-  switch (protobufSensorType) {
-    case ProtobufSensorType::SENSOR_TYPE_ACC: {
+SensorTypeString Sensor::senorTypeToString(const SensorTypeProtobuf sensorTypeProtobuf) {
+  switch (sensorTypeProtobuf) {
+    case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
       return "SENSOR_TYPE_ACC";
     }
-    case ProtobufSensorType::SENSOR_TYPE_PPG: {
+    case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
       return "SENSOR_TYPE_PPG";
     }
     default: {

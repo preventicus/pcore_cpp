@@ -34,19 +34,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PpgMetaDataExampleFactory.h"
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorGreen() {
-  return PpgMetaData(ProtobufColor::COLOR_GREEN);
+  return PpgMetaData(ColorProtobuf::COLOR_GREEN);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorBlue() {
-  return PpgMetaData(ProtobufColor::COLOR_BLUE);
+  return PpgMetaData(ColorProtobuf::COLOR_BLUE);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorRed() {
-  return PpgMetaData(ProtobufColor::COLOR_RED);
+  return PpgMetaData(ColorProtobuf::COLOR_RED);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithColorNone() {
-  return PpgMetaData(ProtobufColor::COLOR_NONE);
+  return PpgMetaData(ColorProtobuf::COLOR_NONE);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0() {
@@ -70,7 +70,7 @@ PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgM
   if (ppgMetaData.hasWavelength()) {
     ppgMetaDataJson[PcoreJsonKey::wavelength_nm] = ppgMetaData.getWavelength_nm();
   } else if (ppgMetaData.hasColor()) {
-    ppgMetaDataJson[PcoreJsonKey::color] = PpgMetaData::protobufColorToString(ppgMetaData.getColor());
+    ppgMetaDataJson[PcoreJsonKey::color] = PpgMetaData::colorProtobufToString(ppgMetaData.getColor());
   }
   return ppgMetaDataJson;
 }

@@ -37,7 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Version.h"
 #include "protobuf/pcore.pb.h"
 
-using ProtobufHeader = com::preventicus::pcore::Data_Header;
+using HeaderProtobuf = com::preventicus::pcore::Data_Header;
 using TimeZoneOffset = int32_t;
 using HeaderJson = Json::Value;
 using DataFormString = std::string;
@@ -46,7 +46,7 @@ using TimeZoneOffsetJson = Json::Value;
 class Header final {
  public:
   explicit Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
-  explicit Header(const ProtobufHeader& protobufHeader);
+  explicit Header(const HeaderProtobuf& headerProtobuf);
   explicit Header(const HeaderJson& header);
   Header();
 
@@ -55,7 +55,7 @@ class Header final {
   [[nodiscard]] DataForm getDataForm() const;
 
   [[nodiscard]] HeaderJson toJson() const;
-  void serialize(ProtobufHeader* protobufHeader) const;
+  void serialize(HeaderProtobuf* headerProtobuf) const;
   void switchDataForm();
 
   static DataForm dataFormFromString(DataFormString dataFormString);

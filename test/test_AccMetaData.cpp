@@ -36,20 +36,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 TEST(AccMetaDataTest, TestSetAndGetCoordinate) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  EXPECT_EQ(accMetaData.getCoordinate(), ProtobufCoordinate::COORDINATE_X);
-  EXPECT_EQ(accMetaData.getNorm(), ProtobufNorm::NORM_NONE);
+  EXPECT_EQ(accMetaData.getCoordinate(), CoordinateProtobuf::COORDINATE_X);
+  EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_NONE);
 }
 
 TEST(AccMetaDataTest, TestSetAndGetNorm) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
-  EXPECT_EQ(accMetaData.getCoordinate(), ProtobufCoordinate::COORDINATE_NONE);
-  EXPECT_EQ(accMetaData.getNorm(), ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+  EXPECT_EQ(accMetaData.getCoordinate(), CoordinateProtobuf::COORDINATE_NONE);
+  EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM);
 }
 
 TEST(AccMetaDataTest, TestSetAndGetEmptyConstructor) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
-  EXPECT_EQ(accMetaData.getCoordinate(), ProtobufCoordinate::COORDINATE_NONE);
-  EXPECT_EQ(accMetaData.getNorm(), ProtobufNorm::NORM_NONE);
+  EXPECT_EQ(accMetaData.getCoordinate(), CoordinateProtobuf::COORDINATE_NONE);
+  EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_NONE);
 }
 
 TEST(AccMetaDataTest, TestIsEqualCoordinateWithAccMetaDataWithCoordinateX) {
@@ -163,46 +163,46 @@ TEST(AccMetaDataTest, TestIsSetWithAccMetaDataNotSet) {
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateX) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  ProtobufAccMetaData protobufAccMetaData;
-  accMetaData1.serialize(&protobufAccMetaData);
-  auto accMetaData2 = AccMetaData(protobufAccMetaData);
+  AccMetaDataProtobuf accMetaDataProtobuf;
+  accMetaData1.serialize(&accMetaDataProtobuf);
+  auto accMetaData2 = AccMetaData(accMetaDataProtobuf);
   EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateY) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
-  ProtobufAccMetaData protobufAccMetaData;
-  accMetaData1.serialize(&protobufAccMetaData);
-  auto accMetaData2 = AccMetaData(protobufAccMetaData);
+  AccMetaDataProtobuf accMetaDataProtobuf;
+  accMetaData1.serialize(&accMetaDataProtobuf);
+  auto accMetaData2 = AccMetaData(accMetaDataProtobuf);
   EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateZ) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
-  ProtobufAccMetaData protobufAccMetaData;
-  accMetaData1.serialize(&protobufAccMetaData);
-  auto accMetaData2 = AccMetaData(protobufAccMetaData);
+  AccMetaDataProtobuf accMetaDataProtobuf;
+  accMetaData1.serialize(&accMetaDataProtobuf);
+  auto accMetaData2 = AccMetaData(accMetaDataProtobuf);
   EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithNormEuclideanDifferencesNorm) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
-  ProtobufAccMetaData protobufAccMetaData;
-  accMetaData1.serialize(&protobufAccMetaData);
-  auto accMetaData2 = AccMetaData(protobufAccMetaData);
+  AccMetaDataProtobuf accMetaDataProtobuf;
+  accMetaData1.serialize(&accMetaDataProtobuf);
+  auto accMetaData2 = AccMetaData(accMetaDataProtobuf);
   EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
 TEST(AccMetaDataTest, TestSerializeNoThrow) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  ProtobufAccMetaData protobufData;
-  EXPECT_NO_THROW(accMetaData.serialize(&protobufData));
+  AccMetaDataProtobuf accMetaDataProtobuf;
+  EXPECT_NO_THROW(accMetaData.serialize(&accMetaDataProtobuf));
 }
 
 TEST(AccMetaDataTest, TestSerializeThrow) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  ProtobufAccMetaData* protobufData = nullptr;
-  EXPECT_THROW(accMetaData.serialize(protobufData), std::invalid_argument);
+  AccMetaDataProtobuf* accMetaDataProtobuf = nullptr;
+  EXPECT_THROW(accMetaData.serialize(accMetaDataProtobuf), std::invalid_argument);
 }
 
 TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithCoordinateX) {

@@ -38,9 +38,9 @@ Header::Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataFo
   this->checkTimeZoneOffset();
 }
 
-Header::Header(const ProtobufHeader& protobufHeader)
-    : timeZoneOffset_min(protobufHeader.time_zone_offset_min()),
-      pcoreVersion(Version(protobufHeader.pcore_version())),
+Header::Header(const HeaderProtobuf& headerProtobuf)
+    : timeZoneOffset_min(headerProtobuf.time_zone_offset_min()),
+      pcoreVersion(Version(headerProtobuf.pcore_version())),
       dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {
   this->checkTimeZoneOffset();
 }
@@ -74,14 +74,14 @@ bool Header::operator!=(const Header& header) const {
   return this->timeZoneOffset_min != header.timeZoneOffset_min || this->pcoreVersion != header.pcoreVersion || this->dataForm != header.dataForm;
 }
 
-void Header::serialize(ProtobufHeader* protobufHeader) const {
-  if (protobufHeader == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufHeader is a null pointer");
+void Header::serialize(HeaderProtobuf* headerProtobuf) const {
+  if (headerProtobuf == nullptr) {
+    throw std::invalid_argument("Error in serialize: headerProtobuf is a null pointer");
   }
-  protobufHeader->set_time_zone_offset_min(this->timeZoneOffset_min);
-  ProtobufVersion protobufVersion;
-  this->pcoreVersion.serialize(&protobufVersion);
-  protobufHeader->mutable_pcore_version()->CopyFrom(protobufVersion);
+  headerProtobuf->set_time_zone_offset_min(this->timeZoneOffset_min);
+  VersionProtobuf versionProtobuf;
+  this->pcoreVersion.serialize(&versionProtobuf);
+  headerProtobuf->mutable_pcore_version()->CopyFrom(versionProtobuf);
 }
 
 void Header::switchDataForm() {

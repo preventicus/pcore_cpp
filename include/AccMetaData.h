@@ -38,38 +38,38 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_norm.pb.h"
 #include "protobuf/pcore_raw.pb.h"
 
-using ProtobufAccMetaData = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
-using ProtobufCoordinate = com::preventicus::pcore::Coordinate;
-using ProtobufNorm = com::preventicus::pcore::Norm;
+using AccMetaDataProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
+using CoordinateProtobuf = com::preventicus::pcore::Coordinate;
+using NormProtobuf = com::preventicus::pcore::Norm;
 using AccMetaDataJson = Json::Value;
-using ProtobufCoordinateString = std::string;
-using ProtobufNormString = std::string;
+using CoordinateProtobufString = std::string;
+using NormStringProtobuf = std::string;
 
 class AccMetaData final {
  public:
-  explicit AccMetaData(ProtobufNorm norm);
-  explicit AccMetaData(ProtobufCoordinate coordinate);
-  explicit AccMetaData(const ProtobufAccMetaData& protobufAccMetaData);
+  explicit AccMetaData(NormProtobuf norm);
+  explicit AccMetaData(CoordinateProtobuf coordinate);
+  explicit AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf);
   explicit AccMetaData(const AccMetaDataJson& accMetaDataJson);
   AccMetaData();
 
-  [[nodiscard]] ProtobufCoordinate getCoordinate() const;
-  [[nodiscard]] ProtobufNorm getNorm() const;
+  [[nodiscard]] CoordinateProtobuf getCoordinate() const;
+  [[nodiscard]] NormProtobuf getNorm() const;
   [[nodiscard]] bool hasNorm() const;
   [[nodiscard]] bool hasCoordinate() const;
   [[nodiscard]] bool isSet() const;
   [[nodiscard]] AccMetaDataJson toJson() const;
-  void serialize(ProtobufAccMetaData* protobufAccMetaData) const;
+  void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const;
 
   bool operator==(const AccMetaData& accMetaData) const;
   bool operator!=(const AccMetaData& accMetaData) const;
 
-  static ProtobufCoordinate protobufCoordinateFromString(ProtobufCoordinateString protobufCoordinateString);
-  static ProtobufCoordinateString protobufCoordinateToString(ProtobufCoordinate protobufCoordinate);
-  static ProtobufNorm protobufNormFromString(ProtobufNormString protobufNormString);
-  static ProtobufNormString protobufNormToString(ProtobufNorm protobufNorm);
+  static CoordinateProtobuf coordinateProtobufFromString(CoordinateProtobufString coordinateProtobufString);
+  static CoordinateProtobufString coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf);
+  static NormProtobuf normProtobufFromString(NormStringProtobuf normProtobufString);
+  static NormStringProtobuf normProtobufToString(NormProtobuf normProtobuf);
 
  private:
-  ProtobufCoordinate coordinate;
-  ProtobufNorm norm;
+  CoordinateProtobuf coordinate;
+  NormProtobuf norm;
 };

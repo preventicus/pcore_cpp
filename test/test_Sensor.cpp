@@ -48,7 +48,7 @@ TEST(SensorTest, TestGetChannelsMethodWithSensorAccWithTwoChannelsInAbsoluteForm
 
 TEST(SensorTest, TestGetSensorTypeMethodWithSensorAccWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
-  EXPECT_EQ(sensor.getSensorType(), ProtobufSensorType::SENSOR_TYPE_ACC);
+  EXPECT_EQ(sensor.getSensorType(), SensorTypeProtobuf::SENSOR_TYPE_ACC);
 }
 
 TEST(SensorTest, TestGetAbsoluteTimestampsMethodWithSensorAccWithTwoChannelsInAbsoluteForm) {
@@ -259,38 +259,38 @@ TEST(SensorTest, TestToJsonWithSensorPpgWithOneChannelsInAbsoluteForm) {
 
 TEST(SensorTest, TestSerizlizeWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
-  ProtobufSensor protobufSensor;
-  sensor1.serialize(&protobufSensor);
-  auto sensor2 = Sensor(protobufSensor);
+  SensorProtobuf sensorProtobuf;
+  sensor1.serialize(&sensorProtobuf);
+  auto sensor2 = Sensor(sensorProtobuf);
   EXPECT_TRUE(sensor1 == sensor2);
 }
 
 TEST(SensorTest, TestSerizlizeWithSensorEmpty) {
   auto sensor1 = SensorExampleFactory::sensorEmpty();
-  ProtobufSensor protobufSensor;
-  sensor1.serialize(&protobufSensor);
-  auto sensor2 = Sensor(protobufSensor);
+  SensorProtobuf sensorProtobuf;
+  sensor1.serialize(&sensorProtobuf);
+  auto sensor2 = Sensor(sensorProtobuf);
   EXPECT_TRUE(sensor1 == sensor2);
 }
 
 TEST(SensorTest, TestSerizlizeWithSensorPpgWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
-  ProtobufSensor protobufSensor;
-  sensor1.serialize(&protobufSensor);
-  auto sensor2 = Sensor(protobufSensor);
+  SensorProtobuf sensorProtobuf;
+  sensor1.serialize(&sensorProtobuf);
+  auto sensor2 = Sensor(sensorProtobuf);
   EXPECT_TRUE(sensor1 == sensor2);
 }
 
 TEST(SensorTest, TestSerializeNoThrow) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
-  ProtobufSensor protobufSensor;
-  EXPECT_NO_THROW(sensor.serialize(&protobufSensor));
+  SensorProtobuf sensorProtobuf;
+  EXPECT_NO_THROW(sensor.serialize(&sensorProtobuf));
 }
 
 TEST(SensorTest, TestSerializeThrow) {
   auto sensor = SensorExampleFactory::sensorEmpty();
-  ProtobufSensor* protobufSensor = nullptr;
-  EXPECT_THROW(sensor.serialize(protobufSensor), std::invalid_argument);
+  SensorProtobuf* sensorProtobuf = nullptr;
+  EXPECT_THROW(sensor.serialize(sensorProtobuf), std::invalid_argument);
 }
 
 TEST(SensorTest, TestSwitchDataFormWithSensorForSwitchDataFromTestInAbsoluteForm) {
@@ -313,13 +313,13 @@ TEST(SensorTest, TestSwitchDataFormWithSensorEmpty) {
 }
 
 TEST(SensorTest, TestSenorTypeFromString) {
-  EXPECT_EQ(Sensor::senorTypeFromString("SENSOR_TYPE_PPG"), ProtobufSensorType::SENSOR_TYPE_PPG);
-  EXPECT_EQ(Sensor::senorTypeFromString("SENSOR_TYPE_ACC"), ProtobufSensorType::SENSOR_TYPE_ACC);
-  EXPECT_EQ(Sensor::senorTypeFromString("SENSOR_TYPE_NONE"), ProtobufSensorType::SENSOR_TYPE_NONE);
+  EXPECT_EQ(Sensor::senorTypeFromString("SENSOR_TYPE_PPG"), SensorTypeProtobuf::SENSOR_TYPE_PPG);
+  EXPECT_EQ(Sensor::senorTypeFromString("SENSOR_TYPE_ACC"), SensorTypeProtobuf::SENSOR_TYPE_ACC);
+  EXPECT_EQ(Sensor::senorTypeFromString("SENSOR_TYPE_NONE"), SensorTypeProtobuf::SENSOR_TYPE_NONE);
 }
 
 TEST(SensorTest, TestSenorTypeToString) {
-  EXPECT_EQ(Sensor::senorTypeToString(ProtobufSensorType::SENSOR_TYPE_PPG), "SENSOR_TYPE_PPG");
-  EXPECT_EQ(Sensor::senorTypeToString(ProtobufSensorType::SENSOR_TYPE_ACC), "SENSOR_TYPE_ACC");
-  EXPECT_EQ(Sensor::senorTypeToString(ProtobufSensorType::SENSOR_TYPE_NONE), "SENSOR_TYPE_NONE");
+  EXPECT_EQ(Sensor::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_PPG), "SENSOR_TYPE_PPG");
+  EXPECT_EQ(Sensor::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_ACC), "SENSOR_TYPE_ACC");
+  EXPECT_EQ(Sensor::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_NONE), "SENSOR_TYPE_NONE");
 }

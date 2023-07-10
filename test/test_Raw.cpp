@@ -104,46 +104,46 @@ TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm
 
 TEST(RawTest, TestSerializeWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
-  ProtobufRaw protobufRaw;
-  raw1.serialize(&protobufRaw);
-  auto raw2 = Raw(protobufRaw);
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
   EXPECT_TRUE(raw1 == raw2);
 }
 
 TEST(RawTest, TestSerializeWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
-  ProtobufRaw protobufRaw;
-  raw1.serialize(&protobufRaw);
-  auto raw2 = Raw(protobufRaw);
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
   EXPECT_TRUE(raw1 == raw2);
 }
 
 TEST(RawTest, TestSerializeWithRawWithOneSensorsAccWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
-  ProtobufRaw protobufRaw;
-  raw1.serialize(&protobufRaw);
-  auto raw2 = Raw(protobufRaw);
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
   EXPECT_TRUE(raw1 == raw2);
 }
 
 TEST(RawTest, TestSerializeWithRawEmpty) {
   auto raw1 = RawExampleFactory::rawEmpty();
-  ProtobufRaw protobufRaw;
-  raw1.serialize(&protobufRaw);
-  auto raw2 = Raw(protobufRaw);
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
   EXPECT_TRUE(raw1 == raw2);
 }
 
 TEST(RawTest, TestSerializeNoThrow) {
   auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
-  ProtobufRaw protobufRaw;
-  EXPECT_NO_THROW(raw.serialize(&protobufRaw));
+  RawProtobuf rawProtobuf;
+  EXPECT_NO_THROW(raw.serialize(&rawProtobuf));
 }
 
 TEST(RawTest, TestSerializeThrow) {
   auto raw = RawExampleFactory::rawEmpty();
-  ProtobufRaw* protobufRaw = nullptr;
-  EXPECT_THROW(raw.serialize(protobufRaw), std::invalid_argument);
+  RawProtobuf* rawProtobuf = nullptr;
+  EXPECT_THROW(raw.serialize(rawProtobuf), std::invalid_argument);
 }
 
 TEST(RawTest, TestSwitchDataFormWithRawForSwitschDataFormTestInAbsoluteForm) {

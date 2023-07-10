@@ -39,7 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "UnixTimestamp.h"
 #include "protobuf/pcore_raw.pb.h"
 
-using ProtobufDifferentialTimestampContainer = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
+using DifferentialTimestampContainerProtobuf = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
 using Difference = uint32_t;
 using BlockDifferences = std::vector<Difference>;
 using TimestampsDifferences = std::vector<Difference>;
@@ -54,7 +54,7 @@ class DifferentialTimestampsContainer final {
   explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
                                            BlockDifferences blockDifferences_ms,
                                            TimestampsDifferences timestampsDifferences_ms);
-  explicit DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampsContainer);
+  explicit DifferentialTimestampsContainer(const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf);
   explicit DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
   DifferentialTimestampsContainer();
 
@@ -68,7 +68,7 @@ class DifferentialTimestampsContainer final {
                                                                 UnixTimestamp firstUnixTimestampInBlock_ms,
                                                                 const DifferentialBlock& lastDifferentialBlock) const;
 
-  void serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampsContainer) const;
+  void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const;
 
   bool operator==(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
   bool operator!=(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;

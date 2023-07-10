@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreJsonKey.h"
 #include "protobuf/pcore_version.pb.h"
 
-using ProtobufVersion = com::preventicus::pcore::Version;
+using VersionProtobuf = com::preventicus::pcore::Version;
 using Major = uint32_t;
 using Minor = uint32_t;
 using Patch = uint32_t;
@@ -48,7 +48,7 @@ using PatchJson = Json::Value;
 class Version final {
  public:
   explicit Version(Major major, Minor minor, Patch patch);
-  explicit Version(const ProtobufVersion& protobufVersion);
+  explicit Version(const VersionProtobuf& versionProtobuf);
   explicit Version(const VersionJson& jsonVersion);
   Version();
 
@@ -56,7 +56,7 @@ class Version final {
   [[nodiscard]] Minor getMinor() const;
   [[nodiscard]] Patch getPatch() const;
   [[nodiscard]] VersionJson toJson() const;
-  void serialize(ProtobufVersion* protobufVersion) const;
+  void serialize(VersionProtobuf* versionProtobuf) const;
 
   bool operator==(const Version& version) const;
   bool operator!=(const Version& version) const;

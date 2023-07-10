@@ -37,7 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Data::Data(Raw raw, const Header& header) : header(header), raw(std::move(raw)) {}
 
-Data::Data(const ProtobufData& protobufData) : header(Header(protobufData.header())), raw(Raw(protobufData.raw())) {}
+Data::Data(const DataProtobuf& DataProtobuf) : header(Header(DataProtobuf.header())), raw(Raw(DataProtobuf.raw())) {}
 
 Data::Data(const DataJson& dataJson) : header(Header(dataJson[PcoreJsonKey::header])), raw(Raw(dataJson[PcoreJsonKey::raw], header.getDataForm())) {}
 
@@ -59,16 +59,16 @@ bool Data::operator!=(const Data& data) const {
   return this->header != data.header || this->raw != data.raw;
 }
 
-void Data::serialize(ProtobufData* protobufData) const {
-  if (protobufData == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufData is a null pointer");
+void Data::serialize(DataProtobuf* dataProtobuf) const {
+  if (dataProtobuf == nullptr) {
+    throw std::invalid_argument("Error in serialize: dataProtobuf is a null pointer");
   }
-  ProtobufHeader protobufHeader;
-  this->header.serialize(&protobufHeader);
-  protobufData->mutable_header()->CopyFrom(protobufHeader);
-  ProtobufRaw protobufRaw;
-  this->raw.serialize(&protobufRaw);
-  protobufData->mutable_raw()->CopyFrom(protobufRaw);
+  HeaderProtobuf headerProtobuf;
+  this->header.serialize(&headerProtobuf);
+  dataProtobuf->mutable_header()->CopyFrom(headerProtobuf);
+  RawProtobuf rawProtobuf;
+  this->raw.serialize(&rawProtobuf);
+  dataProtobuf->mutable_raw()->CopyFrom(rawProtobuf);
 }
 
 void Data::switchDataForm() {

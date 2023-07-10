@@ -37,20 +37,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore.pb.h"
 
 using SensorsJson = Json::Value;
-using ProtobufRaw = com::preventicus::pcore::Raw;
+using RawProtobuf = com::preventicus::pcore::Raw;
 using Sensors = std::vector<Sensor>;
 using RawJson = Json::Value;
 
 class Raw final {
  public:
   explicit Raw(Sensors sensors);
-  explicit Raw(const ProtobufRaw& protobufRaw);
+  explicit Raw(const RawProtobuf& rawProtobuf);
   explicit Raw(const RawJson& rawJson, DataForm dataForm);
   Raw();
 
   [[nodiscard]] Sensors getSensors() const;
   [[nodiscard]] RawJson toJson(DataForm currentDataForm) const;
-  void serialize(ProtobufRaw* protobufRaw) const;
+  void serialize(RawProtobuf* rawProtobuf) const;
   void switchDataForm(DataForm currentDataForm);
 
   bool operator==(const Raw& raw) const;

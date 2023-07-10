@@ -37,13 +37,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Raw::Raw(Sensors sensors) : sensors(std::move(sensors)) {}
 
-Raw::Raw(const ProtobufRaw& protobufRaw)
+Raw::Raw(const RawProtobuf& rawProtobuf)
     : sensors([&]() {
-        auto protobufSensors = protobufRaw.sensors();
+        auto sensorProtobuf = rawProtobuf.sensors();
         Sensors sensors{};
-        sensors.reserve(protobufSensors.size());
-        for (auto& protobufSensor : protobufSensors) {
-          sensors.emplace_back(Sensor(protobufSensor));
+        sensors.reserve(sensorProtobuf.size());
+        for (auto& sensorProtobuf : sensorProtobuf) {
+          sensors.emplace_back(Sensor(sensorProtobuf));
         }
         return sensors;
       }()) {}
@@ -82,13 +82,13 @@ bool Raw::operator!=(const Raw& raw) const {
   return !(*this == raw);
 }
 
-void Raw::serialize(ProtobufRaw* protobufRaw) const {
-  if (protobufRaw == nullptr) {
-    throw std::invalid_argument("protobufRaw is a null pointer");
+void Raw::serialize(RawProtobuf* rawProtobuf) const {
+  if (rawProtobuf == nullptr) {
+    throw std::invalid_argument("rawProtobuf is a null pointer");
   }
   for (auto& sensor : this->sensors) {
-    ProtobufSensor* protobufSensor = protobufRaw->add_sensors();
-    sensor.serialize(protobufSensor);
+    auto* sensorProtobuf = rawProtobuf->add_sensors();
+    sensor.serialize(sensorProtobuf);
   }
 }
 

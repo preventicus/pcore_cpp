@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 
-using ProtobufSensor = com::preventicus::pcore::Raw_Sensor;
+using SensorProtobuf = com::preventicus::pcore::Raw_Sensor;
 using Channels = std::vector<Channel>;
 using SensorTypeString = std::string;
 using SensorJson = Json::Value;
@@ -49,13 +49,13 @@ using ChannelsJson = Json::Value;
 
 class Sensor final {
  public:
-  explicit Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensorType protobufSensorType);
-  explicit Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensorType protobufSensorType);
+  explicit Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
+  explicit Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
   explicit Sensor(const SensorJson& sensorJson, DataForm dataForm);
-  explicit Sensor(const ProtobufSensor& protobufSensor);
+  explicit Sensor(const SensorProtobuf& sensorProtobuf);
   Sensor();
 
-  [[nodiscard]] ProtobufSensorType getSensorType() const;
+  [[nodiscard]] SensorTypeProtobuf getSensorType() const;
   [[nodiscard]] Channels getChannels() const;
   [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const;
   [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const;
@@ -65,11 +65,11 @@ class Sensor final {
 
   // bool isSet();
   [[nodiscard]] SensorJson toJson(DataForm currentDataForm) const;
-  void serialize(ProtobufSensor* protobufSensor) const;
+  void serialize(SensorProtobuf* sensorProtobuf) const;
   void switchDataForm(DataForm currentDataForm);
 
-  static ProtobufSensorType senorTypeFromString(SensorTypeString senorTypeString);
-  static SensorTypeString senorTypeToString(ProtobufSensorType protobufSensorType);
+  static SensorTypeProtobuf senorTypeFromString(SensorTypeString senorTypeString);
+  static SensorTypeString senorTypeToString(SensorTypeProtobuf sensorTypeProtobuf);
 
   bool operator==(const Sensor& sensor) const;
   bool operator!=(const Sensor& sensor) const;
@@ -80,7 +80,7 @@ class Sensor final {
                                                                                 const BlockIdxs& blockIdxs) const;
   [[nodiscard]] BlockIdxs findBlockIdxs() const;
 
-  ProtobufSensorType sensorType;
+  SensorTypeProtobuf sensorType;
   Channels channels;
   DifferentialTimestampsContainer differentialTimestampsContainer;
   AbsoluteTimestampsContainer absoluteTimestampsContainer;

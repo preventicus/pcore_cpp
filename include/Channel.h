@@ -42,8 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PpgMetaData.h"
 #include "protobuf/pcore_raw.pb.h"
 
-using ProtobufChannel = com::preventicus::pcore::Raw_Sensor_Channel;
-using ProtobufSensorType = com::preventicus::pcore::SensorType;
+using ChannelProtobuf = com::preventicus::pcore::Raw_Sensor_Channel;
+using SensorTypeProtobuf = com::preventicus::pcore::SensorType;
 using BlockIdxs = std::vector<BlockIdx>;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 using ChannelJson = Json::Value;
@@ -56,8 +56,8 @@ class Channel final {
   explicit Channel(const PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock);
   explicit Channel(const PpgMetaData& ppgMetaData, DifferentialBlocks differentialBlocks);
   explicit Channel(const AccMetaData& accMetaData, DifferentialBlocks differentialBlocks);
-  explicit Channel(const ChannelJson& channelJson, ProtobufSensorType protobufSensorType, DataForm dataForm);
-  explicit Channel(const ProtobufChannel& protobufChannel);
+  explicit Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm);
+  explicit Channel(const ChannelProtobuf& channelProtobuf);
   Channel();
 
   [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const;
@@ -73,8 +73,8 @@ class Channel final {
   bool operator==(const Channel& channel) const;
   bool operator!=(const Channel& channel) const;
 
-  [[nodiscard]] ChannelJson toJson(DataForm dataForm, ProtobufSensorType protobufSensorType) const;
-  void serialize(ProtobufChannel* protobufChannel) const;
+  [[nodiscard]] ChannelJson toJson(DataForm dataForm, SensorTypeProtobuf sensorTypeProtobuf) const;
+  void serialize(ChannelProtobuf* channelProtobuf) const;
   void switchDataForm(const BlockIdxs& blockIdxs);
   void switchDataForm();
 

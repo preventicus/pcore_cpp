@@ -37,36 +37,36 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_color.pb.h"
 #include "protobuf/pcore_raw.pb.h"
 
-using ProtobufColor = com::preventicus::pcore::Color;
-using ProtobufPpgMetaData = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
+using ColorProtobuf = com::preventicus::pcore::Color;
+using PpgMetaDataProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
 using Wavelength = uint32_t;
 using PpgMetaDataJson = Json::Value;
-using ProtobufColorString = std::string;
+using ColorStringProtobuf = std::string;
 
 class PpgMetaData final {
  public:
-  explicit PpgMetaData(ProtobufColor color);
+  explicit PpgMetaData(ColorProtobuf colorProtobuf);
   explicit PpgMetaData(Wavelength wavelength_nm);
-  explicit PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData);
+  explicit PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf);
   explicit PpgMetaData(const PpgMetaDataJson& ppgMetaData);
   PpgMetaData();
 
-  [[nodiscard]] ProtobufColor getColor() const;
+  [[nodiscard]] ColorProtobuf getColor() const;
   [[nodiscard]] Wavelength getWavelength_nm() const;
   [[nodiscard]] bool hasColor() const;
   [[nodiscard]] bool hasWavelength() const;
   [[nodiscard]] bool isSet() const;
   [[nodiscard]] PpgMetaDataJson toJson() const;
 
-  void serialize(ProtobufPpgMetaData* protobufPpgMetaData) const;
+  void serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const;
 
-  static ProtobufColorString protobufColorToString(ProtobufColor protobufColor);
-  static ProtobufColor protobufColorFromString(ProtobufColorString protobufColorString);
+  static ColorStringProtobuf colorProtobufToString(ColorProtobuf colorProtobuf);
+  static ColorProtobuf colorProtobufFromString(ColorStringProtobuf colorStringProtobuf);
 
   bool operator==(const PpgMetaData& ppgMetaData) const;
   bool operator!=(const PpgMetaData& ppgMetaData) const;
 
  private:
-  ProtobufColor color;
+  ColorProtobuf color;
   Wavelength wavelength_nm;
 };

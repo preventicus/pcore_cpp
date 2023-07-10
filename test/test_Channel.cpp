@@ -208,60 +208,60 @@ TEST(ChannelTest, TestSwitchDataForm) {
 
 TEST(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndAccMetaData) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
-  ProtobufChannel protobufChannel;
-  channel.serialize(&protobufChannel);
-  EXPECT_TRUE(Channel(protobufChannel) == channel);
+  ChannelProtobuf channelProtobuf;
+  channel.serialize(&channelProtobuf);
+  EXPECT_TRUE(Channel(channelProtobuf) == channel);
 }
 
 TEST(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndPpgMetaData) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
-  ProtobufChannel protobufChannel;
-  channel.serialize(&protobufChannel);
-  EXPECT_TRUE(Channel(protobufChannel) == channel);
+  ChannelProtobuf channelProtobuf;
+  channel.serialize(&channelProtobuf);
+  EXPECT_TRUE(Channel(channelProtobuf) == channel);
 }
 
 TEST(ChannelTest, TestSerializeThrowNullPtr) {
   auto channel = ChannelExampleFactory::channelEmpty();
-  ProtobufChannel* protobufChannel = nullptr;
-  EXPECT_THROW(channel.serialize(protobufChannel), std::invalid_argument);
+  ChannelProtobuf* channelProtobuf = nullptr;
+  EXPECT_THROW(channel.serialize(channelProtobuf), std::invalid_argument);
 }
 
 TEST(ChannelTest, TestSerializeThrowChannelEmpty) {
   auto channel = ChannelExampleFactory::channelEmpty();
-  ProtobufChannel protobufChannel;
-  EXPECT_THROW(channel.serialize(&protobufChannel), std::invalid_argument);
+  ChannelProtobuf channelProtobuf;
+  EXPECT_THROW(channel.serialize(&channelProtobuf), std::invalid_argument);
 }
 
 TEST(ChannelTest, TestSerializeNoThrow) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
-  ProtobufChannel protobufChannel;
-  EXPECT_NO_THROW(channel.serialize(&protobufChannel));
+  ChannelProtobuf channelProtobuf;
+  EXPECT_NO_THROW(channel.serialize(&channelProtobuf));
 }
 
 TEST(ChannelTest, TestToJsonWithDifferentialBlocksAndAccMetaData) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_DIFFERENTIAL, ProtobufSensorType::SENSOR_TYPE_ACC);
+  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_DIFFERENTIAL, SensorTypeProtobuf::SENSOR_TYPE_ACC);
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
 TEST(ChannelTest, TestToJsonWithDifferentialBlocksAndPpgMetaData) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_DIFFERENTIAL, ProtobufSensorType::SENSOR_TYPE_PPG);
+  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_DIFFERENTIAL, SensorTypeProtobuf::SENSOR_TYPE_PPG);
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
 TEST(ChannelTest, TestToJsonWithAbsoluteBlockAndAccMetaData) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_ABSOLUTE, ProtobufSensorType::SENSOR_TYPE_ACC);
+  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_ABSOLUTE, SensorTypeProtobuf::SENSOR_TYPE_ACC);
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
 TEST(ChannelTest, TestToJsonWithAbsoluteBlockAndPpgMetaData) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_ABSOLUTE, ProtobufSensorType::SENSOR_TYPE_PPG);
+  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_ABSOLUTE, SensorTypeProtobuf::SENSOR_TYPE_PPG);
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }

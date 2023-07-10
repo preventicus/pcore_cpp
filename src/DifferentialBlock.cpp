@@ -37,13 +37,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) : differentialValues(std::move(differentialValues)) {}
 
-DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock)
+DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf)
     : differentialValues([&]() {
-        auto protobufDifferentialValues = protobufDifferentialBlock.differential_values();
+        auto differentialValuesProtobuf = differentialBlockProtobuf.differential_values();
         DifferentialValues differentialValues = {};
-        differentialValues.reserve(protobufDifferentialValues.size());
-        for (auto& protobufDifferentialValue : protobufDifferentialValues) {
-          this->differentialValues.push_back(protobufDifferentialValue);
+        differentialValues.reserve(differentialValuesProtobuf.size());
+        for (auto& differentialValueProtobuf : differentialValuesProtobuf) {
+          this->differentialValues.push_back(differentialValueProtobuf);
         }
         return differentialValues;
       }()) {}
@@ -77,12 +77,12 @@ bool DifferentialBlock::operator!=(const DifferentialBlock& differentialBlock) c
   return this->differentialValues != differentialBlock.differentialValues;
 }
 
-void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentialBlock) const {
-  if (protobufDifferentialBlock == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
+void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const {
+  if (differentialBlockProtobuf == nullptr) {
+    throw std::invalid_argument("Error in serialize: differentialBlockProtobuf is a null pointer");
   }
   for (auto& differentialValue : this->differentialValues) {
-    protobufDifferentialBlock->add_differential_values(differentialValue);
+    differentialBlockProtobuf->add_differential_values(differentialValue);
   }
 }
 

@@ -108,53 +108,53 @@ TEST(DifferentialBlockTest, TestIsNotEqualWithBlocksWithDifferentSize) {
 
 TEST(DifferentialBlockTest, TestSerializeNoThrow) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
-  ProtobufDifferentialBlock protobufDifferentialBlocks;
-  EXPECT_NO_THROW(differentialBlock.serialize(&protobufDifferentialBlocks));
+  DifferentialBlockProtobuf differentialBlockProtobuf;
+  EXPECT_NO_THROW(differentialBlock.serialize(&differentialBlockProtobuf));
 }
 
 TEST(DifferentialBlockTest, TestSerializeThrow) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
-  ProtobufDifferentialBlock* protobufData = nullptr;
-  EXPECT_THROW(differentialBlock.serialize(protobufData), std::invalid_argument);
+  DifferentialBlockProtobuf* differentialBlockProtobuf = nullptr;
+  EXPECT_THROW(differentialBlock.serialize(differentialBlockProtobuf), std::invalid_argument);
 }
 
 TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreePositiveDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues();
-  ProtobufDifferentialBlock protobufDifferentialBlocks;
-  differentialBlock1.serialize(&protobufDifferentialBlocks);
-  auto differentialBlock2 = DifferentialBlock(protobufDifferentialBlocks);
+  DifferentialBlockProtobuf differentialBlockProtobuf;
+  differentialBlock1.serialize(&differentialBlockProtobuf);
+  auto differentialBlock2 = DifferentialBlock(differentialBlockProtobuf);
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 
 TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithEmptyDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
-  ProtobufDifferentialBlock protobufDifferentialBlocks;
-  differentialBlock1.serialize(&protobufDifferentialBlocks);
-  auto differentialBlock2 = DifferentialBlock(protobufDifferentialBlocks);
+  DifferentialBlockProtobuf differentialBlockProtobuf;
+  differentialBlock1.serialize(&differentialBlockProtobuf);
+  auto differentialBlock2 = DifferentialBlock(differentialBlockProtobuf);
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 
 TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithOneDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
-  ProtobufDifferentialBlock protobufDifferentialBlocks;
-  differentialBlock1.serialize(&protobufDifferentialBlocks);
-  auto differentialBlock2 = DifferentialBlock(protobufDifferentialBlocks);
+  DifferentialBlockProtobuf differentialBlockProtobuf;
+  differentialBlock1.serialize(&differentialBlockProtobuf);
+  auto differentialBlock2 = DifferentialBlock(differentialBlockProtobuf);
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 
 TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeNegativeDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
-  ProtobufDifferentialBlock protobufDifferentialBlocks;
-  differentialBlock1.serialize(&protobufDifferentialBlocks);
-  auto differentialBlock2 = DifferentialBlock(protobufDifferentialBlocks);
+  DifferentialBlockProtobuf differentialBlockProtobuf;
+  differentialBlock1.serialize(&differentialBlockProtobuf);
+  auto differentialBlock2 = DifferentialBlock(differentialBlockProtobuf);
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 
 TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeMixedDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
-  ProtobufDifferentialBlock protobufDifferentialBlocks;
-  differentialBlock1.serialize(&protobufDifferentialBlocks);
-  auto differentialBlock2 = DifferentialBlock(protobufDifferentialBlocks);
+  DifferentialBlockProtobuf differentialBlockProtobuf;
+  differentialBlock1.serialize(&differentialBlockProtobuf);
+  auto differentialBlock2 = DifferentialBlock(differentialBlockProtobuf);
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 

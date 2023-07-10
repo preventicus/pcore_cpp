@@ -42,10 +42,10 @@ TEST(JsonTest, TestToJsonAbsoluteForm) {
 
   auto dataFromJson = Data(inputJson[PcoreJsonKey::data]);
   dataFromJson.switchDataForm();
-  ProtobufData protobufData;
-  dataFromJson.serialize(&protobufData);
+  DataProtobuf dataProtobuf;
+  dataFromJson.serialize(&dataProtobuf);
 
-  auto dataFromProtobuf = Data(protobufData);
+  auto dataFromProtobuf = Data(dataProtobuf);
   dataFromProtobuf.switchDataForm();
   auto outputJson = dataFromProtobuf.toJson();
 
@@ -56,8 +56,8 @@ TEST(JsonTest, TestToJsonDifferentialForm) {
   std::ifstream file("./../../test/JsonTestData/differential_pcore.json");
   Json::Value inputJson;
   file >> inputJson;
-  ProtobufData protobufData;
-  Data(inputJson[PcoreJsonKey::data]).serialize(&protobufData);
-  auto outputJson = Data(protobufData).toJson();
+  DataProtobuf dataProtobuf;
+  Data(inputJson[PcoreJsonKey::data]).serialize(&dataProtobuf);
+  auto outputJson = Data(dataProtobuf).toJson();
   EXPECT_TRUE(inputJson.toStyledString() == outputJson.toStyledString());
 }

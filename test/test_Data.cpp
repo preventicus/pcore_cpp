@@ -110,22 +110,22 @@ TEST(DataTest, TestIsNotEqualWithDifferentRaw) {
 
 TEST(DataTest, TestSerializeWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
-  ProtobufData protobufData;
-  data1.serialize(&protobufData);
-  auto data2 = Data(protobufData);
+  DataProtobuf dataProtobuf;
+  data1.serialize(&dataProtobuf);
+  auto data2 = Data(dataProtobuf);
   EXPECT_TRUE(data1 == data2);
 }
 
 TEST(DataTest, TestSerializeNoThrow) {
   auto data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
-  ProtobufData protobufData;
-  EXPECT_NO_THROW(data.serialize(&protobufData));
+  DataProtobuf dataProtobuf;
+  EXPECT_NO_THROW(data.serialize(&dataProtobuf));
 }
 
 TEST(DataTest, TestSerializeThrow) {
   auto data = DataExampleFactory::dataEmpty();
-  ProtobufData* protobufData = nullptr;
-  EXPECT_THROW(data.serialize(protobufData), std::invalid_argument);
+  DataProtobuf* dataProtobuf = nullptr;
+  EXPECT_THROW(data.serialize(dataProtobuf), std::invalid_argument);
 }
 
 TEST(DataTest, TestSwitchDataFormWithDataInAbsoluteForm) {

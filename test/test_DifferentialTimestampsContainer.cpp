@@ -120,30 +120,30 @@ TEST(DifferentialTimestampsTest, TestIsNotEqualWithDifferentialTimestampsContain
 
 TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContainerWithThreeBlocks) {
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
-  ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer;
-  differentialTimestampsContainer1.serialize(&protobufDifferentialTimestampContainer);
-  auto differentialTimestampsContainer2 = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer);
+  DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
+  differentialTimestampsContainer1.serialize(&differentialTimestampContainerProtobuf);
+  auto differentialTimestampsContainer2 = DifferentialTimestampsContainer(differentialTimestampContainerProtobuf);
   EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContainerEmpty) {
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
-  ProtobufDifferentialTimestampContainer protobufDifferentialTimestampContainer;
-  differentialTimestampsContainer1.serialize(&protobufDifferentialTimestampContainer);
-  auto differentialTimestampsContainer2 = DifferentialTimestampsContainer(protobufDifferentialTimestampContainer);
+  DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
+  differentialTimestampsContainer1.serialize(&differentialTimestampContainerProtobuf);
+  auto differentialTimestampsContainer2 = DifferentialTimestampsContainer(differentialTimestampContainerProtobuf);
   EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeNoThrow) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
-  ProtobufDifferentialTimestampContainer protobufData;
-  EXPECT_NO_THROW(differentialTimestampsContainer.serialize(&protobufData));
+  DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
+  EXPECT_NO_THROW(differentialTimestampsContainer.serialize(&differentialTimestampContainerProtobuf));
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeThrow) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
-  ProtobufDifferentialTimestampContainer* protobufData = nullptr;
-  EXPECT_THROW(differentialTimestampsContainer.serialize(protobufData), std::invalid_argument);
+  DifferentialTimestampContainerProtobuf* differentialTimestampContainerProtobuf = nullptr;
+  EXPECT_THROW(differentialTimestampsContainer.serialize(differentialTimestampContainerProtobuf), std::invalid_argument);
 }
 
 TEST(DifferentialTimestampsTest, TestToJsonWithDifferentialTimestampsContainerEmpty) {

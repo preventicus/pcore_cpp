@@ -33,37 +33,37 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AccMetaData.h"
 
-AccMetaData::AccMetaData(ProtobufCoordinate coordinate) : coordinate(coordinate), norm(ProtobufNorm::NORM_NONE) {}
+AccMetaData::AccMetaData(CoordinateProtobuf coordinate) : coordinate(coordinate), norm(NormProtobuf::NORM_NONE) {}
 
-AccMetaData::AccMetaData(ProtobufNorm norm) : coordinate(ProtobufCoordinate::COORDINATE_NONE), norm(norm) {}
+AccMetaData::AccMetaData(NormProtobuf norm) : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(norm) {}
 
 AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
-    : coordinate(AccMetaData::protobufCoordinateFromString(accMetaDataJson[PcoreJsonKey::coordinate].asString())),
-      norm(AccMetaData::protobufNormFromString(accMetaDataJson[PcoreJsonKey::norm].asString())) {
-  if (this->norm != ProtobufNorm::NORM_NONE & this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
+    : coordinate(AccMetaData::coordinateProtobufFromString(accMetaDataJson[PcoreJsonKey::coordinate].asString())),
+      norm(AccMetaData::normProtobufFromString(accMetaDataJson[PcoreJsonKey::norm].asString())) {
+  if (this->norm != NormProtobuf::NORM_NONE & this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
     throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
   }
 }
 
-AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData)
-    : coordinate(protobufAccMetaData.coordinate()), norm(protobufAccMetaData.norm()) {}
+AccMetaData::AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf)
+    : coordinate(accMetaDataProtobuf.coordinate()), norm(accMetaDataProtobuf.norm()) {}
 
-AccMetaData::AccMetaData() : coordinate(ProtobufCoordinate::COORDINATE_NONE), norm(ProtobufNorm::NORM_NONE) {}
+AccMetaData::AccMetaData() : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(NormProtobuf::NORM_NONE) {}
 
-ProtobufCoordinate AccMetaData::getCoordinate() const {
+CoordinateProtobuf AccMetaData::getCoordinate() const {
   return this->coordinate;
 }
 
-ProtobufNorm AccMetaData::getNorm() const {
+NormProtobuf AccMetaData::getNorm() const {
   return this->norm;
 }
 
 bool AccMetaData::hasNorm() const {
-  return this->norm != ProtobufNorm::NORM_NONE;
+  return this->norm != NormProtobuf::NORM_NONE;
 }
 
 bool AccMetaData::hasCoordinate() const {
-  return this->coordinate != ProtobufCoordinate::COORDINATE_NONE;
+  return this->coordinate != CoordinateProtobuf::COORDINATE_NONE;
 }
 
 bool AccMetaData::isSet() const {
@@ -78,41 +78,41 @@ bool AccMetaData::operator!=(const AccMetaData& accMetaData) const {
   return this->coordinate != accMetaData.coordinate || this->norm != accMetaData.norm;
 }
 
-void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) const {
-  if (protobufAccMetaData == nullptr) {
-    throw std::invalid_argument("protobufAccMetaData is a null pointer");
+void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
+  if (accMetaDataProtobuf == nullptr) {
+    throw std::invalid_argument("accMetaDataProtobuf is a null pointer");
   }
-  if (coordinate != ProtobufCoordinate::COORDINATE_NONE && norm != ProtobufNorm::NORM_NONE) {
+  if (coordinate != CoordinateProtobuf::COORDINATE_NONE && norm != NormProtobuf::NORM_NONE) {
     throw std::invalid_argument("one enum type has to be initialized");
   }
-  if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
-    protobufAccMetaData->set_coordinate(this->coordinate);
+  if (this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
+    accMetaDataProtobuf->set_coordinate(this->coordinate);
   }
-  if (this->norm != ProtobufNorm::NORM_NONE) {
-    protobufAccMetaData->set_norm(this->norm);
+  if (this->norm != NormProtobuf::NORM_NONE) {
+    accMetaDataProtobuf->set_norm(this->norm);
   }
 }
 
 Json::Value AccMetaData::toJson() const {
   AccMetaDataJson accMetaDataJson;
-  if (this->norm != ProtobufNorm::NORM_NONE) {
-    accMetaDataJson[PcoreJsonKey::norm] = AccMetaData::protobufNormToString(this->norm);
+  if (this->norm != NormProtobuf::NORM_NONE) {
+    accMetaDataJson[PcoreJsonKey::norm] = AccMetaData::normProtobufToString(this->norm);
   }
-  if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
-    accMetaDataJson[PcoreJsonKey::coordinate] = AccMetaData::protobufCoordinateToString(this->coordinate);
+  if (this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
+    accMetaDataJson[PcoreJsonKey::coordinate] = AccMetaData::coordinateProtobufToString(this->coordinate);
   }
   return accMetaDataJson;
 }
 
-ProtobufCoordinateString AccMetaData::protobufCoordinateToString(const ProtobufCoordinate protobufCoordinate) {
-  switch (protobufCoordinate) {
-    case ProtobufCoordinate::COORDINATE_X: {
+CoordinateProtobufString AccMetaData::coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf) {
+  switch (coordinateProtobuf) {
+    case CoordinateProtobuf::COORDINATE_X: {
       return "COORDINATE_X";
     }
-    case ProtobufCoordinate::COORDINATE_Y: {
+    case CoordinateProtobuf::COORDINATE_Y: {
       return "COORDINATE_Y";
     }
-    case ProtobufCoordinate::COORDINATE_Z: {
+    case CoordinateProtobuf::COORDINATE_Z: {
       return "COORDINATE_Z";
     }
     default: {
@@ -121,21 +121,21 @@ ProtobufCoordinateString AccMetaData::protobufCoordinateToString(const ProtobufC
   }
 }
 
-ProtobufCoordinate AccMetaData::protobufCoordinateFromString(const ProtobufCoordinateString protobufCoordinateString) {
-  if (protobufCoordinateString == "COORDINATE_X") {
-    return ProtobufCoordinate::COORDINATE_X;
-  } else if (protobufCoordinateString == "COORDINATE_Y") {
-    return ProtobufCoordinate::COORDINATE_Y;
-  } else if (protobufCoordinateString == "COORDINATE_Z") {
-    return ProtobufCoordinate::COORDINATE_Z;
+CoordinateProtobuf AccMetaData::coordinateProtobufFromString(CoordinateProtobufString coordinateProtobufString) {
+  if (coordinateProtobufString == "COORDINATE_X") {
+    return CoordinateProtobuf::COORDINATE_X;
+  } else if (coordinateProtobufString == "COORDINATE_Y") {
+    return CoordinateProtobuf::COORDINATE_Y;
+  } else if (coordinateProtobufString == "COORDINATE_Z") {
+    return CoordinateProtobuf::COORDINATE_Z;
   } else {
-    return ProtobufCoordinate::COORDINATE_NONE;
+    return CoordinateProtobuf::COORDINATE_NONE;
   }
 }
 
-ProtobufNormString AccMetaData::protobufNormToString(const ProtobufNorm protobufNorm) {
-  switch (protobufNorm) {
-    case ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM: {
+NormStringProtobuf AccMetaData::normProtobufToString(NormProtobuf normProtobuf) {
+  switch (normProtobuf) {
+    case NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM: {
       return "NORM_EUCLIDEAN_DIFFERENCES_NORM";
     }
     default: {
@@ -144,10 +144,10 @@ ProtobufNormString AccMetaData::protobufNormToString(const ProtobufNorm protobuf
   }
 }
 
-ProtobufNorm AccMetaData::protobufNormFromString(const ProtobufNormString protobufNormString) {
-  if (protobufNormString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
-    return ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
+NormProtobuf AccMetaData::normProtobufFromString(NormStringProtobuf normProtobufString) {
+  if (normProtobufString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
+    return NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM;
   } else {
-    return ProtobufNorm::NORM_NONE;
+    return NormProtobuf::NORM_NONE;
   }
 }

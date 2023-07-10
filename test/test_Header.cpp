@@ -143,22 +143,22 @@ TEST(HeaderTest, TestToJsonWithHeaderEmpty) {
 
 TEST(HeaderTest, TestSerializeWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
-  ProtobufHeader protobufHeader;
-  header1.serialize(&protobufHeader);
-  auto header2 = Header(protobufHeader);
+  HeaderProtobuf headerProtobuf;
+  header1.serialize(&headerProtobuf);
+  auto header2 = Header(headerProtobuf);
   EXPECT_TRUE(header1 == header2);
 }
 
 TEST(HeaderTest, TestSerializeNoThrow) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
-  ProtobufHeader protobufHeader;
-  EXPECT_NO_THROW(header.serialize(&protobufHeader));
+  HeaderProtobuf headerProtobuf;
+  EXPECT_NO_THROW(header.serialize(&headerProtobuf));
 }
 
 TEST(HeaderTest, TestSerializeThrow) {
   auto header = HeaderExampleFactory::headerEmpty();
-  ProtobufHeader* protobufHeader = nullptr;
-  EXPECT_THROW(header.serialize(protobufHeader), std::invalid_argument);
+  HeaderProtobuf* headerProtobuf = nullptr;
+  EXPECT_THROW(header.serialize(headerProtobuf), std::invalid_argument);
 }
 
 TEST(HeaderTest, TestSwitchDataFormWithHeaderInAbsoluteForm) {

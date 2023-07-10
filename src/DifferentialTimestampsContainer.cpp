@@ -41,23 +41,24 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp f
       blockDifferences_ms(std::move(blockDifferences_ms)),
       timestampsDifferences_ms(std::move(timestampsDifferences_ms)) {}
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer)
-    : firstUnixTimestamp_ms(protobufDifferentialTimestampContainer.first_unix_timestamp_ms()),
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(
+    const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf)
+    : firstUnixTimestamp_ms(differentialTimestampsContainerProtobuf.first_unix_timestamp_ms()),
       blockDifferences_ms([&]() {
-        auto protobufBlockDifferences_ms = protobufDifferentialTimestampContainer.block_differences_ms();
+        auto blockDifferencesProtobuf_ms = differentialTimestampsContainerProtobuf.block_differences_ms();
         BlockDifferences blockDifferences_ms = {};
-        blockDifferences_ms.reserve(protobufBlockDifferences_ms.size());
-        for (auto& protobufBlockDifference_ms : protobufBlockDifferences_ms) {
-          blockDifferences_ms.push_back(protobufBlockDifference_ms);
+        blockDifferences_ms.reserve(blockDifferencesProtobuf_ms.size());
+        for (auto& blockDifferenceProtobuf_ms : blockDifferencesProtobuf_ms) {
+          blockDifferences_ms.push_back(blockDifferenceProtobuf_ms);
         }
         return blockDifferences_ms;
       }()),
       timestampsDifferences_ms([&]() {
-        auto protoBufTimestampsDifferences_ms = protobufDifferentialTimestampContainer.timestamps_differences_ms();
+        auto timestampsDifferencesProtobuf_ms = differentialTimestampsContainerProtobuf.timestamps_differences_ms();
         TimestampsDifferences timestampsDifferences_ms = {};
-        timestampsDifferences_ms.reserve(protoBufTimestampsDifferences_ms.size());
-        for (auto& protobufTimestampsDifference_ms : protoBufTimestampsDifferences_ms) {
-          timestampsDifferences_ms.push_back(protobufTimestampsDifference_ms);
+        timestampsDifferences_ms.reserve(timestampsDifferencesProtobuf_ms.size());
+        for (auto& timestampsDifferenceProtobuf_ms : timestampsDifferencesProtobuf_ms) {
+          timestampsDifferences_ms.push_back(timestampsDifferenceProtobuf_ms);
         }
         return timestampsDifferences_ms;
       }()) {}
@@ -153,15 +154,15 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() co
   return differentialTimestampsContainerJson;
 }
 
-void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) const {
-  if (protobufDifferentialTimestampContainer == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufDifferentialTimestampContainer is a null pointer");
+void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const {
+  if (differentialTimestampsContainerProtobuf == nullptr) {
+    throw std::invalid_argument("Error in serialize: differentialTimestampsContainerProtobuf is a null pointer");
   }
   for (auto& blockDifference_ms : this->blockDifferences_ms) {
-    protobufDifferentialTimestampContainer->add_block_differences_ms(blockDifference_ms);
+    differentialTimestampsContainerProtobuf->add_block_differences_ms(blockDifference_ms);
   }
   for (auto& timestampsDifference_ms : this->timestampsDifferences_ms) {
-    protobufDifferentialTimestampContainer->add_timestamps_differences_ms(timestampsDifference_ms);
+    differentialTimestampsContainerProtobuf->add_timestamps_differences_ms(timestampsDifference_ms);
   }
-  protobufDifferentialTimestampContainer->set_first_unix_timestamp_ms(this->firstUnixTimestamp_ms);
+  differentialTimestampsContainerProtobuf->set_first_unix_timestamp_ms(this->firstUnixTimestamp_ms);
 }

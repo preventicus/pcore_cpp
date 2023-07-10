@@ -37,35 +37,35 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(AccMetaData accMetaData) {
   AccMetaDataJson accMetaDataJson;
   if (accMetaData.hasCoordinate()) {
-    accMetaDataJson[PcoreJsonKey::coordinate] = AccMetaData::protobufCoordinateToString(accMetaData.getCoordinate());
+    accMetaDataJson[PcoreJsonKey::coordinate] = AccMetaData::coordinateProtobufToString(accMetaData.getCoordinate());
   } else if (accMetaData.hasNorm()) {
-    accMetaDataJson[PcoreJsonKey::norm] = AccMetaData::protobufNormToString(accMetaData.getNorm());
+    accMetaDataJson[PcoreJsonKey::norm] = AccMetaData::normProtobufToString(accMetaData.getNorm());
   }
   return accMetaDataJson;
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm() {
-  return AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+  return AccMetaData(NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormNone() {
-  return AccMetaData(ProtobufNorm::NORM_NONE);
+  return AccMetaData(NormProtobuf::NORM_NONE);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateX() {
-  return AccMetaData(ProtobufCoordinate::COORDINATE_X);
+  return AccMetaData(CoordinateProtobuf::COORDINATE_X);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateY() {
-  return AccMetaData(ProtobufCoordinate::COORDINATE_Y);
+  return AccMetaData(CoordinateProtobuf::COORDINATE_Y);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateZ() {
-  return AccMetaData(ProtobufCoordinate::COORDINATE_Z);
+  return AccMetaData(CoordinateProtobuf::COORDINATE_Z);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateNone() {
-  return AccMetaData(ProtobufCoordinate::COORDINATE_NONE);
+  return AccMetaData(CoordinateProtobuf::COORDINATE_NONE);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataNotSet() {

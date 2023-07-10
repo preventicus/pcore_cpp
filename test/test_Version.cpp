@@ -137,28 +137,28 @@ TEST(VersionTest, TestToJsonWithVersionEmpty) {
 
 TEST(VersionTest, TestSerializeWithVersionEmpty) {
   auto version1 = VersionExampleFactory::versionEmpty();
-  ProtobufVersion protobufData;
-  version1.serialize(&protobufData);
-  auto version2 = Version(protobufData);
+  VersionProtobuf versionProtobuf;
+  version1.serialize(&versionProtobuf);
+  auto version2 = Version(versionProtobuf);
   EXPECT_TRUE(version1 == version2);
 }
 
 TEST(VersionTest, TestSerializeWithVersionWithMajor2Minor1Patch0) {
   auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
-  ProtobufVersion protobufData;
-  version1.serialize(&protobufData);
-  auto version2 = Version(protobufData);
+  VersionProtobuf versionProtobuf;
+  version1.serialize(&versionProtobuf);
+  auto version2 = Version(versionProtobuf);
   EXPECT_TRUE(version1 == version2);
 }
 
 TEST(VersionTest, TestSerializeNoThrow) {
   auto version = VersionExampleFactory::versionWithMajor0Minor0Patch0();
-  ProtobufVersion protobufData;
-  EXPECT_NO_THROW(version.serialize(&protobufData));
+  VersionProtobuf versionProtobuf;
+  EXPECT_NO_THROW(version.serialize(&versionProtobuf));
 }
 
 TEST(VersionTest, TestSerializeThrow) {
   auto version = VersionExampleFactory::versionEmpty();
-  ProtobufVersion* protobufData = nullptr;
-  EXPECT_THROW(version.serialize(protobufData), std::invalid_argument);
+  VersionProtobuf* versionProtobuf = nullptr;
+  EXPECT_THROW(version.serialize(versionProtobuf), std::invalid_argument);
 }
