@@ -45,7 +45,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(
     : firstUnixTimestamp_ms(differentialTimestampsContainerProtobuf.first_unix_timestamp_ms()),
       blockDifferences_ms([&]() {
         auto blockDifferencesProtobuf_ms = differentialTimestampsContainerProtobuf.block_differences_ms();
-        BlockDifferences blockDifferences_ms = {};
+        BlockDifferences blockDifferences_ms;
         blockDifferences_ms.reserve(blockDifferencesProtobuf_ms.size());
         for (auto& blockDifferenceProtobuf_ms : blockDifferencesProtobuf_ms) {
           blockDifferences_ms.push_back(blockDifferenceProtobuf_ms);
@@ -54,7 +54,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(
       }()),
       timestampsDifferences_ms([&]() {
         auto timestampsDifferencesProtobuf_ms = differentialTimestampsContainerProtobuf.timestamps_differences_ms();
-        TimestampsDifferences timestampsDifferences_ms = {};
+        TimestampsDifferences timestampsDifferences_ms;
         timestampsDifferences_ms.reserve(timestampsDifferencesProtobuf_ms.size());
         for (auto& timestampsDifferenceProtobuf_ms : timestampsDifferencesProtobuf_ms) {
           timestampsDifferences_ms.push_back(timestampsDifferenceProtobuf_ms);
@@ -71,7 +71,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const Different
       }()),
       blockDifferences_ms([&]() {
         BlockDifferencesJson blockDifferencesJson = differentialTimestampsContainerJson[PcoreJsonKey::block_differences_ms];
-        BlockDifferences blockDifferences_ms = {};
+        BlockDifferences blockDifferences_ms;
         blockDifferences_ms.reserve(blockDifferencesJson.size());
         for (auto& blockDifferenceJson : blockDifferencesJson) {
           blockDifferences_ms.emplace_back(blockDifferenceJson.asUInt());
@@ -80,7 +80,7 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const Different
       }()),
       timestampsDifferences_ms([&]() {
         TimestampsDifferencesJson timestampsDifferencesJson = differentialTimestampsContainerJson[PcoreJsonKey::timestamps_differences_ms];
-        TimestampsDifferences timestampsDifferences_ms = {};
+        TimestampsDifferences timestampsDifferences_ms;
         timestampsDifferences_ms.reserve(timestampsDifferencesJson.size());
         for (auto& timestampsDifferenceJson : timestampsDifferencesJson) {
           timestampsDifferences_ms.emplace_back(timestampsDifferenceJson.asUInt());

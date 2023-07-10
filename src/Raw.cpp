@@ -39,7 +39,7 @@ Raw::Raw(Sensors sensors) : sensors(std::move(sensors)) {}
 Raw::Raw(const RawProtobuf& rawProtobuf)
     : sensors([&]() {
         auto sensorProtobuf = rawProtobuf.sensors();
-        Sensors sensors{};
+        Sensors sensors;
         sensors.reserve(sensorProtobuf.size());
         for (auto& sensorProtobuf : sensorProtobuf) {
           sensors.emplace_back(Sensor(sensorProtobuf));

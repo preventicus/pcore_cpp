@@ -39,7 +39,7 @@ DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) : di
 DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf)
     : differentialValues([&]() {
         auto differentialValuesProtobuf = differentialBlockProtobuf.differential_values();
-        DifferentialValues differentialValues = {};
+        DifferentialValues differentialValues;
         differentialValues.reserve(differentialValuesProtobuf.size());
         for (auto& differentialValueProtobuf : differentialValuesProtobuf) {
           this->differentialValues.push_back(differentialValueProtobuf);
@@ -50,7 +50,7 @@ DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differenti
 DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson)
     : differentialValues([&]() {
         DifferentialValuesJson differentialValuesJson = differentialBlockJson[PcoreJsonKey::differential_values];
-        DifferentialValues differentialValues = {};
+        DifferentialValues differentialValues;
         differentialValues.reserve(differentialValuesJson.size());
         for (auto& differentialValueJson : differentialValuesJson) {
           differentialValues.emplace_back(differentialValueJson.asInt());

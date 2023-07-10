@@ -91,7 +91,7 @@ Channel::Channel(const ChannelProtobuf& channelProtobuf)
       accMetaData(AccMetaData(channelProtobuf.acc_metadata())),
       differentialBlocks([&]() {
         auto differentialBlocksProtobuf = channelProtobuf.differential_blocks();
-        DifferentialBlocks differentialBlocks{};
+        DifferentialBlocks differentialBlocks;
         differentialBlocks.reserve(differentialBlocksProtobuf.size());
         for (auto& differentialBlockProtobuf : differentialBlocksProtobuf) {
           differentialBlocks.emplace_back(DifferentialBlock(differentialBlockProtobuf));
@@ -185,7 +185,7 @@ void Channel::switchDataForm() {
 }
 
 DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const {
-  DifferentialBlocks differentialBlocks = {};
+  DifferentialBlocks differentialBlocks;
   const auto numberOfBlocks = blockIdxs.size();
   /*
   * blockIdxs.size = 0 -> no values are included
@@ -228,7 +228,7 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& abs
 DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx,
                                                    const BlockIdx toBlockIdx,
                                                    const AbsoluteValues& absoluteValues) const {
-  DifferentialValues differentialValues = {};
+  DifferentialValues differentialValues;
   differentialValues.push_back(absoluteValues[fromBlockIdx]);
   for (size_t i = fromBlockIdx + 1; i <= toBlockIdx; i++) {
     differentialValues.emplace_back(absoluteValues[i] - absoluteValues[i - 1]);
@@ -237,7 +237,7 @@ DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx,
 }
 
 AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const {
-  AbsoluteValues absoluteValues = {};
+  AbsoluteValues absoluteValues;
   size_t numberOfElements = 0;
   for (auto& differentialBlock : differentialBlocks) {
     numberOfElements += differentialBlock.getDifferentialValues().size();
