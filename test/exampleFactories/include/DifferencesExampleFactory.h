@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "DifferentialTimestampsContainer.h"
 
+using namespace PCore;
+
 class DifferencesExampleFactory {
  public:
   static BlockDifferences blockDifferencesWithThreeMixedDifferences();

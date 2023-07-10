@@ -37,9 +37,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Raw.h"
 #include "protobuf/pcore.pb.h"
 
+using namespace PCore;
+
 using DataProtobuf = com::preventicus::pcore::Data;
 using DataJson = Json::Value;
 
+namespace PCore {
 class Data final {
  public:
   explicit Data(Raw raw, const Header& header);
@@ -60,3 +63,4 @@ class Data final {
   Header header;
   Raw raw;
 };
+}  // namespace PCore

@@ -37,12 +37,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Version.h"
 #include "protobuf/pcore.pb.h"
 
+using namespace PCore;
+
 using HeaderProtobuf = com::preventicus::pcore::Data_Header;
 using TimeZoneOffset = int32_t;
 using HeaderJson = Json::Value;
 using DataFormString = std::string;
 using TimeZoneOffsetJson = Json::Value;
 
+namespace PCore {
 class Header final {
  public:
   explicit Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
@@ -70,3 +73,4 @@ class Header final {
   Version pcoreVersion;
   DataForm dataForm;
 };
+}  // namespace PCore

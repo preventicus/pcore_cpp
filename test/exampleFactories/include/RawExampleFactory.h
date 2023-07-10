@@ -35,6 +35,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Raw.h"
 #include "SensorExampleFactory.h"
 
+using namespace PCore;
+
 class RawExampleFactory {
  public:
   static Raw rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();

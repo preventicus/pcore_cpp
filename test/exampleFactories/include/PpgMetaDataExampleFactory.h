@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "PpgMetaData.h"
 
+using namespace PCore;
+
 class PpgMetaDataExampleFactory {
  public:
   static PpgMetaData ppgMetDataWithColorGreen();

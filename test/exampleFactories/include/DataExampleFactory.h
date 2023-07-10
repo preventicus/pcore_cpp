@@ -36,6 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "HeaderExampleFactory.h"
 #include "RawExampleFactory.h"
 
+using namespace PCore;
+
 class DataExampleFactory {
  public:
   static Data dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive();

@@ -35,6 +35,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteTimestampsContainer.h"
 #include "UnixTimestampsExampleFactory.h"
 
+using namespace PCore;
+
 class AbsoluteTimestampsContainerExampleFactory {
  public:
   static AbsoluteTimestampsContainer absoluteTimestampsContainerWithThreeSmallTimestamps();

@@ -42,6 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PpgMetaData.h"
 #include "protobuf/pcore_raw.pb.h"
 
+using namespace PCore;
+
 using ChannelProtobuf = com::preventicus::pcore::Raw_Sensor_Channel;
 using SensorTypeProtobuf = com::preventicus::pcore::SensorType;
 using BlockIdxs = std::vector<BlockIdx>;
@@ -50,6 +52,7 @@ using ChannelJson = Json::Value;
 using DifferentialBlocksJson = Json::Value;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 
+namespace PCore {
 class Channel final {
  public:
   explicit Channel(const AccMetaData& accMetadata, AbsoluteBlock absoluteBlock);
@@ -88,3 +91,4 @@ class Channel final {
   DifferentialBlocks differentialBlocks;
   AbsoluteBlock absoluteBlock;
 };
+}  // namespace PCore

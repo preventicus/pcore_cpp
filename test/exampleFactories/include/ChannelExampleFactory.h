@@ -40,6 +40,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Sensor.h"
 
+using namespace PCore;
+
 class ChannelExampleFactory {
  public:
   static Channel channelWithAbsoluteValuesForSwitchDataFormTest();

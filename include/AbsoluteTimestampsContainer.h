@@ -41,6 +41,7 @@ using UnixTimestamps = std::vector<UnixTimestamp>;
 using AbsoluteTimestampsContainerJson = Json::Value;
 using UnixTimestampsJson = Json::Value;
 
+namespace PCore {
 class AbsoluteTimestampsContainer final {
  public:
   explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms);
@@ -56,3 +57,4 @@ class AbsoluteTimestampsContainer final {
  private:
   UnixTimestamps unixTimestamps_ms;
 };
+}  // namespace PCore

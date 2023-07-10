@@ -39,6 +39,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Raw.h"
 
+using namespace PCore;
+
 class SensorExampleFactory {
  public:
   static Sensor sensorPpgWithTwoChannelsInAbsoluteForm();

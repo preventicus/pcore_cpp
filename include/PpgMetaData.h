@@ -43,6 +43,7 @@ using Wavelength = uint32_t;
 using PpgMetaDataJson = Json::Value;
 using ColorStringProtobuf = std::string;
 
+namespace PCore {
 class PpgMetaData final {
  public:
   explicit PpgMetaData(ColorProtobuf colorProtobuf);
@@ -70,3 +71,4 @@ class PpgMetaData final {
   ColorProtobuf color;
   Wavelength wavelength_nm;
 };
+}  // namespace PCore

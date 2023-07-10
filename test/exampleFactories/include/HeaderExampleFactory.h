@@ -35,6 +35,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Header.h"
 #include "VersionExampleFactory.h"
 
+using namespace PCore;
+
 class HeaderExampleFactory {
  public:
   static TimeZoneOffset timeZoneOffsetPositive_min();

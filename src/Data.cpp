@@ -32,7 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Data.h"
-
 #include <utility>
 
 Data::Data(Raw raw, const Header& header) : header(header), raw(std::move(raw)) {}

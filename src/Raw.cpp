@@ -32,7 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Raw.h"
-
 #include <utility>
 
 Raw::Raw(Sensors sensors) : sensors(std::move(sensors)) {}

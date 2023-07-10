@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "Version.h"
 
+using namespace PCore;
+
 class VersionExampleFactory {
  public:
   static Major majorOne();

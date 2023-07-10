@@ -32,7 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Channel.h"
-
 #include <utility>
 
 Channel::Channel(const AccMetaData& accMetaData, AbsoluteBlock absoluteBlock)

@@ -40,6 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 
+using namespace PCore;
+
 using SensorProtobuf = com::preventicus::pcore::Raw_Sensor;
 using Channels = std::vector<Channel>;
 using SensorTypeString = std::string;
@@ -47,6 +49,7 @@ using SensorJson = Json::Value;
 using Duration = uint64_t;
 using ChannelsJson = Json::Value;
 
+namespace PCore {
 class Sensor final {
  public:
   explicit Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
@@ -85,3 +88,4 @@ class Sensor final {
   DifferentialTimestampsContainer differentialTimestampsContainer;
   AbsoluteTimestampsContainer absoluteTimestampsContainer;
 };
+}  // namespace PCore

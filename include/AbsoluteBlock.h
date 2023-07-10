@@ -41,6 +41,7 @@ using AbsoluteValues = std::vector<AbsoluteValue>;
 using AbsoluteValuesJson = Json::Value;
 using AbsoluteBlockJson = Json::Value;
 
+namespace PCore {
 class AbsoluteBlock final {
  public:
   explicit AbsoluteBlock(AbsoluteValues absoluteValues);
@@ -57,3 +58,4 @@ class AbsoluteBlock final {
  private:
   AbsoluteValues absoluteValues;
 };
+}  // namespace PCore

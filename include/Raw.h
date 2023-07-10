@@ -36,11 +36,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Sensor.h"
 #include "protobuf/pcore.pb.h"
 
+using namespace PCore;
+
 using SensorsJson = Json::Value;
 using RawProtobuf = com::preventicus::pcore::Raw;
 using Sensors = std::vector<Sensor>;
 using RawJson = Json::Value;
 
+namespace PCore {
 class Raw final {
  public:
   explicit Raw(Sensors sensors);
@@ -59,3 +62,4 @@ class Raw final {
  private:
   Sensors sensors;
 };
+}  // namespace PCore

@@ -45,6 +45,7 @@ using AccMetaDataJson = Json::Value;
 using CoordinateProtobufString = std::string;
 using NormStringProtobuf = std::string;
 
+namespace PCore {
 class AccMetaData final {
  public:
   explicit AccMetaData(NormProtobuf norm);
@@ -73,3 +74,4 @@ class AccMetaData final {
   CoordinateProtobuf coordinate;
   NormProtobuf norm;
 };
+}  // namespace PCore

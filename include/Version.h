@@ -45,6 +45,7 @@ using MajorJson = Json::Value;
 using MinorJson = Json::Value;
 using PatchJson = Json::Value;
 
+namespace PCore {
 class Version final {
  public:
   explicit Version(Major major, Minor minor, Patch patch);
@@ -68,3 +69,4 @@ class Version final {
   Minor minor;
   Patch patch;
 };
+}  // namespace PCore

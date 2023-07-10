@@ -36,6 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialBlock.h"
 #include "DifferentialValuesExampleFactory.h"
 
+using namespace PCore;
+
 class DifferentialBlockExampleFactory {
  public:
   static DifferentialBlock differentialBlockWithThreePositiveDifferentialValues();

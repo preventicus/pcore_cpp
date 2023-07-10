@@ -35,6 +35,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteBlock.h"
 #include "AbsoluteValuesExampleFactory.h"
 
+using namespace PCore;
+
 class AbsoluteBlockExampleFactory {
  public:
   static AbsoluteBlock absoluteBlockWithThreePositiveAbsoluteValues();

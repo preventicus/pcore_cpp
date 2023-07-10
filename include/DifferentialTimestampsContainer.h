@@ -39,6 +39,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "UnixTimestamp.h"
 #include "protobuf/pcore_raw.pb.h"
 
+using namespace PCore;
+
 using DifferentialTimestampContainerProtobuf = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
 using Difference = uint32_t;
 using BlockDifferences = std::vector<Difference>;
@@ -49,6 +51,7 @@ using UnixTimestampJson = Json::Value;
 using BlockDifferencesJson = Json::Value;
 using TimestampsDifferencesJson = Json::Value;
 
+namespace PCore {
 class DifferentialTimestampsContainer final {
  public:
   explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
@@ -78,3 +81,4 @@ class DifferentialTimestampsContainer final {
   BlockDifferences blockDifferences_ms;
   TimestampsDifferences timestampsDifferences_ms;
 };
+}  // namespace PCore

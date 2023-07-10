@@ -36,6 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Sensor.h"
 
+using namespace PCore;
+
 class DifferentialTimestampsContainerExampleFactory {
  public:
   static DifferentialTimestampsContainer differentialTimestampsContainerWithThreeBlocks();

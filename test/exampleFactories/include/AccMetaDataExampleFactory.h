@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "AccMetaData.h"
 
+using namespace PCore;
+
 class AccMetaDataExampleFactory {
  public:
   static AccMetaData accMetaDataWithNormEuclideanDifferencesNorm();
