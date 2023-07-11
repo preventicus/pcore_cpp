@@ -64,8 +64,8 @@ class Header final : public IPCore<HeaderProtobuf> {
   static DataForm dataFormFromString(DataFormString dataFormString);
   static DataFormString dataFormToString(DataForm dataForm);
 
-  bool operator==(const Header& header) const;
-  bool operator!=(const Header& header) const;
+  bool operator==(const IPCore<HeaderProtobuf>& header) const final;
+  bool operator!=(const IPCore<HeaderProtobuf>& header) const final;
 
  private:
   void checkTimeZoneOffset() const;

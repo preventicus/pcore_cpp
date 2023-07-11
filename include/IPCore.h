@@ -41,6 +41,6 @@ class IPCore {
   [[nodiscard]] virtual Json::Value toJson() const = 0;
   virtual void switchDataForm() = 0;
 
-  // virtual bool operator==(const IPCore& pcore) const = 0;
-  // virtual bool operator!=(const IPCore& pcore) const = 0;
+  virtual bool operator==(const IPCore& pcore) const = 0;
+  virtual bool operator!=(const IPCore& pcore) const = 0;
 };

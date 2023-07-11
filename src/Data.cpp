@@ -52,12 +52,15 @@ Header Data::getHeader() const {
   return this->header;
 }
 
-bool Data::operator==(const Data& data) const {
-  return this->header == data.header && this->raw == data.raw;
+bool Data::operator==(const IPCore<DataProtobuf>& data) const {
+  if (const auto* derived = dynamic_cast<const Data*>(&data)) {
+    return this->header == derived->header && this->raw == derived->raw;
+  }
+  return false;
 }
 
-bool Data::operator!=(const Data& data) const {
-  return this->header != data.header || this->raw != data.raw;
+bool Data::operator!=(const IPCore<DataProtobuf>& data) const {
+  return !(*this == data);
 }
 
 void Data::serialize(DataProtobuf* dataProtobuf) const {

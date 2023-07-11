@@ -67,12 +67,16 @@ DataForm Header::getDataForm() const {
   return this->dataForm;
 }
 
-bool Header::operator==(const Header& header) const {
-  return this->timeZoneOffset_min == header.timeZoneOffset_min && this->pcoreVersion == header.pcoreVersion && this->dataForm == header.dataForm;
+bool Header::operator==(const IPCore<HeaderProtobuf>& header) const {
+  if (const auto* derived = dynamic_cast<const Header*>(&header)) {
+    return this->timeZoneOffset_min == derived->timeZoneOffset_min && this->pcoreVersion == derived->pcoreVersion &&
+           this->dataForm == derived->dataForm;
+  }
+  return false;
 }
 
-bool Header::operator!=(const Header& header) const {
-  return this->timeZoneOffset_min != header.timeZoneOffset_min || this->pcoreVersion != header.pcoreVersion || this->dataForm != header.dataForm;
+bool Header::operator!=(const IPCore<HeaderProtobuf>& header) const {
+  return !(*this == header);
 }
 
 void Header::serialize(HeaderProtobuf* headerProtobuf) const {

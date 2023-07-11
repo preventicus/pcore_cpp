@@ -79,19 +79,15 @@ bool PpgMetaData::isSet() const {
   return !(this->color == ColorProtobuf::COLOR_NONE && this->wavelength_nm == 0);
 }
 
-bool PpgMetaData::operator==(const PpgMetaData& ppgMetaData) const {
-  return this->color == ppgMetaData.color && this->wavelength_nm == ppgMetaData.wavelength_nm;
+bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+  if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
+    return this->color == derived->color && this->wavelength_nm == derived->wavelength_nm;
+  }
+  return false;
 }
 
-// bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
-//   if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
-//     return this->color == derived->color && this->wavelength_nm == derived->wavelength_nm;
-//   }
-//   return false;
-// }
-
-bool PpgMetaData::operator!=(const PpgMetaData& ppgMetaData) const {
-  return this->color != ppgMetaData.color || this->wavelength_nm != ppgMetaData.wavelength_nm;
+bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+  return !(*this == ppgMetaData);
 }
 
 PpgMetaDataJson PpgMetaData::toJson() const {
@@ -122,7 +118,7 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
 }
 
 void PpgMetaData::switchDataForm() {
-  throw std::runtime_error("should not be called"); //TODO unittest
+  throw std::runtime_error("should not be called");  // TODO unittest
 }
 
 ColorStringProtobuf PpgMetaData::colorProtobufToString(ColorProtobuf colorProtobuf) {

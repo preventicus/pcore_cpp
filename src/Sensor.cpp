@@ -120,21 +120,26 @@ AbsoluteTimestampsContainer Sensor::getAbsoluteTimestampsContainer() const {
   return this->absoluteTimestampsContainer;
 }
 
-bool Sensor::operator==(const Sensor& sensor) const {
-  if (this->channels.size() != sensor.channels.size()) {
+bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const {
+  const auto* derived = dynamic_cast<const Sensor*>(&sensor);
+  if (derived == nullptr) {
+    return false;
+  }
+  if (this->channels.size() != derived->channels.size()) {
     return false;
   }
   const auto numberOfChannels = this->channels.size();
   for (size_t i = 0; i < numberOfChannels; i++) {
-    if (this->channels[i] != sensor.channels[i]) {
+    if (this->channels[i] != derived->channels[i]) {
       return false;
     }
   }
-  return this->sensorType == sensor.sensorType && this->differentialTimestampsContainer == sensor.differentialTimestampsContainer &&
-         this->absoluteTimestampsContainer == sensor.absoluteTimestampsContainer && this->dataForm == sensor.dataForm;  // TODO unittest for dataForm
+  return this->sensorType == derived->sensorType && this->differentialTimestampsContainer == derived->differentialTimestampsContainer &&
+         this->absoluteTimestampsContainer == derived->absoluteTimestampsContainer &&
+         this->dataForm == derived->dataForm;  // TODO unittest for dataForm
 }
 
-bool Sensor::operator!=(const Sensor& sensor) const {
+bool Sensor::operator!=(const IPCore<SensorProtobuf>& sensor) const {
   return !(*this == sensor);
 }
 

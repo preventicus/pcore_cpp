@@ -75,8 +75,8 @@ class Sensor final : public IPCore<SensorProtobuf> {
   static SensorTypeProtobuf senorTypeFromString(SensorTypeString senorTypeString);
   static SensorTypeString senorTypeToString(SensorTypeProtobuf sensorTypeProtobuf);
 
-  bool operator==(const Sensor& sensor) const;
-  bool operator!=(const Sensor& sensor) const;
+  bool operator==(const IPCore<SensorProtobuf>& sensor) const final;
+  bool operator!=(const IPCore<SensorProtobuf>& sensor) const final;
 
  private:
   [[nodiscard]] AbsoluteTimestampsContainer calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;

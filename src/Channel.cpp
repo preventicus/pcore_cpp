@@ -150,21 +150,25 @@ DataForm Channel::getDataForm() const {  // TODO unittest
   return this->dataForm;
 }
 
-bool Channel::operator==(const Channel& channel) const {
-  if (this->differentialBlocks.size() != channel.differentialBlocks.size()) {
+bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const {
+  const auto* derived = dynamic_cast<const Channel*>(&channel);
+  if (derived == nullptr) {
+    return false;
+  }
+  if (this->differentialBlocks.size() != derived->differentialBlocks.size()) {
     return false;
   }
   const auto numberOfElements = this->differentialBlocks.size();
   for (size_t i = 0; i < numberOfElements; i++) {
-    if (this->differentialBlocks[i] != channel.differentialBlocks[i]) {
+    if (this->differentialBlocks[i] != derived->differentialBlocks[i]) {
       return false;
     }
   }
-  return this->accMetaData == channel.accMetaData && this->ppgMetaData == channel.ppgMetaData && this->absoluteBlock == channel.absoluteBlock &&
-         this->sensorType == channel.sensorType && this->dataForm == channel.dataForm;  // TODO add unittests for sensortype and dataform
+  return this->accMetaData == derived->accMetaData && this->ppgMetaData == derived->ppgMetaData && this->absoluteBlock == derived->absoluteBlock &&
+         this->sensorType == derived->sensorType && this->dataForm == derived->dataForm;  // TODO add unittests for sensortype and dataform
 }
 
-bool Channel::operator!=(const Channel& channel) const {
+bool Channel::operator!=(const IPCore<ChannelProtobuf>& channel) const {
   return !(*this == channel);
 }
 

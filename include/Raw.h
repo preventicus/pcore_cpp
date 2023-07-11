@@ -57,8 +57,8 @@ class Raw final : public IPCore<RawProtobuf> {
   void serialize(RawProtobuf* rawProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const Raw& raw) const;
-  bool operator!=(const Raw& raw) const;
+  bool operator==(const IPCore<RawProtobuf>& raw) const final;
+  bool operator!=(const IPCore<RawProtobuf>& raw) const final;
 
  private:
   Sensors sensors;

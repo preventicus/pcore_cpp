@@ -61,8 +61,8 @@ class Version final : public IPCore<VersionProtobuf> {
   void serialize(VersionProtobuf* versionProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const Version& version) const;
-  bool operator!=(const Version& version) const;
+  bool operator==(const IPCore<VersionProtobuf>& version) const final;
+  bool operator!=(const IPCore<VersionProtobuf>& version) const final;
 
  private:
   Major major;

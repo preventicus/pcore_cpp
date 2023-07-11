@@ -54,12 +54,15 @@ bool DifferentialBlock::isSet() const {
   return !this->differentialValues.empty();
 }
 
-bool DifferentialBlock::operator==(const DifferentialBlock& differentialBlock) const {
-  return this->differentialValues == differentialBlock.differentialValues;
+bool DifferentialBlock::operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const {
+  if (const auto* derived = dynamic_cast<const DifferentialBlock*>(&differentialBlock)) {
+    return this->differentialValues == derived->differentialValues;
+  }
+  return false;
 }
 
-bool DifferentialBlock::operator!=(const DifferentialBlock& differentialBlock) const {
-  return this->differentialValues != differentialBlock.differentialValues;
+bool DifferentialBlock::operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const {
+  return !(*this == differentialBlock);
 }
 
 void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const {
@@ -78,5 +81,5 @@ DifferentialBlockJson DifferentialBlock::toJson() const {
 }
 
 void DifferentialBlock::switchDataForm() {
-  throw std::runtime_error("should not be called"); //TODO unittest
+  throw std::runtime_error("should not be called");  // TODO unittest
 }

@@ -73,12 +73,15 @@ bool AccMetaData::isSet() const {
   return this->hasNorm() || this->hasCoordinate();
 }
 
-bool AccMetaData::operator==(const AccMetaData& accMetaData) const {
-  return this->coordinate == accMetaData.coordinate && this->norm == accMetaData.norm;
+bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+  if (const auto* derived = dynamic_cast<const AccMetaData*>(&accMetaData)) {
+    return this->coordinate == derived->coordinate && this->norm == derived->norm;
+  }
+  return false;
 }
 
-bool AccMetaData::operator!=(const AccMetaData& accMetaData) const {
-  return this->coordinate != accMetaData.coordinate || this->norm != accMetaData.norm;
+bool AccMetaData::operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+  return !(*this == accMetaData);
 }
 
 void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
@@ -97,7 +100,7 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
 }
 
 void AccMetaData::switchDataForm() {
-  throw std::runtime_error("should not be called"); //TODO unittest
+  throw std::runtime_error("should not be called");  // TODO unittest
 }
 
 Json::Value AccMetaData::toJson() const {

@@ -65,9 +65,8 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
   static ColorStringProtobuf colorProtobufToString(ColorProtobuf colorProtobuf);
   static ColorProtobuf colorProtobufFromString(ColorStringProtobuf colorStringProtobuf);
 
-  // bool operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
-  bool operator==(const PpgMetaData& ppgMetaData) const;
-  bool operator!=(const PpgMetaData& ppgMetaData) const;
+  bool operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
+  bool operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
 
  private:
   ColorProtobuf color;

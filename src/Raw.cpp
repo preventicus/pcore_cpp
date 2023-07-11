@@ -59,20 +59,24 @@ DataForm Raw::getDataFrom() const {  // TODO unit tests
   return this->dataForm;
 }
 
-bool Raw::operator==(const Raw& raw) const {
-  if (this->sensors.size() != raw.sensors.size()) {
+bool Raw::operator==(const IPCore<RawProtobuf>& raw) const {
+  const auto* derived = dynamic_cast<const Raw*>(&raw);
+  if (derived == nullptr) {
+    return false;
+  }
+  if (this->sensors.size() != derived->sensors.size()) {
     return false;
   }
   const auto numberOfSensors = this->sensors.size();
   for (size_t i = 0; i < numberOfSensors; i++) {
-    if (this->sensors[i] != raw.sensors[i]) {
+    if (this->sensors[i] != derived->sensors[i]) {
       return false;
     }
   }
-  return this->dataForm == raw.dataForm;  // TODO unittests for dataform
+  return this->dataForm == derived->dataForm;  // TODO unittests for dataform
 }
 
-bool Raw::operator!=(const Raw& raw) const {
+bool Raw::operator!=(const IPCore<RawProtobuf>& raw) const {
   return !(*this == raw);
 }
 

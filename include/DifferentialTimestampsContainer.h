@@ -74,8 +74,8 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
   void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
-  bool operator!=(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
+  bool operator==(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
+  bool operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
 
  private:
   UnixTimestamp firstUnixTimestamp_ms;

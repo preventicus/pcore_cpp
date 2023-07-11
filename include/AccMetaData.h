@@ -63,8 +63,8 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
   void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const AccMetaData& accMetaData) const;
-  bool operator!=(const AccMetaData& accMetaData) const;
+  bool operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
+  bool operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
 
   static CoordinateProtobuf coordinateProtobufFromString(CoordinateProtobufString coordinateProtobufString);
   static CoordinateProtobufString coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf);

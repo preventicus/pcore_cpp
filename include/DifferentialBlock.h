@@ -60,8 +60,8 @@ class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
   void serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const DifferentialBlock& differentialBlock) const;
-  bool operator!=(const DifferentialBlock& differentialBlock) const;
+  bool operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const final;
+  bool operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const final;
 
  private:
   DifferentialValues differentialValues;

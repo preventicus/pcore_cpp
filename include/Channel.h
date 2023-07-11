@@ -75,8 +75,8 @@ class Channel final : public IPCore<ChannelProtobuf> {
   [[nodiscard]] bool hasDifferentialBlocks() const;
   [[nodiscard]] bool hasAbsoluteBlock() const;
 
-  bool operator==(const Channel& channel) const;
-  bool operator!=(const Channel& channel) const;
+  bool operator==(const IPCore<ChannelProtobuf>& channel) const final;
+  bool operator!=(const IPCore<ChannelProtobuf>& channel) const final;
 
   [[nodiscard]] ChannelJson toJson() const final;
   void serialize(ChannelProtobuf* channelProtobuf) const final;
