@@ -37,10 +37,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreProtobuf.h"
 
 Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
-    : sensorType(sensorTypeProtobuf), channels(std::move(channels)), differentialTimestampsContainer(std::move(differentialTimestampsContainer)) {}
+    : sensorType(sensorTypeProtobuf),
+      channels(std::move(channels)),
+      differentialTimestampsContainer(std::move(differentialTimestampsContainer)),
+      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
 
 Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
-    : sensorType(sensorTypeProtobuf), channels(std::move(channels)), absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)) {}
+    : sensorType(sensorTypeProtobuf),
+      channels(std::move(channels)),
+      absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)),
+      dataForm(DataForm::DATA_FORM_ABSOLUTE) {
+  this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
+}
 
 Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
     : sensorType(Sensor::senorTypeFromString(sensorJson[PcoreJson::Key::sensor_type].asString())),
@@ -70,19 +78,27 @@ Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
             throw std::runtime_error("dataForm is NONE");
           }
         }
-      }()) {}
+      }()),
+      dataForm(dataForm) {}
 
 Sensor::Sensor(const SensorProtobuf& sensorProtobuf)
     : sensorType(sensorProtobuf.sensor_type()),
       channels(PcoreProtobuf::Convert::ProtoBuf2Vector<Channel>(sensorProtobuf.channels())),
       differentialTimestampsContainer(DifferentialTimestampsContainer(sensorProtobuf.differential_timestamps_container())),
-      absoluteTimestampsContainer(AbsoluteTimestampsContainer()) {}
+      absoluteTimestampsContainer(AbsoluteTimestampsContainer()),
+      dataForm([&]() {
+        if (sensorProtobuf.channels().empty() && sensorProtobuf.sensor_type() == SensorTypeProtobuf::SENSOR_TYPE_NONE) {
+          return DataForm::DATA_FORM_NONE;
+        }
+        return DataForm::DATA_FORM_DIFFERENTIAL;
+      }()) {}
 
 Sensor::Sensor()
     : sensorType(SensorTypeProtobuf::SENSOR_TYPE_NONE),
       channels({}),
       differentialTimestampsContainer(DifferentialTimestampsContainer()),
-      absoluteTimestampsContainer(AbsoluteTimestampsContainer()) {}
+      absoluteTimestampsContainer(AbsoluteTimestampsContainer()),
+      dataForm(DataForm::DATA_FORM_NONE) {}
 
 SensorTypeProtobuf Sensor::getSensorType() const {
   return this->sensorType;
@@ -90,6 +106,10 @@ SensorTypeProtobuf Sensor::getSensorType() const {
 
 Channels Sensor::getChannels() const {
   return this->channels;
+}
+
+DataForm Sensor::getDataFrom() const {  // TODO Unittest
+  return this->dataForm;
 }
 
 DifferentialTimestampsContainer Sensor::getDifferentialTimestampsContainer() const {
@@ -100,21 +120,26 @@ AbsoluteTimestampsContainer Sensor::getAbsoluteTimestampsContainer() const {
   return this->absoluteTimestampsContainer;
 }
 
-bool Sensor::operator==(const Sensor& sensor) const {
-  if (this->channels.size() != sensor.channels.size()) {
+bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const {
+  const auto* derived = dynamic_cast<const Sensor*>(&sensor);
+  if (derived == nullptr) {
+    return false;
+  }
+  if (this->channels.size() != derived->channels.size()) {
     return false;
   }
   const auto numberOfChannels = this->channels.size();
   for (size_t i = 0; i < numberOfChannels; i++) {
-    if (this->channels[i] != sensor.channels[i]) {
+    if (this->channels[i] != derived->channels[i]) {
       return false;
     }
   }
-  return this->sensorType == sensor.sensorType && this->differentialTimestampsContainer == sensor.differentialTimestampsContainer &&
-         this->absoluteTimestampsContainer == sensor.absoluteTimestampsContainer;
+  return this->sensorType == derived->sensorType && this->differentialTimestampsContainer == derived->differentialTimestampsContainer &&
+         this->absoluteTimestampsContainer == derived->absoluteTimestampsContainer &&
+         this->dataForm == derived->dataForm;  // TODO unittest for dataForm
 }
 
-bool Sensor::operator!=(const Sensor& sensor) const {
+bool Sensor::operator!=(const IPCore<SensorProtobuf>& sensor) const {
   return !(*this == sensor);
 }
 
@@ -138,14 +163,15 @@ void Sensor::serialize(SensorProtobuf* sensorProtobuf) const {
   sensorProtobuf->mutable_differential_timestamps_container()->CopyFrom(differentialTimestampContainerProtobuf);
 }
 
-void Sensor::switchDataForm(const DataForm currentDataForm) {
-  switch (currentDataForm) {
+void Sensor::switchDataForm() {
+  switch (this->dataForm) {
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(this->differentialTimestampsContainer);
       this->differentialTimestampsContainer = DifferentialTimestampsContainer();
       for (auto& channel : this->channels) {
         channel.switchDataForm();
       }
+      this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
       break;
     }
     case DataForm::DATA_FORM_ABSOLUTE: {
@@ -155,6 +181,7 @@ void Sensor::switchDataForm(const DataForm currentDataForm) {
       for (auto& channel : this->channels) {
         channel.switchDataForm(blockIdxs);
       }
+      this->dataForm = DataForm::DATA_FORM_DIFFERENTIAL;
       break;
     }
     default: {
@@ -311,10 +338,10 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
 }
 
-SensorJson Sensor::toJson(const DataForm currentDataForm) const {
+SensorJson Sensor::toJson() const {
   SensorJson sensorJson;
 
-  switch (currentDataForm) {
+  switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       sensorJson[PcoreJson::Key::absolute_timestamps_container] = this->absoluteTimestampsContainer.toJson();
       break;
@@ -328,7 +355,7 @@ SensorJson Sensor::toJson(const DataForm currentDataForm) const {
     }
   }
 
-  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::Vector2Json(this->channels, currentDataForm, this->sensorType);
+  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::Vector2Json(this->channels);
   sensorJson[PcoreJson::Key::sensor_type] = Sensor::senorTypeToString(this->sensorType);
   return sensorJson;
 }

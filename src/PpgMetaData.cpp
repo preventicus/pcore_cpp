@@ -43,7 +43,7 @@ PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) : color(colorProtobuf), wa
 PpgMetaData::PpgMetaData(Wavelength wavelength_nm) : color(ColorProtobuf::COLOR_NONE), wavelength_nm(wavelength_nm) {}
 
 PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
-    : color(PpgMetaData::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString())), wavelength_nm([&]() {
+    : color(PcoreProtobuf::Convert::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString())), wavelength_nm([&]() {
         if (ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asInt() < 0) {
           throw std::invalid_argument("wavelength_nm is negative in json.");
         }
@@ -79,12 +79,15 @@ bool PpgMetaData::isSet() const {
   return !(this->color == ColorProtobuf::COLOR_NONE && this->wavelength_nm == 0);
 }
 
-bool PpgMetaData::operator==(const PpgMetaData& ppgMetaData) const {
-  return this->color == ppgMetaData.color && this->wavelength_nm == ppgMetaData.wavelength_nm;
+bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+  if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
+    return this->color == derived->color && this->wavelength_nm == derived->wavelength_nm;
+  }
+  return false;
 }
 
-bool PpgMetaData::operator!=(const PpgMetaData& ppgMetaData) const {
-  return this->color != ppgMetaData.color || this->wavelength_nm != ppgMetaData.wavelength_nm;
+bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+  return !(*this == ppgMetaData);
 }
 
 PpgMetaDataJson PpgMetaData::toJson() const {
@@ -94,7 +97,7 @@ PpgMetaDataJson PpgMetaData::toJson() const {
     ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
   }
   if (this->color != ColorProtobuf::COLOR_NONE) {
-    ppgMetaDataJson[PcoreJson::Key::color] = PpgMetaData::colorProtobufToString(this->color);
+    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(this->color);
   }
   return ppgMetaDataJson;
 }
@@ -114,31 +117,6 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
   }
 }
 
-ColorStringProtobuf PpgMetaData::colorProtobufToString(ColorProtobuf colorProtobuf) {
-  switch (colorProtobuf) {
-    case ColorProtobuf::COLOR_RED: {
-      return "COLOR_RED";
-    }
-    case ColorProtobuf::COLOR_BLUE: {
-      return "COLOR_BLUE";
-    }
-    case ColorProtobuf::COLOR_GREEN: {
-      return "COLOR_GREEN";
-    }
-    default: {
-      return "COLOR_NONE";
-    }
-  }
-}
-
-ColorProtobuf PpgMetaData::colorProtobufFromString(ColorStringProtobuf colorStringProtobuf) {
-  if (colorStringProtobuf == "COLOR_RED") {
-    return ColorProtobuf::COLOR_RED;
-  } else if (colorStringProtobuf == "COLOR_BLUE") {
-    return ColorProtobuf::COLOR_BLUE;
-  } else if (colorStringProtobuf == "COLOR_GREEN") {
-    return ColorProtobuf::COLOR_GREEN;
-  } else {
-    return ColorProtobuf::COLOR_NONE;
-  }
+void PpgMetaData::switchDataForm() {
+  throw std::runtime_error("should not be called");  // TODO unittest
 }

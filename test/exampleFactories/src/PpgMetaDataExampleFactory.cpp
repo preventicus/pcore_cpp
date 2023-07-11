@@ -71,7 +71,7 @@ PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgM
   if (ppgMetaData.hasWavelength()) {
     ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = ppgMetaData.getWavelength_nm();
   } else if (ppgMetaData.hasColor()) {
-    ppgMetaDataJson[PcoreJson::Key::color] = PpgMetaData::colorProtobufToString(ppgMetaData.getColor());
+    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(ppgMetaData.getColor());
   }
   return ppgMetaDataJson;
 }

@@ -35,7 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include "PcoreJson.h"
 
-Data::Data(Raw raw, const Header& header) : header(header), raw(std::move(raw)) {}
+Data::Data(Raw raw, Header header) : header(std::move(header)), raw(std::move(raw)) {}
 
 Data::Data(const DataProtobuf& DataProtobuf) : header(Header(DataProtobuf.header())), raw(Raw(DataProtobuf.raw())) {}
 
@@ -52,12 +52,15 @@ Header Data::getHeader() const {
   return this->header;
 }
 
-bool Data::operator==(const Data& data) const {
-  return this->header == data.header && this->raw == data.raw;
+bool Data::operator==(const IPCore<DataProtobuf>& data) const {
+  if (const auto* derived = dynamic_cast<const Data*>(&data)) {
+    return this->header == derived->header && this->raw == derived->raw;
+  }
+  return false;
 }
 
-bool Data::operator!=(const Data& data) const {
-  return this->header != data.header || this->raw != data.raw;
+bool Data::operator!=(const IPCore<DataProtobuf>& data) const {
+  return !(*this == data);
 }
 
 void Data::serialize(DataProtobuf* dataProtobuf) const {
@@ -74,14 +77,14 @@ void Data::serialize(DataProtobuf* dataProtobuf) const {
 
 void Data::switchDataForm() {
   DataForm currentDataForm = this->header.getDataForm();
-  this->raw.switchDataForm(currentDataForm);
+  this->raw.switchDataForm();
   this->header.switchDataForm();
 }
 
 Json::Value Data::toJson() const {
   DataJson data;
   data[PcoreJson::Key::header] = this->header.toJson();
-  data[PcoreJson::Key::raw] = this->raw.toJson(this->header.getDataForm());
+  data[PcoreJson::Key::raw] = this->raw.toJson();
   Json::Value json;
   json[PcoreJson::Key::data] = data;
   return json;

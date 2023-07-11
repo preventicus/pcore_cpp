@@ -36,6 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteTimestampsContainer.h"
 #include "Channel.h"
 #include "DifferentialTimestampsContainer.h"
+#include "IPCore.h"
 #include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 
@@ -49,7 +50,7 @@ using Duration = uint64_t;
 using ChannelsJson = Json::Value;
 
 namespace PCore {
-class Sensor final {
+class Sensor final : public IPCore<SensorProtobuf> {
  public:
   explicit Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
   explicit Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
@@ -64,17 +65,18 @@ class Sensor final {
   [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms(DataForm currentDataForm) const;
   [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms(DataForm currentDataForm) const;
   [[nodiscard]] Duration getDuration_ms(DataForm currentDataForm) const;
+  [[nodiscard]] DataForm getDataFrom() const;
 
   // bool isSet();
-  [[nodiscard]] SensorJson toJson(DataForm currentDataForm) const;
-  void serialize(SensorProtobuf* sensorProtobuf) const;
-  void switchDataForm(DataForm currentDataForm);
+  [[nodiscard]] SensorJson toJson() const final;
+  void serialize(SensorProtobuf* sensorProtobuf) const final;
+  void switchDataForm() final;
 
   static SensorTypeProtobuf senorTypeFromString(SensorTypeString senorTypeString);
   static SensorTypeString senorTypeToString(SensorTypeProtobuf sensorTypeProtobuf);
 
-  bool operator==(const Sensor& sensor) const;
-  bool operator!=(const Sensor& sensor) const;
+  bool operator==(const IPCore<SensorProtobuf>& sensor) const final;
+  bool operator!=(const IPCore<SensorProtobuf>& sensor) const final;
 
  private:
   [[nodiscard]] AbsoluteTimestampsContainer calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
@@ -86,5 +88,6 @@ class Sensor final {
   Channels channels;
   DifferentialTimestampsContainer differentialTimestampsContainer;
   AbsoluteTimestampsContainer absoluteTimestampsContainer;
+  DataForm dataForm;
 };
 }  // namespace PCore

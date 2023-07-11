@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <json/json.h>
 #include <vector>
 #include "AbsoluteBlock.h"
+#include "IPCore.h"
 #include "protobuf/pcore_raw.pb.h"
 
 using namespace PCore;
@@ -46,7 +47,7 @@ using DifferentialValuesJson = Json::Value;
 using DifferentialBlockJson = Json::Value;
 
 namespace PCore {
-class DifferentialBlock final {
+class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
  public:
   explicit DifferentialBlock(DifferentialValues differentialValues);
   explicit DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf);
@@ -55,11 +56,12 @@ class DifferentialBlock final {
 
   [[nodiscard]] DifferentialValues getDifferentialValues() const;
   [[nodiscard]] bool isSet() const;
-  [[nodiscard]] DifferentialBlockJson toJson() const;
-  void serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const;
+  [[nodiscard]] DifferentialBlockJson toJson() const final;
+  void serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const final;
+  void switchDataForm() final;
 
-  bool operator==(const DifferentialBlock& differentialBlock) const;
-  bool operator!=(const DifferentialBlock& differentialBlock) const;
+  bool operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const final;
+  bool operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const final;
 
  private:
   DifferentialValues differentialValues;

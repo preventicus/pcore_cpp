@@ -75,16 +75,16 @@ TimestampsDifferences DifferentialTimestampsContainer::getTimestampsDifferences_
   return this->timestampsDifferences_ms;
 }
 
-bool DifferentialTimestampsContainer::operator==(const DifferentialTimestampsContainer& differentialTimestampsContainer) const {
-  return this->firstUnixTimestamp_ms == differentialTimestampsContainer.firstUnixTimestamp_ms &&
-         this->blockDifferences_ms == differentialTimestampsContainer.blockDifferences_ms &&
-         this->timestampsDifferences_ms == differentialTimestampsContainer.timestampsDifferences_ms;
+bool DifferentialTimestampsContainer::operator==(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const {
+  if (const auto* derived = dynamic_cast<const DifferentialTimestampsContainer*>(&differentialTimestampsContainer)) {
+    return this->firstUnixTimestamp_ms == derived->firstUnixTimestamp_ms && this->blockDifferences_ms == derived->blockDifferences_ms &&
+           this->timestampsDifferences_ms == derived->timestampsDifferences_ms;
+  }
+  return false;
 }
 
-bool DifferentialTimestampsContainer::operator!=(const DifferentialTimestampsContainer& differentialTimestampsContainer) const {
-  return this->firstUnixTimestamp_ms != differentialTimestampsContainer.firstUnixTimestamp_ms ||
-         this->blockDifferences_ms != differentialTimestampsContainer.blockDifferences_ms ||
-         this->timestampsDifferences_ms != differentialTimestampsContainer.timestampsDifferences_ms;
+bool DifferentialTimestampsContainer::operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const {
+  return !(*this == differentialTimestampsContainer);
 }
 
 UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const {
@@ -129,4 +129,8 @@ void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerPr
     differentialTimestampsContainerProtobuf->add_timestamps_differences_ms(timestampsDifference_ms);
   }
   differentialTimestampsContainerProtobuf->set_first_unix_timestamp_ms(this->firstUnixTimestamp_ms);
+}
+
+void DifferentialTimestampsContainer::switchDataForm() {
+  throw std::runtime_error("should not be called");  // TODO unittest
 }

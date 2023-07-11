@@ -32,18 +32,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "IPCore.h"
+#include "PcoreProtobuf.h"
 #include "json/json.h"
-#include "protobuf/pcore_color.pb.h"
-#include "protobuf/pcore_raw.pb.h"
 
-using ColorProtobuf = com::preventicus::pcore::Color;
 using PpgMetaDataProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetadata;
 using Wavelength = uint32_t;
 using PpgMetaDataJson = Json::Value;
-using ColorStringProtobuf = std::string;
 
 namespace PCore {
-class PpgMetaData final {
+class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
  public:
   explicit PpgMetaData(ColorProtobuf colorProtobuf);
   explicit PpgMetaData(Wavelength wavelength_nm);
@@ -56,15 +54,13 @@ class PpgMetaData final {
   [[nodiscard]] bool hasColor() const;
   [[nodiscard]] bool hasWavelength() const;
   [[nodiscard]] bool isSet() const;
-  [[nodiscard]] PpgMetaDataJson toJson() const;
+  [[nodiscard]] PpgMetaDataJson toJson() const final;
 
-  void serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const;
+  void serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const final;
+  void switchDataForm() final;
 
-  static ColorStringProtobuf colorProtobufToString(ColorProtobuf colorProtobuf);
-  static ColorProtobuf colorProtobufFromString(ColorStringProtobuf colorStringProtobuf);
-
-  bool operator==(const PpgMetaData& ppgMetaData) const;
-  bool operator!=(const PpgMetaData& ppgMetaData) const;
+  bool operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
+  bool operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
 
  private:
   ColorProtobuf color;

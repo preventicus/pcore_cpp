@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glueck, Steve Merschel 2023
+Created by Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,36 +32,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include "IPCore.h"
-#include "Sensor.h"
-#include "protobuf/pcore.pb.h"
+#include "json/json.h"
 
-using namespace PCore;
-
-using SensorsJson = Json::Value;
-using RawProtobuf = com::preventicus::pcore::Raw;
-using Sensors = std::vector<Sensor>;
-using RawJson = Json::Value;
-
-namespace PCore {
-class Raw final : public IPCore<RawProtobuf> {
+template <typename T, typename... Args>
+class IPCore {
  public:
-  explicit Raw(Sensors sensors, DataForm dataForm);
-  explicit Raw(const RawProtobuf& rawProtobuf);
-  explicit Raw(const RawJson& rawJson, DataForm dataForm);
-  Raw();
+  virtual void serialize(T* protobuf) const = 0;
+  [[nodiscard]] virtual Json::Value toJson() const = 0;
+  virtual void switchDataForm() = 0;
 
-  [[nodiscard]] Sensors getSensors() const;
-  [[nodiscard]] DataForm getDataFrom() const;
-  [[nodiscard]] RawJson toJson() const final;
-  void serialize(RawProtobuf* rawProtobuf) const final;
-  void switchDataForm() final;
-
-  bool operator==(const IPCore<RawProtobuf>& raw) const final;
-  bool operator!=(const IPCore<RawProtobuf>& raw) const final;
-
- private:
-  Sensors sensors;
-  DataForm dataForm;
+  virtual bool operator==(const IPCore& pcore) const = 0;
+  virtual bool operator!=(const IPCore& pcore) const = 0;
 };
-}  // namespace PCore

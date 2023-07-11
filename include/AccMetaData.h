@@ -32,21 +32,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-
+#include "IPCore.h"
+#include "PcoreProtobuf.h"
 #include "json/json.h"
-#include "protobuf/pcore_coordinate.pb.h"
-#include "protobuf/pcore_norm.pb.h"
-#include "protobuf/pcore_raw.pb.h"
 
 using AccMetaDataProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
-using CoordinateProtobuf = com::preventicus::pcore::Coordinate;
-using NormProtobuf = com::preventicus::pcore::Norm;
 using AccMetaDataJson = Json::Value;
-using CoordinateProtobufString = std::string;
-using NormStringProtobuf = std::string;
 
 namespace PCore {
-class AccMetaData final {
+class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
  public:
   explicit AccMetaData(NormProtobuf norm);
   explicit AccMetaData(CoordinateProtobuf coordinate);
@@ -59,16 +53,12 @@ class AccMetaData final {
   [[nodiscard]] bool hasNorm() const;
   [[nodiscard]] bool hasCoordinate() const;
   [[nodiscard]] bool isSet() const;
-  [[nodiscard]] AccMetaDataJson toJson() const;
-  void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const;
+  [[nodiscard]] AccMetaDataJson toJson() const final;
+  void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const final;
+  void switchDataForm() final;
 
-  bool operator==(const AccMetaData& accMetaData) const;
-  bool operator!=(const AccMetaData& accMetaData) const;
-
-  static CoordinateProtobuf coordinateProtobufFromString(CoordinateProtobufString coordinateProtobufString);
-  static CoordinateProtobufString coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf);
-  static NormProtobuf normProtobufFromString(NormStringProtobuf normProtobufString);
-  static NormStringProtobuf normProtobufToString(NormProtobuf normProtobuf);
+  bool operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
+  bool operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
 
  private:
   CoordinateProtobuf coordinate;

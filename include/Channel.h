@@ -38,6 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "BlockIdx.h"
 #include "DataForm.h"
 #include "DifferentialBlock.h"
+#include "IPCore.h"
 #include "PpgMetaData.h"
 #include "protobuf/pcore_raw.pb.h"
 
@@ -52,7 +53,7 @@ using DifferentialBlocksJson = Json::Value;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 
 namespace PCore {
-class Channel final {
+class Channel final : public IPCore<ChannelProtobuf> {
  public:
   explicit Channel(const AccMetaData& accMetadata, AbsoluteBlock absoluteBlock);
   explicit Channel(const PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock);
@@ -66,19 +67,21 @@ class Channel final {
   [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const;
   [[nodiscard]] AccMetaData getAccMetaData() const;
   [[nodiscard]] PpgMetaData getPpgMetaData() const;
+  [[nodiscard]] SensorTypeProtobuf getSensorType() const;
+  [[nodiscard]] DataForm getDataForm() const;
 
   [[nodiscard]] bool hasAccMetaData() const;
   [[nodiscard]] bool hasPpgMetaData() const;
   [[nodiscard]] bool hasDifferentialBlocks() const;
   [[nodiscard]] bool hasAbsoluteBlock() const;
 
-  bool operator==(const Channel& channel) const;
-  bool operator!=(const Channel& channel) const;
+  bool operator==(const IPCore<ChannelProtobuf>& channel) const final;
+  bool operator!=(const IPCore<ChannelProtobuf>& channel) const final;
 
-  [[nodiscard]] ChannelJson toJson(DataForm dataForm, SensorTypeProtobuf sensorTypeProtobuf) const;
-  void serialize(ChannelProtobuf* channelProtobuf) const;
+  [[nodiscard]] ChannelJson toJson() const final;
+  void serialize(ChannelProtobuf* channelProtobuf) const final;
   void switchDataForm(const BlockIdxs& blockIdxs);
-  void switchDataForm();
+  void switchDataForm() final;
 
  private:
   [[nodiscard]] DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const;
@@ -89,5 +92,7 @@ class Channel final {
   AccMetaData accMetaData;
   DifferentialBlocks differentialBlocks;
   AbsoluteBlock absoluteBlock;
+  SensorTypeProtobuf sensorType;
+  DataForm dataForm;
 };
 }  // namespace PCore

@@ -33,7 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AccMetaData.h"
 #include "PcoreJson.h"
-
 using namespace PCore;
 
 AccMetaData::AccMetaData(CoordinateProtobuf coordinate) : coordinate(coordinate), norm(NormProtobuf::NORM_NONE) {}
@@ -41,8 +40,8 @@ AccMetaData::AccMetaData(CoordinateProtobuf coordinate) : coordinate(coordinate)
 AccMetaData::AccMetaData(NormProtobuf norm) : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(norm) {}
 
 AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
-    : coordinate(AccMetaData::coordinateProtobufFromString(accMetaDataJson[PcoreJson::Key::coordinate].asString())),
-      norm(AccMetaData::normProtobufFromString(accMetaDataJson[PcoreJson::Key::norm].asString())) {
+    : coordinate(PcoreProtobuf::Convert::coordinateProtobufFromString(accMetaDataJson[PcoreJson::Key::coordinate].asString())),
+      norm(PcoreProtobuf::Convert::normProtobufFromString(accMetaDataJson[PcoreJson::Key::norm].asString())) {
   if (this->norm != NormProtobuf::NORM_NONE & this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
     throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
   }
@@ -73,12 +72,15 @@ bool AccMetaData::isSet() const {
   return this->hasNorm() || this->hasCoordinate();
 }
 
-bool AccMetaData::operator==(const AccMetaData& accMetaData) const {
-  return this->coordinate == accMetaData.coordinate && this->norm == accMetaData.norm;
+bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+  if (const auto* derived = dynamic_cast<const AccMetaData*>(&accMetaData)) {
+    return this->coordinate == derived->coordinate && this->norm == derived->norm;
+  }
+  return false;
 }
 
-bool AccMetaData::operator!=(const AccMetaData& accMetaData) const {
-  return this->coordinate != accMetaData.coordinate || this->norm != accMetaData.norm;
+bool AccMetaData::operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+  return !(*this == accMetaData);
 }
 
 void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
@@ -96,61 +98,17 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
   }
 }
 
+void AccMetaData::switchDataForm() {
+  throw std::runtime_error("should not be called");  // TODO unittest
+}
+
 Json::Value AccMetaData::toJson() const {
   AccMetaDataJson accMetaDataJson;
   if (this->norm != NormProtobuf::NORM_NONE) {
-    accMetaDataJson[PcoreJson::Key::norm] = AccMetaData::normProtobufToString(this->norm);
+    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(this->norm);
   }
   if (this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
-    accMetaDataJson[PcoreJson::Key::coordinate] = AccMetaData::coordinateProtobufToString(this->coordinate);
+    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(this->coordinate);
   }
   return accMetaDataJson;
-}
-
-CoordinateProtobufString AccMetaData::coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf) {
-  switch (coordinateProtobuf) {
-    case CoordinateProtobuf::COORDINATE_X: {
-      return "COORDINATE_X";
-    }
-    case CoordinateProtobuf::COORDINATE_Y: {
-      return "COORDINATE_Y";
-    }
-    case CoordinateProtobuf::COORDINATE_Z: {
-      return "COORDINATE_Z";
-    }
-    default: {
-      return "COORDINATE_NONE";
-    }
-  }
-}
-
-CoordinateProtobuf AccMetaData::coordinateProtobufFromString(CoordinateProtobufString coordinateProtobufString) {
-  if (coordinateProtobufString == "COORDINATE_X") {
-    return CoordinateProtobuf::COORDINATE_X;
-  } else if (coordinateProtobufString == "COORDINATE_Y") {
-    return CoordinateProtobuf::COORDINATE_Y;
-  } else if (coordinateProtobufString == "COORDINATE_Z") {
-    return CoordinateProtobuf::COORDINATE_Z;
-  } else {
-    return CoordinateProtobuf::COORDINATE_NONE;
-  }
-}
-
-NormStringProtobuf AccMetaData::normProtobufToString(NormProtobuf normProtobuf) {
-  switch (normProtobuf) {
-    case NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM: {
-      return "NORM_EUCLIDEAN_DIFFERENCES_NORM";
-    }
-    default: {
-      return "NORM_NONE";
-    }
-  }
-}
-
-NormProtobuf AccMetaData::normProtobufFromString(NormStringProtobuf normProtobufString) {
-  if (normProtobufString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
-    return NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM;
-  } else {
-    return NormProtobuf::NORM_NONE;
-  }
 }

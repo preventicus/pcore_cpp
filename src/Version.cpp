@@ -60,12 +60,15 @@ Patch Version::getPatch() const {
   return this->patch;
 }
 
-bool Version::operator==(const Version& version) const {
-  return this->major == version.major && this->minor == version.minor && this->patch == version.patch;
+bool Version::operator==(const IPCore<VersionProtobuf>& version) const {
+  if (const auto* derived = dynamic_cast<const Version*>(&version)) {
+    return this->major == derived->major && this->minor == derived->minor && this->patch == derived->patch;
+  }
+  return false;
 }
 
-bool Version::operator!=(const Version& version) const {
-  return this->major != version.major || this->minor != version.minor || this->patch != version.patch;
+bool Version::operator!=(const IPCore<VersionProtobuf>& version) const {
+  return !(*this == version);
 }
 
 void Version::serialize(VersionProtobuf* versionProtobuf) const {
@@ -75,6 +78,10 @@ void Version::serialize(VersionProtobuf* versionProtobuf) const {
   versionProtobuf->set_major(this->major);
   versionProtobuf->set_minor(this->minor);
   versionProtobuf->set_patch(this->patch);
+}
+
+void Version::switchDataForm() {
+  throw std::runtime_error("should not be called");  // TODO unittest
 }
 
 VersionJson Version::toJson() const {
