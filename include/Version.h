@@ -32,7 +32,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+
 #include <json/json.h>
+#include "IPCore.h"
 #include "protobuf/pcore_version.pb.h"
 
 using VersionProtobuf = com::preventicus::pcore::Version;
@@ -45,7 +47,7 @@ using MinorJson = Json::Value;
 using PatchJson = Json::Value;
 
 namespace PCore {
-class Version final {
+class Version final : public IPCore<VersionProtobuf> {
  public:
   explicit Version(Major major, Minor minor, Patch patch);
   explicit Version(const VersionProtobuf& versionProtobuf);
@@ -55,8 +57,9 @@ class Version final {
   [[nodiscard]] Major getMajor() const;
   [[nodiscard]] Minor getMinor() const;
   [[nodiscard]] Patch getPatch() const;
-  [[nodiscard]] VersionJson toJson() const;
-  void serialize(VersionProtobuf* versionProtobuf) const;
+  [[nodiscard]] VersionJson toJson() const final;
+  void serialize(VersionProtobuf* versionProtobuf) const final;
+  void switchDataForm() final;
 
   bool operator==(const Version& version) const;
   bool operator!=(const Version& version) const;

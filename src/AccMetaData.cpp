@@ -96,6 +96,10 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
   }
 }
 
+void AccMetaData::switchDataForm() {
+  throw std::runtime_error("should not be called"); //TODO unittest
+}
+
 Json::Value AccMetaData::toJson() const {
   AccMetaDataJson accMetaDataJson;
   if (this->norm != NormProtobuf::NORM_NONE) {

@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "Header.h"
+#include "IPCore.h"
 #include "PcoreJson.h"
 #include "Raw.h"
 #include "protobuf/pcore.pb.h"
@@ -43,17 +44,17 @@ using DataProtobuf = com::preventicus::pcore::Data;
 using DataJson = Json::Value;
 
 namespace PCore {
-class Data final {
+class Data final : public IPCore<DataProtobuf> {
  public:
-  explicit Data(Raw raw, const Header& header);
+  explicit Data(Raw raw, Header header);
   explicit Data(const DataProtobuf& DataProtobuf);
   explicit Data(const DataJson& dataJson);
   Data();
 
   [[nodiscard]] Raw getRaw() const;
   [[nodiscard]] Header getHeader() const;
-  [[nodiscard]] DataJson toJson() const;
-  void serialize(DataProtobuf* dataProtobuf) const;
+  [[nodiscard]] DataJson toJson() const final;
+  void serialize(DataProtobuf* dataProtobuf) const final;
   void switchDataForm();
 
   bool operator==(const Data& data) const;

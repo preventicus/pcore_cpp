@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glueck, Steve Merschel 2023
+Created by Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,38 +32,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <json/json.h>
-#include <vector>
-#include "AbsoluteBlock.h"
-#include "IPCore.h"
-#include "protobuf/pcore_raw.pb.h"
+#include "json/json.h"
 
-using namespace PCore;
-
-using DifferentialBlockProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_DifferentialBlock;
-using DifferentialValue = int32_t;
-using DifferentialValues = std::vector<DifferentialValue>;
-using DifferentialValuesJson = Json::Value;
-using DifferentialBlockJson = Json::Value;
-
-namespace PCore {
-class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
+template <typename T, typename... Args>
+class IPCore {
  public:
-  explicit DifferentialBlock(DifferentialValues differentialValues);
-  explicit DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf);
-  explicit DifferentialBlock(const DifferentialBlockJson& differentialBlockJson);
-  DifferentialBlock();
+  virtual void serialize(T* protobuf) const = 0;
+  [[nodiscard]] virtual Json::Value toJson() const = 0;
+  virtual void switchDataForm() = 0;
 
-  [[nodiscard]] DifferentialValues getDifferentialValues() const;
-  [[nodiscard]] bool isSet() const;
-  [[nodiscard]] DifferentialBlockJson toJson() const final;
-  void serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const final;
-  void switchDataForm() final;
-
-  bool operator==(const DifferentialBlock& differentialBlock) const;
-  bool operator!=(const DifferentialBlock& differentialBlock) const;
-
- private:
-  DifferentialValues differentialValues;
+  // virtual bool operator==(const IPCore& pcore) const = 0;
+  // virtual bool operator!=(const IPCore& pcore) const = 0;
 };
-}  // namespace PCore

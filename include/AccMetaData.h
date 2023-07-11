@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-
+#include "IPCore.h"
 #include "json/json.h"
 #include "protobuf/pcore_coordinate.pb.h"
 #include "protobuf/pcore_norm.pb.h"
@@ -46,7 +46,7 @@ using CoordinateProtobufString = std::string;
 using NormStringProtobuf = std::string;
 
 namespace PCore {
-class AccMetaData final {
+class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
  public:
   explicit AccMetaData(NormProtobuf norm);
   explicit AccMetaData(CoordinateProtobuf coordinate);
@@ -59,8 +59,9 @@ class AccMetaData final {
   [[nodiscard]] bool hasNorm() const;
   [[nodiscard]] bool hasCoordinate() const;
   [[nodiscard]] bool isSet() const;
-  [[nodiscard]] AccMetaDataJson toJson() const;
-  void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const;
+  [[nodiscard]] AccMetaDataJson toJson() const final;
+  void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const final;
+  void switchDataForm() final;
 
   bool operator==(const AccMetaData& accMetaData) const;
   bool operator!=(const AccMetaData& accMetaData) const;

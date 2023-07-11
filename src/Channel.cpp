@@ -37,16 +37,36 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreProtobuf.h"
 
 Channel::Channel(const AccMetaData& accMetaData, AbsoluteBlock absoluteBlock)
-    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(std::move(absoluteBlock)) {}
+    : ppgMetaData(PpgMetaData()),
+      accMetaData(accMetaData),
+      differentialBlocks(DifferentialBlocks()),
+      absoluteBlock(std::move(absoluteBlock)),
+      sensorType(SensorTypeProtobuf::SENSOR_TYPE_ACC),
+      dataForm(DataForm::DATA_FORM_ABSOLUTE) {}
 
 Channel::Channel(const PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock)
-    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(DifferentialBlocks()), absoluteBlock(std::move(absoluteBlock)) {}
+    : ppgMetaData(ppgMetaData),
+      accMetaData(AccMetaData()),
+      differentialBlocks(DifferentialBlocks()),
+      absoluteBlock(std::move(absoluteBlock)),
+      sensorType(SensorTypeProtobuf::SENSOR_TYPE_PPG),
+      dataForm(DataForm::DATA_FORM_ABSOLUTE) {}
 
 Channel::Channel(const AccMetaData& accMetaData, DifferentialBlocks differentialBlocks)
-    : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(std::move(differentialBlocks)), absoluteBlock(AbsoluteBlock()) {}
+    : ppgMetaData(PpgMetaData()),
+      accMetaData(accMetaData),
+      differentialBlocks(std::move(differentialBlocks)),
+      absoluteBlock(AbsoluteBlock()),
+      sensorType(SensorTypeProtobuf::SENSOR_TYPE_ACC),
+      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
 
 Channel::Channel(const PpgMetaData& ppgMetaData, DifferentialBlocks differentialBlocks)
-    : ppgMetaData(ppgMetaData), accMetaData(AccMetaData()), differentialBlocks(std::move(differentialBlocks)), absoluteBlock(AbsoluteBlock()) {}
+    : ppgMetaData(ppgMetaData),
+      accMetaData(AccMetaData()),
+      differentialBlocks(std::move(differentialBlocks)),
+      absoluteBlock(AbsoluteBlock()),
+      sensorType(SensorTypeProtobuf::SENSOR_TYPE_PPG),
+      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
 
 Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm)
     : ppgMetaData(sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_PPG ? PpgMetaData(channelJson[PcoreJson::Key::ppg_metadata]) : PpgMetaData()),
@@ -86,10 +106,25 @@ Channel::Channel(const ChannelProtobuf& channelProtobuf)
     : ppgMetaData(PpgMetaData(channelProtobuf.ppg_metadata())),
       accMetaData(AccMetaData(channelProtobuf.acc_metadata())),
       differentialBlocks(PcoreProtobuf::Convert::ProtoBuf2Vector<DifferentialBlock>(channelProtobuf.differential_blocks())),
-      absoluteBlock(AbsoluteBlock()) {}
+      absoluteBlock(AbsoluteBlock()),
+      sensorType([&]() {
+        if (channelProtobuf.has_acc_metadata()) {
+          return SensorTypeProtobuf::SENSOR_TYPE_ACC;
+        } else if (channelProtobuf.has_ppg_metadata()) {
+          return SensorTypeProtobuf::SENSOR_TYPE_PPG;
+        } else {
+          return SensorTypeProtobuf::SENSOR_TYPE_NONE;
+        }
+      }()),
+      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
 
 Channel::Channel()
-    : ppgMetaData(PpgMetaData()), accMetaData(AccMetaData()), differentialBlocks(DifferentialBlocks()), absoluteBlock(AbsoluteBlock()) {}
+    : ppgMetaData(PpgMetaData()),
+      accMetaData(AccMetaData()),
+      differentialBlocks(DifferentialBlocks()),
+      absoluteBlock(AbsoluteBlock()),
+      sensorType(SensorTypeProtobuf::SENSOR_TYPE_NONE),
+      dataForm(DataForm::DATA_FORM_NONE) {}
 
 DifferentialBlocks Channel::getDifferentialBlocks() const {
   return this->differentialBlocks;
@@ -107,6 +142,14 @@ PpgMetaData Channel::getPpgMetaData() const {
   return this->ppgMetaData;
 }
 
+SensorTypeProtobuf Channel::getSensorType() const {  // TODO unittest
+  return this->sensorType;
+}
+
+DataForm Channel::getDataForm() const {  // TODO unittest
+  return this->dataForm;
+}
+
 bool Channel::operator==(const Channel& channel) const {
   if (this->differentialBlocks.size() != channel.differentialBlocks.size()) {
     return false;
@@ -117,7 +160,8 @@ bool Channel::operator==(const Channel& channel) const {
       return false;
     }
   }
-  return this->accMetaData == channel.accMetaData && this->ppgMetaData == channel.ppgMetaData && this->absoluteBlock == channel.absoluteBlock;
+  return this->accMetaData == channel.accMetaData && this->ppgMetaData == channel.ppgMetaData && this->absoluteBlock == channel.absoluteBlock &&
+         this->sensorType == channel.sensorType && this->dataForm == channel.dataForm;  // TODO add unittests for sensortype and dataform
 }
 
 bool Channel::operator!=(const Channel& channel) const {
@@ -165,11 +209,13 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
 void Channel::switchDataForm(const BlockIdxs& blockIdxs) {
   this->differentialBlocks = this->calculateDifferentialBlocks(this->absoluteBlock, blockIdxs);
   this->absoluteBlock = AbsoluteBlock();
+  this->dataForm = DataForm::DATA_FORM_DIFFERENTIAL;
 }
 
 void Channel::switchDataForm() {
   this->absoluteBlock = this->calculateAbsoluteBlock(this->differentialBlocks);
   this->differentialBlocks = DifferentialBlocks();
+  this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
 }
 
 DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const {
@@ -241,13 +287,13 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differen
   return AbsoluteBlock(absoluteValues);
 }
 
-ChannelJson Channel::toJson(const DataForm currentDataForm, const SensorTypeProtobuf sensorTypeProtobuf) const {
+ChannelJson Channel::toJson() const {
   ChannelJson channelJson;
-  switch (currentDataForm) {
+  switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       AbsoluteBlockJson absoluteBlockJson(this->absoluteBlock.toJson());
       channelJson[PcoreJson::Key::absolute_block] = absoluteBlockJson;
-      switch (sensorTypeProtobuf) {
+      switch (this->sensorType) {
         case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
           channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
           break;
@@ -264,7 +310,7 @@ ChannelJson Channel::toJson(const DataForm currentDataForm, const SensorTypeProt
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       channelJson[PcoreJson::Key::differential_blocks] = PcoreJson::Convert::Vector2Json(this->differentialBlocks);
-      switch (sensorTypeProtobuf) {
+      switch (this->sensorType) {
         case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
           channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
           break;

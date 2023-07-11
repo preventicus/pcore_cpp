@@ -240,28 +240,28 @@ TEST(ChannelTest, TestSerializeNoThrow) {
 
 TEST(ChannelTest, TestToJsonWithDifferentialBlocksAndAccMetaData) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_DIFFERENTIAL, SensorTypeProtobuf::SENSOR_TYPE_ACC);
+  auto channelJson1 = channel.toJson();
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
 TEST(ChannelTest, TestToJsonWithDifferentialBlocksAndPpgMetaData) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_DIFFERENTIAL, SensorTypeProtobuf::SENSOR_TYPE_PPG);
+  auto channelJson1 = channel.toJson();
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
 TEST(ChannelTest, TestToJsonWithAbsoluteBlockAndAccMetaData) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_ABSOLUTE, SensorTypeProtobuf::SENSOR_TYPE_ACC);
+  auto channelJson1 = channel.toJson();
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
 TEST(ChannelTest, TestToJsonWithAbsoluteBlockAndPpgMetaData) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
-  auto channelJson1 = channel.toJson(DataForm::DATA_FORM_ABSOLUTE, SensorTypeProtobuf::SENSOR_TYPE_PPG);
+  auto channelJson1 = channel.toJson();
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }

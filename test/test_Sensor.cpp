@@ -218,42 +218,42 @@ TEST(SensorTest, TestIsNotEqualWithSensorPpgWithOneChannelsInAbsoluteFormAndSens
 TEST(SensorTest, TestToJsonWithSensorPpgWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor, DataForm::DATA_FORM_ABSOLUTE);
-  auto sensorJson2 = sensor.toJson(DataForm::DATA_FORM_ABSOLUTE);
+  auto sensorJson2 = sensor.toJson();
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
 
 TEST(SensorTest, TestToJsonWithSensorEmpty) {
   auto sensor = SensorExampleFactory::sensorEmpty();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor, DataForm::DATA_FORM_NONE);
-  auto sensorJson2 = sensor.toJson(DataForm::DATA_FORM_NONE);
+  auto sensorJson2 = sensor.toJson();
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
 
 TEST(SensorTest, TestToJsonWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor, DataForm::DATA_FORM_DIFFERENTIAL);
-  auto sensorJson2 = sensor.toJson(DataForm::DATA_FORM_DIFFERENTIAL);
+  auto sensorJson2 = sensor.toJson();
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
 
 TEST(SensorTest, TestToJsonWithSensorAccWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor, DataForm::DATA_FORM_ABSOLUTE);
-  auto sensorJson2 = sensor.toJson(DataForm::DATA_FORM_ABSOLUTE);
+  auto sensorJson2 = sensor.toJson();
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
 
 TEST(SensorTest, TestToJsonWithSensorPpgWithTwoChannelsInDifferentialForm) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor, DataForm::DATA_FORM_DIFFERENTIAL);
-  auto sensorJson2 = sensor.toJson(DataForm::DATA_FORM_DIFFERENTIAL);
+  auto sensorJson2 = sensor.toJson();
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
 
 TEST(SensorTest, TestToJsonWithSensorPpgWithOneChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor, DataForm::DATA_FORM_ABSOLUTE);
-  auto sensorJson2 = sensor.toJson(DataForm::DATA_FORM_ABSOLUTE);
+  auto sensorJson2 = sensor.toJson();
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
 
@@ -296,20 +296,20 @@ TEST(SensorTest, TestSerializeThrow) {
 TEST(SensorTest, TestSwitchDataFormWithSensorForSwitchDataFromTestInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm();
   auto sensorInDifferentialForm = SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm();
-  sensor.switchDataForm(DataForm::DATA_FORM_ABSOLUTE);
+  sensor.switchDataForm();
   EXPECT_TRUE(sensor == sensorInDifferentialForm);
 }
 
 TEST(SensorTest, TestSwitchDataFormWithSensorForSwitchDataFromTestInDifferentialForm) {
   auto sensor = SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm();
   auto sensorInAbsoluteForm = SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm();
-  sensor.switchDataForm(DataForm::DATA_FORM_DIFFERENTIAL);
+  sensor.switchDataForm();
   EXPECT_TRUE(sensor == sensorInAbsoluteForm);
 }
 
 TEST(SensorTest, TestSwitchDataFormWithSensorEmpty) {
   auto sensor = SensorExampleFactory::sensorEmpty();
-  EXPECT_THROW(sensor.switchDataForm(DataForm::DATA_FORM_NONE), std::runtime_error);
+  EXPECT_THROW(sensor.switchDataForm(), std::runtime_error);
 }
 
 TEST(SensorTest, TestSenorTypeFromString) {

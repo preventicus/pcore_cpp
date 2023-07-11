@@ -77,6 +77,10 @@ void Version::serialize(VersionProtobuf* versionProtobuf) const {
   versionProtobuf->set_patch(this->patch);
 }
 
+void Version::switchDataForm() {
+  throw std::runtime_error("should not be called"); //TODO unittest
+}
+
 VersionJson Version::toJson() const {
   MajorJson majorJson(this->major);
   MinorJson minorJson(this->minor);

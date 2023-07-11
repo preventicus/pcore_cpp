@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include "IPCore.h"
 #include "Sensor.h"
 #include "protobuf/pcore.pb.h"
 
@@ -43,22 +44,24 @@ using Sensors = std::vector<Sensor>;
 using RawJson = Json::Value;
 
 namespace PCore {
-class Raw final {
+class Raw final : public IPCore<RawProtobuf> {
  public:
-  explicit Raw(Sensors sensors);
+  explicit Raw(Sensors sensors, DataForm dataForm);
   explicit Raw(const RawProtobuf& rawProtobuf);
   explicit Raw(const RawJson& rawJson, DataForm dataForm);
   Raw();
 
   [[nodiscard]] Sensors getSensors() const;
-  [[nodiscard]] RawJson toJson(DataForm currentDataForm) const;
-  void serialize(RawProtobuf* rawProtobuf) const;
-  void switchDataForm(DataForm currentDataForm);
+  [[nodiscard]] DataForm getDataFrom() const;
+  [[nodiscard]] RawJson toJson() const final;
+  void serialize(RawProtobuf* rawProtobuf) const final;
+  void switchDataForm() final;
 
   bool operator==(const Raw& raw) const;
   bool operator!=(const Raw& raw) const;
 
  private:
   Sensors sensors;
+  DataForm dataForm;
 };
 }  // namespace PCore

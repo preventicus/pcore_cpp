@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "DataForm.h"
+#include "IPCore.h"
 #include "Version.h"
 #include "protobuf/pcore.pb.h"
 
@@ -45,7 +46,7 @@ using DataFormString = std::string;
 using TimeZoneOffsetJson = Json::Value;
 
 namespace PCore {
-class Header final {
+class Header final : public IPCore<HeaderProtobuf> {
  public:
   explicit Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
   explicit Header(const HeaderProtobuf& headerProtobuf);
@@ -56,9 +57,9 @@ class Header final {
   [[nodiscard]] Version getPcoreVersion() const;
   [[nodiscard]] DataForm getDataForm() const;
 
-  [[nodiscard]] HeaderJson toJson() const;
-  void serialize(HeaderProtobuf* headerProtobuf) const;
-  void switchDataForm();
+  [[nodiscard]] HeaderJson toJson() const final;
+  void serialize(HeaderProtobuf* headerProtobuf) const final;
+  void switchDataForm() final;
 
   static DataForm dataFormFromString(DataFormString dataFormString);
   static DataFormString dataFormToString(DataForm dataForm);

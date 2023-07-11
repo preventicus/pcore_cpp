@@ -148,14 +148,14 @@ TEST(RawTest, TestSerializeThrow) {
 
 TEST(RawTest, TestSwitchDataFormWithRawForSwitschDataFormTestInAbsoluteForm) {
   auto raw = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
-  raw.switchDataForm(DataForm::DATA_FORM_ABSOLUTE);
+  raw.switchDataForm();
   auto rawInDifferentialForm = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
   EXPECT_TRUE(raw == rawInDifferentialForm);
 }
 
-TEST(RawTest, TestSwitchDataFormWith) {
+TEST(RawTest, TestSwitchDataFormWithRawForSwitchDataFormTestInDifferentialForm) {
   auto raw = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
-  raw.switchDataForm(DataForm::DATA_FORM_DIFFERENTIAL);
+  raw.switchDataForm();
   auto rawInAbsoluteForm = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
   EXPECT_TRUE(raw == rawInAbsoluteForm);
 }

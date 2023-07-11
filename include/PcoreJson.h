@@ -96,8 +96,8 @@ class Convert {
     return vector;
   }
 
-  template <typename T, typename... Args>
-  static Json::Value Vector2Json(std::vector<T> vector, Args&... args) {
+  template <typename T>
+  static Json::Value Vector2Json(std::vector<T> vector) {
     Json::Value jsonValues(Json::arrayValue);
 
     if constexpr (std::is_same_v<T, int32_t>) {
@@ -114,7 +114,7 @@ class Convert {
       }
     } else {
       for (auto& element : vector) {
-        jsonValues.append(element.toJson(args...));
+        jsonValues.append(element.toJson());
       }
     }
     return jsonValues;

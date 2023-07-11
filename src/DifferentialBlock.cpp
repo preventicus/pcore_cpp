@@ -76,3 +76,7 @@ DifferentialBlockJson DifferentialBlock::toJson() const {
   differentialBlockJson[PcoreJson::Key::differential_values] = PcoreJson::Convert::Vector2Json(this->differentialValues);
   return differentialBlockJson;
 }
+
+void DifferentialBlock::switchDataForm() {
+  throw std::runtime_error("should not be called"); //TODO unittest
+}

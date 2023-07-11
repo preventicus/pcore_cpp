@@ -36,16 +36,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
 
-Raw::Raw(Sensors sensors) : sensors(std::move(sensors)) {}
+Raw::Raw(Sensors sensors, DataForm dataForm) : sensors(std::move(sensors)), dataForm(dataForm) {}
 
-Raw::Raw(const RawProtobuf& rawProtobuf) : sensors(PcoreProtobuf::Convert::ProtoBuf2Vector<Sensor>(rawProtobuf.sensors())) {}
+Raw::Raw(const RawProtobuf& rawProtobuf)
+    : sensors(PcoreProtobuf::Convert::ProtoBuf2Vector<Sensor>(rawProtobuf.sensors())), dataForm([&]() {
+        if (rawProtobuf.sensors().empty()) {
+          return DataForm::DATA_FORM_NONE;
+        }
+        return DataForm::DATA_FORM_DIFFERENTIAL;
+      }()) {}
 
-Raw::Raw(const RawJson& rawJson, DataForm dataForm) : sensors(PcoreJson::Convert::Json2Vector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)) {}
+Raw::Raw(const RawJson& rawJson, DataForm dataForm)
+    : sensors(PcoreJson::Convert::Json2Vector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)), dataForm(dataForm) {}
 
-Raw::Raw() : sensors({}) {}
+Raw::Raw() : sensors({}), dataForm(DataForm::DATA_FORM_NONE) {}
 
 Sensors Raw::getSensors() const {
   return this->sensors;
+}
+
+DataForm Raw::getDataFrom() const {  // TODO unit tests
+  return this->dataForm;
 }
 
 bool Raw::operator==(const Raw& raw) const {
@@ -58,7 +69,7 @@ bool Raw::operator==(const Raw& raw) const {
       return false;
     }
   }
-  return true;
+  return this->dataForm == raw.dataForm;  // TODO unittests for dataform
 }
 
 bool Raw::operator!=(const Raw& raw) const {
@@ -75,14 +86,27 @@ void Raw::serialize(RawProtobuf* rawProtobuf) const {
   }
 }
 
-void Raw::switchDataForm(const DataForm currentDataForm) {
+void Raw::switchDataForm() {
   for (auto& sensor : this->sensors) {
-    sensor.switchDataForm(currentDataForm);
+    sensor.switchDataForm();
+  }
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
+      break;
+    }
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      this->dataForm = DataForm::DATA_FORM_DIFFERENTIAL;
+      break;
+    }
+    case DataForm::DATA_FORM_NONE: {
+      throw std::runtime_error("CurrentDataForm is NONE");  // TODO unittest
+    }
   }
 }
 
-RawJson Raw::toJson(const DataForm currentDataForm) const {
+RawJson Raw::toJson() const {
   RawJson rawJson;
-  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::Vector2Json(this->sensors, currentDataForm);
+  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::Vector2Json(this->sensors);
   return rawJson;
 }

@@ -130,3 +130,7 @@ void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerPr
   }
   differentialTimestampsContainerProtobuf->set_first_unix_timestamp_ms(this->firstUnixTimestamp_ms);
 }
+
+void DifferentialTimestampsContainer::switchDataForm() {
+  throw std::runtime_error("should not be called"); //TODO unittest
+}

@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include "BlockIdx.h"
 #include "DifferentialBlock.h"
+#include "IPCore.h"
 #include "UnixTimestamp.h"
 #include "protobuf/pcore_raw.pb.h"
 
@@ -51,7 +52,7 @@ using BlockDifferencesJson = Json::Value;
 using TimestampsDifferencesJson = Json::Value;
 
 namespace PCore {
-class DifferentialTimestampsContainer final {
+class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestampContainerProtobuf> {
  public:
   explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
                                            BlockDifferences blockDifferences_ms,
@@ -64,13 +65,14 @@ class DifferentialTimestampsContainer final {
   [[nodiscard]] BlockDifferences getBlockDifferences_ms() const;
   [[nodiscard]] TimestampsDifferences getTimestampsDifferences_ms() const;
 
-  [[nodiscard]] DifferentialTimestampsContainerJson toJson() const;
+  [[nodiscard]] DifferentialTimestampsContainerJson toJson() const final;
   [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const;
   [[nodiscard]] UnixTimestamp calculateLastUnixTimestampInBlock(const BlockIdx& blockIdx,
                                                                 UnixTimestamp firstUnixTimestampInBlock_ms,
                                                                 const DifferentialBlock& lastDifferentialBlock) const;
 
-  void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const;
+  void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const final;
+  void switchDataForm() final;
 
   bool operator==(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
   bool operator!=(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;

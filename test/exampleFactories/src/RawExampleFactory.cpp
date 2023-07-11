@@ -37,32 +37,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Raw RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm());
-  return Raw(sensors);
+  return Raw(sensors, DataForm::DATA_FORM_ABSOLUTE);
 }
 
 Raw RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm());
-  return Raw(sensors);
+  return Raw(sensors, DataForm::DATA_FORM_ABSOLUTE);
 }
 
 Raw RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm());
-  return Raw(sensors);
+  return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 Raw RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
-  return Raw(sensors);
+  return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 Raw RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
   sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());
-  return Raw(sensors);
+  return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 Raw RawExampleFactory::rawEmpty() {
@@ -72,13 +72,13 @@ Raw RawExampleFactory::rawEmpty() {
 Raw RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm());
-  return Raw(sensors);
+  return Raw(sensors, DataForm::DATA_FORM_ABSOLUTE);
 }
 
 Raw RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm());
-  return Raw(sensors);
+  return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 RawJson RawExampleFactory::buildRawJson(Raw raw, DataForm dataForm) {
