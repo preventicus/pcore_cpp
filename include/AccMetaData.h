@@ -33,17 +33,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "IPCore.h"
+#include "PcoreProtobuf.h"
 #include "json/json.h"
-#include "protobuf/pcore_coordinate.pb.h"
-#include "protobuf/pcore_norm.pb.h"
-#include "protobuf/pcore_raw.pb.h"
 
 using AccMetaDataProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
-using CoordinateProtobuf = com::preventicus::pcore::Coordinate;
-using NormProtobuf = com::preventicus::pcore::Norm;
 using AccMetaDataJson = Json::Value;
-using CoordinateProtobufString = std::string;
-using NormStringProtobuf = std::string;
 
 namespace PCore {
 class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
@@ -65,11 +59,6 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
 
   bool operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
   bool operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
-
-  static CoordinateProtobuf coordinateProtobufFromString(CoordinateProtobufString coordinateProtobufString);
-  static CoordinateProtobufString coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf);
-  static NormProtobuf normProtobufFromString(NormStringProtobuf normProtobufString);
-  static NormStringProtobuf normProtobufToString(NormProtobuf normProtobuf);
 
  private:
   CoordinateProtobuf coordinate;
