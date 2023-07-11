@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Channel.h"
 #include <utility>
 #include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
 Channel::Channel(const AccMetaData& accMetaData, AbsoluteBlock absoluteBlock)
     : ppgMetaData(PpgMetaData()), accMetaData(accMetaData), differentialBlocks(DifferentialBlocks()), absoluteBlock(std::move(absoluteBlock)) {}
@@ -84,15 +85,7 @@ Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypePr
 Channel::Channel(const ChannelProtobuf& channelProtobuf)
     : ppgMetaData(PpgMetaData(channelProtobuf.ppg_metadata())),
       accMetaData(AccMetaData(channelProtobuf.acc_metadata())),
-      differentialBlocks([&]() {
-        auto differentialBlocksProtobuf = channelProtobuf.differential_blocks();
-        DifferentialBlocks differentialBlocks;
-        differentialBlocks.reserve(differentialBlocksProtobuf.size());
-        for (auto& differentialBlockProtobuf : differentialBlocksProtobuf) {
-          differentialBlocks.emplace_back(DifferentialBlock(differentialBlockProtobuf));
-        }
-        return differentialBlocks;
-      }()),
+      differentialBlocks(PcoreProtobuf::Convert::ProtoBuf2Vector<DifferentialBlock>(channelProtobuf.differential_blocks())),
       absoluteBlock(AbsoluteBlock()) {}
 
 Channel::Channel()

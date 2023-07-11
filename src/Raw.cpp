@@ -34,19 +34,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Raw.h"
 #include <utility>
 #include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
 Raw::Raw(Sensors sensors) : sensors(std::move(sensors)) {}
 
-Raw::Raw(const RawProtobuf& rawProtobuf)
-    : sensors([&]() {
-        auto sensorProtobuf = rawProtobuf.sensors();
-        Sensors sensors;
-        sensors.reserve(sensorProtobuf.size());
-        for (auto& sensorProtobuf : sensorProtobuf) {
-          sensors.emplace_back(Sensor(sensorProtobuf));
-        }
-        return sensors;
-      }()) {}
+Raw::Raw(const RawProtobuf& rawProtobuf) : sensors(PcoreProtobuf::Convert::ProtoBuf2Vector<Sensor>(rawProtobuf.sensors())) {}
 
 Raw::Raw(const RawJson& rawJson, DataForm dataForm) : sensors(PcoreJson::Convert::Json2Vector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)) {}
 

@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialTimestampsContainer.h"
 #include <utility>
 #include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
                                                                  BlockDifferences blockDifferences_ms,
@@ -44,24 +45,9 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp f
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(
     const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf)
     : firstUnixTimestamp_ms(differentialTimestampsContainerProtobuf.first_unix_timestamp_ms()),
-      blockDifferences_ms([&]() {
-        auto blockDifferencesProtobuf_ms = differentialTimestampsContainerProtobuf.block_differences_ms();
-        BlockDifferences blockDifferences_ms;
-        blockDifferences_ms.reserve(blockDifferencesProtobuf_ms.size());
-        for (auto& blockDifferenceProtobuf_ms : blockDifferencesProtobuf_ms) {
-          blockDifferences_ms.push_back(blockDifferenceProtobuf_ms);
-        }
-        return blockDifferences_ms;
-      }()),
-      timestampsDifferences_ms([&]() {
-        auto timestampsDifferencesProtobuf_ms = differentialTimestampsContainerProtobuf.timestamps_differences_ms();
-        TimestampsDifferences timestampsDifferences_ms;
-        timestampsDifferences_ms.reserve(timestampsDifferencesProtobuf_ms.size());
-        for (auto& timestampsDifferenceProtobuf_ms : timestampsDifferencesProtobuf_ms) {
-          timestampsDifferences_ms.push_back(timestampsDifferenceProtobuf_ms);
-        }
-        return timestampsDifferences_ms;
-      }()) {}
+      blockDifferences_ms(PcoreProtobuf::Convert::ProtoBuf2Vector<TimeDifference>(differentialTimestampsContainerProtobuf.block_differences_ms())),
+      timestampsDifferences_ms(
+          PcoreProtobuf::Convert::ProtoBuf2Vector<TimeDifference>(differentialTimestampsContainerProtobuf.timestamps_differences_ms())) {}
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
     : firstUnixTimestamp_ms([&]() {

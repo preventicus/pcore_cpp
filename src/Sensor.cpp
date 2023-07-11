@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Sensor.h"
 #include <utility>
 #include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
 Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
     : sensorType(sensorTypeProtobuf), channels(std::move(channels)), differentialTimestampsContainer(std::move(differentialTimestampsContainer)) {}
@@ -73,13 +74,7 @@ Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
 
 Sensor::Sensor(const SensorProtobuf& sensorProtobuf)
     : sensorType(sensorProtobuf.sensor_type()),
-      channels([&]() {
-        Channels channels;
-        for (auto& channel : sensorProtobuf.channels()) {
-          channels.emplace_back(Channel(channel));
-        }
-        return channels;
-      }()),
+      channels(PcoreProtobuf::Convert::ProtoBuf2Vector<Channel>(sensorProtobuf.channels())),
       differentialTimestampsContainer(DifferentialTimestampsContainer(sensorProtobuf.differential_timestamps_container())),
       absoluteTimestampsContainer(AbsoluteTimestampsContainer()) {}
 

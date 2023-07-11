@@ -34,19 +34,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialBlock.h"
 #include <utility>
 #include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
 DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) : differentialValues(std::move(differentialValues)) {}
 
 DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf)
-    : differentialValues([&]() {
-        auto differentialValuesProtobuf = differentialBlockProtobuf.differential_values();
-        DifferentialValues differentialValues;
-        differentialValues.reserve(differentialValuesProtobuf.size());
-        for (auto& differentialValueProtobuf : differentialValuesProtobuf) {
-          this->differentialValues.push_back(differentialValueProtobuf);
-        }
-        return differentialValues;
-      }()) {}
+    : differentialValues(PcoreProtobuf::Convert::ProtoBuf2Vector<DifferentialValue>(differentialBlockProtobuf.differential_values())) {}
 
 DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson)
     : differentialValues(PcoreJson::Convert::Json2Vector<DifferentialValue>(differentialBlockJson, PcoreJson::Key::differential_values)) {}
