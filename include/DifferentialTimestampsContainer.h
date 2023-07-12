@@ -62,6 +62,7 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
   DifferentialTimestampsContainer();
 
   [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms(UnixTimestamp firstUnixTimestampInLastBlock, size_t numberOfElementsInLastBlock) const;
   [[nodiscard]] BlockDifferences getBlockDifferences_ms() const;
   [[nodiscard]] TimestampsDifferences getTimestampsDifferences_ms() const;
 

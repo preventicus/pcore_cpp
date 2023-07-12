@@ -68,6 +68,11 @@ UnixTimestamp DifferentialTimestampsContainer::getFirstUnixTimestamp_ms() const 
   return this->firstUnixTimestamp_ms;
 }
 
+UnixTimestamp DifferentialTimestampsContainer::getLastUnixTimestamp_ms(UnixTimestamp firstUnixTimestampInLastBlock,
+                                                                       size_t numberOfElementsInLastBlock) const {
+  return firstUnixTimestampInLastBlock + this->timestampsDifferences_ms.back() * (numberOfElementsInLastBlock - 1);
+}
+
 BlockDifferences DifferentialTimestampsContainer::getBlockDifferences_ms() const {
   return this->blockDifferences_ms;
 }

@@ -199,7 +199,7 @@ UnixTimestamp Sensor::getFirstUnixTimestamp_ms() const {
   switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       if (this->absoluteTimestampsContainer.isSet()) {
-        return this->absoluteTimestampsContainer.getUnixTimestamps_ms()[0];  // TODO add getfirsttimestamp in absoluteTimestampsContainer
+        return this->absoluteTimestampsContainer.getFirstUnixTimestamp_ms();
       } else {
         throw std::runtime_error("absoluteTimestampsContainer is not set");
       }
@@ -221,19 +221,17 @@ UnixTimestamp Sensor::getLastUnixTimestamp_ms() const {
   switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       if (this->absoluteTimestampsContainer.isSet()) {
-        return absoluteTimestampsContainer.getUnixTimestamps_ms().back();  // TODO add get lasttimestamp in absoluteTimestampsContainer
+        return absoluteTimestampsContainer.getLastUnixTimestamp_ms();
       } else {
         throw std::runtime_error("absoluteTimestampsContainer is not set");
       }
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       if (this->differentialTimestampsContainer.isSet()) {
-        // TODO use get lasttimestamp in differentialTimestampsContainer
-        const auto timestampsDifferences_ms = this->differentialTimestampsContainer.getTimestampsDifferences_ms();
-        const auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
-        const auto nLastBlock = differentialBlocksOfFirstChannel.back().getDifferentialValues().size();
+        const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
+        const auto numberOfElementsInLastBlock = differentialBlocksOfFirstChannel.back().getDifferentialValues().size();
         const auto firstUnixTimestampInLastBlock = this->calculateFirstUnixTimestampInLastBlock();
-        return firstUnixTimestampInLastBlock + timestampsDifferences_ms.back() * (nLastBlock - 1);
+        return this->differentialTimestampsContainer.getLastUnixTimestamp_ms(firstUnixTimestampInLastBlock, numberOfElementsInLastBlock);
       } else {
         throw std::runtime_error("differentialTimestampsContainer is not set");
       }
@@ -276,7 +274,7 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
   if (this->channels.empty()) {
     return {};
   }
-  const auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
+  const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
   const auto timestampsDifferences_ms = differentialTimestampsContainer.getTimestampsDifferences_ms();
   const auto blockDifferences_ms = differentialTimestampsContainer.getBlockDifferences_ms();
   auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
@@ -323,7 +321,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
   }
 
   const auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps_ms();
-  firstUnixTimestamp_ms = absoluteUnixTimestamps[0];
+  firstUnixTimestamp_ms = absoluteUnixTimestamps.front();
   if (numberOfBlocks == 1) {
     TimeDifference timestampsDifference = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
     timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsDifference);

@@ -48,6 +48,8 @@ class AbsoluteTimestampsContainer final {
   AbsoluteTimestampsContainer();
 
   [[nodiscard]] UnixTimestamps getUnixTimestamps_ms() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms() const;
   [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const;
   [[nodiscard]] bool isSet() const;
 

@@ -47,6 +47,20 @@ UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps_ms() const {
   return this->unixTimestamps_ms;
 }
 
+UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestamp_ms() const {  // TODO unittests
+  if (!isSet()) {
+    throw std::runtime_error("unixTimestamps_ms is empty");
+  }
+  return this->unixTimestamps_ms.front();
+}
+
+UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestamp_ms() const {  // TODO unittests
+  if (!isSet()) {
+    throw std::runtime_error("unixTimestamps_ms is empty");
+  }
+  return this->unixTimestamps_ms.back();
+}
+
 bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
   return this->unixTimestamps_ms == absoluteTimestampsContainer.unixTimestamps_ms;
 }
