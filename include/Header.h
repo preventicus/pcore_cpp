@@ -32,8 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include "DataForm.h"
 #include "IPCore.h"
+#include "PcoreJson.h"
 #include "Version.h"
 #include "protobuf/pcore.pb.h"
 
@@ -42,13 +42,12 @@ using namespace PCore;
 using HeaderProtobuf = com::preventicus::pcore::Data_Header;
 using TimeZoneOffset = int32_t;
 using HeaderJson = Json::Value;
-using DataFormString = std::string;
 using TimeZoneOffsetJson = Json::Value;
 
 namespace PCore {
 class Header final : public IPCore<HeaderProtobuf> {
  public:
-  explicit Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
+  explicit Header(Version version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
   explicit Header(const HeaderProtobuf& headerProtobuf);
   explicit Header(const HeaderJson& header);
   Header();
@@ -60,9 +59,6 @@ class Header final : public IPCore<HeaderProtobuf> {
   [[nodiscard]] HeaderJson toJson() const final;
   void serialize(HeaderProtobuf* headerProtobuf) const final;
   void switchDataForm() final;
-
-  static DataForm dataFormFromString(DataFormString dataFormString);
-  static DataFormString dataFormToString(DataForm dataForm);
 
   bool operator==(const IPCore<HeaderProtobuf>& header) const final;
   bool operator!=(const IPCore<HeaderProtobuf>& header) const final;

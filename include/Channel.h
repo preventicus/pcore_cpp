@@ -45,7 +45,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using namespace PCore;
 
 using ChannelProtobuf = com::preventicus::pcore::Raw_Sensor_Channel;
-using SensorTypeProtobuf = com::preventicus::pcore::SensorType;
 using BlockIdxs = std::vector<BlockIdx>;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
 using ChannelJson = Json::Value;
@@ -55,10 +54,10 @@ using DifferentialBlocks = std::vector<DifferentialBlock>;
 namespace PCore {
 class Channel final : public IPCore<ChannelProtobuf> {
  public:
-  explicit Channel(const AccMetaData& accMetadata, AbsoluteBlock absoluteBlock);
-  explicit Channel(const PpgMetaData& ppgMetaData, AbsoluteBlock absoluteBlock);
-  explicit Channel(const PpgMetaData& ppgMetaData, DifferentialBlocks differentialBlocks);
-  explicit Channel(const AccMetaData& accMetaData, DifferentialBlocks differentialBlocks);
+  explicit Channel(AccMetaData accMetadata, AbsoluteBlock absoluteBlock);
+  explicit Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock);
+  explicit Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks);
+  explicit Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks);
   explicit Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm);
   explicit Channel(const ChannelProtobuf& channelProtobuf);
   Channel();

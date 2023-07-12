@@ -33,8 +33,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <string>
+#include "DataForm.h"
 
 using JsonKey = std::string;
+using DataFormString = std::string;
 
 namespace PcoreJson {
 namespace Key {
@@ -71,7 +73,7 @@ const JsonKey norm = "norm";
 class Convert {
  public:
   template <typename T, typename... Args>
-  static std::vector<T> Json2Vector(const Json::Value& jsonValue, const JsonKey& jsonKey, const Args&... args) {
+  static std::vector<T> jsonToVector(const Json::Value& jsonValue, const JsonKey& jsonKey, const Args&... args) {
     Json::Value values = jsonValue[jsonKey];
     std::vector<T> vector;
     vector.reserve(values.size());
@@ -97,7 +99,7 @@ class Convert {
   }
 
   template <typename T>
-  static Json::Value Vector2Json(std::vector<T> vector) {
+  static Json::Value vectorToJson(std::vector<T> vector) {
     Json::Value jsonValues(Json::arrayValue);
 
     if constexpr (std::is_same_v<T, int32_t>) {
@@ -121,7 +123,7 @@ class Convert {
   }
 
   template <typename T>
-  static T Json2Value(const Json::Value& jsonValue, const JsonKey& jsonKey) {
+  static T jsonToValue(const Json::Value& jsonValue, const JsonKey& jsonKey) {
     if constexpr (std::is_same_v<T, int32_t>) {
       return jsonValue[jsonKey].asInt();
     } else if constexpr (std::is_same_v<T, uint32_t>) {
@@ -129,6 +131,30 @@ class Convert {
         throw std::invalid_argument(jsonKey + " is negative in json.");
       }
       return jsonValue[jsonKey].asUInt();
+    }
+  }
+
+  static DataForm dataFormFromString(const DataFormString& dataFormString) {
+    if (dataFormString == "DATA_FORM_ABSOLUTE") {
+      return DataForm::DATA_FORM_ABSOLUTE;
+    } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {
+      return DataForm::DATA_FORM_DIFFERENTIAL;
+    } else {
+      return DataForm::DATA_FORM_NONE;
+    }
+  }
+
+  static DataFormString dataFormToString(const DataForm dataForm) {
+    switch (dataForm) {
+      case DataForm::DATA_FORM_ABSOLUTE: {
+        return "DATA_FORM_ABSOLUTE";
+      }
+      case DataForm::DATA_FORM_DIFFERENTIAL: {
+        return "DATA_FORM_DIFFERENTIAL";
+      }
+      default: {
+        return "DATA_FORM_NONE";
+      }
     }
   }
 };

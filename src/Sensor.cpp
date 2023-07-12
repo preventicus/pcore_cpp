@@ -51,8 +51,8 @@ Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestamps
 }
 
 Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
-    : sensorType(Sensor::senorTypeFromString(sensorJson[PcoreJson::Key::sensor_type].asString())),
-      channels(PcoreJson::Convert::Json2Vector<Channel>(sensorJson, PcoreJson::Key::channels, this->sensorType, dataForm)),
+    : sensorType(PcoreProtobuf::Convert::senorTypeFromString(sensorJson[PcoreJson::Key::sensor_type].asString())),
+      channels(PcoreJson::Convert::jsonToVector<Channel>(sensorJson, PcoreJson::Key::channels, this->sensorType, dataForm)),
       differentialTimestampsContainer([&]() {
         switch (dataForm) {
           case DataForm::DATA_FORM_ABSOLUTE: {
@@ -83,7 +83,7 @@ Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
 
 Sensor::Sensor(const SensorProtobuf& sensorProtobuf)
     : sensorType(sensorProtobuf.sensor_type()),
-      channels(PcoreProtobuf::Convert::ProtoBuf2Vector<Channel>(sensorProtobuf.channels())),
+      channels(PcoreProtobuf::Convert::protoBufToVector<Channel>(sensorProtobuf.channels())),
       differentialTimestampsContainer(DifferentialTimestampsContainer(sensorProtobuf.differential_timestamps_container())),
       absoluteTimestampsContainer(AbsoluteTimestampsContainer()),
       dataForm([&]() {
@@ -125,10 +125,10 @@ bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const {
   if (derived == nullptr) {
     return false;
   }
-  if (this->channels.size() != derived->channels.size()) {
+  const auto numberOfChannels = this->channels.size();
+  if (numberOfChannels != derived->channels.size()) {
     return false;
   }
-  const auto numberOfChannels = this->channels.size();
   for (size_t i = 0; i < numberOfChannels; i++) {
     if (this->channels[i] != derived->channels[i]) {
       return false;
@@ -185,13 +185,13 @@ void Sensor::switchDataForm() {
       break;
     }
     default: {
-      throw std::runtime_error("CurrentDataForm is NONE");
+      throw std::runtime_error("dataForm is NONE");
     }
   }
 }
 
-UnixTimestamp Sensor::getFirstUnixTimestamp_ms(DataForm currentDataForm) const {
-  switch (currentDataForm) {
+UnixTimestamp Sensor::getFirstUnixTimestamp_ms() const {
+  switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps_ms();
       if (unixTimestamps.empty()) {  // TODO use is set methode of absoluteTimestampsContainer
@@ -205,13 +205,13 @@ UnixTimestamp Sensor::getFirstUnixTimestamp_ms(DataForm currentDataForm) const {
       return this->differentialTimestampsContainer.getFirstUnixTimestamp_ms();
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::invalid_argument("currentDataForm is none");
+      throw std::invalid_argument("dataForm is none");
     }
   }
 }
 
-UnixTimestamp Sensor::getLastUnixTimestamp_ms(DataForm currentDataForm) const {
-  switch (currentDataForm) {
+UnixTimestamp Sensor::getLastUnixTimestamp_ms() const {
+  switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       UnixTimestamps unixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps_ms();
       if (unixTimestamps.empty()) {  // TODO use is set methode of absoluteTimestampsContainer
@@ -223,23 +223,19 @@ UnixTimestamp Sensor::getLastUnixTimestamp_ms(DataForm currentDataForm) const {
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       // TODO use isSet methode
       const auto timestampsDifferences_ms = this->differentialTimestampsContainer.getTimestampsDifferences_ms();
-      const auto blockDifferences_ms = this->differentialTimestampsContainer.getBlockDifferences_ms();
       const auto differentialBlocksOfFirstChannel = this->channels[0].getDifferentialBlocks();
       const auto nLastBlock = differentialBlocksOfFirstChannel.back().getDifferentialValues().size();
-      auto absoluteUnixTimestamp = this->getFirstUnixTimestamp_ms(currentDataForm);
-      for (auto& blockDifference_ms : blockDifferences_ms) {
-        absoluteUnixTimestamp += blockDifference_ms;
-      }
-      return absoluteUnixTimestamp + timestampsDifferences_ms.back() * (nLastBlock - 1);
+      const auto firstUnixTimestampInLastBlock = this->calculateFirstUnixTimestampInLastBlock();
+      return firstUnixTimestampInLastBlock + timestampsDifferences_ms.back() * (nLastBlock - 1);
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::invalid_argument("currentDataForm is none");
+      throw std::invalid_argument("dataForm is none");
     }
   }
 }
 
-Duration Sensor::getDuration_ms(DataForm currentDataForm) const {
-  return this->getLastUnixTimestamp_ms(currentDataForm) - this->getFirstUnixTimestamp_ms(currentDataForm);
+Duration Sensor::getDuration_ms() const {
+  return this->getLastUnixTimestamp_ms() - this->getFirstUnixTimestamp_ms();
 }
 
 BlockIdxs Sensor::findBlockIdxs() const {
@@ -355,31 +351,16 @@ SensorJson Sensor::toJson() const {
     }
   }
 
-  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::Vector2Json(this->channels);
-  sensorJson[PcoreJson::Key::sensor_type] = Sensor::senorTypeToString(this->sensorType);
+  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::vectorToJson(this->channels);
+  sensorJson[PcoreJson::Key::sensor_type] = PcoreProtobuf::Convert::senorTypeToString(this->sensorType);
   return sensorJson;
 }
 
-SensorTypeProtobuf Sensor::senorTypeFromString(const SensorTypeString senorTypeString) {
-  if (senorTypeString == "SENSOR_TYPE_PPG") {
-    return SensorTypeProtobuf::SENSOR_TYPE_PPG;
-  } else if (senorTypeString == "SENSOR_TYPE_ACC") {
-    return SensorTypeProtobuf::SENSOR_TYPE_ACC;
-  } else {
-    return SensorTypeProtobuf::SENSOR_TYPE_NONE;
+UnixTimestamp Sensor::calculateFirstUnixTimestampInLastBlock() const {
+  const auto blockDifferences_ms = this->differentialTimestampsContainer.getBlockDifferences_ms();
+  auto firstUnixTimestampInLastBlock = this->getFirstUnixTimestamp_ms();
+  for (auto& blockDifference_ms : blockDifferences_ms) {
+    firstUnixTimestampInLastBlock += blockDifference_ms;
   }
-}
-
-SensorTypeString Sensor::senorTypeToString(const SensorTypeProtobuf sensorTypeProtobuf) {
-  switch (sensorTypeProtobuf) {
-    case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
-      return "SENSOR_TYPE_ACC";
-    }
-    case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
-      return "SENSOR_TYPE_PPG";
-    }
-    default: {
-      return "SENSOR_TYPE_NONE";
-    }
-  }
+  return firstUnixTimestampInLastBlock;
 }

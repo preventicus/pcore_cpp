@@ -40,7 +40,7 @@ using namespace PCore;
 AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) : absoluteValues(std::move(absoluteValues)) {}
 
 AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson)
-    : absoluteValues(PcoreJson::Convert::Json2Vector<AbsoluteValue>(absoluteBlockJson, PcoreJson::Key::absolute_values)) {}
+    : absoluteValues(PcoreJson::Convert::jsonToVector<AbsoluteValue>(absoluteBlockJson, PcoreJson::Key::absolute_values)) {}
 
 AbsoluteBlock::AbsoluteBlock() : absoluteValues({}) {}
 
@@ -65,6 +65,6 @@ AbsoluteBlockJson AbsoluteBlock::toJson() const {
   if (!isSet()) {
     return absoluteBlockJson;
   }
-  absoluteBlockJson[PcoreJson::Key::absolute_values] = PcoreJson::Convert::Vector2Json(this->absoluteValues);
+  absoluteBlockJson[PcoreJson::Key::absolute_values] = PcoreJson::Convert::vectorToJson(this->absoluteValues);
   return absoluteBlockJson;
 }

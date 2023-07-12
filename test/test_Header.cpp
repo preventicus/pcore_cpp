@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gtest/gtest.h>
 #include "HeaderExampleFactory.h"
+#include "PcoreJson.h"
 
 TEST(HeaderTest, TestGetTimeZoneOffset) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
@@ -176,15 +177,15 @@ TEST(HeaderTest, TestSwitchDataFormWithHeaderInDifferentialForm) {
 }
 
 TEST(HeaderTest, TestDataFormFromString) {
-  EXPECT_EQ(Header::dataFormFromString("DATA_FORM_ABSOLUTE"), DataForm::DATA_FORM_ABSOLUTE);
-  EXPECT_EQ(Header::dataFormFromString("DATA_FORM_DIFFERENTIAL"), DataForm::DATA_FORM_DIFFERENTIAL);
-  EXPECT_EQ(Header::dataFormFromString("DATA_FORM_NONE"), DataForm::DATA_FORM_NONE);
+  EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_ABSOLUTE"), DataForm::DATA_FORM_ABSOLUTE);
+  EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_DIFFERENTIAL"), DataForm::DATA_FORM_DIFFERENTIAL);
+  EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_NONE"), DataForm::DATA_FORM_NONE);
 }
 
 TEST(HeaderTest, TestDataFormToString) {
-  EXPECT_EQ(Header::dataFormToString(DataForm::DATA_FORM_ABSOLUTE), "DATA_FORM_ABSOLUTE");
-  EXPECT_EQ(Header::dataFormToString(DataForm::DATA_FORM_DIFFERENTIAL), "DATA_FORM_DIFFERENTIAL");
-  EXPECT_EQ(Header::dataFormToString(DataForm::DATA_FORM_NONE), "DATA_FORM_NONE");
+  EXPECT_EQ(PcoreJson::Convert::dataFormToString(DataForm::DATA_FORM_ABSOLUTE), "DATA_FORM_ABSOLUTE");
+  EXPECT_EQ(PcoreJson::Convert::dataFormToString(DataForm::DATA_FORM_DIFFERENTIAL), "DATA_FORM_DIFFERENTIAL");
+  EXPECT_EQ(PcoreJson::Convert::dataFormToString(DataForm::DATA_FORM_NONE), "DATA_FORM_NONE");
 }
 
 TEST(HeaderTest, TestConstructorThrowWithTimeZoneOffsetPositiveInvalid) {

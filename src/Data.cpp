@@ -76,7 +76,6 @@ void Data::serialize(DataProtobuf* dataProtobuf) const {
 }
 
 void Data::switchDataForm() {
-  DataForm currentDataForm = this->header.getDataForm();
   this->raw.switchDataForm();
   this->header.switchDataForm();
 }

@@ -38,13 +38,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialTimestampsContainer.h"
 #include "IPCore.h"
 #include "protobuf/pcore_raw.pb.h"
-#include "protobuf/pcore_sensor_type.pb.h"
 
 using namespace PCore;
 
-using SensorProtobuf = com::preventicus::pcore::Raw_Sensor;
 using Channels = std::vector<Channel>;
-using SensorTypeString = std::string;
+
 using SensorJson = Json::Value;
 using Duration = uint64_t;
 using ChannelsJson = Json::Value;
@@ -62,18 +60,15 @@ class Sensor final : public IPCore<SensorProtobuf> {
   [[nodiscard]] Channels getChannels() const;
   [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const;
   [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const;
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms(DataForm currentDataForm) const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms(DataForm currentDataForm) const;
-  [[nodiscard]] Duration getDuration_ms(DataForm currentDataForm) const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms() const;
+  [[nodiscard]] Duration getDuration_ms() const;
   [[nodiscard]] DataForm getDataFrom() const;
 
   // bool isSet();
   [[nodiscard]] SensorJson toJson() const final;
   void serialize(SensorProtobuf* sensorProtobuf) const final;
   void switchDataForm() final;
-
-  static SensorTypeProtobuf senorTypeFromString(SensorTypeString senorTypeString);
-  static SensorTypeString senorTypeToString(SensorTypeProtobuf sensorTypeProtobuf);
 
   bool operator==(const IPCore<SensorProtobuf>& sensor) const final;
   bool operator!=(const IPCore<SensorProtobuf>& sensor) const final;
@@ -83,6 +78,8 @@ class Sensor final : public IPCore<SensorProtobuf> {
   [[nodiscard]] DifferentialTimestampsContainer calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
                                                                                 const BlockIdxs& blockIdxs) const;
   [[nodiscard]] BlockIdxs findBlockIdxs() const;
+
+  [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInLastBlock() const;
 
   SensorTypeProtobuf sensorType;
   Channels channels;

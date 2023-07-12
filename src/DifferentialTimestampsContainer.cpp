@@ -45,9 +45,9 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp f
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(
     const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf)
     : firstUnixTimestamp_ms(differentialTimestampsContainerProtobuf.first_unix_timestamp_ms()),
-      blockDifferences_ms(PcoreProtobuf::Convert::ProtoBuf2Vector<TimeDifference>(differentialTimestampsContainerProtobuf.block_differences_ms())),
+      blockDifferences_ms(PcoreProtobuf::Convert::protoBufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.block_differences_ms())),
       timestampsDifferences_ms(
-          PcoreProtobuf::Convert::ProtoBuf2Vector<TimeDifference>(differentialTimestampsContainerProtobuf.timestamps_differences_ms())) {}
+          PcoreProtobuf::Convert::protoBufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.timestamps_differences_ms())) {}
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
     : firstUnixTimestamp_ms([&]() {
@@ -56,9 +56,10 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(const Different
         }
         return differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms].asUInt64();
       }()),
-      blockDifferences_ms(PcoreJson::Convert::Json2Vector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::block_differences_ms)),
+      blockDifferences_ms(
+          PcoreJson::Convert::jsonToVector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::block_differences_ms)),
       timestampsDifferences_ms(
-          PcoreJson::Convert::Json2Vector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::timestamps_differences_ms)) {}
+          PcoreJson::Convert::jsonToVector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::timestamps_differences_ms)) {}
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer()
     : firstUnixTimestamp_ms(0), blockDifferences_ms({}), timestampsDifferences_ms({}) {}
@@ -112,9 +113,8 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() co
   firstUnixTimestampJson = this->firstUnixTimestamp_ms;
   DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
   differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms] = firstUnixTimestampJson;
-  differentialTimestampsContainerJson[PcoreJson::Key::block_differences_ms] = PcoreJson::Convert::Vector2Json(this->blockDifferences_ms);
-  ;
-  differentialTimestampsContainerJson[PcoreJson::Key::timestamps_differences_ms] = PcoreJson::Convert::Vector2Json(this->timestampsDifferences_ms);
+  differentialTimestampsContainerJson[PcoreJson::Key::block_differences_ms] = PcoreJson::Convert::vectorToJson(this->blockDifferences_ms);
+  differentialTimestampsContainerJson[PcoreJson::Key::timestamps_differences_ms] = PcoreJson::Convert::vectorToJson(this->timestampsDifferences_ms);
   return differentialTimestampsContainerJson;
 }
 

@@ -39,9 +39,9 @@ using namespace PCore;
 Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
 
 Version::Version(const VersionJson& versionJson)
-    : major(PcoreJson::Convert::Json2Value<Major>(versionJson, PcoreJson::Key::major)),
-      minor(PcoreJson::Convert::Json2Value<Minor>(versionJson, PcoreJson::Key::minor)),
-      patch(PcoreJson::Convert::Json2Value<Patch>(versionJson, PcoreJson::Key::patch)) {}
+    : major(PcoreJson::Convert::jsonToValue<Major>(versionJson, PcoreJson::Key::major)),
+      minor(PcoreJson::Convert::jsonToValue<Minor>(versionJson, PcoreJson::Key::minor)),
+      patch(PcoreJson::Convert::jsonToValue<Patch>(versionJson, PcoreJson::Key::patch)) {}
 
 Version::Version(const VersionProtobuf& versionProtobuf)
     : major(versionProtobuf.major()), minor(versionProtobuf.minor()), patch(versionProtobuf.patch()) {}

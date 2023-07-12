@@ -39,10 +39,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) : differentialValues(std::move(differentialValues)) {}
 
 DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf)
-    : differentialValues(PcoreProtobuf::Convert::ProtoBuf2Vector<DifferentialValue>(differentialBlockProtobuf.differential_values())) {}
+    : differentialValues(PcoreProtobuf::Convert::protoBufToVector<DifferentialValue>(differentialBlockProtobuf.differential_values())) {}
 
 DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson)
-    : differentialValues(PcoreJson::Convert::Json2Vector<DifferentialValue>(differentialBlockJson, PcoreJson::Key::differential_values)) {}
+    : differentialValues(PcoreJson::Convert::jsonToVector<DifferentialValue>(differentialBlockJson, PcoreJson::Key::differential_values)) {}
 
 DifferentialBlock::DifferentialBlock() : differentialValues({}){};
 
@@ -76,7 +76,7 @@ void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockPr
 
 DifferentialBlockJson DifferentialBlock::toJson() const {
   DifferentialBlockJson differentialBlockJson;
-  differentialBlockJson[PcoreJson::Key::differential_values] = PcoreJson::Convert::Vector2Json(this->differentialValues);
+  differentialBlockJson[PcoreJson::Key::differential_values] = PcoreJson::Convert::vectorToJson(this->differentialValues);
   return differentialBlockJson;
 }
 

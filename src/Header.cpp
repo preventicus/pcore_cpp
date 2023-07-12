@@ -32,10 +32,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Header.h"
+
+#include <utility>
 #include "PcoreJson.h"
 
-Header::Header(const Version& version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
-    : timeZoneOffset_min(timeZoneOffset_min), pcoreVersion(version), dataForm(dataForm) {
+Header::Header(Version version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
+    : timeZoneOffset_min(timeZoneOffset_min), pcoreVersion(std::move(version)), dataForm(dataForm) {
   this->checkTimeZoneOffset();
 }
 
@@ -49,7 +51,7 @@ Header::Header(const HeaderProtobuf& headerProtobuf)
 Header::Header(const HeaderJson& headerJson)
     : timeZoneOffset_min(headerJson[PcoreJson::Key::time_zone_offset_min].asInt()),
       pcoreVersion(Version(headerJson[PcoreJson::Key::pcore_version])),
-      dataForm(Header::dataFormFromString(headerJson[PcoreJson::Key::data_form].asString())) {
+      dataForm(PcoreJson::Convert::dataFormFromString(headerJson[PcoreJson::Key::data_form].asString())) {
   this->checkTimeZoneOffset();
 }
 
@@ -110,36 +112,12 @@ HeaderJson Header::toJson() const {
   TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
   headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffset_min;
   headerJson[PcoreJson::Key::pcore_version] = this->pcoreVersion.toJson();
-  headerJson[PcoreJson::Key::data_form] = Header::dataFormToString(this->dataForm);
+  headerJson[PcoreJson::Key::data_form] = PcoreJson::Convert::dataFormToString(this->dataForm);
   return headerJson;
 }
 
 void Header::checkTimeZoneOffset() const {
   if (840 < this->timeZoneOffset_min || this->timeZoneOffset_min < -720) {
     throw std::invalid_argument("timeZoneOffset must be between -720 and 840");
-  }
-}
-
-DataForm Header::dataFormFromString(const DataFormString dataFormString) {
-  if (dataFormString == "DATA_FORM_ABSOLUTE") {
-    return DataForm::DATA_FORM_ABSOLUTE;
-  } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {
-    return DataForm::DATA_FORM_DIFFERENTIAL;
-  } else {
-    return DataForm::DATA_FORM_NONE;
-  }
-}
-
-DataFormString Header::dataFormToString(const DataForm dataForm) {
-  switch (dataForm) {
-    case DataForm::DATA_FORM_ABSOLUTE: {
-      return "DATA_FORM_ABSOLUTE";
-    }
-    case DataForm::DATA_FORM_DIFFERENTIAL: {
-      return "DATA_FORM_DIFFERENTIAL";
-    }
-    default: {
-      return "DATA_FORM_NONE";
-    }
   }
 }

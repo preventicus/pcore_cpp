@@ -115,6 +115,6 @@ SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataFor
     channelsJson.append(ChannelExampleFactory::buildChannelJson(channel));
   }
   sensorJson[PcoreJson::Key::channels] = channelsJson;
-  sensorJson[PcoreJson::Key::sensor_type] = Sensor::senorTypeToString(sensor.getSensorType());
+  sensorJson[PcoreJson::Key::sensor_type] = PcoreProtobuf::Convert::senorTypeToString(sensor.getSensorType());
   return sensorJson;
 }

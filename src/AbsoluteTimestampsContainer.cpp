@@ -39,7 +39,7 @@ using namespace PCore;
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms) : unixTimestamps_ms(std::move(unixTimestamps_ms)) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
-    : unixTimestamps_ms(PcoreJson::Convert::Json2Vector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms)) {}
+    : unixTimestamps_ms(PcoreJson::Convert::jsonToVector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms)) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestamps_ms({}) {}
 
@@ -57,6 +57,6 @@ bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& 
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
-  absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = PcoreJson::Convert::Vector2Json(this->unixTimestamps_ms);
+  absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = PcoreJson::Convert::vectorToJson(this->unixTimestamps_ms);
   return absoluteTimestampsContainerJson;
 }

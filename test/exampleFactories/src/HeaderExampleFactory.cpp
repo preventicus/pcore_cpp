@@ -101,6 +101,6 @@ HeaderJson HeaderExampleFactory::buildHeaderJson(Header header) {
   TimeZoneOffsetJson timeZoneOffset_min(header.getTimeZoneOffset());
   headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffset_min;
   headerJson[PcoreJson::Key::pcore_version] = VersionExampleFactory::buildVersionJson(header.getPcoreVersion());
-  headerJson[PcoreJson::Key::data_form] = Header::dataFormToString(header.getDataForm());
+  headerJson[PcoreJson::Key::data_form] = PcoreJson::Convert::dataFormToString(header.getDataForm());
   return headerJson;
 }

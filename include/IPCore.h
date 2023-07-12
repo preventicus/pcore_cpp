@@ -34,7 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "json/json.h"
 
-template <typename T, typename... Args>
+template <typename T>
 class IPCore {
  public:
   virtual void serialize(T* protobuf) const = 0;

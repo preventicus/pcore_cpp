@@ -37,7 +37,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_coordinate.pb.h"
 #include "protobuf/pcore_norm.pb.h"
 #include "protobuf/pcore_raw.pb.h"
+#include "protobuf/pcore_sensor_type.pb.h"
 
+using SensorProtobuf = com::preventicus::pcore::Raw_Sensor;
+using SensorTypeProtobuf = com::preventicus::pcore::SensorType;
+using SensorTypeString = std::string;
 using CoordinateProtobufString = std::string;
 using CoordinateProtobuf = com::preventicus::pcore::Coordinate;
 using NormStringProtobuf = std::string;
@@ -49,7 +53,7 @@ namespace PcoreProtobuf {
 class Convert {
  public:
   template <typename T, typename P, typename... Args>
-  static std::vector<T> ProtoBuf2Vector(P values, const Args&... args) {
+  static std::vector<T> protoBufToVector(P values, const Args&... args) {
     std::vector<T> vector;
     vector.reserve(values.size());
 
@@ -139,6 +143,30 @@ class Convert {
       return ColorProtobuf::COLOR_GREEN;
     } else {
       return ColorProtobuf::COLOR_NONE;
+    }
+  }
+
+  static SensorTypeProtobuf senorTypeFromString(const SensorTypeString& senorTypeString) {
+    if (senorTypeString == "SENSOR_TYPE_PPG") {
+      return SensorTypeProtobuf::SENSOR_TYPE_PPG;
+    } else if (senorTypeString == "SENSOR_TYPE_ACC") {
+      return SensorTypeProtobuf::SENSOR_TYPE_ACC;
+    } else {
+      return SensorTypeProtobuf::SENSOR_TYPE_NONE;
+    }
+  }
+
+  static SensorTypeString senorTypeToString(const SensorTypeProtobuf sensorTypeProtobuf) {
+    switch (sensorTypeProtobuf) {
+      case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
+        return "SENSOR_TYPE_ACC";
+      }
+      case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
+        return "SENSOR_TYPE_PPG";
+      }
+      default: {
+        return "SENSOR_TYPE_NONE";
+      }
     }
   }
 };

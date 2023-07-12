@@ -39,7 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Raw::Raw(Sensors sensors, DataForm dataForm) : sensors(std::move(sensors)), dataForm(dataForm) {}
 
 Raw::Raw(const RawProtobuf& rawProtobuf)
-    : sensors(PcoreProtobuf::Convert::ProtoBuf2Vector<Sensor>(rawProtobuf.sensors())), dataForm([&]() {
+    : sensors(PcoreProtobuf::Convert::protoBufToVector<Sensor>(rawProtobuf.sensors())), dataForm([&]() {
         if (rawProtobuf.sensors().empty()) {
           return DataForm::DATA_FORM_NONE;
         }
@@ -47,7 +47,7 @@ Raw::Raw(const RawProtobuf& rawProtobuf)
       }()) {}
 
 Raw::Raw(const RawJson& rawJson, DataForm dataForm)
-    : sensors(PcoreJson::Convert::Json2Vector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)), dataForm(dataForm) {}
+    : sensors(PcoreJson::Convert::jsonToVector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)), dataForm(dataForm) {}
 
 Raw::Raw() : sensors({}), dataForm(DataForm::DATA_FORM_NONE) {}
 
@@ -64,10 +64,10 @@ bool Raw::operator==(const IPCore<RawProtobuf>& raw) const {
   if (derived == nullptr) {
     return false;
   }
-  if (this->sensors.size() != derived->sensors.size()) {
+  const auto numberOfSensors = this->sensors.size();
+  if (numberOfSensors != derived->sensors.size()) {
     return false;
   }
-  const auto numberOfSensors = this->sensors.size();
   for (size_t i = 0; i < numberOfSensors; i++) {
     if (this->sensors[i] != derived->sensors[i]) {
       return false;
@@ -104,13 +104,13 @@ void Raw::switchDataForm() {
       break;
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::runtime_error("CurrentDataForm is NONE");  // TODO unittest
+      throw std::runtime_error("dataForm is NONE");  // TODO unittest
     }
   }
 }
 
 RawJson Raw::toJson() const {
   RawJson rawJson;
-  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::Vector2Json(this->sensors);
+  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::vectorToJson(this->sensors);
   return rawJson;
 }
