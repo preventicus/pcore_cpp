@@ -76,7 +76,7 @@ bool PpgMetaData::hasWavelength() const {
 }
 
 bool PpgMetaData::isSet() const {
-  return !(this->color == ColorProtobuf::COLOR_NONE && this->wavelength_nm == 0);
+  return this->color != ColorProtobuf::COLOR_NONE || this->wavelength_nm != 0;
 }
 
 bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
@@ -92,6 +92,9 @@ bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) con
 
 PpgMetaDataJson PpgMetaData::toJson() const {
   PpgMetaDataJson ppgMetaDataJson;
+  if (!this->isSet()) {
+    return ppgMetaDataJson;
+  }
   WavelegthJson wavelengthJson(this->wavelength_nm);
   if (this->wavelength_nm != 0) {
     ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
@@ -106,8 +109,11 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
   if (ppgMetaDataProtobuf == nullptr) {
     throw std::invalid_argument("Error in serialize: ppgMetaDataProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   if (this->color != ColorProtobuf::COLOR_NONE && this->wavelength_nm != 0) {
-    throw std::invalid_argument("one parameter has to be initialized");
+    throw std::invalid_argument("only one parameter has to be initialized");
   }
   if (this->color != ColorProtobuf::COLOR_NONE) {
     ppgMetaDataProtobuf->set_color(this->color);

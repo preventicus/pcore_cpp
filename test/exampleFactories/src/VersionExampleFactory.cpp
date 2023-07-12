@@ -95,10 +95,13 @@ Version VersionExampleFactory::versionEmpty() {
 }
 
 VersionJson VersionExampleFactory::buildVersionJson(Version version) {
+  VersionJson versionJson;
+  if (!version.isSet()) {
+    return versionJson;
+  }
   MajorJson majorJson(version.getMajor());
   MinorJson minorJson(version.getMinor());
   PatchJson patchJson(version.getPatch());
-  VersionJson versionJson;
   versionJson[PcoreJson::Key::major] = majorJson;
   versionJson[PcoreJson::Key::minor] = minorJson;
   versionJson[PcoreJson::Key::patch] = patchJson;

@@ -59,6 +59,7 @@ class Header final : public IPCore<HeaderProtobuf> {
   [[nodiscard]] HeaderJson toJson() const final;
   void serialize(HeaderProtobuf* headerProtobuf) const final;
   void switchDataForm() final;
+  [[nodiscard]] bool isSet() const final;
 
   bool operator==(const IPCore<HeaderProtobuf>& header) const final;
   bool operator!=(const IPCore<HeaderProtobuf>& header) const final;

@@ -55,7 +55,7 @@ class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
   DifferentialBlock();
 
   [[nodiscard]] DifferentialValues getDifferentialValues() const;
-  [[nodiscard]] bool isSet() const;
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] DifferentialBlockJson toJson() const final;
   void serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const final;
   void switchDataForm() final;

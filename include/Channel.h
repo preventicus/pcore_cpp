@@ -81,6 +81,7 @@ class Channel final : public IPCore<ChannelProtobuf> {
   void serialize(ChannelProtobuf* channelProtobuf) const final;
   void switchDataForm(const BlockIdxs& blockIdxs);
   void switchDataForm() final;
+  [[nodiscard]] bool isSet() const final;
 
  private:
   [[nodiscard]] DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const;

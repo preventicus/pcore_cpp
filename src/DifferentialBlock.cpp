@@ -69,6 +69,9 @@ void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockPr
   if (differentialBlockProtobuf == nullptr) {
     throw std::invalid_argument("Error in serialize: differentialBlockProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   for (auto& differentialValue : this->differentialValues) {
     differentialBlockProtobuf->add_differential_values(differentialValue);
   }
@@ -76,6 +79,9 @@ void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockPr
 
 DifferentialBlockJson DifferentialBlock::toJson() const {
   DifferentialBlockJson differentialBlockJson;
+  if (!this->isSet()) {
+    return differentialBlockJson;
+  }
   differentialBlockJson[PcoreJson::Key::differential_values] = PcoreJson::Convert::vectorToJson(this->differentialValues);
   return differentialBlockJson;
 }

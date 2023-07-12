@@ -67,6 +67,9 @@ void Data::serialize(DataProtobuf* dataProtobuf) const {
   if (dataProtobuf == nullptr) {
     throw std::invalid_argument("Error in serialize: dataProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   HeaderProtobuf headerProtobuf;
   this->header.serialize(&headerProtobuf);
   dataProtobuf->mutable_header()->CopyFrom(headerProtobuf);
@@ -76,15 +79,25 @@ void Data::serialize(DataProtobuf* dataProtobuf) const {
 }
 
 void Data::switchDataForm() {
+  if (!this->isSet()) {
+    return;
+  }
   this->raw.switchDataForm();
   this->header.switchDataForm();
 }
 
 Json::Value Data::toJson() const {
   DataJson data;
+  if (!this->isSet()) {
+    return data;
+  }
   data[PcoreJson::Key::header] = this->header.toJson();
   data[PcoreJson::Key::raw] = this->raw.toJson();
   Json::Value json;
   json[PcoreJson::Key::data] = data;
   return json;
+}
+
+bool Data::isSet() const {
+  return this->raw.isSet() || this->header.isSet();
 }

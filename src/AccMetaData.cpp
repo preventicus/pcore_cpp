@@ -87,8 +87,11 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
   if (accMetaDataProtobuf == nullptr) {
     throw std::invalid_argument("accMetaDataProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   if (coordinate != CoordinateProtobuf::COORDINATE_NONE && norm != NormProtobuf::NORM_NONE) {
-    throw std::invalid_argument("one enum type has to be initialized");
+    throw std::invalid_argument("only one enum type has to be initialized");
   }
   if (this->coordinate != CoordinateProtobuf::COORDINATE_NONE) {
     accMetaDataProtobuf->set_coordinate(this->coordinate);
@@ -104,6 +107,9 @@ void AccMetaData::switchDataForm() {
 
 Json::Value AccMetaData::toJson() const {
   AccMetaDataJson accMetaDataJson;
+  if (!this->isSet()) {
+    return accMetaDataJson;
+  }
   if (this->norm != NormProtobuf::NORM_NONE) {
     accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(this->norm);
   }

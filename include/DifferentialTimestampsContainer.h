@@ -73,6 +73,7 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
 
   void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const final;
   void switchDataForm() final;
+  [[nodiscard]] bool isSet() const final;
 
   bool operator==(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
   bool operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;

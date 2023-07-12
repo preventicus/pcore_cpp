@@ -60,7 +60,7 @@ class Version final : public IPCore<VersionProtobuf> {
   [[nodiscard]] VersionJson toJson() const final;
   void serialize(VersionProtobuf* versionProtobuf) const final;
   void switchDataForm() final;
-
+  [[nodiscard]] bool isSet() const final;
   bool operator==(const IPCore<VersionProtobuf>& version) const final;
   bool operator!=(const IPCore<VersionProtobuf>& version) const final;
 

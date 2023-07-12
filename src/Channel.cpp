@@ -118,7 +118,13 @@ Channel::Channel(const ChannelProtobuf& channelProtobuf)
           return SensorTypeProtobuf::SENSOR_TYPE_NONE;
         }
       }()),
-      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
+      dataForm([&]() {
+        if (channelProtobuf.has_ppg_metadata() || channelProtobuf.has_acc_metadata() || !channelProtobuf.differential_blocks().empty()) {
+          return DataForm::DATA_FORM_DIFFERENTIAL;
+        } else {
+          return DataForm::DATA_FORM_NONE;
+        }
+      }()) {}
 
 Channel::Channel()
     : ppgMetaData(PpgMetaData()),
@@ -194,6 +200,9 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
   if (channelProtobuf == nullptr) {
     throw std::invalid_argument("Error in serialize: differentialBlockProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   if (accMetaData.isSet() == ppgMetaData.isSet()) {
     throw std::invalid_argument("just one type of MetaData can be initialized");
   }
@@ -215,15 +224,31 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
 }
 
 void Channel::switchDataForm(const BlockIdxs& blockIdxs) {
+  if (!this->isSet()) {
+    return;
+  }
   this->differentialBlocks = this->calculateDifferentialBlocks(this->absoluteBlock, blockIdxs);
   this->absoluteBlock = AbsoluteBlock();
   this->dataForm = DataForm::DATA_FORM_DIFFERENTIAL;
 }
 
 void Channel::switchDataForm() {
+  if (!this->isSet()) {
+    return;
+  }
   this->absoluteBlock = this->calculateAbsoluteBlock(this->differentialBlocks);
   this->differentialBlocks = DifferentialBlocks();
   this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
+}
+
+bool Channel::isSet() const {
+  for (auto& differentialBlock : this->differentialBlocks) {
+    if (differentialBlock.isSet()) {
+      return true;
+    }
+  }
+  return this->ppgMetaData.isSet() || accMetaData.isSet() || absoluteBlock.isSet() || sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE ||
+         dataForm != DataForm::DATA_FORM_NONE;
 }
 
 DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const {
@@ -297,6 +322,9 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differen
 
 ChannelJson Channel::toJson() const {
   ChannelJson channelJson;
+  if (!this->isSet()) {
+    return channelJson;
+  }
   switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       AbsoluteBlockJson absoluteBlockJson(this->absoluteBlock.toJson());

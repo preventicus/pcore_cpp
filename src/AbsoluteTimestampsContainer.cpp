@@ -57,6 +57,13 @@ bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& 
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
+  if (!this->isSet()) {
+    return absoluteTimestampsContainerJson;
+  }
   absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = PcoreJson::Convert::vectorToJson(this->unixTimestamps_ms);
   return absoluteTimestampsContainerJson;
+}
+
+bool AbsoluteTimestampsContainer::isSet() const {
+  return !this->unixTimestamps_ms.empty();
 }

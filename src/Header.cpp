@@ -42,9 +42,13 @@ Header::Header(Version version, TimeZoneOffset timeZoneOffset_min, DataForm data
 }
 
 Header::Header(const HeaderProtobuf& headerProtobuf)
-    : timeZoneOffset_min(headerProtobuf.time_zone_offset_min()),
-      pcoreVersion(Version(headerProtobuf.pcore_version())),
-      dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {
+    : timeZoneOffset_min(headerProtobuf.time_zone_offset_min()), pcoreVersion(Version(headerProtobuf.pcore_version())), dataForm([&]() {
+        if (headerProtobuf.has_pcore_version()) {
+          return DataForm::DATA_FORM_DIFFERENTIAL;
+        } else {
+          return DataForm::DATA_FORM_NONE;
+        }
+      }()) {
   this->checkTimeZoneOffset();
 }
 
@@ -85,6 +89,9 @@ void Header::serialize(HeaderProtobuf* headerProtobuf) const {
   if (headerProtobuf == nullptr) {
     throw std::invalid_argument("Error in serialize: headerProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   headerProtobuf->set_time_zone_offset_min(this->timeZoneOffset_min);
   VersionProtobuf versionProtobuf;
   this->pcoreVersion.serialize(&versionProtobuf);
@@ -92,6 +99,9 @@ void Header::serialize(HeaderProtobuf* headerProtobuf) const {
 }
 
 void Header::switchDataForm() {
+  if (!this->isSet()) {
+    return;
+  }
   switch (this->dataForm) {
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       this->dataForm = DATA_FORM_ABSOLUTE;
@@ -102,18 +112,25 @@ void Header::switchDataForm() {
       break;
     }
     default: {
-      throw std::runtime_error("DataForm is NONE");
+      throw std::runtime_error("DataForm is NONE");  // should not happen, since it is intercepted by isSet guard above
     }
   }
 }
 
 HeaderJson Header::toJson() const {
   HeaderJson headerJson;
-  TimeZoneOffsetJson timeZoneOffset_min(this->timeZoneOffset_min);
-  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffset_min;
+  if (!this->isSet()) {
+    return headerJson;
+  }
+  TimeZoneOffsetJson timeZoneOffsetJson(this->timeZoneOffset_min);
+  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffsetJson;
   headerJson[PcoreJson::Key::pcore_version] = this->pcoreVersion.toJson();
   headerJson[PcoreJson::Key::data_form] = PcoreJson::Convert::dataFormToString(this->dataForm);
   return headerJson;
+}
+
+bool Header::isSet() const {
+  return this->timeZoneOffset_min != 0 || this->pcoreVersion.isSet() || this->dataForm != DataForm::DATA_FORM_NONE;
 }
 
 void Header::checkTimeZoneOffset() const {

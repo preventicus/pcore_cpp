@@ -226,10 +226,12 @@ TEST(ChannelTest, TestSerializeThrowNullPtr) {
   EXPECT_THROW(channel.serialize(channelProtobuf), std::invalid_argument);
 }
 
-TEST(ChannelTest, TestSerializeThrowChannelEmpty) {
-  auto channel = ChannelExampleFactory::channelEmpty();
+TEST(ChannelTest, TestSerializeWithChannelEmpty) {
+  auto channel1 = ChannelExampleFactory::channelEmpty();
   ChannelProtobuf channelProtobuf;
-  EXPECT_THROW(channel.serialize(&channelProtobuf), std::invalid_argument);
+  channel1.serialize(&channelProtobuf);
+  auto channel2 = Channel(channelProtobuf);
+  EXPECT_TRUE(channel1 == channel2);
 }
 
 TEST(ChannelTest, TestSerializeNoThrow) {

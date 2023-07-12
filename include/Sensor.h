@@ -65,7 +65,7 @@ class Sensor final : public IPCore<SensorProtobuf> {
   [[nodiscard]] Duration getDuration_ms() const;
   [[nodiscard]] DataForm getDataFrom() const;
 
-  // bool isSet();
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] SensorJson toJson() const final;
   void serialize(SensorProtobuf* sensorProtobuf) const final;
   void switchDataForm() final;

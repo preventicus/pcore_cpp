@@ -91,10 +91,13 @@ Sensor SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm() {
   return Sensor(channels, differentialTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_PPG);
 }
 
-SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor, DataForm dataForm) {
+SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor) {
   SensorJson sensorJson;
+  if (!sensor.isSet()) {
+    return sensorJson;
+  }
   ChannelsJson channelsJson;
-  switch (dataForm) {
+  switch (sensor.getDataFrom()) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       auto absoluteTimestampsContainer = sensor.getAbsoluteTimestampsContainer();
       sensorJson[PcoreJson::Key::absolute_timestamps_container] =

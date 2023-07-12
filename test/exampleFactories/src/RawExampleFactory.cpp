@@ -81,12 +81,15 @@ Raw RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm() {
   return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
-RawJson RawExampleFactory::buildRawJson(Raw raw, DataForm dataForm) {
+RawJson RawExampleFactory::buildRawJson(Raw raw) {
   RawJson rawJson;
+  if (!raw.isSet()) {
+    return rawJson;
+  }
   SensorsJson sensorsJson(Json::arrayValue);
   auto sensors = raw.getSensors();
   for (auto& sensor : sensors) {
-    SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor, dataForm);
+    SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor);
     sensorsJson.append(sensorJson);
   }
   rawJson[PcoreJson::Key::sensors] = sensorsJson;

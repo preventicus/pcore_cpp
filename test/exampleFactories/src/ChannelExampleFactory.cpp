@@ -89,6 +89,9 @@ Channel ChannelExampleFactory::channelEmpty() {
 
 ChannelJson ChannelExampleFactory::buildChannelJson(Channel channel) {
   ChannelJson channelJson;
+  if (!channel.isSet()) {
+    return channelJson;
+  }
   if (channel.hasAbsoluteBlock() && channel.hasAccMetaData()) {
     auto absoluteBlock = channel.getAbsoluteBlock();
     channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);

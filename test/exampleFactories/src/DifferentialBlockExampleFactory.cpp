@@ -89,9 +89,12 @@ DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJ
 }
 
 DifferentialBlockJson DifferentialBlockExampleFactory::buildDifferentialBlockJson(DifferentialBlock differentialBlock) {
+  DifferentialBlockJson differentialBlockJson;
+  if (!differentialBlock.isSet()) {
+    return differentialBlockJson;
+  }
   auto differentialValues = differentialBlock.getDifferentialValues();
   auto differentialValuesJson = DifferentialValuesExampleFactory::buildDifferentialValuesJson(differentialValues);
-  DifferentialBlockJson differentialBlockJson;
   differentialBlockJson[PcoreJson::Key::differential_values] = differentialValuesJson;
   return differentialBlockJson;
 }

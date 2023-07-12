@@ -53,7 +53,7 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
   [[nodiscard]] Wavelength getWavelength_nm() const;
   [[nodiscard]] bool hasColor() const;
   [[nodiscard]] bool hasWavelength() const;
-  [[nodiscard]] bool isSet() const;
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] PpgMetaDataJson toJson() const final;
 
   void serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const final;

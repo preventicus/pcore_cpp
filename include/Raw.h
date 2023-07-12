@@ -56,6 +56,7 @@ class Raw final : public IPCore<RawProtobuf> {
   [[nodiscard]] RawJson toJson() const final;
   void serialize(RawProtobuf* rawProtobuf) const final;
   void switchDataForm() final;
+  [[nodiscard]] bool isSet() const final;
 
   bool operator==(const IPCore<RawProtobuf>& raw) const final;
   bool operator!=(const IPCore<RawProtobuf>& raw) const final;

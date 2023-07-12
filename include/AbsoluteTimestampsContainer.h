@@ -49,6 +49,7 @@ class AbsoluteTimestampsContainer final {
 
   [[nodiscard]] UnixTimestamps getUnixTimestamps_ms() const;
   [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const;
+  [[nodiscard]] bool isSet() const;
 
   bool operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;
   bool operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;

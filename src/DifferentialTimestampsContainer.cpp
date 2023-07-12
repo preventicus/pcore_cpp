@@ -109,9 +109,12 @@ UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock
 }
 
 DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() const {
+  DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
+  if (!this->isSet()) {
+    return differentialTimestampsContainerJson;
+  }
   UnixTimestampJson firstUnixTimestampJson(Json::uintValue);
   firstUnixTimestampJson = this->firstUnixTimestamp_ms;
-  DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
   differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms] = firstUnixTimestampJson;
   differentialTimestampsContainerJson[PcoreJson::Key::block_differences_ms] = PcoreJson::Convert::vectorToJson(this->blockDifferences_ms);
   differentialTimestampsContainerJson[PcoreJson::Key::timestamps_differences_ms] = PcoreJson::Convert::vectorToJson(this->timestampsDifferences_ms);
@@ -121,6 +124,9 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() co
 void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const {
   if (differentialTimestampsContainerProtobuf == nullptr) {
     throw std::invalid_argument("Error in serialize: differentialTimestampsContainerProtobuf is a null pointer");
+  }
+  if (!this->isSet()) {
+    return;
   }
   for (auto& blockDifference_ms : this->blockDifferences_ms) {
     differentialTimestampsContainerProtobuf->add_block_differences_ms(blockDifference_ms);
@@ -133,4 +139,8 @@ void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerPr
 
 void DifferentialTimestampsContainer::switchDataForm() {
   throw std::runtime_error("should not be called");  // TODO unittest
+}
+
+bool DifferentialTimestampsContainer::isSet() const {
+  return this->firstUnixTimestamp_ms != 0 || !this->blockDifferences_ms.empty() || !this->timestampsDifferences_ms.empty();
 }

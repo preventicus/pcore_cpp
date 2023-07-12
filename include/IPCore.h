@@ -40,6 +40,7 @@ class IPCore {
   virtual void serialize(T* protobuf) const = 0;
   [[nodiscard]] virtual Json::Value toJson() const = 0;
   virtual void switchDataForm() = 0;
+  [[nodiscard]] virtual bool isSet() const = 0;
 
   virtual bool operator==(const IPCore& pcore) const = 0;
   virtual bool operator!=(const IPCore& pcore) const = 0;

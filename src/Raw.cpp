@@ -84,6 +84,9 @@ void Raw::serialize(RawProtobuf* rawProtobuf) const {
   if (rawProtobuf == nullptr) {
     throw std::invalid_argument("rawProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   for (auto& sensor : this->sensors) {
     auto* sensorProtobuf = rawProtobuf->add_sensors();
     sensor.serialize(sensorProtobuf);
@@ -91,6 +94,9 @@ void Raw::serialize(RawProtobuf* rawProtobuf) const {
 }
 
 void Raw::switchDataForm() {
+  if (!this->isSet()) {
+    return;
+  }
   for (auto& sensor : this->sensors) {
     sensor.switchDataForm();
   }
@@ -104,13 +110,20 @@ void Raw::switchDataForm() {
       break;
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::runtime_error("dataForm is NONE");  // TODO unittest
+      throw std::runtime_error("dataForm is NONE");  // should not happen, since it is intercepted by isSet guard above
     }
   }
 }
 
 RawJson Raw::toJson() const {
   RawJson rawJson;
+  if (!this->isSet()) {
+    return rawJson;
+  }
   rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::vectorToJson(this->sensors);
   return rawJson;
+}
+
+bool Raw::isSet() const {
+  return !this->sensors.empty() || this->dataForm != DataForm::DATA_FORM_NONE;
 }

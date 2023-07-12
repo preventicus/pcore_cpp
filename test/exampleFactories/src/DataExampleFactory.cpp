@@ -70,10 +70,13 @@ Data DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm() {
 
 Json::Value DataExampleFactory::buildDataJson(Data data) {
   DataJson dataJson;
+  if (!data.isSet()) {
+    return dataJson;
+  }
   auto header = data.getHeader();
   auto raw = data.getRaw();
   dataJson[PcoreJson::Key::header] = HeaderExampleFactory::buildHeaderJson(header);
-  dataJson[PcoreJson::Key::raw] = RawExampleFactory::buildRawJson(raw, header.getDataForm());
+  dataJson[PcoreJson::Key::raw] = RawExampleFactory::buildRawJson(raw);
   Json::Value json;
   json[PcoreJson::Key::data] = dataJson;
   return json;

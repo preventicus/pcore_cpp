@@ -52,7 +52,7 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
   [[nodiscard]] NormProtobuf getNorm() const;
   [[nodiscard]] bool hasNorm() const;
   [[nodiscard]] bool hasCoordinate() const;
-  [[nodiscard]] bool isSet() const;
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] AccMetaDataJson toJson() const final;
   void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const final;
   void switchDataForm() final;

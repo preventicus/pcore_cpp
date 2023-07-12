@@ -38,6 +38,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(AccMetaData accMetaData) {
   AccMetaDataJson accMetaDataJson;
+  if (!accMetaData.isSet()) {
+    return accMetaDataJson;
+  }
   if (accMetaData.hasCoordinate()) {
     accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(accMetaData.getCoordinate());
   } else if (accMetaData.hasNorm()) {

@@ -75,6 +75,9 @@ void Version::serialize(VersionProtobuf* versionProtobuf) const {
   if (versionProtobuf == nullptr) {
     throw std::invalid_argument("Error in serialize: versionProtobuf is a null pointer");
   }
+  if (!this->isSet()) {
+    return;
+  }
   versionProtobuf->set_major(this->major);
   versionProtobuf->set_minor(this->minor);
   versionProtobuf->set_patch(this->patch);
@@ -85,12 +88,19 @@ void Version::switchDataForm() {
 }
 
 VersionJson Version::toJson() const {
+  VersionJson versionJson;
+  if (!this->isSet()) {
+    return versionJson;
+  }
   MajorJson majorJson(this->major);
   MinorJson minorJson(this->minor);
   PatchJson patchJson(this->patch);
-  VersionJson versionJson;
   versionJson[PcoreJson::Key::major] = majorJson;
   versionJson[PcoreJson::Key::minor] = minorJson;
   versionJson[PcoreJson::Key::patch] = patchJson;
   return versionJson;
+}
+
+bool Version::isSet() const {
+  return this->major != 0 || this->minor != 0 || this->patch != 0;  // TODO Unittests
 }

@@ -66,10 +66,11 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest() 
 
 AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock) {
   AbsoluteBlockJson absoluteBlockJson;
-  if (absoluteBlock.isSet()) {
-    auto absoluteValues = absoluteBlock.getAbsoluteValues();
-    auto absoluteValuesJson = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(absoluteValues);
-    absoluteBlockJson[PcoreJson::Key::absolute_values] = absoluteValuesJson;
+  if (!absoluteBlock.isSet()) {
+    return absoluteBlockJson;
   }
+  auto absoluteValues = absoluteBlock.getAbsoluteValues();
+  auto absoluteValuesJson = AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(absoluteValues);
+  absoluteBlockJson[PcoreJson::Key::absolute_values] = absoluteValuesJson;
   return absoluteBlockJson;
 }

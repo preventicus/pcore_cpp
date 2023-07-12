@@ -56,6 +56,7 @@ class Data final : public IPCore<DataProtobuf> {
   [[nodiscard]] DataJson toJson() const final;
   void serialize(DataProtobuf* dataProtobuf) const final;
   void switchDataForm() final;
+  [[nodiscard]] bool isSet() const final;
 
   bool operator==(const IPCore<DataProtobuf>& data) const final;
   bool operator!=(const IPCore<DataProtobuf>& data) const final;
