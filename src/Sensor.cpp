@@ -205,7 +205,7 @@ UnixTimestamp Sensor::getFirstUnixTimestamp_ms() const {
       return this->differentialTimestampsContainer.getFirstUnixTimestamp_ms();
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::invalid_argument("dataForm is none");
+      throw std::runtime_error("dataForm is none");
     }
   }
 }
@@ -229,7 +229,7 @@ UnixTimestamp Sensor::getLastUnixTimestamp_ms() const {
       return firstUnixTimestampInLastBlock + timestampsDifferences_ms.back() * (nLastBlock - 1);
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::invalid_argument("dataForm is none");
+      throw std::runtime_error("dataForm is none");
     }
   }
 }
