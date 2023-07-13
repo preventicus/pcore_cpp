@@ -94,7 +94,7 @@ Version VersionExampleFactory::versionEmpty() {
   return Version();
 }
 
-VersionJson VersionExampleFactory::buildVersionJson(Version version) {
+VersionJson VersionExampleFactory::buildVersionJson(const Version& version) {
   VersionJson versionJson;
   if (!version.isSet()) {
     return versionJson;

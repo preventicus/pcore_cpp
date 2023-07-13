@@ -47,5 +47,5 @@ class DataExampleFactory {
   static Data dataWithRawForSwitchDataFormTestInAbsoluteForm();
   static Data dataWithRawForSwitchDataFormTestInDifferentialForm();
 
-  static Json::Value buildDataJson(Data data);
+  static Json::Value buildDataJson(const Data& data);
 };

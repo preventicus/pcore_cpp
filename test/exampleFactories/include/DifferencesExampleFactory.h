@@ -49,6 +49,6 @@ class DifferencesExampleFactory {
   static BlockDifferences blockDifferencesForSwitchDataFormTest();
   static TimestampsDifferences timestampsDifferencesForSwitchDataFromTest();
 
-  static TimestampsDifferencesJson buildTimestampsDifferencesJson(TimestampsDifferences timestampsDifferences);
-  static BlockDifferencesJson buildBlockDifferencesJson(BlockDifferences blockDifferences);
+  static TimestampsDifferencesJson buildTimestampsDifferencesJson(const TimestampsDifferences& timestampsDifferences);
+  static BlockDifferencesJson buildBlockDifferencesJson(const BlockDifferences& blockDifferences);
 };

@@ -79,7 +79,7 @@ UnixTimestamp UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormT
   return 1677696136587;
 }
 
-UnixTimestampsJson UnixTimestampsExampleFactory::buildUnixTimestampsJson(UnixTimestamps unixTimestamps_ms) {
+UnixTimestampsJson UnixTimestampsExampleFactory::buildUnixTimestampsJson(const UnixTimestamps& unixTimestamps_ms) {
   UnixTimestampsJson unixTimestampsJson(Json::arrayValue);
   for (auto& unixTimestamp_ms : unixTimestamps_ms) {
     unixTimestampsJson.append(unixTimestamp_ms);

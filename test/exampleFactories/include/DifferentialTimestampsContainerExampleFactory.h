@@ -47,5 +47,5 @@ class DifferentialTimestampsContainerExampleFactory {
   static DifferentialTimestampsContainer differentialTimestampsContainerForSwitchDataFormTest();
 
   static DifferentialTimestampsContainerJson buildDifferentialTimestampsContainerJson(
-      DifferentialTimestampsContainer differentialTimestampsContainer);
+      const DifferentialTimestampsContainer& differentialTimestampsContainer);
 };

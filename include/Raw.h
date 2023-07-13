@@ -49,7 +49,7 @@ class Raw final : public IPCore<RawProtobuf> {
   explicit Raw(Sensors sensors, DataForm dataForm);
   explicit Raw(const RawProtobuf& rawProtobuf);
   explicit Raw(const RawJson& rawJson, DataForm dataForm);
-  Raw();
+  explicit Raw();
 
   [[nodiscard]] Sensors getSensors() const;
   [[nodiscard]] DataForm getDataFrom() const;

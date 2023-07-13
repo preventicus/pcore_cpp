@@ -172,8 +172,13 @@ bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const {
       return false;
     }
   }
-  return this->accMetaData == derived->accMetaData && this->ppgMetaData == derived->ppgMetaData && this->absoluteBlock == derived->absoluteBlock &&
-         this->sensorType == derived->sensorType && this->dataForm == derived->dataForm;  // TODO add unittests for sensortype and dataform
+  // clang-format off
+  return this->accMetaData == derived->accMetaData
+      && this->ppgMetaData == derived->ppgMetaData
+      && this->absoluteBlock == derived->absoluteBlock
+      && this->sensorType == derived->sensorType
+      && this->dataForm == derived->dataForm;  // TODO add unittests for sensortype and dataform
+  // clang-format off
 }
 
 bool Channel::operator!=(const IPCore<ChannelProtobuf>& channel) const {
@@ -217,7 +222,7 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
   } else {
     throw std::invalid_argument("SensorType is not set");
   }
-  for (auto& differentialBlock : this->differentialBlocks) {
+  for (const auto& differentialBlock : this->differentialBlocks) {
     auto* differentialBlockProtobuf = channelProtobuf->add_differential_blocks();
     differentialBlock.serialize(differentialBlockProtobuf);
   }
@@ -242,13 +247,18 @@ void Channel::switchDataForm() {
 }
 
 bool Channel::isSet() const {
-  for (auto& differentialBlock : this->differentialBlocks) {
+  for (const auto& differentialBlock : this->differentialBlocks) {
     if (differentialBlock.isSet()) {
       return true;
     }
   }
-  return this->ppgMetaData.isSet() || accMetaData.isSet() || absoluteBlock.isSet() || sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE ||
-         dataForm != DataForm::DATA_FORM_NONE;
+  // clang-format off
+  return this->ppgMetaData.isSet()
+      || accMetaData.isSet()
+      || absoluteBlock.isSet()
+      || sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
+      || dataForm != DataForm::DATA_FORM_NONE;
+  // clang-format on
 }
 
 DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const {
@@ -306,13 +316,13 @@ DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx,
 AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const {
   AbsoluteValues absoluteValues;
   size_t numberOfElements = 0;
-  for (auto& differentialBlock : differentialBlocks) {
+  for (const auto& differentialBlock : differentialBlocks) {
     numberOfElements += differentialBlock.getDifferentialValues().size();
   }
   absoluteValues.reserve(numberOfElements);
-  for (auto& differentialBlock : differentialBlocks) {
+  for (const auto& differentialBlock : differentialBlocks) {
     AbsoluteValue absoluteValue = 0;
-    for (auto& differentialValue : differentialBlock.getDifferentialValues()) {
+    for (const auto& differentialValue : differentialBlock.getDifferentialValues()) {
       absoluteValue += differentialValue;
       absoluteValues.push_back(absoluteValue);
     }

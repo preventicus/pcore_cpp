@@ -87,7 +87,7 @@ void Raw::serialize(RawProtobuf* rawProtobuf) const {
   if (!this->isSet()) {
     return;
   }
-  for (auto& sensor : this->sensors) {
+  for (const auto& sensor : this->sensors) {
     auto* sensorProtobuf = rawProtobuf->add_sensors();
     sensor.serialize(sensorProtobuf);
   }
@@ -125,5 +125,10 @@ RawJson Raw::toJson() const {
 }
 
 bool Raw::isSet() const {
-  return !this->sensors.empty() || this->dataForm != DataForm::DATA_FORM_NONE;
+  for (const auto& sensor : this->sensors) {
+    if (sensor.isSet()) {
+      return true;
+    }
+  }
+  return this->dataForm != DataForm::DATA_FORM_NONE;
 }

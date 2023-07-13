@@ -50,7 +50,7 @@ class Header final : public IPCore<HeaderProtobuf> {
   explicit Header(Version version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
   explicit Header(const HeaderProtobuf& headerProtobuf);
   explicit Header(const HeaderJson& header);
-  Header();
+  explicit Header();
 
   [[nodiscard]] TimeZoneOffset getTimeZoneOffset() const;
   [[nodiscard]] Version getPcoreVersion() const;

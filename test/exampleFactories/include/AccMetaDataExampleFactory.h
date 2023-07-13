@@ -46,5 +46,5 @@ class AccMetaDataExampleFactory {
   static AccMetaData accMetaDataWithCoordinateNone();
   static AccMetaData accMetaDataNotSet();
 
-  static AccMetaDataJson buildAccMetaDataJson(AccMetaData accMetaData);
+  static AccMetaDataJson buildAccMetaDataJson(const AccMetaData& accMetaData);
 };

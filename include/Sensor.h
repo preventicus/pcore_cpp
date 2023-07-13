@@ -54,7 +54,7 @@ class Sensor final : public IPCore<SensorProtobuf> {
   explicit Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
   explicit Sensor(const SensorJson& sensorJson, DataForm dataForm);
   explicit Sensor(const SensorProtobuf& sensorProtobuf);
-  Sensor();
+  explicit Sensor();
 
   [[nodiscard]] SensorTypeProtobuf getSensorType() const;
   [[nodiscard]] Channels getChannels() const;

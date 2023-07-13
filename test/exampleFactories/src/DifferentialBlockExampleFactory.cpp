@@ -80,7 +80,7 @@ DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksForTestSer
   return {DifferentialBlock(differentialValues1), DifferentialBlock(differentialValues2)};
 }
 
-DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJson(DifferentialBlocks differentialBlocks) {
+DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJson(const DifferentialBlocks& differentialBlocks) {
   DifferentialBlocksJson differentialBlocksJson;
   for (auto& differentialBlock : differentialBlocks) {
     differentialBlocksJson.append(DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock));
@@ -88,7 +88,7 @@ DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJ
   return differentialBlocksJson;
 }
 
-DifferentialBlockJson DifferentialBlockExampleFactory::buildDifferentialBlockJson(DifferentialBlock differentialBlock) {
+DifferentialBlockJson DifferentialBlockExampleFactory::buildDifferentialBlockJson(const DifferentialBlock& differentialBlock) {
   DifferentialBlockJson differentialBlockJson;
   if (!differentialBlock.isSet()) {
     return differentialBlockJson;

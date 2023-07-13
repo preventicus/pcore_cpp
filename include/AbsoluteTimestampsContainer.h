@@ -45,7 +45,7 @@ class AbsoluteTimestampsContainer final {
  public:
   explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms);
   explicit AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson);
-  AbsoluteTimestampsContainer();
+  explicit AbsoluteTimestampsContainer();
 
   [[nodiscard]] UnixTimestamps getUnixTimestamps_ms() const;
   [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;

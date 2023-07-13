@@ -47,7 +47,7 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
   explicit PpgMetaData(Wavelength wavelength_nm);
   explicit PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf);
   explicit PpgMetaData(const PpgMetaDataJson& ppgMetaData);
-  PpgMetaData();
+  explicit PpgMetaData();
 
   [[nodiscard]] ColorProtobuf getColor() const;
   [[nodiscard]] Wavelength getWavelength_nm() const;

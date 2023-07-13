@@ -52,7 +52,7 @@ class Version final : public IPCore<VersionProtobuf> {
   explicit Version(Major major, Minor minor, Patch patch);
   explicit Version(const VersionProtobuf& versionProtobuf);
   explicit Version(const VersionJson& jsonVersion);
-  Version();
+  explicit Version();
 
   [[nodiscard]] Major getMajor() const;
   [[nodiscard]] Minor getMinor() const;

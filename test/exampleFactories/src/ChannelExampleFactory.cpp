@@ -87,7 +87,7 @@ Channel ChannelExampleFactory::channelEmpty() {
   return Channel();
 }
 
-ChannelJson ChannelExampleFactory::buildChannelJson(Channel channel) {
+ChannelJson ChannelExampleFactory::buildChannelJson(const Channel& channel) {
   ChannelJson channelJson;
   if (!channel.isSet()) {
     return channelJson;

@@ -81,7 +81,7 @@ Raw RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm() {
   return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
-RawJson RawExampleFactory::buildRawJson(Raw raw) {
+RawJson RawExampleFactory::buildRawJson(const Raw& raw) {
   RawJson rawJson;
   if (!raw.isSet()) {
     return rawJson;

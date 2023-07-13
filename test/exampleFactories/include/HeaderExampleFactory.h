@@ -55,5 +55,5 @@ class HeaderExampleFactory {
 
   static Header headerEmpty();
 
-  static HeaderJson buildHeaderJson(Header header);
+  static HeaderJson buildHeaderJson(const Header& header);
 };

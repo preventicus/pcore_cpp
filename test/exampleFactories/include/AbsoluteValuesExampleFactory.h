@@ -48,5 +48,5 @@ class AbsoluteValuesExampleFactory {
   static AbsoluteValues absoluteJsonDataValuesAcc();
   static AbsoluteValues absoluteValuesWithOneValueInLastBlock();
 
-  static AbsoluteValuesJson buildAbsoluteValuesJson(AbsoluteValues absoluteValues);
+  static AbsoluteValuesJson buildAbsoluteValuesJson(const AbsoluteValues& absoluteValues);
 };

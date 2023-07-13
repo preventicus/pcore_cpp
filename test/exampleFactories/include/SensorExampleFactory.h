@@ -52,5 +52,5 @@ class SensorExampleFactory {
   static Sensor sensorForSwitchDataFromTestInAbsoluteForm();
   static Sensor sensorForSwitchDataFromTestInDifferentialForm();
 
-  static SensorJson buildSensorJson(Sensor sensor);
+  static SensorJson buildSensorJson(const Sensor& sensor);
 };

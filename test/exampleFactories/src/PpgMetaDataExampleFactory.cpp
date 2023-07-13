@@ -66,7 +66,7 @@ PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
   return PpgMetaData();
 }
 
-PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(PpgMetaData ppgMetaData) {
+PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(const PpgMetaData& ppgMetaData) {
   PpgMetaDataJson ppgMetaDataJson;
   if (!ppgMetaData.isSet()) {
     return ppgMetaDataJson;

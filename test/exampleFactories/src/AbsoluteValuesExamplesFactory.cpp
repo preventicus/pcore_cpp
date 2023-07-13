@@ -80,9 +80,9 @@ AbsoluteValues AbsoluteValuesExampleFactory::absoluteJsonDataValuesAcc() {
   return {548, 34, 234, 3435, 433, 454};
 }
 
-AbsoluteValuesJson AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(AbsoluteValues absoluteValues) {
+AbsoluteValuesJson AbsoluteValuesExampleFactory::buildAbsoluteValuesJson(const AbsoluteValues& absoluteValues) {
   AbsoluteValuesJson absoluteValuesJson(Json::arrayValue);
-  for (auto& absoluteValue : absoluteValues) {
+  for (const auto& absoluteValue : absoluteValues) {
     absoluteValuesJson.append(absoluteValue);
   }
   return absoluteValuesJson;

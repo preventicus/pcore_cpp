@@ -64,7 +64,7 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest() 
   return AbsoluteBlock(absoluteValues);
 }
 
-AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock) {
+AbsoluteBlockJson AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(const AbsoluteBlock& absoluteBlock) {
   AbsoluteBlockJson absoluteBlockJson;
   if (!absoluteBlock.isSet()) {
     return absoluteBlockJson;

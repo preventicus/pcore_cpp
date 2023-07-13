@@ -50,6 +50,6 @@ class DifferentialBlockExampleFactory {
   static DifferentialBlocks differentialBlocksForSwitchDataFormTest();
   static DifferentialBlocks differentialBlocksForTestSerialize();
 
-  static DifferentialBlocksJson buildDifferentialBlocksJson(DifferentialBlocks differentialBlocks);
-  static DifferentialBlockJson buildDifferentialBlockJson(DifferentialBlock differentialBlock);
+  static DifferentialBlocksJson buildDifferentialBlocksJson(const DifferentialBlocks& differentialBlocks);
+  static DifferentialBlockJson buildDifferentialBlockJson(const DifferentialBlock& differentialBlock);
 };

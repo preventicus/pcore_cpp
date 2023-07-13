@@ -91,7 +91,7 @@ Sensor SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm() {
   return Sensor(channels, differentialTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_PPG);
 }
 
-SensorJson SensorExampleFactory::buildSensorJson(Sensor sensor) {
+SensorJson SensorExampleFactory::buildSensorJson(const Sensor& sensor) {
   SensorJson sensorJson;
   if (!sensor.isSet()) {
     return sensorJson;

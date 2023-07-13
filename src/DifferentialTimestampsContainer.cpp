@@ -133,10 +133,10 @@ void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerPr
   if (!this->isSet()) {
     return;
   }
-  for (auto& blockDifference_ms : this->blockDifferences_ms) {
+  for (const auto& blockDifference_ms : this->blockDifferences_ms) {
     differentialTimestampsContainerProtobuf->add_block_differences_ms(blockDifference_ms);
   }
-  for (auto& timestampsDifference_ms : this->timestampsDifferences_ms) {
+  for (const auto& timestampsDifference_ms : this->timestampsDifferences_ms) {
     differentialTimestampsContainerProtobuf->add_timestamps_differences_ms(timestampsDifference_ms);
   }
   differentialTimestampsContainerProtobuf->set_first_unix_timestamp_ms(this->firstUnixTimestamp_ms);

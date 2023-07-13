@@ -96,7 +96,7 @@ Header HeaderExampleFactory::headerEmpty() {
   return Header();
 }
 
-HeaderJson HeaderExampleFactory::buildHeaderJson(Header header) {
+HeaderJson HeaderExampleFactory::buildHeaderJson(const Header& header) {
   HeaderJson headerJson;
   if (!header.isSet()) {
     return headerJson;

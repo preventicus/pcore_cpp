@@ -72,7 +72,7 @@ void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockPr
   if (!this->isSet()) {
     return;
   }
-  for (auto& differentialValue : this->differentialValues) {
+  for (const auto& differentialValue : this->differentialValues) {
     differentialBlockProtobuf->add_differential_values(differentialValue);
   }
 }

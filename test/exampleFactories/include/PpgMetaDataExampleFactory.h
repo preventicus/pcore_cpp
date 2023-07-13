@@ -47,5 +47,5 @@ class PpgMetaDataExampleFactory {
   static PpgMetaData ppgMetaDataWithWavelength0();
   static PpgMetaData ppgMetaDataNotSet();
 
-  static PpgMetaDataJson buildPpgMetaDataJson(PpgMetaData ppgMetaData);
+  static PpgMetaDataJson buildPpgMetaDataJson(const PpgMetaData& ppgMetaData);
 };

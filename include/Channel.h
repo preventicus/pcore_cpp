@@ -60,7 +60,7 @@ class Channel final : public IPCore<ChannelProtobuf> {
   explicit Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks);
   explicit Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm);
   explicit Channel(const ChannelProtobuf& channelProtobuf);
-  Channel();
+  explicit Channel();
 
   [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const;
   [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const;

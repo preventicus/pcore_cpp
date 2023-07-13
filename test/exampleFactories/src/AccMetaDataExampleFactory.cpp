@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
 
-AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(AccMetaData accMetaData) {
+AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(const AccMetaData& accMetaData) {
   AccMetaDataJson accMetaDataJson;
   if (!accMetaData.isSet()) {
     return accMetaDataJson;

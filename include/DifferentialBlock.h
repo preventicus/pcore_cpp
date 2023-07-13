@@ -52,7 +52,7 @@ class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
   explicit DifferentialBlock(DifferentialValues differentialValues);
   explicit DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf);
   explicit DifferentialBlock(const DifferentialBlockJson& differentialBlockJson);
-  DifferentialBlock();
+  explicit DifferentialBlock();
 
   [[nodiscard]] DifferentialValues getDifferentialValues() const;
   [[nodiscard]] bool isSet() const final;

@@ -49,5 +49,5 @@ class UnixTimestampsExampleFactory {
   static UnixTimestamp lastTimestamp_ms();
   static UnixTimestamp firstUnixTimestampForSwitchDataFormTest_ms();
 
-  static UnixTimestampsJson buildUnixTimestampsJson(UnixTimestamps unixTimestamps_ms);
+  static UnixTimestampsJson buildUnixTimestampsJson(const UnixTimestamps& unixTimestamps_ms);
 };

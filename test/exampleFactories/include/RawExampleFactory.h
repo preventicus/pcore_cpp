@@ -48,5 +48,5 @@ class RawExampleFactory {
   static Raw rawForSwitchDataFormTestInAbsoluteForm();
   static Raw rawForSwitchDataFormTestInDifferentialForm();
 
-  static RawJson buildRawJson(Raw raw);
+  static RawJson buildRawJson(const Raw& raw);
 };

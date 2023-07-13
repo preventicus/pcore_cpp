@@ -46,7 +46,7 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
   explicit AccMetaData(CoordinateProtobuf coordinate);
   explicit AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf);
   explicit AccMetaData(const AccMetaDataJson& accMetaDataJson);
-  AccMetaData();
+  explicit AccMetaData();
 
   [[nodiscard]] CoordinateProtobuf getCoordinate() const;
   [[nodiscard]] NormProtobuf getNorm() const;

@@ -35,7 +35,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
-
 Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
     : sensorType(sensorTypeProtobuf),
       channels(std::move(channels)),
@@ -134,9 +133,12 @@ bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const {
       return false;
     }
   }
-  return this->sensorType == derived->sensorType && this->differentialTimestampsContainer == derived->differentialTimestampsContainer &&
-         this->absoluteTimestampsContainer == derived->absoluteTimestampsContainer &&
-         this->dataForm == derived->dataForm;  // TODO unittest for dataForm
+  // clang-format off
+  return this->sensorType == derived->sensorType
+      && this->differentialTimestampsContainer == derived->differentialTimestampsContainer
+      && this->absoluteTimestampsContainer == derived->absoluteTimestampsContainer
+      && this->dataForm == derived->dataForm;  // TODO unittest for dataForm
+  // clang-format on
 }
 
 bool Sensor::operator!=(const IPCore<SensorProtobuf>& sensor) const {
@@ -144,8 +146,16 @@ bool Sensor::operator!=(const IPCore<SensorProtobuf>& sensor) const {
 }
 
 bool Sensor::isSet() const {
-  return !this->channels.empty() || this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE || this->absoluteTimestampsContainer.isSet() ||
-         this->differentialTimestampsContainer.isSet();
+  for (const auto& channel : this->channels) {
+    if (channel.isSet()) {
+      return true;
+    }
+  }
+  // clang-format off
+  return this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
+      || this->absoluteTimestampsContainer.isSet()
+      || this->differentialTimestampsContainer.isSet();
+  // clang-format on
 }
 
 void Sensor::serialize(SensorProtobuf* sensorProtobuf) const {
@@ -155,7 +165,7 @@ void Sensor::serialize(SensorProtobuf* sensorProtobuf) const {
   if (!this->isSet()) {
     return;
   }
-  for (auto& channel : this->channels) {
+  for (const auto& channel : this->channels) {
     auto* channelProtobuf = sensorProtobuf->add_channels();
     channel.serialize(channelProtobuf);
   }
@@ -272,7 +282,7 @@ BlockIdxs Sensor::findBlockIdxs() const {
 
 AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const {
   if (this->channels.empty()) {
-    return {};
+    return AbsoluteTimestampsContainer();
   }
   const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
   const auto timestampsDifferences_ms = differentialTimestampsContainer.getTimestampsDifferences_ms();
@@ -280,7 +290,7 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
   auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
 
   size_t numberOfElements = 0;
-  for (auto& differentialBlockOfFirstChannel : differentialBlocksOfFirstChannel) {
+  for (const auto& differentialBlockOfFirstChannel : differentialBlocksOfFirstChannel) {
     numberOfElements += differentialBlockOfFirstChannel.getDifferentialValues().size();
   }
   UnixTimestamps unixTimestamps_ms;
@@ -371,7 +381,7 @@ SensorJson Sensor::toJson() const {
 UnixTimestamp Sensor::calculateFirstUnixTimestampInLastBlock() const {
   const auto blockDifferences_ms = this->differentialTimestampsContainer.getBlockDifferences_ms();
   auto firstUnixTimestampInLastBlock = this->getFirstUnixTimestamp_ms();
-  for (auto& blockDifference_ms : blockDifferences_ms) {
+  for (const auto& blockDifference_ms : blockDifferences_ms) {
     firstUnixTimestampInLastBlock += blockDifference_ms;
   }
   return firstUnixTimestampInLastBlock;

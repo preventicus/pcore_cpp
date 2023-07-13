@@ -70,7 +70,7 @@ DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::d
 }
 
 DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(
-    DifferentialTimestampsContainer differentialTimestampsContainer) {
+    const DifferentialTimestampsContainer& differentialTimestampsContainer) {
   DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
   if (!differentialTimestampsContainer.isSet()) {
     return differentialTimestampsContainerJson;

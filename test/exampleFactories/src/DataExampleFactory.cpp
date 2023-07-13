@@ -68,7 +68,7 @@ Data DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm() {
   return Data(raw, header);
 }
 
-Json::Value DataExampleFactory::buildDataJson(Data data) {
+Json::Value DataExampleFactory::buildDataJson(const Data& data) {
   DataJson dataJson;
   if (!data.isSet()) {
     return dataJson;

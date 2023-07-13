@@ -58,5 +58,5 @@ class VersionExampleFactory {
 
   static Version versionEmpty();
 
-  static VersionJson buildVersionJson(Version version);
+  static VersionJson buildVersionJson(const Version& version);
 };

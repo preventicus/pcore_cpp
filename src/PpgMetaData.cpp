@@ -49,7 +49,7 @@ PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
         }
         return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
       }()) {
-  if (this->wavelength_nm != 0 & this->color != ColorProtobuf::COLOR_NONE) {
+  if (this->color != ColorProtobuf::COLOR_NONE && this->wavelength_nm != 0) {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
   }
 }

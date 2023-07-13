@@ -54,5 +54,5 @@ class ChannelExampleFactory {
   static Channel channelWithDifferentialBlocksAndAccMetaData();
   static Channel channelEmpty();
 
-  static ChannelJson buildChannelJson(Channel channel);
+  static ChannelJson buildChannelJson(const Channel& channel);
 };

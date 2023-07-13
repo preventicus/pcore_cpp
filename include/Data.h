@@ -49,7 +49,7 @@ class Data final : public IPCore<DataProtobuf> {
   explicit Data(Raw raw, Header header);
   explicit Data(const DataProtobuf& DataProtobuf);
   explicit Data(const DataJson& dataJson);
-  Data();
+  explicit Data();
 
   [[nodiscard]] Raw getRaw() const;
   [[nodiscard]] Header getHeader() const;

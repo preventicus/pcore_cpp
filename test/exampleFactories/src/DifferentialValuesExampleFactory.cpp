@@ -54,7 +54,7 @@ DifferentialValues DifferentialValuesExampleFactory::differentialValuesEmpty() {
   return {};
 }
 
-DifferentialValuesJson DifferentialValuesExampleFactory::buildDifferentialValuesJson(DifferentialValues differentialValues) {
+DifferentialValuesJson DifferentialValuesExampleFactory::buildDifferentialValuesJson(const DifferentialValues& differentialValues) {
   DifferentialValuesJson differentialValuesJson(Json::arrayValue);
   for (auto& differentialValue : differentialValues) {
     differentialValuesJson.append(differentialValue);

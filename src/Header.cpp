@@ -130,7 +130,11 @@ HeaderJson Header::toJson() const {
 }
 
 bool Header::isSet() const {
-  return this->timeZoneOffset_min != 0 || this->pcoreVersion.isSet() || this->dataForm != DataForm::DATA_FORM_NONE;
+  // clang-format off
+  return this->timeZoneOffset_min != 0
+      || this->pcoreVersion.isSet()
+      || this->dataForm != DataForm::DATA_FORM_NONE;
+  // clang-format on
 }
 
 void Header::checkTimeZoneOffset() const {

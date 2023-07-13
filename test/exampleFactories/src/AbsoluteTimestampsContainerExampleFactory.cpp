@@ -65,7 +65,7 @@ AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteT
 }
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(
-    AbsoluteTimestampsContainer absoluteTimestampsContainer) {
+    const AbsoluteTimestampsContainer& absoluteTimestampsContainer) {
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
   if (!absoluteTimestampsContainer.isSet()) {
     return absoluteTimestampsContainerJson;

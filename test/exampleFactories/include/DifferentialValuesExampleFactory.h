@@ -45,5 +45,5 @@ class DifferentialValuesExampleFactory {
   static DifferentialValues differentialValuesOneElement();
   static DifferentialValues differentialValuesEmpty();
 
-  static DifferentialValuesJson buildDifferentialValuesJson(DifferentialValues differentialValues);
+  static DifferentialValuesJson buildDifferentialValuesJson(const DifferentialValues& differentialValues);
 };

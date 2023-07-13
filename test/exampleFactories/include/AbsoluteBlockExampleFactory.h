@@ -46,5 +46,5 @@ class AbsoluteBlockExampleFactory {
   static AbsoluteBlock absoluteBlockWithEmptyAbsoluteValue();
   static AbsoluteBlock absoluteBlockForSwitchDataFormTest();
 
-  static AbsoluteBlockJson buildAbsoluteBlockJson(AbsoluteBlock absoluteBlock);
+  static AbsoluteBlockJson buildAbsoluteBlockJson(const AbsoluteBlock& absoluteBlock);
 };

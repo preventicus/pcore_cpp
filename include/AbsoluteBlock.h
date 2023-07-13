@@ -45,7 +45,7 @@ class AbsoluteBlock final {
  public:
   explicit AbsoluteBlock(AbsoluteValues absoluteValues);
   explicit AbsoluteBlock(const AbsoluteBlockJson& absoluteBlock);
-  AbsoluteBlock();
+  explicit AbsoluteBlock();
 
   [[nodiscard]] AbsoluteValues getAbsoluteValues() const;
   [[nodiscard]] bool isSet() const;

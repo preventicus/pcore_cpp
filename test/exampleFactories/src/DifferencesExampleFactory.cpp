@@ -74,7 +74,7 @@ TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesForSwitchD
   return {40, 40, 40};
 }
 
-TimestampsDifferencesJson DifferencesExampleFactory::buildTimestampsDifferencesJson(TimestampsDifferences timestampsDifferences) {
+TimestampsDifferencesJson DifferencesExampleFactory::buildTimestampsDifferencesJson(const TimestampsDifferences& timestampsDifferences) {
   TimestampsDifferencesJson timestampsDifferencesJson(Json::arrayValue);
   for (auto& timestampsDifference : timestampsDifferences) {
     timestampsDifferencesJson.append(timestampsDifference);
@@ -82,7 +82,7 @@ TimestampsDifferencesJson DifferencesExampleFactory::buildTimestampsDifferencesJ
   return timestampsDifferencesJson;
 }
 
-BlockDifferencesJson DifferencesExampleFactory::buildBlockDifferencesJson(BlockDifferences blockDifferences) {
+BlockDifferencesJson DifferencesExampleFactory::buildBlockDifferencesJson(const BlockDifferences& blockDifferences) {
   BlockDifferencesJson blockDifferencesJson(Json::arrayValue);
   for (auto& blockDifference_ms : blockDifferences) {
     blockDifferencesJson.append(blockDifference_ms);
