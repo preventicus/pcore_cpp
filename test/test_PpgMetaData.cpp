@@ -181,6 +181,14 @@ TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetaDataWithWavelength255) {
   EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
+TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetaDataNotSet) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  PpgMetaDataProtobuf ppgMetaDataProtobuf;
+  ppgMetaData1.serialize(&ppgMetaDataProtobuf);
+  auto ppgMetaData2 = PpgMetaData(ppgMetaDataProtobuf);
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
+}
+
 TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetDataWithColorRed) {
   auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   PpgMetaDataProtobuf ppgMetaDataProtobuf;

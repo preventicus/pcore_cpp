@@ -257,7 +257,7 @@ TEST(SensorTest, TestToJsonWithSensorPpgWithOneChannelsInAbsoluteForm) {
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
 
-TEST(SensorTest, TestSerizlizeWithSensorAccWithTwoChannelsInDifferentialForm) {
+TEST(SensorTest, TestSerializeWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
   SensorProtobuf sensorProtobuf;
   sensor1.serialize(&sensorProtobuf);

@@ -161,6 +161,14 @@ TEST(AccMetaDataTest, TestIsSetWithAccMetaDataNotSet) {
   EXPECT_FALSE(accMetaData.isSet());
 }
 
+TEST(AccMetaDataTest, TestSerializeWithAccMetaDataNotSet) {
+  auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataNotSet();
+  AccMetaDataProtobuf accMetaDataProtobuf;
+  accMetaData1.serialize(&accMetaDataProtobuf);
+  auto accMetaData2 = AccMetaData(accMetaDataProtobuf);
+  EXPECT_TRUE(accMetaData1 == accMetaData2);
+}
+
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataWithCoordinateX) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   AccMetaDataProtobuf accMetaDataProtobuf;

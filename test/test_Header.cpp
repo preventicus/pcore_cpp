@@ -150,6 +150,14 @@ TEST(HeaderTest, TestSerializeWithHeaderWithVersionWithMajor2Minor1Patch0AndTime
   EXPECT_TRUE(header1 == header2);
 }
 
+TEST(HeaderTest, TestSerializeWithHeaderNotSet) {
+  auto header1 = HeaderExampleFactory::headerEmpty();
+  HeaderProtobuf headerProtobuf;
+  header1.serialize(&headerProtobuf);
+  auto header2 = Header(headerProtobuf);
+  EXPECT_TRUE(header1 == header2);
+}
+
 TEST(HeaderTest, TestSerializeNoThrow) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   HeaderProtobuf headerProtobuf;
