@@ -316,7 +316,7 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
 
   /*
    * blockIdxs.size = 0 -> no timestamps are included
-                            return default Values for emptyBlock
+                            return default Values for not set Block
    * blockIdxs.size = 1 -> case 1 : just one Block with one timestamps
                             return firstTimestamps, BlockDifferences_ms = {0}, timestampsDifference_ms{0}
    *                       case 2 : one Block with certain amount of timestamps with same time differences

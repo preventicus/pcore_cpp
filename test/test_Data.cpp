@@ -54,15 +54,15 @@ TEST(DataTest, TestIsEqualWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneO
   EXPECT_TRUE(data1 == data2);
 }
 
-TEST(DataTest, TestIsEqualWithDataEmpty) {
-  auto data1 = DataExampleFactory::dataEmpty();
-  auto data2 = DataExampleFactory::dataEmpty();
+TEST(DataTest, TestIsEqualWithDataNotSet) {
+  auto data1 = DataExampleFactory::dataNotSet();
+  auto data2 = DataExampleFactory::dataNotSet();
   EXPECT_TRUE(data1 == data2);
 }
 
-TEST(DataTest, TestIsEqualWithDataEmptyAndDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+TEST(DataTest, TestIsEqualWithDataNotSetAndDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
-  auto data2 = DataExampleFactory::dataEmpty();
+  auto data2 = DataExampleFactory::dataNotSet();
   EXPECT_FALSE(data1 == data2);
 }
 
@@ -84,15 +84,15 @@ TEST(DataTest, TestIsNotEqualWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZo
   EXPECT_FALSE(data1 != data2);
 }
 
-TEST(DataTest, TestIsNotEqualWithDataEmpty) {
-  auto data1 = DataExampleFactory::dataEmpty();
-  auto data2 = DataExampleFactory::dataEmpty();
+TEST(DataTest, TestIsNotEqualWithDataNotSet) {
+  auto data1 = DataExampleFactory::dataNotSet();
+  auto data2 = DataExampleFactory::dataNotSet();
   EXPECT_FALSE(data1 != data2);
 }
 
-TEST(DataTest, TestIsNotEqualWithDataEmptyAndDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+TEST(DataTest, TestIsNotEqualWithDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegativeAndDataNotSet) {
   auto data1 = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
-  auto data2 = DataExampleFactory::dataEmpty();
+  auto data2 = DataExampleFactory::dataNotSet();
   EXPECT_TRUE(data1 != data2);
 }
 
@@ -123,7 +123,7 @@ TEST(DataTest, TestSerializeNoThrow) {
 }
 
 TEST(DataTest, TestSerializeThrow) {
-  auto data = DataExampleFactory::dataEmpty();
+  auto data = DataExampleFactory::dataNotSet();
   DataProtobuf* dataProtobuf = nullptr;
   EXPECT_THROW(data.serialize(dataProtobuf), std::invalid_argument);
 }
@@ -142,8 +142,8 @@ TEST(DataTest, TestSwitchDataFormWithDataInDifferentialForm) {
   EXPECT_TRUE(data == dataInAbsoluteForm);
 }
 
-TEST(DataTest, TestToJsonWithDataEmpty) {
-  auto data = DataExampleFactory::dataEmpty();
+TEST(DataTest, TestToJsonWithDataNotSet) {
+  auto data = DataExampleFactory::dataNotSet();
   auto dataJson1 = DataExampleFactory::buildDataJson(data);
   auto dataJson2 = data.toJson();
   EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());

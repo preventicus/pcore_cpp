@@ -49,14 +49,14 @@ UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps_ms() const {
 
 UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestamp_ms() const {  // TODO unittests
   if (!isSet()) {
-    throw std::runtime_error("unixTimestamps_ms is empty");
+    throw std::runtime_error("unixTimestamps_ms is not set");
   }
   return this->unixTimestamps_ms.front();
 }
 
 UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestamp_ms() const {  // TODO unittests
   if (!isSet()) {
-    throw std::runtime_error("unixTimestamps_ms is empty");
+    throw std::runtime_error("unixTimestamps_ms is not set");
   }
   return this->unixTimestamps_ms.back();
 }

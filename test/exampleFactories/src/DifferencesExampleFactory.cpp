@@ -42,11 +42,11 @@ TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesWithThreeZ
   return {0, 0, 0};
 }
 
-BlockDifferences DifferencesExampleFactory::blockDifferencesEmpty() {
+BlockDifferences DifferencesExampleFactory::blockDifferencesNotSet() {
   return {};
 }
 
-TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesEmpty() {
+TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesNotSet() {
   return {};
 }
 

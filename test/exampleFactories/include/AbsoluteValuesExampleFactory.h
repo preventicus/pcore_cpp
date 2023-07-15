@@ -40,7 +40,7 @@ class AbsoluteValuesExampleFactory {
   static AbsoluteValues absoluteValuesWithThreeMixedElements();
   static AbsoluteValues absoluteValuesWithThreeNegativeElements();
   static AbsoluteValues absoluteValuesWithOneElement();
-  static AbsoluteValues absoluteValuesEmpty();
+  static AbsoluteValues absoluteValuesNotSet();
   static AbsoluteValues absoluteValuesForSwitchDataFormTest();
   static AbsoluteValues absoluteValues();
   static AbsoluteValues absoluteJsonDataValuesPpg1();

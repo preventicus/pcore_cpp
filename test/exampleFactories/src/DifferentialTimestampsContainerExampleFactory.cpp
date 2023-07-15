@@ -44,7 +44,7 @@ DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::d
   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
 }
 
-DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty() {
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet() {
   return DifferentialTimestampsContainer();
 }
 

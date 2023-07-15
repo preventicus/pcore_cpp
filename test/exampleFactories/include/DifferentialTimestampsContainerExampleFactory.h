@@ -41,7 +41,7 @@ using namespace PCore;
 class DifferentialTimestampsContainerExampleFactory {
  public:
   static DifferentialTimestampsContainer differentialTimestampsContainerWithThreeBlocks();
-  static DifferentialTimestampsContainer differentialTimestampsContainerEmpty();
+  static DifferentialTimestampsContainer differentialTimestampsContainerNotSet();
   static DifferentialTimestampsContainer differentialTimestampsContainerWithTwoBlocks();
   static DifferentialTimestampsContainer differentialTimestampsContainerWithBigBlocks();
   static DifferentialTimestampsContainer differentialTimestampsContainerForSwitchDataFormTest();

@@ -50,7 +50,7 @@ DifferentialValues DifferentialValuesExampleFactory::differentialValuesOneElemen
   return {123};
 }
 
-DifferentialValues DifferentialValuesExampleFactory::differentialValuesEmpty() {
+DifferentialValues DifferentialValuesExampleFactory::differentialValuesNotSet() {
   return {};
 }
 

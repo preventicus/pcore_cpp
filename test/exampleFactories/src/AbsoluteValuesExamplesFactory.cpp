@@ -50,7 +50,7 @@ AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesWithOneElement() {
   return {12};
 }
 
-AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesEmpty() {
+AbsoluteValues AbsoluteValuesExampleFactory::absoluteValuesNotSet() {
   return {};
 }
 

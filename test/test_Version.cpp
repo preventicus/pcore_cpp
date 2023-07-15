@@ -55,14 +55,14 @@ TEST(VersionTest, TestIsEqualWithVersionWithMajor2Minor1Patch0) {
   EXPECT_TRUE(version1 == version2);
 }
 
-TEST(VersionTest, TestIsEqualWithVersionEmpty) {
-  auto version1 = VersionExampleFactory::versionEmpty();
-  auto version2 = VersionExampleFactory::versionEmpty();
+TEST(VersionTest, TestIsEqualWithVersionNotSet) {
+  auto version1 = VersionExampleFactory::versionNotSet();
+  auto version2 = VersionExampleFactory::versionNotSet();
   EXPECT_TRUE(version1 == version2);
 }
 
-TEST(VersionTest, TestIsEqualWithVersionEmptyAndVersionWithMajor1Minor1Patch0) {
-  auto version1 = VersionExampleFactory::versionEmpty();
+TEST(VersionTest, TestIsEqualWithVersionNotSetAndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionNotSet();
   auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
   EXPECT_FALSE(version1 == version2);
 }
@@ -91,14 +91,14 @@ TEST(VersionTest, TestIsNotEqualWithVersionWithMajor2Minor1Patch0) {
   EXPECT_FALSE(version1 != version2);
 }
 
-TEST(VersionTest, TestIsNotEqualWithVersionEmpty) {
-  auto version1 = VersionExampleFactory::versionEmpty();
-  auto version2 = VersionExampleFactory::versionEmpty();
+TEST(VersionTest, TestIsNotEqualWithVersionNotSet) {
+  auto version1 = VersionExampleFactory::versionNotSet();
+  auto version2 = VersionExampleFactory::versionNotSet();
   EXPECT_FALSE(version1 != version2);
 }
 
-TEST(VersionTest, TestIsNotEqualWithVersionEmptyAndVersionWithMajor1Minor1Patch0) {
-  auto version1 = VersionExampleFactory::versionEmpty();
+TEST(VersionTest, TestIsNotEqualWithVersionNotSetAndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionNotSet();
   auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
   EXPECT_TRUE(version1 != version2);
 }
@@ -128,15 +128,15 @@ TEST(VersionTest, TestToJsonWithVersionWithMajor1Minor1Patch0) {
   EXPECT_TRUE(versionJson1.toStyledString() == versionJson2.toStyledString());
 }
 
-TEST(VersionTest, TestToJsonWithVersionEmpty) {
-  auto version = VersionExampleFactory::versionEmpty();
+TEST(VersionTest, TestToJsonWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
   auto versionJson1 = VersionExampleFactory::buildVersionJson(version);
   auto versionJson2 = version.toJson();
   EXPECT_TRUE(versionJson1.toStyledString() == versionJson2.toStyledString());
 }
 
-TEST(VersionTest, TestSerializeWithVersionEmpty) {
-  auto version1 = VersionExampleFactory::versionEmpty();
+TEST(VersionTest, TestSerializeWithVersionNotSet) {
+  auto version1 = VersionExampleFactory::versionNotSet();
   VersionProtobuf versionProtobuf;
   version1.serialize(&versionProtobuf);
   auto version2 = Version(versionProtobuf);
@@ -158,7 +158,7 @@ TEST(VersionTest, TestSerializeNoThrow) {
 }
 
 TEST(VersionTest, TestSerializeThrow) {
-  auto version = VersionExampleFactory::versionEmpty();
+  auto version = VersionExampleFactory::versionNotSet();
   VersionProtobuf* versionProtobuf = nullptr;
   EXPECT_THROW(version.serialize(versionProtobuf), std::invalid_argument);
 }

@@ -46,7 +46,7 @@ TEST(AccMetaDataTest, TestSetAndGetNorm) {
   EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM);
 }
 
-TEST(AccMetaDataTest, TestSetAndGetEmptyConstructor) {
+TEST(AccMetaDataTest, TestConstructorWithAccMetaDataNotSet) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_EQ(accMetaData.getCoordinate(), CoordinateProtobuf::COORDINATE_NONE);
   EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_NONE);
@@ -82,13 +82,13 @@ TEST(AccMetaDataTest, TestIsEqualCoordinateWithNorm) {
   EXPECT_FALSE(accMetaData1 == accMetaData2);
 }
 
-TEST(AccMetaDataTest, TestIsEqualNormEuclidean) {
+TEST(AccMetaDataTest, TestIsEqualWithAccMetaDataWithNormEuclideanDifferencesNorm) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
   EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
-TEST(AccMetaDataTest, TestIsEqualNotSet) {
+TEST(AccMetaDataTest, TestIsEqualAccMetaDataNotSet) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataNotSet();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_TRUE(accMetaData1 == accMetaData2);

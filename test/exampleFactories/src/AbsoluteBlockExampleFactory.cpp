@@ -54,9 +54,8 @@ AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithOneAbsoluteValue() {
   return AbsoluteBlock(absoluteValues);
 }
 
-AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockWithEmptyAbsoluteValue() {
-  auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesEmpty();
-  return AbsoluteBlock(absoluteValues);
+AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockNotSet() {
+  return AbsoluteBlock();
 }
 
 AbsoluteBlock AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest() {

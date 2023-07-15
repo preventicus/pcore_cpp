@@ -65,7 +65,7 @@ Raw RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm() {
   return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
-Raw RawExampleFactory::rawEmpty() {
+Raw RawExampleFactory::rawNotSet() {
   return Raw();
 }
 

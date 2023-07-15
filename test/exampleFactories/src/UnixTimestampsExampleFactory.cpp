@@ -49,7 +49,7 @@ UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0_ms() {
   return {0};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsEmpty_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsNotSet_ms() {
   return {};
 }
 
@@ -61,7 +61,7 @@ UnixTimestamp UnixTimestampsExampleFactory::firstTimestamp_ms() {
   return 1675732789987;
 }
 
-UnixTimestamp UnixTimestampsExampleFactory::firstTimestampEmpty_ms() {
+UnixTimestamp UnixTimestampsExampleFactory::firstTimestampNotSet_ms() {
   return 0;
 }
 

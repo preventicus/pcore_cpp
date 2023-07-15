@@ -90,7 +90,7 @@ Version VersionExampleFactory::versionWithMajor2Minor1Patch0() {
   return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
 }
 
-Version VersionExampleFactory::versionEmpty() {
+Version VersionExampleFactory::versionNotSet() {
   return Version();
 }
 

@@ -73,7 +73,7 @@ Sensor SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm() {
   return Sensor(channels, differentialTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_ACC);
 }
 
-Sensor SensorExampleFactory::sensorEmpty() {
+Sensor SensorExampleFactory::sensorNotSet() {
   return Sensor();
 }
 

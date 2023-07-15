@@ -62,15 +62,15 @@ TEST(HeaderTest, TestIsEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZo
   EXPECT_TRUE(header1 == header2);
 }
 
-TEST(HeaderTest, TestIsEqualWithHeaderEmpty) {
-  auto header1 = HeaderExampleFactory::headerEmpty();
-  auto header2 = HeaderExampleFactory::headerEmpty();
+TEST(HeaderTest, TestIsEqualWithHeaderNotSet) {
+  auto header1 = HeaderExampleFactory::headerNotSet();
+  auto header2 = HeaderExampleFactory::headerNotSet();
   EXPECT_TRUE(header1 == header2);
 }
 
-TEST(HeaderTest, TestIsEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderEmpty) {
+TEST(HeaderTest, TestIsEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderNotSet) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
-  auto header2 = HeaderExampleFactory::headerEmpty();
+  auto header2 = HeaderExampleFactory::headerNotSet();
   EXPECT_FALSE(header1 == header2);
 }
 
@@ -98,15 +98,15 @@ TEST(HeaderTest, TestIsNotEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTim
   EXPECT_FALSE(header1 != header2);
 }
 
-TEST(HeaderTest, TestIsNotEqualWithHeaderEmpty) {
-  auto header1 = HeaderExampleFactory::headerEmpty();
-  auto header2 = HeaderExampleFactory::headerEmpty();
+TEST(HeaderTest, TestIsNotEqualWithHeaderNotSet) {
+  auto header1 = HeaderExampleFactory::headerNotSet();
+  auto header2 = HeaderExampleFactory::headerNotSet();
   EXPECT_FALSE(header1 != header2);
 }
 
-TEST(HeaderTest, TestIsNotEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderEmpty) {
+TEST(HeaderTest, TestIsNotEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderNotSet) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
-  auto header2 = HeaderExampleFactory::headerEmpty();
+  auto header2 = HeaderExampleFactory::headerNotSet();
   EXPECT_TRUE(header1 != header2);
 }
 
@@ -135,8 +135,8 @@ TEST(HeaderTest, TestToJsonWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZon
   EXPECT_TRUE(headerJson1.toStyledString() == headerJson2.toStyledString());
 }
 
-TEST(HeaderTest, TestToJsonWithHeaderEmpty) {
-  auto header = HeaderExampleFactory::headerEmpty();
+TEST(HeaderTest, TestToJsonWithHeaderNotSet) {
+  auto header = HeaderExampleFactory::headerNotSet();
   auto headerJson1 = HeaderExampleFactory::buildHeaderJson(header);
   auto headerJson2 = header.toJson();
   EXPECT_TRUE(headerJson1.toStyledString() == headerJson2.toStyledString());
@@ -151,7 +151,7 @@ TEST(HeaderTest, TestSerializeWithHeaderWithVersionWithMajor2Minor1Patch0AndTime
 }
 
 TEST(HeaderTest, TestSerializeWithHeaderNotSet) {
-  auto header1 = HeaderExampleFactory::headerEmpty();
+  auto header1 = HeaderExampleFactory::headerNotSet();
   HeaderProtobuf headerProtobuf;
   header1.serialize(&headerProtobuf);
   auto header2 = Header(headerProtobuf);
@@ -165,7 +165,7 @@ TEST(HeaderTest, TestSerializeNoThrow) {
 }
 
 TEST(HeaderTest, TestSerializeThrow) {
-  auto header = HeaderExampleFactory::headerEmpty();
+  auto header = HeaderExampleFactory::headerNotSet();
   HeaderProtobuf* headerProtobuf = nullptr;
   EXPECT_THROW(header.serialize(headerProtobuf), std::invalid_argument);
 }

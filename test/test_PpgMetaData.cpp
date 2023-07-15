@@ -46,7 +46,7 @@ TEST(PpgMetaDataTest, TestSetAndGetWavelength) {
   EXPECT_EQ(ppgMetaData.getWavelength_nm(), 255);
 }
 
-TEST(PpgMetaDataTest, TestSetAndGetEmptyConstructor) {
+TEST(PpgMetaDataTest, TestConstructorPpgMetaDataNotSet) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
   EXPECT_EQ(ppgMetaData.getColor(), ColorProtobuf::COLOR_NONE);
   EXPECT_EQ(ppgMetaData.getWavelength_nm(), 0);

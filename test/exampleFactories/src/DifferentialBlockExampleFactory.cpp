@@ -54,9 +54,8 @@ DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithOneDiffe
   return DifferentialBlock(differentialValues);
 }
 
-DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues() {
-  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesEmpty();
-  return DifferentialBlock(differentialValues);
+DifferentialBlock DifferentialBlockExampleFactory::differentialBlockNotSet() {
+  return DifferentialBlock();
 }
 
 DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksWithThreeMixedDifferentialBlocks() {

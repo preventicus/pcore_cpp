@@ -83,7 +83,7 @@ Channel ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData() {
   return Channel(ppgMetaData, differentialBlocks);
 }
 
-Channel ChannelExampleFactory::channelEmpty() {
+Channel ChannelExampleFactory::channelNotSet() {
   return Channel();
 }
 

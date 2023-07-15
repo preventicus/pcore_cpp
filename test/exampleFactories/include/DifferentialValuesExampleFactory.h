@@ -43,7 +43,7 @@ class DifferentialValuesExampleFactory {
   static DifferentialValues differentialValuesWithThreeMixedElements();
   static DifferentialValues differentialValuesWithThreeNegativeElements();
   static DifferentialValues differentialValuesOneElement();
-  static DifferentialValues differentialValuesEmpty();
+  static DifferentialValues differentialValuesNotSet();
 
   static DifferentialValuesJson buildDifferentialValuesJson(const DifferentialValues& differentialValues);
 };

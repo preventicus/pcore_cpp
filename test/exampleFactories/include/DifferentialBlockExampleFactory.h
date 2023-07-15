@@ -44,7 +44,7 @@ class DifferentialBlockExampleFactory {
   static DifferentialBlock differentialBlockWithThreeMixedDifferentialValues();
   static DifferentialBlock differentialBlockWithThreeNegativeDifferentialValues();
   static DifferentialBlock differentialBlockWithOneDifferentialValues();
-  static DifferentialBlock differentialBlockWithEmptyDifferentialValues();
+  static DifferentialBlock differentialBlockNotSet();
 
   static DifferentialBlocks differentialBlocksWithThreeMixedDifferentialBlocks();
   static DifferentialBlocks differentialBlocksForSwitchDataFormTest();

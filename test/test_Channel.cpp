@@ -118,7 +118,7 @@ TEST(ChannelTest, TestIsEqualWithNotEqualInDifferentialBlock) {
   EXPECT_FALSE(channel1 == channel2);
 }
 
-TEST(ChannelTest, TestIsEqualChannelEmpty) {
+TEST(ChannelTest, TestIsEqualChannelNotSet) {
   auto channel1 = Channel();
   auto channel2 = Channel();
   EXPECT_TRUE(channel1 == channel2);
@@ -178,7 +178,7 @@ TEST(ChannelTest, TestIsNotEqualWithNotEqualInDifferentialBlock) {
   EXPECT_TRUE(channel1 != channel2);
 }
 
-TEST(ChannelTest, TestIsNotEqualChannelEmpty) {
+TEST(ChannelTest, TestIsNotEqualWithChannelNotSet) {
   auto channel1 = Channel();
   auto channel2 = Channel();
   EXPECT_FALSE(channel1 != channel2);
@@ -188,8 +188,8 @@ TEST(ChannelTest, TestSwitchDataForm) {
   BlockIdxs blockIdxs = {0, 11, 20};
   auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest();
   channelWithAbsoluteBlock.switchDataForm(blockIdxs);
-  auto absoluteBlockEmpty = AbsoluteBlock();
-  EXPECT_TRUE(channelWithAbsoluteBlock.getAbsoluteBlock() == absoluteBlockEmpty);
+  auto absoluteBlock = AbsoluteBlock();
+  EXPECT_TRUE(channelWithAbsoluteBlock.getAbsoluteBlock() == absoluteBlock);
   auto expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest();
   auto actualDifferentialBlocks = channelWithAbsoluteBlock.getDifferentialBlocks();
   auto actualDifferentialBlocksSize = actualDifferentialBlocks.size();
@@ -221,13 +221,13 @@ TEST(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndPpgMetaData) 
 }
 
 TEST(ChannelTest, TestSerializeThrowNullPtr) {
-  auto channel = ChannelExampleFactory::channelEmpty();
+  auto channel = ChannelExampleFactory::channelNotSet();
   ChannelProtobuf* channelProtobuf = nullptr;
   EXPECT_THROW(channel.serialize(channelProtobuf), std::invalid_argument);
 }
 
-TEST(ChannelTest, TestSerializeWithChannelEmpty) {
-  auto channel1 = ChannelExampleFactory::channelEmpty();
+TEST(ChannelTest, TestSerializeWithChannelNotSet) {
+  auto channel1 = ChannelExampleFactory::channelNotSet();
   ChannelProtobuf channelProtobuf;
   channel1.serialize(&channelProtobuf);
   auto channel2 = Channel(channelProtobuf);

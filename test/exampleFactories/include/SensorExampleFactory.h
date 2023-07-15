@@ -48,7 +48,7 @@ class SensorExampleFactory {
   static Sensor sensorAccWithTwoChannelsInAbsoluteForm();
   static Sensor sensorPpgWithTwoChannelsInDifferentialForm();
   static Sensor sensorAccWithTwoChannelsInDifferentialForm();
-  static Sensor sensorEmpty();
+  static Sensor sensorNotSet();
   static Sensor sensorForSwitchDataFromTestInAbsoluteForm();
   static Sensor sensorForSwitchDataFromTestInDifferentialForm();
 

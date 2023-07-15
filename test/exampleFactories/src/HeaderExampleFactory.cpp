@@ -42,7 +42,7 @@ TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNegative_min() {
   return -120;
 }
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetEmpty_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNotSet_min() {
   return 0;
 }
 
@@ -92,7 +92,7 @@ Header HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneO
   return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
-Header HeaderExampleFactory::headerEmpty() {
+Header HeaderExampleFactory::headerNotSet() {
   return Header();
 }
 

@@ -43,7 +43,7 @@ class AbsoluteTimestampsContainerExampleFactory {
   static AbsoluteTimestampsContainer absoluteTimestampsContainerWithThreeBigTimestamps();
   static AbsoluteTimestampsContainer absoluteTimestampsContainerWithOneBigTimestamp();
   static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestamp0();
-  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestampsEmpty();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerNotSet();
   static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
 
   static AbsoluteTimestampsContainerJson buildAbsoluteTimestampsContainerJson(const AbsoluteTimestampsContainer& absoluteTimestampsContainer);

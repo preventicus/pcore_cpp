@@ -54,9 +54,8 @@ AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteT
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
-AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsEmpty() {
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsEmpty_ms();
-  return AbsoluteTimestampsContainer(unixTimestamps);
+AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerNotSet() {
+  return AbsoluteTimestampsContainer();
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest() {

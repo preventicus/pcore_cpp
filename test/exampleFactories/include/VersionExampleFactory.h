@@ -56,7 +56,7 @@ class VersionExampleFactory {
   static Version versionWithMajor1Minor2Patch0();
   static Version versionWithMajor1Minor1Patch1();
 
-  static Version versionEmpty();
+  static Version versionNotSet();
 
   static VersionJson buildVersionJson(const Version& version);
 };

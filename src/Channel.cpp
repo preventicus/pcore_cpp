@@ -266,7 +266,7 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& abs
   const auto numberOfBlocks = blockIdxs.size();
   /*
   * blockIdxs.size = 0 -> no values are included
-                            return default value for emptyBlock
+                            return default value for not set Block
   * blockIdxs.size = 1 -> case 1 : just one Block with one value
                             return DifferentialBlock with one absoluteValue
   *                       case 2 : one Block with certain amount of value

@@ -41,7 +41,7 @@ class HeaderExampleFactory {
  public:
   static TimeZoneOffset timeZoneOffsetPositive_min();
   static TimeZoneOffset timeZoneOffsetNegative_min();
-  static TimeZoneOffset timeZoneOffsetEmpty_min();
+  static TimeZoneOffset timeZoneOffsetNotSet_min();
   static TimeZoneOffset timeZoneOffsetMaxValue_min();
   static TimeZoneOffset timeZoneOffsetMinValue_min();
   static TimeZoneOffset timeZoneOffsetPositiveInvalid_min();
@@ -53,7 +53,7 @@ class HeaderExampleFactory {
   static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
   static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
 
-  static Header headerEmpty();
+  static Header headerNotSet();
 
   static HeaderJson buildHeaderJson(const Header& header);
 };

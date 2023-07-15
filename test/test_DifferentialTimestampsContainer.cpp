@@ -64,14 +64,14 @@ TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerW
   EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
-TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerEmpty) {
-  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
-  auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
-TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerEmptyAndDifferentialTimestampsContainerWithThreeBlocks) {
-  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+TEST(DifferentialTimestampsTest, TestIsEqualWithDifferentialTimestampsContainerNotSetAndDifferentialTimestampsContainerWithThreeBlocks) {
+  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   EXPECT_FALSE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
@@ -94,14 +94,14 @@ TEST(DifferentialTimestampsTest, TestIsNotEqualWithDifferentialTimestampsContain
   EXPECT_FALSE(differentialTimestampsContainer1 != differentialTimestampsContainer2);
 }
 
-TEST(DifferentialTimestampsTest, TestIsNotEqualWithDifferentialTimestampsContainerEmpty) {
-  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
-  auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+TEST(DifferentialTimestampsTest, TestIsNotEqualWithDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   EXPECT_FALSE(differentialTimestampsContainer1 != differentialTimestampsContainer2);
 }
 
-TEST(DifferentialTimestampsTest, TestIsNotEqualWithDifferentialTimestampsContainerEmptyAndDifferentialTimestampsContainerWithThreeBlocks) {
-  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+TEST(DifferentialTimestampsTest, TestIsNotEqualWithDifferentialTimestampsContainerNotSetAndDifferentialTimestampsContainerWithThreeBlocks) {
+  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   EXPECT_TRUE(differentialTimestampsContainer1 != differentialTimestampsContainer2);
 }
@@ -126,8 +126,8 @@ TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContaine
   EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
-TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContainerEmpty) {
-  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
   differentialTimestampsContainer1.serialize(&differentialTimestampContainerProtobuf);
   auto differentialTimestampsContainer2 = DifferentialTimestampsContainer(differentialTimestampContainerProtobuf);
@@ -135,19 +135,19 @@ TEST(DifferentialTimestampsTest, TestSerializeWithDifferentialTimestampsContaine
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeNoThrow) {
-  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
   EXPECT_NO_THROW(differentialTimestampsContainer.serialize(&differentialTimestampContainerProtobuf));
 }
 
 TEST(DifferentialTimestampsTest, TestSerializeThrow) {
-  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   DifferentialTimestampContainerProtobuf* differentialTimestampContainerProtobuf = nullptr;
   EXPECT_THROW(differentialTimestampsContainer.serialize(differentialTimestampContainerProtobuf), std::invalid_argument);
 }
 
-TEST(DifferentialTimestampsTest, TestToJsonWithDifferentialTimestampsContainerEmpty) {
-  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+TEST(DifferentialTimestampsTest, TestToJsonWithDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   auto differentialTimestampsContainerJson1 =
       DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
   auto differentialTimestampsContainerJson2 = differentialTimestampsContainer.toJson();
@@ -196,8 +196,8 @@ TEST(DifferentialTimestampsTest, TestCalculateFirstUnixTimestampInBlockWithDiffe
   EXPECT_EQ(differentialTimestampsContainer.calculateFirstUnixTimestampInBlock(blockIdx2), firstUnixTimestampInBlock2);
 }
 
-TEST(DifferentialTimestampsTest, TestCalculateFirstUnixTimestampInBlockWithDifferentialTimestampsContainerEmpty) {
-  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
+TEST(DifferentialTimestampsTest, TestCalculateFirstUnixTimestampInBlockWithDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   BlockIdx blockIdx = 0;
   EXPECT_THROW(std::ignore = differentialTimestampsContainer.calculateFirstUnixTimestampInBlock(blockIdx), std::invalid_argument);
 }
@@ -232,9 +232,9 @@ TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockWithDiffer
             lastTimeStampInBlock2);
 }
 
-TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockWithDifferentialTimestampsContainerEmpty) {
-  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerEmpty();
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithEmptyDifferentialValues();
+TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockWithDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
   BlockIdx blockIdx = 0;
   auto firstUnixTimestampInBlock = 0;
   EXPECT_THROW(

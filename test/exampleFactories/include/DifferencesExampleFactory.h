@@ -40,8 +40,8 @@ class DifferencesExampleFactory {
  public:
   static BlockDifferences blockDifferencesWithThreeMixedDifferences();
   static TimestampsDifferences timestampsDifferencesWithThreeZeroDifferences();
-  static BlockDifferences blockDifferencesEmpty();
-  static TimestampsDifferences timestampsDifferencesEmpty();
+  static BlockDifferences blockDifferencesNotSet();
+  static TimestampsDifferences timestampsDifferencesNotSet();
   static BlockDifferences blockDifferencesWithTwoMixedDifferences();
   static TimestampsDifferences timestampsDifferencesWithTwoMixedDifferences();
   static BlockDifferences blockDifferencesWithThreeBigDifferences();

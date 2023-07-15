@@ -40,12 +40,12 @@ class UnixTimestampsExampleFactory {
   static UnixTimestamps unixTimestampsWithThreeBigTimestamps_ms();
   static UnixTimestamps unixTimestampsWithOneBigTimestamp_ms();
   static UnixTimestamps unixTimestampsWithTimestamp0_ms();
-  static UnixTimestamps unixTimestampsEmpty_ms();
+  static UnixTimestamps unixTimestampsNotSet_ms();
   static UnixTimestamps unixTimestampsWithFiveDifferentialTimestamps_ms();
   static UnixTimestamps unixTimestampsForSwitchDataFormTest_ms();
 
   static UnixTimestamp firstTimestamp_ms();
-  static UnixTimestamp firstTimestampEmpty_ms();
+  static UnixTimestamp firstTimestampNotSet_ms();
   static UnixTimestamp lastTimestamp_ms();
   static UnixTimestamp firstUnixTimestampForSwitchDataFormTest_ms();
 

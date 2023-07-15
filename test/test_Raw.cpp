@@ -48,9 +48,9 @@ TEST(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
   EXPECT_TRUE(raw1 == raw2);
 }
 
-TEST(RawTest, TestIsEqualWithRawEmpty) {
-  auto raw1 = RawExampleFactory::rawEmpty();
-  auto raw2 = RawExampleFactory::rawEmpty();
+TEST(RawTest, TestIsEqualWithRawNotSet) {
+  auto raw1 = RawExampleFactory::rawNotSet();
+  auto raw2 = RawExampleFactory::rawNotSet();
   EXPECT_TRUE(raw1 == raw2);
 }
 
@@ -60,8 +60,8 @@ TEST(RawTest, TestIsEqualWithRawWithOneSensorAndRawWithTwoSensors) {
   EXPECT_FALSE(raw1 == raw2);
 }
 
-TEST(RawTest, TestIsEqualWithRawEmptyAndRawWithOneSensors) {
-  auto raw1 = RawExampleFactory::rawEmpty();
+TEST(RawTest, TestIsEqualWithRawNotSetAndRawWithOneSensors) {
+  auto raw1 = RawExampleFactory::rawNotSet();
   auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   EXPECT_FALSE(raw1 == raw2);
 }
@@ -78,9 +78,9 @@ TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm
   EXPECT_FALSE(raw1 != raw2);
 }
 
-TEST(RawTest, TestIsNotEqualWithRawEmpty) {
-  auto raw1 = RawExampleFactory::rawEmpty();
-  auto raw2 = RawExampleFactory::rawEmpty();
+TEST(RawTest, TestIsNotEqualWithRawNotSet) {
+  auto raw1 = RawExampleFactory::rawNotSet();
+  auto raw2 = RawExampleFactory::rawNotSet();
   EXPECT_FALSE(raw1 != raw2);
 }
 
@@ -90,8 +90,8 @@ TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAndRawWithTwoSensors) {
   EXPECT_TRUE(raw1 != raw2);
 }
 
-TEST(RawTest, TestIsNotEqualWithRawEmptyAndRawWithOneSensors) {
-  auto raw1 = RawExampleFactory::rawEmpty();
+TEST(RawTest, TestIsNotEqualWithRawNotSetAndRawWithOneSensors) {
+  auto raw1 = RawExampleFactory::rawNotSet();
   auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   EXPECT_TRUE(raw1 != raw2);
 }
@@ -126,8 +126,8 @@ TEST(RawTest, TestSerializeWithRawWithOneSensorsAccWithTwoChannelsInDifferential
   EXPECT_TRUE(raw1 == raw2);
 }
 
-TEST(RawTest, TestSerializeWithRawEmpty) {
-  auto raw1 = RawExampleFactory::rawEmpty();
+TEST(RawTest, TestSerializeWithRawNotSet) {
+  auto raw1 = RawExampleFactory::rawNotSet();
   RawProtobuf rawProtobuf;
   raw1.serialize(&rawProtobuf);
   auto raw2 = Raw(rawProtobuf);
@@ -141,7 +141,7 @@ TEST(RawTest, TestSerializeNoThrow) {
 }
 
 TEST(RawTest, TestSerializeThrow) {
-  auto raw = RawExampleFactory::rawEmpty();
+  auto raw = RawExampleFactory::rawNotSet();
   RawProtobuf* rawProtobuf = nullptr;
   EXPECT_THROW(raw.serialize(rawProtobuf), std::invalid_argument);
 }

@@ -52,7 +52,7 @@ class ChannelExampleFactory {
   static Channel channelWithAbsoluteBlockAndAccMetaData();
   static Channel channelWithDifferentialBlocksAndPpgMetaData();
   static Channel channelWithDifferentialBlocksAndAccMetaData();
-  static Channel channelEmpty();
+  static Channel channelNotSet();
 
   static ChannelJson buildChannelJson(const Channel& channel);
 };
