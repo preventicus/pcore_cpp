@@ -232,7 +232,7 @@ TEST(ChannelTest, TestIsNotEqualWithChannelNotSet) {
   EXPECT_FALSE(channel1 != channel2);
 }
 
-TEST(ChannelTest, TestSwitchDataFormWithChannelWithAbsoluteValuesForSwitchDataFormTest) {
+TEST(ChannelTest, TestSwitchDataFormWithBlockIdxsWithChannelWithAbsoluteValuesForSwitchDataFormTest) {
   BlockIdxs blockIdxs = {0, 11, 20};
   auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest();
   channelWithAbsoluteBlock.switchDataForm(blockIdxs);
@@ -245,13 +245,28 @@ TEST(ChannelTest, TestSwitchDataFormWithChannelWithAbsoluteValuesForSwitchDataFo
   for (size_t i = 0; i < actualDifferentialBlocksSize; i++) {
     EXPECT_TRUE(actualDifferentialBlocks[i] == expectedDifferentialBlocks[i]);
   }
+}
 
+TEST(ChannelTest, TestSwitchDataFormWithChannelWithDifferentialValuesForSwitchDataFormTest) {
   auto channelWithDifferentialBlocks = ChannelExampleFactory::channelWithDifferentialValuesForSwitchDataFormTest();
   channelWithDifferentialBlocks.switchDataForm();
   EXPECT_EQ(channelWithDifferentialBlocks.getDifferentialBlocks().size(), 0);
   auto expectedAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest();
   auto actualAbsoluteBlock = channelWithDifferentialBlocks.getAbsoluteBlock();
   EXPECT_TRUE(actualAbsoluteBlock == expectedAbsoluteBlock);
+}
+
+TEST(ChannelTest, TestSwitchDataFormWithBlockIdxsWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  BlockIdxs blockIdxs = {};
+  channel.switchDataForm(blockIdxs);
+  EXPECT_FALSE(channel.isSet());
+}
+
+TEST(ChannelTest, TestSwitchDataFormWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  channel.switchDataForm();
+  EXPECT_FALSE(channel.isSet());
 }
 
 TEST(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndAccMetaData) {

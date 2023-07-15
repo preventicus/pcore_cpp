@@ -202,3 +202,8 @@ TEST(DifferentialBlockTest, TestIsSetWithDifferentialBlockNotSet) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
   EXPECT_FALSE(differentialBlock.isSet());
 }
+
+TEST(DifferentialBlockTest, TestSwitchDataFormWithDifferentialBlockNotSet) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
+  EXPECT_THROW(differentialBlock.switchDataForm(), std::runtime_error);
+}

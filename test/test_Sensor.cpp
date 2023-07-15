@@ -314,7 +314,7 @@ TEST(SensorTest, TestSerializeWithSensorAccWithTwoChannelsInDifferentialForm) {
   EXPECT_TRUE(sensor1 == sensor2);
 }
 
-TEST(SensorTest, TestSerizlizeWithSensorNotSet) {
+TEST(SensorTest, TestSerializeWithSensorNotSet) {
   auto sensor1 = SensorExampleFactory::sensorNotSet();
   SensorProtobuf sensorProtobuf;
   sensor1.serialize(&sensorProtobuf);
@@ -322,7 +322,7 @@ TEST(SensorTest, TestSerizlizeWithSensorNotSet) {
   EXPECT_TRUE(sensor1 == sensor2);
 }
 
-TEST(SensorTest, TestSerizlizeWithSensorPpgWithTwoChannelsInDifferentialForm) {
+TEST(SensorTest, TestSerializeWithSensorPpgWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
   SensorProtobuf sensorProtobuf;
   sensor1.serialize(&sensorProtobuf);

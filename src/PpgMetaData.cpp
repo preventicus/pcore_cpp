@@ -124,5 +124,5 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
 }
 
 void PpgMetaData::switchDataForm() {
-  throw std::runtime_error("should not be called");  // TODO unittest
+  throw std::runtime_error("should not be called");
 }

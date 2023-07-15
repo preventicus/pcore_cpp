@@ -143,7 +143,7 @@ void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerPr
 }
 
 void DifferentialTimestampsContainer::switchDataForm() {
-  throw std::runtime_error("should not be called");  // TODO unittest
+  throw std::runtime_error("should not be called");
 }
 
 bool DifferentialTimestampsContainer::isSet() const {

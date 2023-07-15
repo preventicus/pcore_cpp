@@ -177,3 +177,8 @@ TEST(VersionTest, TestSerializeThrow) {
   VersionProtobuf* versionProtobuf = nullptr;
   EXPECT_THROW(version.serialize(versionProtobuf), std::invalid_argument);
 }
+
+TEST(VersionTest, TestSwitchDataFormWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_THROW(version.switchDataForm(), std::runtime_error);
+}

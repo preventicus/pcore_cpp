@@ -224,6 +224,12 @@ TEST(HeaderTest, TestSwitchDataFormWithHeaderWithVersionWithMajor2Minor1Patch0An
   EXPECT_TRUE(dataFormInAbsoluteForm == DataForm::DATA_FORM_ABSOLUTE);
 }
 
+TEST(HeaderTest, TestSwitchDataFormWithHeaderNotSet) {
+  auto header = HeaderExampleFactory::headerNotSet();
+  header.switchDataForm();
+  EXPECT_FALSE(header.isSet());
+}
+
 TEST(HeaderTest, TestDataFormFromString) {
   EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_ABSOLUTE"), DataForm::DATA_FORM_ABSOLUTE);
   EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_DIFFERENTIAL"), DataForm::DATA_FORM_DIFFERENTIAL);

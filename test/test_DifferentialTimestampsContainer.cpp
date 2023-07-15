@@ -272,3 +272,8 @@ TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockThrowInval
       std::ignore = differentialTimestampsContainer.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock),
       std::invalid_argument);
 }
+
+TEST(DifferentialTimestampsTest, TestSwitchDataFormDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  EXPECT_THROW(differentialTimestampsContainer.switchDataForm(), std::runtime_error);
+}

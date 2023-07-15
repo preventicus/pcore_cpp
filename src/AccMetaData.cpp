@@ -102,7 +102,7 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
 }
 
 void AccMetaData::switchDataForm() {
-  throw std::runtime_error("should not be called");  // TODO unittest
+  throw std::runtime_error("should not be called");
 }
 
 Json::Value AccMetaData::toJson() const {

@@ -281,3 +281,8 @@ TEST(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithWavelength0) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0();
   EXPECT_FALSE(ppgMetaData.hasWavelength());
 }
+
+TEST(PpgMetaDataTest, TestSwitchDataFormWithPpgMetaDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_THROW(ppgMetaData.switchDataForm(), std::runtime_error);
+}

@@ -150,11 +150,11 @@ PpgMetaData Channel::getPpgMetaData() const {
   return this->ppgMetaData;
 }
 
-SensorTypeProtobuf Channel::getSensorType() const {  // TODO unittest
+SensorTypeProtobuf Channel::getSensorType() const {
   return this->sensorType;
 }
 
-DataForm Channel::getDataForm() const {  // TODO unittest
+DataForm Channel::getDataForm() const {
   return this->dataForm;
 }
 

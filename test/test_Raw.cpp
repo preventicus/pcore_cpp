@@ -182,6 +182,12 @@ TEST(RawTest, TestSwitchDataFormWithRawForSwitchDataFormTestInDifferentialForm) 
   EXPECT_TRUE(raw == rawInAbsoluteForm);
 }
 
+TEST(RawTest, TestSwitchDataFormWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  raw.switchDataForm();
+  EXPECT_FALSE(raw.isSet());
+}
+
 TEST(RawTest, TestToJsonWithRawNotSet) {
   auto raw = RawExampleFactory::rawNotSet();
   auto rawJson1 = RawExampleFactory::buildRawJson(raw);

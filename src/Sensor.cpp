@@ -107,7 +107,7 @@ Channels Sensor::getChannels() const {
   return this->channels;
 }
 
-DataForm Sensor::getDataFrom() const {  // TODO Unittest
+DataForm Sensor::getDataFrom() const {
   return this->dataForm;
 }
 

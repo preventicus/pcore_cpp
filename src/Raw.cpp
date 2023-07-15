@@ -55,7 +55,7 @@ Sensors Raw::getSensors() const {
   return this->sensors;
 }
 
-DataForm Raw::getDataFrom() const {  // TODO unit tests
+DataForm Raw::getDataFrom() const {
   return this->dataForm;
 }
 

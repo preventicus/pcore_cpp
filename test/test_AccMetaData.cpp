@@ -269,3 +269,8 @@ TEST(AccMetaDataTest, TestHasCoordinateWithAccMetaDataWithCoordinateNone) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateNone();
   EXPECT_FALSE(accMetaData.hasCoordinate());
 }
+
+TEST(AccMetaDataTest, TestSwitchDataFormWithAccMetaDataNotSet) {
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
+  EXPECT_THROW(accMetaData.switchDataForm(), std::runtime_error);
+}

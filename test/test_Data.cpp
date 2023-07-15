@@ -164,6 +164,12 @@ TEST(DataTest, TestSwitchDataFormWithDataWithRawForSwitchDataFormTestInDifferent
   EXPECT_TRUE(data == dataInAbsoluteForm);
 }
 
+TEST(DataTest, TestSwitchDataFormWithDataNotSet) {
+  auto data = DataExampleFactory::dataNotSet();
+  data.switchDataForm();
+  EXPECT_FALSE(data.isSet());
+}
+
 TEST(DataTest, TestToJsonWithDataNotSet) {
   auto data = DataExampleFactory::dataNotSet();
   auto dataJson1 = DataExampleFactory::buildDataJson(data);
