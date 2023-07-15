@@ -37,21 +37,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialTimestampsContainerExampleFactory.h"
 #include "UnixTimestampsExampleFactory.h"
 
-TEST(DifferentialTimestampsTest, TestGetFirstTimestamp) {
+TEST(DifferentialTimestampsTest, TestGetFirstTimestampWithDifferentialTimestampsContainerWithThreeBlocks) {
   auto firstTimestamp1_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   auto firstTimestamp2_ms = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
   EXPECT_EQ(firstTimestamp1_ms, firstTimestamp2_ms);
 }
 
-TEST(DifferentialTimestampsTest, TestGetBlockDifferences) {
+TEST(DifferentialTimestampsTest, TestGetBlockDifferencesWithDifferentialTimestampsContainerWithThreeBlocks) {
   auto blockDifferences1 = DifferencesExampleFactory::blockDifferencesWithThreeMixedDifferences();
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   auto blockDifferences2 = differentialTimestampsContainer.getBlockDifferences_ms();
   EXPECT_EQ(blockDifferences1, blockDifferences2);
 }
 
-TEST(DifferentialTimestampsTest, TestGetTimestampsDifferences) {
+TEST(DifferentialTimestampsTest, TestGetTimestampsDifferencesWithDifferentialTimestampsContainerWithThreeBlocks) {
   auto timestampsDifferences1 = DifferencesExampleFactory::timestampsDifferencesWithThreeZeroDifferences();
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   auto timestampsDifferences2 = differentialTimestampsContainer.getTimestampsDifferences_ms();

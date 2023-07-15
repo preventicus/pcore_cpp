@@ -54,13 +54,13 @@ TEST(RawTest, TestIsEqualWithRawNotSet) {
   EXPECT_TRUE(raw1 == raw2);
 }
 
-TEST(RawTest, TestIsEqualWithRawWithOneSensorAndRawWithTwoSensors) {
+TEST(RawTest, TestIsEqualWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
   auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   EXPECT_FALSE(raw1 == raw2);
 }
 
-TEST(RawTest, TestIsEqualWithRawNotSetAndRawWithOneSensors) {
+TEST(RawTest, TestIsEqualWithrawNotSetAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawNotSet();
   auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   EXPECT_FALSE(raw1 == raw2);
@@ -84,13 +84,13 @@ TEST(RawTest, TestIsNotEqualWithRawNotSet) {
   EXPECT_FALSE(raw1 != raw2);
 }
 
-TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAndRawWithTwoSensors) {
+TEST(RawTest, TestIsNotEqualWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
   auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   EXPECT_TRUE(raw1 != raw2);
 }
 
-TEST(RawTest, TestIsNotEqualWithRawNotSetAndRawWithOneSensors) {
+TEST(RawTest, TestIsNotEqualWithRawNotSetAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawNotSet();
   auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   EXPECT_TRUE(raw1 != raw2);

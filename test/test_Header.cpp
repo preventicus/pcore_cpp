@@ -35,21 +35,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "HeaderExampleFactory.h"
 #include "PcoreJson.h"
 
-TEST(HeaderTest, TestGetTimeZoneOffset) {
+TEST(HeaderTest, TestGetTimeZoneOffsetWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto timeZoneOffset1_min = HeaderExampleFactory::timeZoneOffsetPositive_min();
   auto timeZoneOffset2_min = header.getTimeZoneOffset();
   EXPECT_TRUE(timeZoneOffset1_min == timeZoneOffset2_min);
 }
 
-TEST(HeaderTest, TestGetVersion) {
+TEST(HeaderTest, TestGetVersionWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto version1 = VersionExampleFactory::versionWithMajor0Minor0Patch0();
   auto version2 = header.getPcoreVersion();
   EXPECT_TRUE(version1 == version2);
 }
 
-TEST(HeaderTest, TestGetDataForm) {
+TEST(HeaderTest, TestGetDataFormWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto dataForm1 = DataForm::DATA_FORM_ABSOLUTE;
   auto dataForm2 = header.getDataForm();
@@ -74,19 +74,25 @@ TEST(HeaderTest, TestIsEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZo
   EXPECT_FALSE(header1 == header2);
 }
 
-TEST(HeaderTest, TestIsEqualWithHeaderWithDifferentVersions) {
+TEST(
+    HeaderTest,
+    TestIsEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
   EXPECT_FALSE(header1 == header2);
 }
 
-TEST(HeaderTest, TestIsEqualWithHeaderWithDifferentTimeZoneOffset) {
+TEST(
+    HeaderTest,
+    TestIsEqualWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
   EXPECT_FALSE(header1 == header2);
 }
 
-TEST(HeaderTest, TestIsEqualWithHeaderWithDifferentDataForm) {
+TEST(
+    HeaderTest,
+    TestIsEqualWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   EXPECT_FALSE(header1 == header2);
@@ -110,19 +116,25 @@ TEST(HeaderTest, TestIsNotEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTim
   EXPECT_TRUE(header1 != header2);
 }
 
-TEST(HeaderTest, TestIsNotEqualWithHeaderWithDifferentVersions) {
+TEST(
+    HeaderTest,
+    TestIsNotEqualWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
   EXPECT_TRUE(header1 != header2);
 }
 
-TEST(HeaderTest, TestIsNotEqualWithHeaderWithDifferentTimeZoneOffset) {
+TEST(
+    HeaderTest,
+    TestIsNotEqualWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
   EXPECT_TRUE(header1 != header2);
 }
 
-TEST(HeaderTest, TestIsNotEqualWithHeaderWithDifferentDataForm) {
+TEST(
+    HeaderTest,
+    TestIsNotEqualWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsoluteAndHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential) {
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto header2 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   EXPECT_TRUE(header1 != header2);
@@ -177,7 +189,7 @@ TEST(HeaderTest, TestSwitchDataFormWithHeaderInAbsoluteForm) {
   EXPECT_TRUE(dataFormInDifferentialForm == DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
-TEST(HeaderTest, TestSwitchDataFormWithHeaderInDifferentialForm) {
+TEST(HeaderTest, TestSwitchDataFormWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
   header.switchDataForm();
   auto dataFormInAbsoluteForm = header.getDataForm();

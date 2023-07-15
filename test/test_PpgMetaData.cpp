@@ -34,21 +34,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "PpgMetaDataExampleFactory.h"
 
-TEST(PpgMetaDataTest, TestSetAndGetColor) {
+TEST(PpgMetaDataTest, TestGetColorWithPpgMetDataWithColorGreen) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   EXPECT_EQ(ppgMetaData.getColor(), ColorProtobuf::COLOR_GREEN);
-  EXPECT_EQ(ppgMetaData.getWavelength_nm(), 0);
 }
 
-TEST(PpgMetaDataTest, TestSetAndGetWavelength) {
+TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataWithWavelength255) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
-  EXPECT_EQ(ppgMetaData.getColor(), ColorProtobuf::COLOR_NONE);
   EXPECT_EQ(ppgMetaData.getWavelength_nm(), 255);
 }
 
-TEST(PpgMetaDataTest, TestConstructorPpgMetaDataNotSet) {
+TEST(PpgMetaDataTest, TestGetColorWithPpgMetaDataNotSet) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
   EXPECT_EQ(ppgMetaData.getColor(), ColorProtobuf::COLOR_NONE);
+}
+
+TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
   EXPECT_EQ(ppgMetaData.getWavelength_nm(), 0);
 }
 
@@ -101,13 +103,13 @@ TEST(PpgMetaDataTest, TestIsEqualPpgMetDataWithWavelength255) {
   EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST(PpgMetaDataTest, TestIsEqualWithDifferentColor) {
+TEST(PpgMetaDataTest, TestIsEqualWithPpgMetDataWithColorGreenAndPpgMetDataWithColorRed) {
   auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   EXPECT_FALSE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST(PpgMetaDataTest, TestIsEqualWithDifferentWavelength) {
+TEST(PpgMetaDataTest, TestIsEqualWithPpgMetaDataWithWavelength255AndPpgMetaDataWithWavelength100) {
   auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
   EXPECT_FALSE(ppgMetaData1 == ppgMetaData2);
@@ -119,7 +121,7 @@ TEST(PpgMetaDataTest, TestIsEqualWithPpgMetaDataNotSet) {
   EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST(PpgMetaDataTest, TestIsEqualWithColorAndWavelength) {
+TEST(PpgMetaDataTest, TestIsEqualWithPpgMetDataWithColorGreenAndPpgMetaDataWithWavelength100) {
   auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
   EXPECT_FALSE(ppgMetaData1 == ppgMetaData2);
@@ -149,13 +151,13 @@ TEST(PpgMetaDataTest, TestIsNotEqualPpgMetDataWithWavelength255) {
   EXPECT_FALSE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST(PpgMetaDataTest, TestIsNotEqualWithDifferentColor) {
+TEST(PpgMetaDataTest, TestIsNotEqualWithPpgMetDataWithColorGreenAndPpgMetDataWithColorRed) {
   auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
   EXPECT_TRUE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST(PpgMetaDataTest, TestIsNotEqualWithDifferentWavelength) {
+TEST(PpgMetaDataTest, TestIsNotEqualWithPpgMetaDataWithWavelength255AndPpgMetaDataWithWavelength100) {
   auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
   EXPECT_TRUE(ppgMetaData1 != ppgMetaData2);
@@ -167,7 +169,7 @@ TEST(PpgMetaDataTest, TestIsNotEqualWithPpgMetaDataNotSet) {
   EXPECT_FALSE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST(PpgMetaDataTest, TestIsNotEqualWithColorAndWavelength) {
+TEST(PpgMetaDataTest, TestIsNotEqualWithppgMetDataWithColorGreenAndPpgMetaDataWithWavelength100) {
   auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
   EXPECT_TRUE(ppgMetaData1 != ppgMetaData2);

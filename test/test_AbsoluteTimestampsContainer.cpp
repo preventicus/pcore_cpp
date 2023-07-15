@@ -35,7 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteTimestampsContainerExampleFactory.h"
 #include "UnixTimestampsExampleFactory.h"
 
-TEST(AbsoluteTimestampsContainerTest, TestGetUnixTimestampsWithThreeBigTimestamps) {
+TEST(AbsoluteTimestampsContainerTest, TestGetUnixTimestampsWithAbsoluteTimestampsContainerWithThreeBigTimestamps) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
   EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps_ms(), unixTimestamps);
@@ -47,13 +47,14 @@ TEST(AbsoluteTimestampsContainerTest, TestGetUnixTimestampsWithAbsoluteTimestamp
   EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps_ms(), unixTimestamps);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithThreeBigTimestampsAndThreeBigTimestamps) {
+TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithAbsoluteTimestampsContainerWithThreeBigTimestamps) {
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto absoluteTimestampsContainer2 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   EXPECT_TRUE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithThreeBigTimestampsAndThreeSmallTimestamps) {
+TEST(AbsoluteTimestampsContainerTest,
+     TestIsEqualWithAbsoluteTimestampsContainerWithThreeBigTimestampsAndAbsoluteTimestampsContainerWithThreeSmallTimestamps) {
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto absoluteTimestampsContainer2 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps();
   EXPECT_FALSE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
@@ -65,25 +66,27 @@ TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithAbsoluteTimestampsContainer
   EXPECT_TRUE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithAbsoluteTimestampsContainerNotSetAndWithThreeSmallTimestamps) {
+TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithAbsoluteTimestampsContainerNotSetAndAbsoluteTimestampsContainerWithThreeSmallTimestamps) {
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerNotSet();
   auto absoluteTimestampsContainer2 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps();
   EXPECT_FALSE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithThreeBigTimestampsAndOneBigTimestamp) {
+TEST(AbsoluteTimestampsContainerTest,
+     TestIsEqualWithAbsoluteTimestampsContainerWithThreeBigTimestampsAndAbsoluteTimestampsContainerWithOneBigTimestamp) {
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto absoluteTimestampsContainer2 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithOneBigTimestamp();
   EXPECT_FALSE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestIsNotEqualWithThreeBigTimestampsAndThreeBigTimestamps) {
+TEST(AbsoluteTimestampsContainerTest, TestIsNotEqualWithAbsoluteTimestampsContainer) {
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto absoluteTimestampsContainer2 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   EXPECT_FALSE(absoluteTimestampsContainer1 != absoluteTimestampsContainer2);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestIsNotEqualWithThreeBigTimestampsAndThreeSmallTimestamps) {
+TEST(AbsoluteTimestampsContainerTest,
+     TestIsNotEqualWithAbsoluteTimestampsContainerWithThreeBigTimestampsAndAbsoluteTimestampsContainerWithThreeSmallTimestamps) {
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto absoluteTimestampsContainer2 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps();
   EXPECT_TRUE(absoluteTimestampsContainer1 != absoluteTimestampsContainer2);
@@ -101,13 +104,14 @@ TEST(AbsoluteTimestampsContainerTest, TestIsNotEqualWithAbsoluteTimestampsContai
   EXPECT_TRUE(absoluteTimestampsContainer1 != absoluteTimestampsContainer2);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestIsNotEqualWithThreeBigTimestampsAndOneBigTimestamp) {
+TEST(AbsoluteTimestampsContainerTest,
+     TestIsNotEqualAbsoluteTimestampsContainerWithThreeBigTimestampsAndAbsoluteTimestampsContainerWithOneBigTimestamp) {
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto absoluteTimestampsContainer2 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithOneBigTimestamp();
   EXPECT_TRUE(absoluteTimestampsContainer1 != absoluteTimestampsContainer2);
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestToJsonWithThreeBigTimestamps) {
+TEST(AbsoluteTimestampsContainerTest, TestToJsonWithAbsoluteTimestampsContainerWithThreeBigTimestamps) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
   auto absoluteTimestampsContainerJson1 =
       AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
@@ -123,7 +127,7 @@ TEST(AbsoluteTimestampsContainerTest, TestToJsonWithAbsoluteTimestampsContainerN
   EXPECT_TRUE(absoluteTimestampsContainerJson1.toStyledString() == absoluteTimestampsContainerJson2.toStyledString());
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestToJsonWithThreeSmallTimestamps) {
+TEST(AbsoluteTimestampsContainerTest, TestToJsonWithAbsoluteTimestampsContainerWithThreeSmallTimestamps) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps();
   auto absoluteTimestampsContainerJson1 =
       AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
@@ -131,7 +135,7 @@ TEST(AbsoluteTimestampsContainerTest, TestToJsonWithThreeSmallTimestamps) {
   EXPECT_TRUE(absoluteTimestampsContainerJson1.toStyledString() == absoluteTimestampsContainerJson2.toStyledString());
 }
 
-TEST(AbsoluteTimestampsContainerTest, TestToJsonWithOneBigTimestamp) {
+TEST(AbsoluteTimestampsContainerTest, TestToJsonWithAbsoluteTimestampsContainerWithOneBigTimestamp) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithOneBigTimestamp();
   auto absoluteTimestampsContainerJson1 =
       AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);

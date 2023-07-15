@@ -52,7 +52,7 @@ TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDiffer
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 
-TEST(DifferentialBlockTest, TestIsEqualWithdifferentialBlockWithThreeMixedDifferentialValuesAndThreeNegativeDifferentialValues) {
+TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDifferentialValuesAndDifferentialBlockWithThreeNegativeDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
   EXPECT_FALSE(differentialBlock1 == differentialBlock2);
@@ -70,7 +70,7 @@ TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDiffer
   EXPECT_FALSE(differentialBlock1 == differentialBlock2);
 }
 
-TEST(DifferentialBlockTest, TestIsEqualWithBlocksWithDifferentSize) {
+TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDifferentialValuesAndDifferentialBlockWithOneDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   EXPECT_FALSE(differentialBlock1 == differentialBlock2);
@@ -100,7 +100,7 @@ TEST(DifferentialBlockTest, TestIsNotEqualWithDifferentialBlockWithThreeMixedDif
   EXPECT_TRUE(differentialBlock1 != differentialBlock2);
 }
 
-TEST(DifferentialBlockTest, TestIsNotEqualWithBlocksWithDifferentSize) {
+TEST(DifferentialBlockTest, TestIsNotEqualWithDifferentialBlockWithThreeMixedDifferentialValuesAndDifferentialBlockWithOneDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   EXPECT_TRUE(differentialBlock1 != differentialBlock2);

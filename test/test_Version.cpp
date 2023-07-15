@@ -34,17 +34,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "VersionExampleFactory.h"
 
-TEST(VersionTest, TestGetMajor) {
+TEST(VersionTest, TestGetMajorWithVersionWithMajor2Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   EXPECT_EQ(version.getMajor(), VersionExampleFactory::majorTwo());
 }
 
-TEST(VersionTest, TestGetMinor) {
+TEST(VersionTest, TestGetMinorWithVersionWithMajor2Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   EXPECT_EQ(version.getMinor(), VersionExampleFactory::minorOne());
 }
 
-TEST(VersionTest, TestGetPatch) {
+TEST(VersionTest, TestGetPatchWithVersionWithMajor2Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   EXPECT_EQ(version.getPatch(), VersionExampleFactory::patchZero());
 }
