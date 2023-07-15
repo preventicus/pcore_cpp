@@ -142,3 +142,13 @@ TEST(AbsoluteTimestampsContainerTest, TestToJsonWithAbsoluteTimestampsContainerW
   auto absoluteTimestampsContainerJson2 = absoluteTimestampsContainer.toJson();
   EXPECT_TRUE(absoluteTimestampsContainerJson1.toStyledString() == absoluteTimestampsContainerJson2.toStyledString());
 }
+
+TEST(AbsoluteTimestampsContainerTest, TestIsSetWithAbsoluteTimestampsContainerNotSet) {
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerNotSet();
+  EXPECT_FALSE(absoluteTimestampsContainer.isSet());
+}
+
+TEST(AbsoluteTimestampsContainerTest, TestIsSetWithAbsoluteTimestampsContainerWithThreeBigTimestamps) {
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  EXPECT_TRUE(absoluteTimestampsContainer.isSet());
+}

@@ -337,3 +337,33 @@ TEST(ChannelTest, TestToJsonWithChannelNotSet) {
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
+
+TEST(ChannelTest, TestIsSetWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  EXPECT_FALSE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithDifferentialBlocksAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndAccMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithNotSetAbsoluteBlockAndNoSetMetaData) {
+  auto channel = ChannelExampleFactory::channelWithNotSetAbsoluteBlockAndNoSetMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndNoSetMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndNoSetMetaData();
+  EXPECT_TRUE(channel.isSet());
+}

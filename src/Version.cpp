@@ -102,5 +102,9 @@ VersionJson Version::toJson() const {
 }
 
 bool Version::isSet() const {
-  return this->major != 0 || this->minor != 0 || this->patch != 0;  // TODO Unittests
+  // clang-format off
+  return this->major != 0
+      || this->minor != 0
+      || this->patch != 0;
+  // clang-format on
 }

@@ -69,6 +69,21 @@ DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::d
   return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
 }
 
+DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithFirstUnixTimeStampNotSet() {
+  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestampNotSet_ms();
+  auto blockDifferences = DifferencesExampleFactory::blockDifferencesForSwitchDataFormTest();
+  auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesForSwitchDataFromTest();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
+}
+
+DifferentialTimestampsContainer
+DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithFirstUnixTimeStampNotSetAndBlockDifferencesNotSet() {
+  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestampNotSet_ms();
+  auto blockDifferences = DifferencesExampleFactory::blockDifferencesNotSet();
+  auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesForSwitchDataFromTest();
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences, timestampsDifferences);
+}
+
 DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(
     const DifferentialTimestampsContainer& differentialTimestampsContainer) {
   DifferentialTimestampsContainerJson differentialTimestampsContainerJson;

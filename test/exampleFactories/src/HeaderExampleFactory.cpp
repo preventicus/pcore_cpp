@@ -92,6 +92,18 @@ Header HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneO
   return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
+Header HeaderExampleFactory::headerWithVersionNotSetAndTimeZoneOffsetNotSetAndDataFormDifferential() {
+  auto version = VersionExampleFactory::versionNotSet();
+  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetNotSet_min();
+  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
+}
+
+Header HeaderExampleFactory::headerWithVersionWithMajor1Minor2Patch0AndTimeZoneOffsetNotSetAndDataFormDifferential() {
+  auto version = VersionExampleFactory::versionWithMajor1Minor2Patch0();
+  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetNotSet_min();
+  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
+}
+
 Header HeaderExampleFactory::headerNotSet() {
   return Header();
 }

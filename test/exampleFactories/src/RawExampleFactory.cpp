@@ -58,6 +58,11 @@ Raw RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm() {
   return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
+Raw RawExampleFactory::rawWithZeroSensorsInDifferentialForm() {
+  Sensors sensors;
+  return Raw(sensors, DataForm::DATA_FORM_DIFFERENTIAL);
+}
+
 Raw RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm() {
   Sensors sensors;
   sensors.emplace_back(SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm());

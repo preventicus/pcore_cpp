@@ -52,6 +52,8 @@ class HeaderExampleFactory {
   static Header headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
   static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
+  static Header headerWithVersionNotSetAndTimeZoneOffsetNotSetAndDataFormDifferential();
+  static Header headerWithVersionWithMajor1Minor2Patch0AndTimeZoneOffsetNotSetAndDataFormDifferential();
 
   static Header headerNotSet();
 

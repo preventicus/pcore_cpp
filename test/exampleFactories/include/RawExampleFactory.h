@@ -44,6 +44,7 @@ class RawExampleFactory {
   static Raw rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
   static Raw rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
   static Raw rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  static Raw rawWithZeroSensorsInDifferentialForm();
   static Raw rawNotSet();
   static Raw rawForSwitchDataFormTestInAbsoluteForm();
   static Raw rawForSwitchDataFormTestInDifferentialForm();

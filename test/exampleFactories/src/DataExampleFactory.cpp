@@ -52,6 +52,12 @@ Data DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffset
   return Data(raw, header);
 }
 
+Data DataExampleFactory::dataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet() {
+  auto raw = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerNotSet();
+  return Data(raw, header);
+}
+
 Data DataExampleFactory::dataNotSet() {
   return Data();
 }

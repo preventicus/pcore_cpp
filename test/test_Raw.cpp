@@ -229,3 +229,18 @@ TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInDifferentialForm
   auto rawJson2 = raw.toJson();
   EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
 }
+
+TEST(RawTest, TestIsSetWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  EXPECT_FALSE(raw.isSet());
+}
+
+TEST(RawTest, TestIsSetWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw.isSet());
+}
+
+TEST(RawTest, TestIsSetWithRawWithZeroSensorsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  EXPECT_TRUE(raw.isSet());
+}

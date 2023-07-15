@@ -273,7 +273,28 @@ TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockThrowInval
       std::invalid_argument);
 }
 
-TEST(DifferentialTimestampsTest, TestSwitchDataFormDifferentialTimestampsContainerNotSet) {
+TEST(DifferentialTimestampsTest, TestSwitchDataFormWithDifferentialTimestampsContainerNotSet) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   EXPECT_THROW(differentialTimestampsContainer.switchDataForm(), std::runtime_error);
+}
+
+TEST(DifferentialTimestampsTest, TestIsSetWithDifferentialTimestampsContainerNotSet) {
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  EXPECT_FALSE(differentialTimestampsContainer.isSet());
+}
+
+TEST(DifferentialTimestampsTest, TestIsSetWithDifferentialTimestampsContainerWithThreeBlocks) {
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  EXPECT_TRUE(differentialTimestampsContainer.isSet());
+}
+
+TEST(DifferentialTimestampsTest, TestIsSetWithDifferentialTimestampsContainerWithFirstUnixTimeStampNotSet) {
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithFirstUnixTimeStampNotSet();
+  EXPECT_TRUE(differentialTimestampsContainer.isSet());
+}
+
+TEST(DifferentialTimestampsTest, TestIsSetWithDifferentialTimestampsContainerWithFirstUnixTimeStampNotSetAndBlockDifferencesNotSet) {
+  auto differentialTimestampsContainer =
+      DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithFirstUnixTimeStampNotSetAndBlockDifferencesNotSet();
+  EXPECT_TRUE(differentialTimestampsContainer.isSet());
 }

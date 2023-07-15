@@ -55,6 +55,8 @@ class VersionExampleFactory {
   static Version versionWithMajor2Minor1Patch0();
   static Version versionWithMajor1Minor2Patch0();
   static Version versionWithMajor1Minor1Patch1();
+  static Version versionWithMajor0Minor2Patch0();
+  static Version versionWithMajor0Minor0Patch1();
 
   static Version versionNotSet();
 

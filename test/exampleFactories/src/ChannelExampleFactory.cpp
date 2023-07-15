@@ -83,6 +83,18 @@ Channel ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData() {
   return Channel(ppgMetaData, differentialBlocks);
 }
 
+Channel ChannelExampleFactory::channelWithAbsoluteBlockAndNoSetMetaData() {
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  return Channel(ppgMetaData, absoluteBlock);
+}
+
+Channel ChannelExampleFactory::channelWithNotSetAbsoluteBlockAndNoSetMetaData() {
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockNotSet();
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  return Channel(ppgMetaData, absoluteBlock);
+}
+
 Channel ChannelExampleFactory::channelNotSet() {
   return Channel();
 }

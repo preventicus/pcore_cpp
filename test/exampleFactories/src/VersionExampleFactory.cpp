@@ -82,6 +82,14 @@ Version VersionExampleFactory::versionWithMajor1Minor1Patch1() {
   return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchOne());
 }
 
+Version VersionExampleFactory::versionWithMajor0Minor2Patch0() {
+  return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorTwo(), VersionExampleFactory::patchZero());
+}
+
+Version VersionExampleFactory::versionWithMajor0Minor0Patch1() {
+  return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorZero(), VersionExampleFactory::patchOne());
+}
+
 Version VersionExampleFactory::versionWithMajor0Minor0Patch0() {
   return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorZero(), VersionExampleFactory::patchZero());
 }

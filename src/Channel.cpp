@@ -254,10 +254,10 @@ bool Channel::isSet() const {
   }
   // clang-format off
   return this->ppgMetaData.isSet()
-      || accMetaData.isSet()
-      || absoluteBlock.isSet()
-      || sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
-      || dataForm != DataForm::DATA_FORM_NONE;
+      || this->accMetaData.isSet()
+      || this->absoluteBlock.isSet()
+      || this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
+      || this->dataForm != DataForm::DATA_FORM_NONE;
   // clang-format on
 }
 

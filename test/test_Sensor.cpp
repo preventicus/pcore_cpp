@@ -373,3 +373,28 @@ TEST(SensorTest, TestSenorTypeToString) {
   EXPECT_EQ(PcoreProtobuf::Convert::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_ACC), "SENSOR_TYPE_ACC");
   EXPECT_EQ(PcoreProtobuf::Convert::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_NONE), "SENSOR_TYPE_NONE");
 }
+
+TEST(SensorTest, TestIsSetWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorAccWithZeroChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithZeroChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}

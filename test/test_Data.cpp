@@ -190,3 +190,18 @@ TEST(DataTest, TestToJsonWithDataWithRawForSwitchDataFormTestInDifferentialForm)
   auto dataJson2 = data.toJson();
   EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
 }
+
+TEST(DataTest, TestIsSetWithDataNotSet) {
+  auto data = DataExampleFactory::dataNotSet();
+  EXPECT_FALSE(data.isSet());
+}
+
+TEST(DataTest, TestIsSetWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+  auto data = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  EXPECT_TRUE(data.isSet());
+}
+
+TEST(DataTest, TestIsSetWithDataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet) {
+  auto data = DataExampleFactory::dataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet();
+  EXPECT_TRUE(data.isSet());
+}

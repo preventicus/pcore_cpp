@@ -253,3 +253,23 @@ TEST(HeaderTest, TestConstructorThrowWithTimeZoneOffsetNagativeInvalid) {
   auto invalidPositiveTimeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetNegativeInvalid_min();
   EXPECT_THROW(Header(version, invalidPositiveTimeZoneOffset_min, DataForm::DATA_FORM_ABSOLUTE), std::invalid_argument);
 }
+
+TEST(HeaderTest, TestIsSetWithHeaderNotSet) {
+  auto header = HeaderExampleFactory::headerNotSet();
+  EXPECT_FALSE(header.isSet());
+}
+
+TEST(HeaderTest, TestIsSetWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
+  EXPECT_TRUE(header.isSet());
+}
+
+TEST(HeaderTest, TestIsSetWithHeaderWithVersionNotSetAndTimeZoneOffsetNotSetAndDataFormDifferential) {
+  auto header = HeaderExampleFactory::headerWithVersionNotSetAndTimeZoneOffsetNotSetAndDataFormDifferential();
+  EXPECT_TRUE(header.isSet());
+}
+
+TEST(HeaderTest, TestIsSetWithHeaderWithVersionWithMajor1Minor2Patch0AndTimeZoneOffsetNotSetAndDataFormDifferential) {
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor1Minor2Patch0AndTimeZoneOffsetNotSetAndDataFormDifferential();
+  EXPECT_TRUE(header.isSet());
+}

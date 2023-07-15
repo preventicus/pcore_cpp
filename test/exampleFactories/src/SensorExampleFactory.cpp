@@ -73,6 +73,24 @@ Sensor SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm() {
   return Sensor(channels, differentialTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_ACC);
 }
 
+Sensor SensorExampleFactory::sensorAccWithZeroChannelsInDifferentialForm() {
+  Channels channels;
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  return Sensor(channels, differentialTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_ACC);
+}
+
+Sensor SensorExampleFactory::sensorNoneWithZeroChannelsInDifferentialForm() {
+  Channels channels;
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  return Sensor(channels, differentialTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_NONE);
+}
+
+Sensor SensorExampleFactory::sensorNoneWithZeroChannelsInAbsoluteForm() {
+  Channels channels;
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  return Sensor(channels, absoluteTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_NONE);
+}
+
 Sensor SensorExampleFactory::sensorNotSet() {
   return Sensor();
 }

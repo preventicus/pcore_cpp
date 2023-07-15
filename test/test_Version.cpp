@@ -182,3 +182,23 @@ TEST(VersionTest, TestSwitchDataFormWithVersionNotSet) {
   auto version = VersionExampleFactory::versionNotSet();
   EXPECT_THROW(version.switchDataForm(), std::runtime_error);
 }
+
+TEST(VersionTest, TestIsSetWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_FALSE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor1Minor2Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor1Minor2Patch0();
+  EXPECT_TRUE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor2Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor0Minor2Patch0();
+  EXPECT_TRUE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor0Patch1) {
+  auto version = VersionExampleFactory::versionWithMajor0Minor0Patch1();
+  EXPECT_TRUE(version.isSet());
+}

@@ -147,5 +147,9 @@ void DifferentialTimestampsContainer::switchDataForm() {
 }
 
 bool DifferentialTimestampsContainer::isSet() const {
-  return this->firstUnixTimestamp_ms != 0 || !this->blockDifferences_ms.empty() || !this->timestampsDifferences_ms.empty();
+  // clang-format off
+  return this->firstUnixTimestamp_ms != 0
+     || !this->blockDifferences_ms.empty()
+     || !this->timestampsDifferences_ms.empty();
+  // clang-format on
 }

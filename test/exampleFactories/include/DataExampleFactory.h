@@ -43,6 +43,7 @@ class DataExampleFactory {
   static Data dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive();
   static Data dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   static Data dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  static Data dataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet();
   static Data dataNotSet();
   static Data dataWithRawForSwitchDataFormTestInAbsoluteForm();
   static Data dataWithRawForSwitchDataFormTestInDifferentialForm();
