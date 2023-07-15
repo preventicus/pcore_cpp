@@ -181,3 +181,45 @@ TEST(RawTest, TestSwitchDataFormWithRawForSwitchDataFormTestInDifferentialForm) 
   auto rawInAbsoluteForm = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
   EXPECT_TRUE(raw == rawInAbsoluteForm);
 }
+
+TEST(RawTest, TestToJsonWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
