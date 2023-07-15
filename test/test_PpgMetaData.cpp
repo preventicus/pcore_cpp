@@ -255,6 +255,13 @@ TEST(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorBlue) {
   EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
 }
 
+TEST(PpgMetaDataTest, TestToJsonWithPpgMetDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  auto ppgMetaDataJson1 = ppgMetaData.toJson();
+  auto ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
+}
+
 TEST(PpgMetaDataTest, TestHasColorWithPpgMetDataWithColorBlue) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
   EXPECT_TRUE(ppgMetaData.hasColor());

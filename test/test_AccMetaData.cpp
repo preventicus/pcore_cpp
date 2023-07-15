@@ -243,6 +243,13 @@ TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithNormEuclideanDifferencesNorm)
   EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
 }
 
+TEST(AccMetaDataTest, TestToJsonWithAccMetaDataNotSet) {
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
+  auto accMetaDataJson1 = accMetaData.toJson();
+  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
+}
+
 TEST(AccMetaDataTest, TestHasNormWithAccMetaDataWithNormEuclideanDifferencesNorm) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
   EXPECT_TRUE(accMetaData.hasNorm());

@@ -315,3 +315,10 @@ TEST(ChannelTest, TestToJsonWithChannelWithAbsoluteBlockAndPpgMetaData) {
   auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
   EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
+
+TEST(ChannelTest, TestToJsonWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  auto channelJson1 = channel.toJson();
+  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
+  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
+}
