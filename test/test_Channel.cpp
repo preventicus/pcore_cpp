@@ -167,8 +167,8 @@ TEST(ChannelTest, TestIsEqualWithChannelWithDifferentialBlocksForNotEqualTestAnd
 }
 
 TEST(ChannelTest, TestIsEqualChannelNotSet) {
-  auto channel1 = Channel();
-  auto channel2 = Channel();
+  auto channel1 = ChannelExampleFactory::channelNotSet();
+  auto channel2 = ChannelExampleFactory::channelNotSet();
   EXPECT_TRUE(channel1 == channel2);
 }
 
@@ -227,8 +227,8 @@ TEST(ChannelTest, TestIsNotEqualWithChannelWithDifferentialBlocksForNotEqualTest
 }
 
 TEST(ChannelTest, TestIsNotEqualWithChannelNotSet) {
-  auto channel1 = Channel();
-  auto channel2 = Channel();
+  auto channel1 = ChannelExampleFactory::channelNotSet();
+  auto channel2 = ChannelExampleFactory::channelNotSet();
   EXPECT_FALSE(channel1 != channel2);
 }
 
@@ -236,7 +236,7 @@ TEST(ChannelTest, TestSwitchDataFormWithChannelWithAbsoluteValuesForSwitchDataFo
   BlockIdxs blockIdxs = {0, 11, 20};
   auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest();
   channelWithAbsoluteBlock.switchDataForm(blockIdxs);
-  auto absoluteBlock = AbsoluteBlock();
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockNotSet();
   EXPECT_TRUE(channelWithAbsoluteBlock.getAbsoluteBlock() == absoluteBlock);
   auto expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest();
   auto actualDifferentialBlocks = channelWithAbsoluteBlock.getDifferentialBlocks();
