@@ -42,6 +42,13 @@ TEST(HeaderTest, TestGetTimeZoneOffsetWithHeaderWithVersionWithMajor0Minor0Patch
   EXPECT_TRUE(timeZoneOffset1_min == timeZoneOffset2_min);
 }
 
+TEST(HeaderTest, TestGetTimeZoneOffsetWithHeaderNotSet) {
+  auto header = HeaderExampleFactory::headerNotSet();
+  auto timeZoneOffset1_min = HeaderExampleFactory::timeZoneOffsetNotSet_min();
+  auto timeZoneOffset2_min = header.getTimeZoneOffset();
+  EXPECT_TRUE(timeZoneOffset1_min == timeZoneOffset2_min);
+}
+
 TEST(HeaderTest, TestGetVersionWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto version1 = VersionExampleFactory::versionWithMajor0Minor0Patch0();
@@ -49,9 +56,30 @@ TEST(HeaderTest, TestGetVersionWithHeaderWithVersionWithMajor0Minor0Patch0AndTim
   EXPECT_TRUE(version1 == version2);
 }
 
+TEST(HeaderTest, TestGetVersionWithHeaderNotSet) {
+  auto header = HeaderExampleFactory::headerNotSet();
+  auto version1 = VersionExampleFactory::versionNotSet();
+  auto version2 = header.getPcoreVersion();
+  EXPECT_TRUE(version1 == version2);
+}
+
 TEST(HeaderTest, TestGetDataFormWithHeaderWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute) {
   auto header = HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   auto dataForm1 = DataForm::DATA_FORM_ABSOLUTE;
+  auto dataForm2 = header.getDataForm();
+  EXPECT_TRUE(dataForm1 == dataForm2);
+}
+
+TEST(HeaderTest, TestGetDataFormWithHeaderWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential) {
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  auto dataForm1 = DataForm::DATA_FORM_DIFFERENTIAL;
+  auto dataForm2 = header.getDataForm();
+  EXPECT_TRUE(dataForm1 == dataForm2);
+}
+
+TEST(HeaderTest, TestGetDataFormWithHeaderNotSet) {
+  auto header = HeaderExampleFactory::headerNotSet();
+  auto dataForm1 = DataForm::DATA_FORM_NONE;
   auto dataForm2 = header.getDataForm();
   EXPECT_TRUE(dataForm1 == dataForm2);
 }

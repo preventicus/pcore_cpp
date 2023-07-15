@@ -42,6 +42,28 @@ TEST(RawTest, TestGetSensorWithSensorPpgWithTwoChannelsInDifferentialForm) {
   EXPECT_TRUE(sensors[0] == sensor);
 }
 
+TEST(RawTest, TestGetSensorWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  auto raw = RawExampleFactory::rawNotSet();
+  auto sensors = raw.getSensors();
+  EXPECT_TRUE(sensors.empty());
+}
+
+TEST(RawTest, TestGetDataFormWithRawWithSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw.getDataFrom() == DataForm::DATA_FORM_DIFFERENTIAL);
+}
+
+TEST(RawTest, TestGetDataFormWithRawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(raw.getDataFrom() == DataForm::DATA_FORM_ABSOLUTE);
+}
+
+TEST(RawTest, TestGetDataFormWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  EXPECT_TRUE(raw.getDataFrom() == DataForm::DATA_FORM_NONE);
+}
+
 TEST(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
   auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
   auto raw2 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();

@@ -35,10 +35,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Channel.h"
 #include "ChannelExampleFactory.h"
 
+TEST(ChannelTest, TestGetPpgMetaDataWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_TRUE(channel.getPpgMetaData() == ppgMetaData);
+}
+
 TEST(ChannelTest, TestGetPpgMetaDataWithChannelWithAbsoluteBlockAndPpgMetaData) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
   EXPECT_TRUE(channel.getPpgMetaData() == ppgMetaData);
+}
+
+TEST(ChannelTest, TestGetAccMetaDataWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
+  EXPECT_TRUE(channel.getAccMetaData() == accMetaData);
 }
 
 TEST(ChannelTest, TestGetAccMetaDataWithChannelWithAbsoluteBlockAndAccMetaData) {
@@ -57,11 +69,47 @@ TEST(ChannelTest, TestGetDifferentialBlocksWithChannelWithDifferentialBlocksAndA
   }
 }
 
+TEST(ChannelTest, TestGetAbsoluteBlockWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockNotSet();
+  EXPECT_TRUE(channel.getAbsoluteBlock() == absoluteBlock);
+}
+
 TEST(ChannelTest, TestGetAbsoluteBlockWithChannelWithAbsoluteBlockAndPpgMetaData) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
   auto actualAbsoluteBlock = channel.getAbsoluteBlock();
   auto expectedAbsoluteValues = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
   EXPECT_TRUE(actualAbsoluteBlock == expectedAbsoluteValues);
+}
+
+TEST(ChannelTest, TestGetDataFormWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  EXPECT_TRUE(channel.getDataForm() == DataForm::DATA_FORM_NONE);
+}
+
+TEST(ChannelTest, TestGetDataFormWithChannelWithAbsoluteBlockAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_TRUE(channel.getDataForm() == DataForm::DATA_FORM_ABSOLUTE);
+}
+
+TEST(ChannelTest, TestGetDataFormWithChannelWithDifferentialBlocksAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_TRUE(channel.getDataForm() == DataForm::DATA_FORM_DIFFERENTIAL);
+}
+
+TEST(ChannelTest, TestGetSemsorTypeWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  EXPECT_TRUE(channel.getSensorType() == SensorTypeProtobuf::SENSOR_TYPE_NONE);
+}
+
+TEST(ChannelTest, TestGetSemsorTypeWithChannelWithAbsoluteBlockAndAccMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  EXPECT_TRUE(channel.getSensorType() == SensorTypeProtobuf::SENSOR_TYPE_ACC);
+}
+
+TEST(ChannelTest, TestGetSemsorTypeWithChannelWithAbsoluteBlockAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_TRUE(channel.getSensorType() == SensorTypeProtobuf::SENSOR_TYPE_PPG);
 }
 
 TEST(ChannelTest, TestIsEqualWithChannelWithAbsoluteBlockAndAccMetaData) {

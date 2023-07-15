@@ -39,13 +39,28 @@ TEST(VersionTest, TestGetMajorWithVersionWithMajor2Minor1Patch0) {
   EXPECT_EQ(version.getMajor(), VersionExampleFactory::majorTwo());
 }
 
+TEST(VersionTest, TestGetMajorWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_EQ(version.getMajor(), VersionExampleFactory::majorZero());
+}
+
 TEST(VersionTest, TestGetMinorWithVersionWithMajor2Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   EXPECT_EQ(version.getMinor(), VersionExampleFactory::minorOne());
 }
 
+TEST(VersionTest, TestGetMinorWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_EQ(version.getMinor(), VersionExampleFactory::minorZero());
+}
+
 TEST(VersionTest, TestGetPatchWithVersionWithMajor2Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  EXPECT_EQ(version.getPatch(), VersionExampleFactory::patchZero());
+}
+
+TEST(VersionTest, TestGetPatchWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
   EXPECT_EQ(version.getPatch(), VersionExampleFactory::patchZero());
 }
 

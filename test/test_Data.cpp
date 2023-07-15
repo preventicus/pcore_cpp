@@ -41,9 +41,23 @@ TEST(DataTest, TestGetRawWithDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOf
   EXPECT_TRUE(raw1 == raw2);
 }
 
+TEST(DataTest, TestGetRawWithDataNotSet) {
+  auto data = DataExampleFactory::dataNotSet();
+  auto raw1 = RawExampleFactory::rawNotSet();
+  auto raw2 = data.getRaw();
+  EXPECT_TRUE(raw1 == raw2);
+}
+
 TEST(DataTest, TestGetHeaderWithDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto header1 = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  auto header2 = data.getHeader();
+  EXPECT_TRUE(header1 == header2);
+}
+
+TEST(DataTest, TestGetHeaderWithDataNotSet) {
+  auto data = DataExampleFactory::dataNotSet();
+  auto header1 = HeaderExampleFactory::headerNotSet();
   auto header2 = data.getHeader();
   EXPECT_TRUE(header1 == header2);
 }

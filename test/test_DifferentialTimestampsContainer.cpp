@@ -44,6 +44,13 @@ TEST(DifferentialTimestampsTest, TestGetFirstTimestampWithDifferentialTimestamps
   EXPECT_EQ(firstTimestamp1_ms, firstTimestamp2_ms);
 }
 
+TEST(DifferentialTimestampsTest, TestGetFirstTimestampWithDifferentialTimestampsContainerNotSet) {
+  auto firstTimestamp1_ms = UnixTimestampsExampleFactory::firstTimestampNotSet_ms();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  auto firstTimestamp2_ms = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
+  EXPECT_EQ(firstTimestamp1_ms, firstTimestamp2_ms);
+}
+
 TEST(DifferentialTimestampsTest, TestGetBlockDifferencesWithDifferentialTimestampsContainerWithThreeBlocks) {
   auto blockDifferences1 = DifferencesExampleFactory::blockDifferencesWithThreeMixedDifferences();
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
@@ -51,9 +58,23 @@ TEST(DifferentialTimestampsTest, TestGetBlockDifferencesWithDifferentialTimestam
   EXPECT_EQ(blockDifferences1, blockDifferences2);
 }
 
+TEST(DifferentialTimestampsTest, TestGetBlockDifferencesWithDifferentialTimestampsContainerNotSet) {
+  auto blockDifferences1 = DifferencesExampleFactory::blockDifferencesNotSet();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  auto blockDifferences2 = differentialTimestampsContainer.getBlockDifferences_ms();
+  EXPECT_EQ(blockDifferences1, blockDifferences2);
+}
+
 TEST(DifferentialTimestampsTest, TestGetTimestampsDifferencesWithDifferentialTimestampsContainerWithThreeBlocks) {
   auto timestampsDifferences1 = DifferencesExampleFactory::timestampsDifferencesWithThreeZeroDifferences();
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  auto timestampsDifferences2 = differentialTimestampsContainer.getTimestampsDifferences_ms();
+  EXPECT_EQ(timestampsDifferences1, timestampsDifferences2);
+}
+
+TEST(DifferentialTimestampsTest, TestGetTimestampsDifferentialTimestampsContainerNotSet) {
+  auto timestampsDifferences1 = DifferencesExampleFactory::timestampsDifferencesNotSet();
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   auto timestampsDifferences2 = differentialTimestampsContainer.getTimestampsDifferences_ms();
   EXPECT_EQ(timestampsDifferences1, timestampsDifferences2);
 }
