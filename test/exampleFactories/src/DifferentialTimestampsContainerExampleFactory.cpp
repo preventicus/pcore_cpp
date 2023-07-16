@@ -37,11 +37,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "UnixTimestampsExampleFactory.h"
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks() {
-  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampInMs();
   auto blocksDifferences = DifferencesExampleFactory::blocksDifferencesWithThreeMixedDifferences();
   auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesWithThreeZeroDifferences();
 
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences, timestampsDifferences);
+  return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet() {
@@ -49,39 +49,39 @@ DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::d
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithTwoBlocks() {
-  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampInMs();
   auto blocksDifferences = DifferencesExampleFactory::blocksDifferencesWithTwoMixedDifferences();
   auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesWithTwoMixedDifferences();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences, timestampsDifferences);
+  return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithBigBlocks() {
-  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestamp_ms();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampInMs();
   auto blocksDifferences = DifferencesExampleFactory::blocksDifferencesWithThreeBigDifferences();
   auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesWithThreeBigDifferences();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences, timestampsDifferences);
+  return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerForSwitchDataFormTest() {
-  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormTest_ms();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormTestInMs();
   auto blocksDifferences = DifferencesExampleFactory::blocksDifferencesForSwitchDataFormTest();
   auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesForSwitchDataFromTest();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences, timestampsDifferences);
+  return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithFirstUnixTimeStampNotSet() {
-  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestampNotSet_ms();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampNotSetInMs();
   auto blocksDifferences = DifferencesExampleFactory::blocksDifferencesForSwitchDataFormTest();
   auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesForSwitchDataFromTest();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences, timestampsDifferences);
+  return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainer
 DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithFirstUnixTimeStampNotSetAndBlocksDifferencesNotSet() {
-  auto firstUnixTimestamp_ms = UnixTimestampsExampleFactory::firstTimestampNotSet_ms();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampNotSetInMs();
   auto blocksDifferences = DifferencesExampleFactory::blocksDifferencesNotSet();
   auto timestampsDifferences = DifferencesExampleFactory::timestampsDifferencesForSwitchDataFromTest();
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences, timestampsDifferences);
+  return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferences, timestampsDifferences);
 }
 
 DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(
@@ -90,11 +90,11 @@ DifferentialTimestampsContainerJson DifferentialTimestampsContainerExampleFactor
   if (!differentialTimestampsContainer.isSet()) {
     return differentialTimestampsContainerJson;
   }
-  auto blocksDifferences = differentialTimestampsContainer.getBlocksDifferences_ms();
-  auto timestampsDifferences = differentialTimestampsContainer.getTimestampsDifferences_ms();
+  auto blocksDifferences = differentialTimestampsContainer.getBlocksDifferencesInMs();
+  auto timestampsDifferences = differentialTimestampsContainer.getTimestampsDifferencesInMs();
   auto blocksDifferencesJson = DifferencesExampleFactory::buildBlocksDifferencesJson(blocksDifferences);
   auto timestampsDifferencesJson = DifferencesExampleFactory::buildTimestampsDifferencesJson(timestampsDifferences);
-  differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms] = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
+  differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms] = differentialTimestampsContainer.getFirstUnixTimestampInMs();
   differentialTimestampsContainerJson[PcoreJson::Key::blocks_differences_ms] = blocksDifferencesJson;
   differentialTimestampsContainerJson[PcoreJson::Key::timestamps_differences_ms] = timestampsDifferencesJson;
   return differentialTimestampsContainerJson;

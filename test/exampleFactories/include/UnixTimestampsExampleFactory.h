@@ -36,18 +36,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class UnixTimestampsExampleFactory {
  public:
-  static UnixTimestamps unixTimestampsWithThreeSmallTimestamps_ms();
-  static UnixTimestamps unixTimestampsWithThreeBigTimestamps_ms();
-  static UnixTimestamps unixTimestampsWithOneBigTimestamp_ms();
-  static UnixTimestamps unixTimestampsWithTimestamp0_ms();
-  static UnixTimestamps unixTimestampsNotSet_ms();
-  static UnixTimestamps unixTimestampsWithFiveDifferentialTimestamps_ms();
-  static UnixTimestamps unixTimestampsForSwitchDataFormTest_ms();
+  static UnixTimestamps unixTimestampsWithThreeSmallTimestampsInMs();
+  static UnixTimestamps unixTimestampsWithThreeBigTimestampsInMs();
+  static UnixTimestamps unixTimestampsWithOneBigTimestampInMs();
+  static UnixTimestamps unixTimestampsWithTimestamp0InMs();
+  static UnixTimestamps unixTimestampsNotSetInMs();
+  static UnixTimestamps unixTimestampsWithFiveDifferentialTimestampsInMs();
+  static UnixTimestamps unixTimestampsForSwitchDataFormTestInMs();
 
-  static UnixTimestamp firstTimestamp_ms();
-  static UnixTimestamp firstTimestampNotSet_ms();
-  static UnixTimestamp lastTimestamp_ms();
-  static UnixTimestamp firstUnixTimestampForSwitchDataFormTest_ms();
+  static UnixTimestamp firstTimestampInMs();
+  static UnixTimestamp firstTimestampNotSetInMs();
+  static UnixTimestamp lastTimestampInMs();
+  static UnixTimestamp firstUnixTimestampForSwitchDataFormTestInMs();
 
-  static UnixTimestampsJson buildUnixTimestampsJson(const UnixTimestamps& unixTimestamps_ms);
+  static UnixTimestampsJson buildUnixTimestampsJson(const UnixTimestamps& unixTimestampsInMs);
 };

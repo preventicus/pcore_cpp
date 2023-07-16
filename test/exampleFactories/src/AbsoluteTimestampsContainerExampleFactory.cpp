@@ -35,22 +35,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreJson.h"
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeSmallTimestamps() {
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestamps_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestampsInMs();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps() {
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestampsInMs();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithOneBigTimestamp() {
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestamp_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestampInMs();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestamp0() {
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0InMs();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
@@ -59,7 +59,7 @@ AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteT
 }
 
 AbsoluteTimestampsContainer AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest() {
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTest_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTestInMs();
   return AbsoluteTimestampsContainer(unixTimestamps);
 }
 
@@ -69,7 +69,7 @@ AbsoluteTimestampsContainerJson AbsoluteTimestampsContainerExampleFactory::build
   if (!absoluteTimestampsContainer.isSet()) {
     return absoluteTimestampsContainerJson;
   }
-  auto unixTimestamps = absoluteTimestampsContainer.getUnixTimestamps_ms();
+  auto unixTimestamps = absoluteTimestampsContainer.getUnixTimestampsInMs();
   absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
   return absoluteTimestampsContainerJson;
 }

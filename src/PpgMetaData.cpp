@@ -38,33 +38,33 @@ using namespace PCore;
 
 using WavelegthJson = Json::Value;
 
-PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) : color(colorProtobuf), wavelength_nm(0) {}
+PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) : color(colorProtobuf), wavelengthInNm(0) {}
 
-PpgMetaData::PpgMetaData(Wavelength wavelength_nm) : color(ColorProtobuf::COLOR_NONE), wavelength_nm(wavelength_nm) {}
+PpgMetaData::PpgMetaData(Wavelength wavelengthInNm) : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(wavelengthInNm) {}
 
 PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
-    : color(PcoreProtobuf::Convert::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString())), wavelength_nm([&]() {
+    : color(PcoreProtobuf::Convert::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString())), wavelengthInNm([&]() {
         if (ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asInt() < 0) {
-          throw std::invalid_argument("wavelength_nm is negative in json.");
+          throw std::invalid_argument("wavelengthInNm is negative in json.");
         }
         return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
       }()) {
-  if (this->color != ColorProtobuf::COLOR_NONE && this->wavelength_nm != 0) {
+  if (this->color != ColorProtobuf::COLOR_NONE && this->wavelengthInNm != 0) {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
   }
 }
 
 PpgMetaData::PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf)
-    : color(ppgMetaDataProtobuf.color()), wavelength_nm(ppgMetaDataProtobuf.wavelength_nm()) {}
+    : color(ppgMetaDataProtobuf.color()), wavelengthInNm(ppgMetaDataProtobuf.wavelength_nm()) {}
 
-PpgMetaData::PpgMetaData() : color(ColorProtobuf::COLOR_NONE), wavelength_nm(0) {}
+PpgMetaData::PpgMetaData() : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(0) {}
 
 ColorProtobuf PpgMetaData::getColor() const {
   return this->color;
 }
 
-Wavelength PpgMetaData::getWavelength_nm() const {
-  return this->wavelength_nm;
+Wavelength PpgMetaData::getWavelengthInNm() const {
+  return this->wavelengthInNm;
 }
 
 bool PpgMetaData::hasColor() const {
@@ -72,16 +72,16 @@ bool PpgMetaData::hasColor() const {
 }
 
 bool PpgMetaData::hasWavelength() const {
-  return this->wavelength_nm > 0;
+  return this->wavelengthInNm > 0;
 }
 
 bool PpgMetaData::isSet() const {
-  return this->color != ColorProtobuf::COLOR_NONE || this->wavelength_nm != 0;
+  return this->color != ColorProtobuf::COLOR_NONE || this->wavelengthInNm != 0;
 }
 
 bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
   if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
-    return this->color == derived->color && this->wavelength_nm == derived->wavelength_nm;
+    return this->color == derived->color && this->wavelengthInNm == derived->wavelengthInNm;
   }
   return false;
 }
@@ -95,8 +95,8 @@ PpgMetaDataJson PpgMetaData::toJson() const {
   if (!this->isSet()) {
     return ppgMetaDataJson;
   }
-  WavelegthJson wavelengthJson(this->wavelength_nm);
-  if (this->wavelength_nm != 0) {
+  WavelegthJson wavelengthJson(this->wavelengthInNm);
+  if (this->wavelengthInNm != 0) {
     ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
   }
   if (this->color != ColorProtobuf::COLOR_NONE) {
@@ -112,14 +112,14 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
   if (!this->isSet()) {
     return;
   }
-  if (this->color != ColorProtobuf::COLOR_NONE && this->wavelength_nm != 0) {
+  if (this->color != ColorProtobuf::COLOR_NONE && this->wavelengthInNm != 0) {
     throw std::invalid_argument("only one parameter has to be initialized");
   }
   if (this->color != ColorProtobuf::COLOR_NONE) {
     ppgMetaDataProtobuf->set_color(this->color);
   }
-  if (this->wavelength_nm != 0) {
-    ppgMetaDataProtobuf->set_wavelength_nm(this->wavelength_nm);
+  if (this->wavelengthInNm != 0) {
+    ppgMetaDataProtobuf->set_wavelength_nm(this->wavelengthInNm);
   }
 }
 

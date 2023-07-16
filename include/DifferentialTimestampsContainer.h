@@ -54,22 +54,22 @@ using TimestampsDifferencesJson = Json::Value;
 namespace PCore {
 class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestampContainerProtobuf> {
  public:
-  explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
-                                           BlocksDifferences blocksDifferences_ms,
-                                           TimestampsDifferences timestampsDifferences_ms);
+  explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestampInMs,
+                                           BlocksDifferences blocksDifferencesInMs,
+                                           TimestampsDifferences timestampsDifferencesInMs);
   explicit DifferentialTimestampsContainer(const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf);
   explicit DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
   explicit DifferentialTimestampsContainer();
 
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms(UnixTimestamp firstUnixTimestampInLastBlock, size_t numberOfElementsInLastBlock) const;
-  [[nodiscard]] BlocksDifferences getBlocksDifferences_ms() const;
-  [[nodiscard]] TimestampsDifferences getTimestampsDifferences_ms() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs(UnixTimestamp firstUnixTimestampInLastBlock, size_t numberOfElementsInLastBlock) const;
+  [[nodiscard]] BlocksDifferences getBlocksDifferencesInMs() const;
+  [[nodiscard]] TimestampsDifferences getTimestampsDifferencesInMs() const;
 
   [[nodiscard]] DifferentialTimestampsContainerJson toJson() const final;
   [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const;
   [[nodiscard]] UnixTimestamp calculateLastUnixTimestampInBlock(const BlockIdx& blockIdx,
-                                                                UnixTimestamp firstUnixTimestampInBlock_ms,
+                                                                UnixTimestamp firstUnixTimestampInBlockInMs,
                                                                 const DifferentialBlock& lastDifferentialBlock) const;
 
   void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const final;
@@ -80,8 +80,8 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
   bool operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
 
  private:
-  UnixTimestamp firstUnixTimestamp_ms;
-  BlocksDifferences blocksDifferences_ms;
-  TimestampsDifferences timestampsDifferences_ms;
+  UnixTimestamp firstUnixTimestampInMs;
+  BlocksDifferences blocksDifferencesInMs;
+  TimestampsDifferences timestampsDifferencesInMs;
 };
 }  // namespace PCore

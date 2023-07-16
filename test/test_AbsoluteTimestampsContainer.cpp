@@ -37,14 +37,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 TEST(AbsoluteTimestampsContainerTest, TestGetUnixTimestampsWithAbsoluteTimestampsContainerWithThreeBigTimestamps) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
-  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps_ms(), unixTimestamps);
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestampsInMs();
+  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestampsInMs(), unixTimestamps);
 }
 
 TEST(AbsoluteTimestampsContainerTest, TestGetUnixTimestampsWithAbsoluteTimestampsNotSet) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerNotSet();
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsNotSet_ms();
-  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestamps_ms(), unixTimestamps);
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsNotSetInMs();
+  EXPECT_EQ(absoluteTimestampsContainer.getUnixTimestampsInMs(), unixTimestamps);
 }
 
 TEST(AbsoluteTimestampsContainerTest, TestIsEqualWithAbsoluteTimestampsContainerWithThreeBigTimestamps) {

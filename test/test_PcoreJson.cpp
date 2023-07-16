@@ -88,7 +88,7 @@ TEST(PcoreJson, TestJsonToVectorWithAbsoluteValue) {
 
 TEST(PcoreJson, TestJsonToVectorWithUnixTimestamp) {
   auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
-  auto unixTimestampExpected = absoluteTimestampsContainer.getUnixTimestamps_ms();
+  auto unixTimestampExpected = absoluteTimestampsContainer.getUnixTimestampsInMs();
   auto absoluteTimestampsContainerJson = AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
   auto unixTimestampResult = PcoreJson::Convert::jsonToVector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms);
 
@@ -112,8 +112,8 @@ TEST(PcoreJson, TestJsonToVectorWithDifferentialValue) {
 
 TEST(PcoreJson, TestJsonToVectorWithTimeDifference) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithBigBlocks();
-  auto blocksDifferencesExpected = differentialTimestampsContainer.getBlocksDifferences_ms();
-  auto timestampsDifferencesExpected = differentialTimestampsContainer.getTimestampsDifferences_ms();
+  auto blocksDifferencesExpected = differentialTimestampsContainer.getBlocksDifferencesInMs();
+  auto timestampsDifferencesExpected = differentialTimestampsContainer.getTimestampsDifferencesInMs();
   auto differentialTimestampsContainerJson =
       DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
   auto blocksDifferencesResult =
@@ -164,7 +164,7 @@ TEST(PcoreJson, TestVectorToJsonWithAbsoluteValues) {
 }
 
 TEST(PcoreJson, TestVectorToJsonWithUnixTimestamps) {
-  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms();
+  auto unixTimestamps = UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestampsInMs();
   auto unixTimestampsJsonExpected = UnixTimestampsExampleFactory::buildUnixTimestampsJson(unixTimestamps);
   auto unixTimestampsJsonResult = PcoreJson::Convert::vectorToJson(unixTimestamps);
   EXPECT_TRUE(unixTimestampsJsonExpected.toStyledString() == unixTimestampsJsonResult.toStyledString());

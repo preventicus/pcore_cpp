@@ -41,7 +41,7 @@ TEST(PpgMetaDataTest, TestGetColorWithPpgMetDataWithColorGreen) {
 
 TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataWithWavelength255) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
-  EXPECT_EQ(ppgMetaData.getWavelength_nm(), 255);
+  EXPECT_EQ(ppgMetaData.getWavelengthInNm(), 255);
 }
 
 TEST(PpgMetaDataTest, TestGetColorWithPpgMetaDataNotSet) {
@@ -51,7 +51,7 @@ TEST(PpgMetaDataTest, TestGetColorWithPpgMetaDataNotSet) {
 
 TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataNotSet) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-  EXPECT_EQ(ppgMetaData.getWavelength_nm(), 0);
+  EXPECT_EQ(ppgMetaData.getWavelengthInNm(), 0);
 }
 
 TEST(PpgMetaDataTest, TestIsSetWithPpgMetaDataWithWavelength255) {

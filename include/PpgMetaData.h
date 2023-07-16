@@ -44,13 +44,13 @@ namespace PCore {
 class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
  public:
   explicit PpgMetaData(ColorProtobuf colorProtobuf);
-  explicit PpgMetaData(Wavelength wavelength_nm);
+  explicit PpgMetaData(Wavelength wavelengthInNm);
   explicit PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf);
   explicit PpgMetaData(const PpgMetaDataJson& ppgMetaData);
   explicit PpgMetaData();
 
   [[nodiscard]] ColorProtobuf getColor() const;
-  [[nodiscard]] Wavelength getWavelength_nm() const;
+  [[nodiscard]] Wavelength getWavelengthInNm() const;
   [[nodiscard]] bool hasColor() const;
   [[nodiscard]] bool hasWavelength() const;
   [[nodiscard]] bool isSet() const final;
@@ -64,6 +64,6 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
 
  private:
   ColorProtobuf color;
-  Wavelength wavelength_nm;
+  Wavelength wavelengthInNm;
 };
 }  // namespace PCore

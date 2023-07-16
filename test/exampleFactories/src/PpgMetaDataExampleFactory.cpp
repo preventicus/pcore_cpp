@@ -72,7 +72,7 @@ PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(const PpgMetaDat
     return ppgMetaDataJson;
   }
   if (ppgMetaData.hasWavelength()) {
-    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = ppgMetaData.getWavelength_nm();
+    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = ppgMetaData.getWavelengthInNm();
   } else if (ppgMetaData.hasColor()) {
     ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(ppgMetaData.getColor());
   }

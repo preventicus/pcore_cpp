@@ -60,9 +60,9 @@ class Sensor final : public IPCore<SensorProtobuf> {
   [[nodiscard]] Channels getChannels() const;
   [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const;
   [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const;
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms() const;
-  [[nodiscard]] Duration getDuration_ms() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const;
+  [[nodiscard]] Duration getDurationInMs() const;
   [[nodiscard]] DataForm getDataFrom() const;
 
   [[nodiscard]] bool isSet() const final;

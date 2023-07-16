@@ -43,13 +43,13 @@ using UnixTimestampsJson = Json::Value;
 namespace PCore {
 class AbsoluteTimestampsContainer final {
  public:
-  explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms);
+  explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs);
   explicit AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson);
   explicit AbsoluteTimestampsContainer();
 
-  [[nodiscard]] UnixTimestamps getUnixTimestamps_ms() const;
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms() const;
+  [[nodiscard]] UnixTimestamps getUnixTimestampsInMs() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const;
   [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const;
   [[nodiscard]] bool isSet() const;
 
@@ -57,6 +57,6 @@ class AbsoluteTimestampsContainer final {
   bool operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;
 
  private:
-  UnixTimestamps unixTimestamps_ms;
+  UnixTimestamps unixTimestampsInMs;
 };
 }  // namespace PCore

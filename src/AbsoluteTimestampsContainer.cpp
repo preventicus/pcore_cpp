@@ -36,37 +36,37 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace PCore;
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestamps_ms) : unixTimestamps_ms(std::move(unixTimestamps_ms)) {}
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs) : unixTimestampsInMs(std::move(unixTimestampsInMs)) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
-    : unixTimestamps_ms(PcoreJson::Convert::jsonToVector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms)) {}
+    : unixTimestampsInMs(PcoreJson::Convert::jsonToVector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms)) {}
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestamps_ms({}) {}
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestampsInMs({}) {}
 
-UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestamps_ms() const {
-  return this->unixTimestamps_ms;
+UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestampsInMs() const {
+  return this->unixTimestampsInMs;
 }
 
-UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestamp_ms() const {  // TODO unittests
+UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestampInMs() const {  // TODO unittests
   if (!isSet()) {
-    throw std::runtime_error("unixTimestamps_ms is not set");
+    throw std::runtime_error("unixTimestampsInMs is not set");
   }
-  return this->unixTimestamps_ms.front();
+  return this->unixTimestampsInMs.front();
 }
 
-UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestamp_ms() const {  // TODO unittests
+UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const {  // TODO unittests
   if (!isSet()) {
-    throw std::runtime_error("unixTimestamps_ms is not set");
+    throw std::runtime_error("unixTimestampsInMs is not set");
   }
-  return this->unixTimestamps_ms.back();
+  return this->unixTimestampsInMs.back();
 }
 
 bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
-  return this->unixTimestamps_ms == absoluteTimestampsContainer.unixTimestamps_ms;
+  return this->unixTimestampsInMs == absoluteTimestampsContainer.unixTimestampsInMs;
 }
 
 bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
-  return this->unixTimestamps_ms != absoluteTimestampsContainer.unixTimestamps_ms;
+  return this->unixTimestampsInMs != absoluteTimestampsContainer.unixTimestampsInMs;
 }
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
@@ -74,10 +74,10 @@ AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
   if (!this->isSet()) {
     return absoluteTimestampsContainerJson;
   }
-  absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = PcoreJson::Convert::vectorToJson(this->unixTimestamps_ms);
+  absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = PcoreJson::Convert::vectorToJson(this->unixTimestampsInMs);
   return absoluteTimestampsContainerJson;
 }
 
 bool AbsoluteTimestampsContainer::isSet() const {
-  return !this->unixTimestamps_ms.empty();
+  return !this->unixTimestampsInMs.empty();
 }

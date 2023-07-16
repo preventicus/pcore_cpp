@@ -33,56 +33,56 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "UnixTimestampsExampleFactory.h"
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestamps_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithThreeSmallTimestampsInMs() {
   return {1, 2, 3};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestamps_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithThreeBigTimestampsInMs() {
   return {1675732789987, 1675732789995, 1675732790000};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestamp_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithOneBigTimestampInMs() {
   return {1675732789987};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithTimestamp0InMs() {
   return {0};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsNotSet_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsNotSetInMs() {
   return {};
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithFiveDifferentialTimestamps_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsWithFiveDifferentialTimestampsInMs() {
   return {5, 0, 7, 200, 1};
 }
 
-UnixTimestamp UnixTimestampsExampleFactory::firstTimestamp_ms() {
+UnixTimestamp UnixTimestampsExampleFactory::firstTimestampInMs() {
   return 1675732789987;
 }
 
-UnixTimestamp UnixTimestampsExampleFactory::firstTimestampNotSet_ms() {
+UnixTimestamp UnixTimestampsExampleFactory::firstTimestampNotSetInMs() {
   return 0;
 }
 
-UnixTimestamp UnixTimestampsExampleFactory::lastTimestamp_ms() {
+UnixTimestamp UnixTimestampsExampleFactory::lastTimestampInMs() {
   return 1675732790000;
 }
 
-UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTest_ms() {
+UnixTimestamps UnixTimestampsExampleFactory::unixTimestampsForSwitchDataFormTestInMs() {
   return {1677696136587, 1677696136627, 1677696136667, 1677696136707, 1677696136747, 1677696136787, 1677696136827, 1677696136867, 1677696136907,
           1677696136947, 1677696136987, 1677696137028, 1677696137068, 1677696137108, 1677696137148, 1677696137188, 1677696137228, 1677696137268,
           1677696137308, 1677696137348, 1677696137387, 1677696137427, 1677696137467, 1677696137507, 1677696137547, 1677696137587, 1677696137627};
 }
 
-UnixTimestamp UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormTest_ms() {
+UnixTimestamp UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormTestInMs() {
   return 1677696136587;
 }
 
-UnixTimestampsJson UnixTimestampsExampleFactory::buildUnixTimestampsJson(const UnixTimestamps& unixTimestamps_ms) {
+UnixTimestampsJson UnixTimestampsExampleFactory::buildUnixTimestampsJson(const UnixTimestamps& unixTimestampsInMs) {
   UnixTimestampsJson unixTimestampsJson(Json::arrayValue);
-  for (const auto& unixTimestamp_ms : unixTimestamps_ms) {
-    unixTimestampsJson.append(unixTimestamp_ms);
+  for (const auto& unixTimestampInMs : unixTimestampsInMs) {
+    unixTimestampsJson.append(unixTimestampInMs);
   }
   return unixTimestampsJson;
 }
