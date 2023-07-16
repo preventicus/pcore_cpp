@@ -81,7 +81,7 @@ DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksForTestSer
 
 DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJson(const DifferentialBlocks& differentialBlocks) {
   DifferentialBlocksJson differentialBlocksJson;
-  for (auto& differentialBlock : differentialBlocks) {
+  for (const auto& differentialBlock : differentialBlocks) {
     differentialBlocksJson.append(DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock));
   }
   return differentialBlocksJson;

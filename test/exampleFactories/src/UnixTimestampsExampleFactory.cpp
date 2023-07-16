@@ -81,7 +81,7 @@ UnixTimestamp UnixTimestampsExampleFactory::firstUnixTimestampForSwitchDataFormT
 
 UnixTimestampsJson UnixTimestampsExampleFactory::buildUnixTimestampsJson(const UnixTimestamps& unixTimestamps_ms) {
   UnixTimestampsJson unixTimestampsJson(Json::arrayValue);
-  for (auto& unixTimestamp_ms : unixTimestamps_ms) {
+  for (const auto& unixTimestamp_ms : unixTimestamps_ms) {
     unixTimestampsJson.append(unixTimestamp_ms);
   }
   return unixTimestampsJson;

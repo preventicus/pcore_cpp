@@ -138,7 +138,7 @@ SensorJson SensorExampleFactory::buildSensorJson(const Sensor& sensor) {
 
 SensorsJson SensorExampleFactory::buildSensorsJson(const Sensors& sensors) {
   SensorsJson sensorsJson(Json::arrayValue);
-  for (auto& sensor : sensors) {
+  for (const auto& sensor : sensors) {
     SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor);
     sensorsJson.append(sensorJson);
   }

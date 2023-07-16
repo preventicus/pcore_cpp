@@ -56,7 +56,7 @@ DifferentialValues DifferentialValuesExampleFactory::differentialValuesNotSet() 
 
 DifferentialValuesJson DifferentialValuesExampleFactory::buildDifferentialValuesJson(const DifferentialValues& differentialValues) {
   DifferentialValuesJson differentialValuesJson(Json::arrayValue);
-  for (auto& differentialValue : differentialValues) {
+  for (const auto& differentialValue : differentialValues) {
     differentialValuesJson.append(differentialValue);
   }
   return differentialValuesJson;
