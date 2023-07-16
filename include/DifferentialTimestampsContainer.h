@@ -43,19 +43,19 @@ using namespace PCore;
 
 using DifferentialTimestampContainerProtobuf = com::preventicus::pcore::Raw_Sensor_DifferentialTimestampsContainer;
 using TimeDifference = uint32_t;
-using BlockDifferences = std::vector<TimeDifference>;
+using BlocksDifferences = std::vector<TimeDifference>;
 using TimestampsDifferences = std::vector<TimeDifference>;
 using DifferentialTimestampsContainerJson = Json::Value;
 
 using UnixTimestampJson = Json::Value;
-using BlockDifferencesJson = Json::Value;
+using BlocksDifferencesJson = Json::Value;
 using TimestampsDifferencesJson = Json::Value;
 
 namespace PCore {
 class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestampContainerProtobuf> {
  public:
   explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestamp_ms,
-                                           BlockDifferences blockDifferences_ms,
+                                           BlocksDifferences blocksDifferences_ms,
                                            TimestampsDifferences timestampsDifferences_ms);
   explicit DifferentialTimestampsContainer(const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf);
   explicit DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
@@ -63,7 +63,7 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
 
   [[nodiscard]] UnixTimestamp getFirstUnixTimestamp_ms() const;
   [[nodiscard]] UnixTimestamp getLastUnixTimestamp_ms(UnixTimestamp firstUnixTimestampInLastBlock, size_t numberOfElementsInLastBlock) const;
-  [[nodiscard]] BlockDifferences getBlockDifferences_ms() const;
+  [[nodiscard]] BlocksDifferences getBlocksDifferences_ms() const;
   [[nodiscard]] TimestampsDifferences getTimestampsDifferences_ms() const;
 
   [[nodiscard]] DifferentialTimestampsContainerJson toJson() const final;
@@ -81,7 +81,7 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
 
  private:
   UnixTimestamp firstUnixTimestamp_ms;
-  BlockDifferences blockDifferences_ms;
+  BlocksDifferences blocksDifferences_ms;
   TimestampsDifferences timestampsDifferences_ms;
 };
 }  // namespace PCore

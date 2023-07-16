@@ -46,7 +46,7 @@ class DifferentialTimestampsContainerExampleFactory {
   static DifferentialTimestampsContainer differentialTimestampsContainerWithBigBlocks();
   static DifferentialTimestampsContainer differentialTimestampsContainerForSwitchDataFormTest();
   static DifferentialTimestampsContainer differentialTimestampsContainerWithFirstUnixTimeStampNotSet();
-  static DifferentialTimestampsContainer differentialTimestampsContainerWithFirstUnixTimeStampNotSetAndBlockDifferencesNotSet();
+  static DifferentialTimestampsContainer differentialTimestampsContainerWithFirstUnixTimeStampNotSetAndBlocksDifferencesNotSet();
   static DifferentialTimestampsContainerJson buildDifferentialTimestampsContainerJson(
       const DifferentialTimestampsContainer& differentialTimestampsContainer);
 };

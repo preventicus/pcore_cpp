@@ -54,7 +54,7 @@
                     ],
                     "differential_timestamps_container": {
                         "first_unix_timestamp_ms": 1675416424341,
-                        "block_differences_ms": [30,30,30,30],
+                        "blocks_differences_ms": [30,30,30,30],
                         "timestamps_differences_ms": [28,30,22,30]
                     },
                     "sensor_type": "SENSOR_TYPE_PPG"
@@ -80,7 +80,7 @@
                     ],
                     "differential_timestamps_container": {
                         "first_unix_timestamp_ms": 1675416424301,
-                        "block_differences_ms": [30,31,30],
+                        "blocks_differences_ms": [30,31,30],
                         "timestamps_differences_ms": [31,30,30]
                     },
                     "sensor_type": "SENSOR_TYPE_ACC"

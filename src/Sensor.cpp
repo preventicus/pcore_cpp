@@ -286,7 +286,7 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
   }
   const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
   const auto timestampsDifferences_ms = differentialTimestampsContainer.getTimestampsDifferences_ms();
-  const auto blockDifferences_ms = differentialTimestampsContainer.getBlockDifferences_ms();
+  const auto blocksDifferences_ms = differentialTimestampsContainer.getBlocksDifferences_ms();
   auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestamp_ms();
 
   size_t numberOfElements = 0;
@@ -296,9 +296,9 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
   UnixTimestamps unixTimestamps_ms;
   unixTimestamps_ms.reserve(numberOfElements);
 
-  const auto numberOfBlockDifferences = blockDifferences_ms.size();
-  for (size_t i = 0; i < numberOfBlockDifferences; i++) {
-    absoluteUnixTimestamp += blockDifferences_ms[i];
+  const auto numberOfBlocksDifferences = blocksDifferences_ms.size();
+  for (size_t i = 0; i < numberOfBlocksDifferences; i++) {
+    absoluteUnixTimestamp += blocksDifferences_ms[i];
     const auto numberOfDifferentialValues = differentialBlocksOfFirstChannel[i].getDifferentialValues().size();
     for (size_t j = 0; j < numberOfDifferentialValues; j++) {
       unixTimestamps_ms.emplace_back(absoluteUnixTimestamp + j * timestampsDifferences_ms[i]);
@@ -310,7 +310,7 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const Differenti
 DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
                                                                         const BlockIdxs& blockIdxs) const {
   const auto numberOfBlocks = blockIdxs.size();
-  BlockDifferences blockDifferences_ms;
+  BlocksDifferences blocksDifferences_ms;
   TimestampsDifferences timestampsDifferences_ms;
   UnixTimestamp firstUnixTimestamp_ms = 0;
 
@@ -318,16 +318,16 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
    * blockIdxs.size = 0 -> no timestamps are included
                             return default Values for not set Block
    * blockIdxs.size = 1 -> case 1 : just one Block with one timestamps
-                            return firstTimestamps, BlockDifferences_ms = {0}, timestampsDifference_ms{0}
+                            return firstTimestamps, BlocksDifferences_ms = {0}, timestampsDifference_ms{0}
    *                       case 2 : one Block with certain amount of timestamps with same time differences
-                            return firstTimestamps, BlockDifference_ms  = {0}, timestampsDifferences_ms with one value (BestCase)
+                            return firstTimestamps, BlocksDifference_ms  = {0}, timestampsDifferences_ms with one value (BestCase)
    * blockIdxs.size > 1 -> case 1: normal condition (Last block hold at least 2 Timestamps)
                             return calculate differentialTimestamps
    *                       case 2: the last Block hold just one Timestamp
                             return calculate differentialTimestamps  + last timestampsDifference_ms.pushback(0)
   */
   if (numberOfBlocks == 0) {
-    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
+    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences_ms, timestampsDifferences_ms);
   }
 
   const auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestamps_ms();
@@ -335,24 +335,24 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
   if (numberOfBlocks == 1) {
     TimeDifference timestampsDifference = absoluteUnixTimestamps[1] - firstUnixTimestamp_ms;
     timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsDifference);
-    blockDifferences_ms.push_back(0);
-    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
+    blocksDifferences_ms.push_back(0);
+    return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences_ms, timestampsDifferences_ms);
   }
 
-  blockDifferences_ms.push_back(0);
+  blocksDifferences_ms.push_back(0);
   timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps[1] - firstUnixTimestamp_ms);
   const auto numberOfDifferences = blockIdxs.size() - 1;
   for (size_t i = 1; i < numberOfDifferences; i++) {
     const BlockIdx previousBlockIdx = blockIdxs[i - 1];
     const BlockIdx currentBlockIdx = blockIdxs[i];
     timestampsDifferences_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
-    blockDifferences_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
+    blocksDifferences_ms.emplace_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
   }
   const auto lastBlockIdx = blockIdxs.back();
-  blockDifferences_ms.emplace_back(absoluteUnixTimestamps[lastBlockIdx] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
+  blocksDifferences_ms.emplace_back(absoluteUnixTimestamps[lastBlockIdx] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
   timestampsDifferences_ms.emplace_back(
       absoluteUnixTimestamps.size() - 1 == lastBlockIdx ? 0 : absoluteUnixTimestamps[lastBlockIdx + 1] - absoluteUnixTimestamps[lastBlockIdx]);
-  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blockDifferences_ms, timestampsDifferences_ms);
+  return DifferentialTimestampsContainer(firstUnixTimestamp_ms, blocksDifferences_ms, timestampsDifferences_ms);
 }
 
 SensorJson Sensor::toJson() const {
@@ -379,10 +379,10 @@ SensorJson Sensor::toJson() const {
 }
 
 UnixTimestamp Sensor::calculateFirstUnixTimestampInLastBlock() const {
-  const auto blockDifferences_ms = this->differentialTimestampsContainer.getBlockDifferences_ms();
+  const auto blocksDifferences_ms = this->differentialTimestampsContainer.getBlocksDifferences_ms();
   auto firstUnixTimestampInLastBlock = this->getFirstUnixTimestamp_ms();
-  for (const auto& blockDifference_ms : blockDifferences_ms) {
-    firstUnixTimestampInLastBlock += blockDifference_ms;
+  for (const auto& blocksDifference_ms : blocksDifferences_ms) {
+    firstUnixTimestampInLastBlock += blocksDifference_ms;
   }
   return firstUnixTimestampInLastBlock;
 }

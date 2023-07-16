@@ -112,17 +112,17 @@ TEST(PcoreJson, TestJsonToVectorWithDifferentialValue) {
 
 TEST(PcoreJson, TestJsonToVectorWithTimeDifference) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithBigBlocks();
-  auto blockDifferencesExpected = differentialTimestampsContainer.getBlockDifferences_ms();
+  auto blocksDifferencesExpected = differentialTimestampsContainer.getBlocksDifferences_ms();
   auto timestampsDifferencesExpected = differentialTimestampsContainer.getTimestampsDifferences_ms();
   auto differentialTimestampsContainerJson =
       DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
-  auto blockDifferencesResult =
-      PcoreJson::Convert::jsonToVector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::block_differences_ms);
+  auto blocksDifferencesResult =
+      PcoreJson::Convert::jsonToVector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::blocks_differences_ms);
   auto timestampsDifferencesResult =
       PcoreJson::Convert::jsonToVector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::timestamps_differences_ms);
-  EXPECT_TRUE(blockDifferencesExpected.size() == blockDifferencesResult.size());
-  for (size_t i = 0; i < blockDifferencesExpected.size(); i++) {
-    EXPECT_TRUE(blockDifferencesExpected[i] == blockDifferencesResult[i]);
+  EXPECT_TRUE(blocksDifferencesExpected.size() == blocksDifferencesResult.size());
+  for (size_t i = 0; i < blocksDifferencesExpected.size(); i++) {
+    EXPECT_TRUE(blocksDifferencesExpected[i] == blocksDifferencesResult[i]);
   }
 
   EXPECT_TRUE(timestampsDifferencesExpected.size() == timestampsDifferencesResult.size());
@@ -185,11 +185,11 @@ TEST(PcoreJson, TestVectorToJsonWithDifferentialValues) {
   EXPECT_TRUE(differentialValuesJsonExpected.toStyledString() == differentialValuesJsonResult.toStyledString());
 }
 
-TEST(PcoreJson, TestVectorToJsonWithBlockDifferences) {
-  auto blockDifferences = DifferencesExampleFactory::blockDifferencesWithThreeBigDifferences();
-  auto blockDifferencesJsonExpected = DifferencesExampleFactory::buildBlockDifferencesJson(blockDifferences);
-  auto blockDifferencesJsonResult = PcoreJson::Convert::vectorToJson(blockDifferences);
-  EXPECT_TRUE(blockDifferencesJsonExpected.toStyledString() == blockDifferencesJsonResult.toStyledString());
+TEST(PcoreJson, TestVectorToJsonWithBlocksDifferences) {
+  auto blocksDifferences = DifferencesExampleFactory::blocksDifferencesWithThreeBigDifferences();
+  auto blocksDifferencesJsonExpected = DifferencesExampleFactory::buildBlocksDifferencesJson(blocksDifferences);
+  auto blocksDifferencesJsonResult = PcoreJson::Convert::vectorToJson(blocksDifferences);
+  EXPECT_TRUE(blocksDifferencesJsonExpected.toStyledString() == blocksDifferencesJsonResult.toStyledString());
 }
 
 TEST(PcoreJson, TestVectorToJsonWithTimestampsDifferences) {

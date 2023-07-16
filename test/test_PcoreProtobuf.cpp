@@ -139,15 +139,15 @@ TEST(PcoreProtobuf, TestProtobufToVectorWithTimeDifference) {
   timestampsDifferencesExpected.emplace_back(10);
   timestampsDifferencesExpected.emplace_back(20);
 
-  BlockDifferences blockDifferencesExpected;
-  blockDifferencesExpected.push_back(1);
-  blockDifferencesExpected.push_back(67);
-  blockDifferencesExpected.push_back(21);
+  BlocksDifferences blocksDifferencesExpected;
+  blocksDifferencesExpected.push_back(1);
+  blocksDifferencesExpected.push_back(67);
+  blocksDifferencesExpected.push_back(21);
 
   DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
-  differentialTimestampContainerProtobuf.add_block_differences_ms(blockDifferencesExpected[0]);
-  differentialTimestampContainerProtobuf.add_block_differences_ms(blockDifferencesExpected[1]);
-  differentialTimestampContainerProtobuf.add_block_differences_ms(blockDifferencesExpected[2]);
+  differentialTimestampContainerProtobuf.add_blocks_differences_ms(blocksDifferencesExpected[0]);
+  differentialTimestampContainerProtobuf.add_blocks_differences_ms(blocksDifferencesExpected[1]);
+  differentialTimestampContainerProtobuf.add_blocks_differences_ms(blocksDifferencesExpected[2]);
 
   differentialTimestampContainerProtobuf.add_timestamps_differences_ms(timestampsDifferencesExpected[0]);
   differentialTimestampContainerProtobuf.add_timestamps_differences_ms(timestampsDifferencesExpected[1]);
@@ -161,12 +161,12 @@ TEST(PcoreProtobuf, TestProtobufToVectorWithTimeDifference) {
     EXPECT_TRUE(timestampsDifferencesExpected[i] == timestampsDifferencesResult[i]);
   }
 
-  auto blockDifferencesResult =
-      PcoreProtobuf::Convert::protobufToVector<TimeDifference>(differentialTimestampContainerProtobuf.block_differences_ms());
+  auto blocksDifferencesResult =
+      PcoreProtobuf::Convert::protobufToVector<TimeDifference>(differentialTimestampContainerProtobuf.blocks_differences_ms());
 
-  EXPECT_TRUE(blockDifferencesResult.size() == blockDifferencesExpected.size());
-  for (size_t i = 0; i < blockDifferencesResult.size(); i++) {
-    EXPECT_TRUE(blockDifferencesExpected[i] == blockDifferencesResult[i]);
+  EXPECT_TRUE(blocksDifferencesResult.size() == blocksDifferencesExpected.size());
+  for (size_t i = 0; i < blocksDifferencesResult.size(); i++) {
+    EXPECT_TRUE(blocksDifferencesExpected[i] == blocksDifferencesResult[i]);
   }
 }
 

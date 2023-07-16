@@ -34,7 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferencesExampleFactory.h"
 #include "PcoreJson.h"
 
-BlockDifferences DifferencesExampleFactory::blockDifferencesWithThreeMixedDifferences() {
+BlocksDifferences DifferencesExampleFactory::blocksDifferencesWithThreeMixedDifferences() {
   return {0, 8, 5};
 }
 
@@ -42,7 +42,7 @@ TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesWithThreeZ
   return {0, 0, 0};
 }
 
-BlockDifferences DifferencesExampleFactory::blockDifferencesNotSet() {
+BlocksDifferences DifferencesExampleFactory::blocksDifferencesNotSet() {
   return {};
 }
 
@@ -50,7 +50,7 @@ TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesNotSet() {
   return {};
 }
 
-BlockDifferences DifferencesExampleFactory::blockDifferencesWithTwoMixedDifferences() {
+BlocksDifferences DifferencesExampleFactory::blocksDifferencesWithTwoMixedDifferences() {
   return {0, 1};
 }
 
@@ -58,7 +58,7 @@ TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesWithTwoMix
   return {30, 29};
 }
 
-BlockDifferences DifferencesExampleFactory::blockDifferencesWithThreeBigDifferences() {
+BlocksDifferences DifferencesExampleFactory::blocksDifferencesWithThreeBigDifferences() {
   return {0, 5000, 74389};
 }
 
@@ -66,7 +66,7 @@ TimestampsDifferences DifferencesExampleFactory::timestampsDifferencesWithThreeB
   return {30823, 3139, 297238};
 }
 
-BlockDifferences DifferencesExampleFactory::blockDifferencesForSwitchDataFormTest() {
+BlocksDifferences DifferencesExampleFactory::blocksDifferencesForSwitchDataFormTest() {
   return {0, 441, 359};
 }
 
@@ -82,10 +82,10 @@ TimestampsDifferencesJson DifferencesExampleFactory::buildTimestampsDifferencesJ
   return timestampsDifferencesJson;
 }
 
-BlockDifferencesJson DifferencesExampleFactory::buildBlockDifferencesJson(const BlockDifferences& blockDifferences) {
-  BlockDifferencesJson blockDifferencesJson(Json::arrayValue);
-  for (const auto& blockDifference_ms : blockDifferences) {
-    blockDifferencesJson.append(blockDifference_ms);
+BlocksDifferencesJson DifferencesExampleFactory::buildBlocksDifferencesJson(const BlocksDifferences& blocksDifferences) {
+  BlocksDifferencesJson blocksDifferencesJson(Json::arrayValue);
+  for (const auto& blocksDifference_ms : blocksDifferences) {
+    blocksDifferencesJson.append(blocksDifference_ms);
   }
-  return blockDifferencesJson;
+  return blocksDifferencesJson;
 }

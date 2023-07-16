@@ -38,17 +38,17 @@ using namespace PCore;
 
 class DifferencesExampleFactory {
  public:
-  static BlockDifferences blockDifferencesWithThreeMixedDifferences();
+  static BlocksDifferences blocksDifferencesWithThreeMixedDifferences();
   static TimestampsDifferences timestampsDifferencesWithThreeZeroDifferences();
-  static BlockDifferences blockDifferencesNotSet();
+  static BlocksDifferences blocksDifferencesNotSet();
   static TimestampsDifferences timestampsDifferencesNotSet();
-  static BlockDifferences blockDifferencesWithTwoMixedDifferences();
+  static BlocksDifferences blocksDifferencesWithTwoMixedDifferences();
   static TimestampsDifferences timestampsDifferencesWithTwoMixedDifferences();
-  static BlockDifferences blockDifferencesWithThreeBigDifferences();
+  static BlocksDifferences blocksDifferencesWithThreeBigDifferences();
   static TimestampsDifferences timestampsDifferencesWithThreeBigDifferences();
-  static BlockDifferences blockDifferencesForSwitchDataFormTest();
+  static BlocksDifferences blocksDifferencesForSwitchDataFormTest();
   static TimestampsDifferences timestampsDifferencesForSwitchDataFromTest();
 
   static TimestampsDifferencesJson buildTimestampsDifferencesJson(const TimestampsDifferences& timestampsDifferences);
-  static BlockDifferencesJson buildBlockDifferencesJson(const BlockDifferences& blockDifferences);
+  static BlocksDifferencesJson buildBlocksDifferencesJson(const BlocksDifferences& blocksDifferences);
 };
