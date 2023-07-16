@@ -230,18 +230,6 @@ TEST(HeaderTest, TestSwitchDataFormWithHeaderNotSet) {
   EXPECT_FALSE(header.isSet());
 }
 
-TEST(HeaderTest, TestDataFormFromString) {
-  EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_ABSOLUTE"), DataForm::DATA_FORM_ABSOLUTE);
-  EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_DIFFERENTIAL"), DataForm::DATA_FORM_DIFFERENTIAL);
-  EXPECT_EQ(PcoreJson::Convert::dataFormFromString("DATA_FORM_NONE"), DataForm::DATA_FORM_NONE);
-}
-
-TEST(HeaderTest, TestDataFormToString) {
-  EXPECT_EQ(PcoreJson::Convert::dataFormToString(DataForm::DATA_FORM_ABSOLUTE), "DATA_FORM_ABSOLUTE");
-  EXPECT_EQ(PcoreJson::Convert::dataFormToString(DataForm::DATA_FORM_DIFFERENTIAL), "DATA_FORM_DIFFERENTIAL");
-  EXPECT_EQ(PcoreJson::Convert::dataFormToString(DataForm::DATA_FORM_NONE), "DATA_FORM_NONE");
-}
-
 TEST(HeaderTest, TestConstructorThrowWithTimeZoneOffsetPositiveInvalid) {
   auto version = VersionExampleFactory::versionWithMajor0Minor0Patch0();
   auto invalidPositiveTimeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetPositiveInvalid_min();

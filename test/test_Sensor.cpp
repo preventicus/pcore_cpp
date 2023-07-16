@@ -362,18 +362,6 @@ TEST(SensorTest, TestSwitchDataFormWithSensorNotSet) {
   EXPECT_FALSE(sensor.isSet());
 }
 
-TEST(SensorTest, TestSenorTypeFromString) {
-  EXPECT_EQ(PcoreProtobuf::Convert::senorTypeFromString("SENSOR_TYPE_PPG"), SensorTypeProtobuf::SENSOR_TYPE_PPG);
-  EXPECT_EQ(PcoreProtobuf::Convert::senorTypeFromString("SENSOR_TYPE_ACC"), SensorTypeProtobuf::SENSOR_TYPE_ACC);
-  EXPECT_EQ(PcoreProtobuf::Convert::senorTypeFromString("SENSOR_TYPE_NONE"), SensorTypeProtobuf::SENSOR_TYPE_NONE);
-}
-
-TEST(SensorTest, TestSenorTypeToString) {
-  EXPECT_EQ(PcoreProtobuf::Convert::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_PPG), "SENSOR_TYPE_PPG");
-  EXPECT_EQ(PcoreProtobuf::Convert::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_ACC), "SENSOR_TYPE_ACC");
-  EXPECT_EQ(PcoreProtobuf::Convert::senorTypeToString(SensorTypeProtobuf::SENSOR_TYPE_NONE), "SENSOR_TYPE_NONE");
-}
-
 TEST(SensorTest, TestIsSetWithSensorNotSet) {
   auto sensor = SensorExampleFactory::sensorNotSet();
   EXPECT_FALSE(sensor.isSet());

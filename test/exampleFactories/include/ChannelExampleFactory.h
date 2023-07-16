@@ -57,4 +57,5 @@ class ChannelExampleFactory {
   static Channel channelNotSet();
 
   static ChannelJson buildChannelJson(const Channel& channel);
+  static ChannelsJson buildChannelsJson(const Channels& channels);
 };

@@ -127,3 +127,11 @@ ChannelJson ChannelExampleFactory::buildChannelJson(const Channel& channel) {
   }
   return channelJson;
 }
+
+ChannelsJson ChannelExampleFactory::buildChannelsJson(const Channels& channels) {
+  ChannelsJson channelsJson(Json::arrayValue);
+  for (auto& channel : channels) {
+    channelsJson.append(ChannelExampleFactory::buildChannelJson(channel));
+  }
+  return channelsJson;
+}

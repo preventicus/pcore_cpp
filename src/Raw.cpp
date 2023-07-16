@@ -39,7 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Raw::Raw(Sensors sensors, DataForm dataForm) : sensors(std::move(sensors)), dataForm(dataForm) {}
 
 Raw::Raw(const RawProtobuf& rawProtobuf)
-    : sensors(PcoreProtobuf::Convert::protoBufToVector<Sensor>(rawProtobuf.sensors())), dataForm([&]() {
+    : sensors(PcoreProtobuf::Convert::protobufToVector<Sensor>(rawProtobuf.sensors())), dataForm([&]() {
         if (rawProtobuf.sensors().empty()) {
           return DataForm::DATA_FORM_NONE;
         }

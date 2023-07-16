@@ -107,7 +107,7 @@ Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypePr
 Channel::Channel(const ChannelProtobuf& channelProtobuf)
     : ppgMetaData(PpgMetaData(channelProtobuf.ppg_metadata())),
       accMetaData(AccMetaData(channelProtobuf.acc_metadata())),
-      differentialBlocks(PcoreProtobuf::Convert::protoBufToVector<DifferentialBlock>(channelProtobuf.differential_blocks())),
+      differentialBlocks(PcoreProtobuf::Convert::protobufToVector<DifferentialBlock>(channelProtobuf.differential_blocks())),
       absoluteBlock(AbsoluteBlock()),
       sensorType([&]() {
         if (channelProtobuf.has_acc_metadata()) {

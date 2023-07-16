@@ -82,7 +82,7 @@ Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
 
 Sensor::Sensor(const SensorProtobuf& sensorProtobuf)
     : sensorType(sensorProtobuf.sensor_type()),
-      channels(PcoreProtobuf::Convert::protoBufToVector<Channel>(sensorProtobuf.channels())),
+      channels(PcoreProtobuf::Convert::protobufToVector<Channel>(sensorProtobuf.channels())),
       differentialTimestampsContainer(DifferentialTimestampsContainer(sensorProtobuf.differential_timestamps_container())),
       absoluteTimestampsContainer(AbsoluteTimestampsContainer()),
       dataForm([&]() {

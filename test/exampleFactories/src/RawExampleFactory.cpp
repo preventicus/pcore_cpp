@@ -91,12 +91,7 @@ RawJson RawExampleFactory::buildRawJson(const Raw& raw) {
   if (!raw.isSet()) {
     return rawJson;
   }
-  SensorsJson sensorsJson(Json::arrayValue);
   auto sensors = raw.getSensors();
-  for (auto& sensor : sensors) {
-    SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor);
-    sensorsJson.append(sensorJson);
-  }
-  rawJson[PcoreJson::Key::sensors] = sensorsJson;
+  rawJson[PcoreJson::Key::sensors] = SensorExampleFactory::buildSensorsJson(sensors);
   return rawJson;
 }

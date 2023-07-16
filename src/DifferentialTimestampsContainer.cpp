@@ -45,9 +45,9 @@ DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp f
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(
     const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf)
     : firstUnixTimestamp_ms(differentialTimestampsContainerProtobuf.first_unix_timestamp_ms()),
-      blockDifferences_ms(PcoreProtobuf::Convert::protoBufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.block_differences_ms())),
+      blockDifferences_ms(PcoreProtobuf::Convert::protobufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.block_differences_ms())),
       timestampsDifferences_ms(
-          PcoreProtobuf::Convert::protoBufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.timestamps_differences_ms())) {}
+          PcoreProtobuf::Convert::protobufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.timestamps_differences_ms())) {}
 
 DifferentialTimestampsContainer::DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
     : firstUnixTimestamp_ms([&]() {

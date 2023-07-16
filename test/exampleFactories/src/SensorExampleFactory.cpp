@@ -114,7 +114,6 @@ SensorJson SensorExampleFactory::buildSensorJson(const Sensor& sensor) {
   if (!sensor.isSet()) {
     return sensorJson;
   }
-  ChannelsJson channelsJson;
   switch (sensor.getDataFrom()) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       auto absoluteTimestampsContainer = sensor.getAbsoluteTimestampsContainer();
@@ -132,10 +131,16 @@ SensorJson SensorExampleFactory::buildSensorJson(const Sensor& sensor) {
       return sensorJson;
   }
   Channels channels = sensor.getChannels();
-  for (auto& channel : channels) {
-    channelsJson.append(ChannelExampleFactory::buildChannelJson(channel));
-  }
-  sensorJson[PcoreJson::Key::channels] = channelsJson;
+  sensorJson[PcoreJson::Key::channels] = ChannelExampleFactory::buildChannelsJson(channels);
   sensorJson[PcoreJson::Key::sensor_type] = PcoreProtobuf::Convert::senorTypeToString(sensor.getSensorType());
   return sensorJson;
+}
+
+SensorsJson SensorExampleFactory::buildSensorsJson(const Sensors& sensors) {
+  SensorsJson sensorsJson(Json::arrayValue);
+  for (auto& sensor : sensors) {
+    SensorJson sensorJson = SensorExampleFactory::buildSensorJson(sensor);
+    sensorsJson.append(sensorJson);
+  }
+  return sensorsJson;
 }

@@ -53,7 +53,7 @@ namespace PcoreProtobuf {
 class Convert {
  public:
   template <typename T, typename P, typename... Args>
-  static std::vector<T> protoBufToVector(P values, const Args&... args) {
+  static std::vector<T> protobufToVector(P values, const Args&... args) {
     std::vector<T> vector;
     vector.reserve(values.size());
 

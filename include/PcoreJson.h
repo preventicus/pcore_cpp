@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <string>
 #include "DataForm.h"
+#include "json/json.h"
 
 using JsonKey = std::string;
 using DataFormString = std::string;

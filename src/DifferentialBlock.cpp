@@ -39,7 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) : differentialValues(std::move(differentialValues)) {}
 
 DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf)
-    : differentialValues(PcoreProtobuf::Convert::protoBufToVector<DifferentialValue>(differentialBlockProtobuf.differential_values())) {}
+    : differentialValues(PcoreProtobuf::Convert::protobufToVector<DifferentialValue>(differentialBlockProtobuf.differential_values())) {}
 
 DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson)
     : differentialValues(PcoreJson::Convert::jsonToVector<DifferentialValue>(differentialBlockJson, PcoreJson::Key::differential_values)) {}
