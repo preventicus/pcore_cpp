@@ -36,13 +36,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include "PcoreJson.h"
 
-Header::Header(Version version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm)
-    : timeZoneOffset_min(timeZoneOffset_min), pcoreVersion(std::move(version)), dataForm(dataForm) {
+Header::Header(Version version, TimeZoneOffset timeZoneOffsetInMin, DataForm dataForm)
+    : timeZoneOffsetInMin(timeZoneOffsetInMin), pcoreVersion(std::move(version)), dataForm(dataForm) {
   this->checkTimeZoneOffset();
 }
 
 Header::Header(const HeaderProtobuf& headerProtobuf)
-    : timeZoneOffset_min(headerProtobuf.time_zone_offset_min()), pcoreVersion(Version(headerProtobuf.pcore_version())), dataForm([&]() {
+    : timeZoneOffsetInMin(headerProtobuf.time_zone_offset_min()), pcoreVersion(Version(headerProtobuf.pcore_version())), dataForm([&]() {
         if (headerProtobuf.has_pcore_version()) {
           return DataForm::DATA_FORM_DIFFERENTIAL;
         } else {
@@ -53,16 +53,16 @@ Header::Header(const HeaderProtobuf& headerProtobuf)
 }
 
 Header::Header(const HeaderJson& headerJson)
-    : timeZoneOffset_min(headerJson[PcoreJson::Key::time_zone_offset_min].asInt()),
+    : timeZoneOffsetInMin(headerJson[PcoreJson::Key::time_zone_offset_min].asInt()),
       pcoreVersion(Version(headerJson[PcoreJson::Key::pcore_version])),
       dataForm(PcoreJson::Convert::dataFormFromString(headerJson[PcoreJson::Key::data_form].asString())) {
   this->checkTimeZoneOffset();
 }
 
-Header::Header() : timeZoneOffset_min(0), pcoreVersion(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
+Header::Header() : timeZoneOffsetInMin(0), pcoreVersion(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
 
-TimeZoneOffset Header::getTimeZoneOffset() const {
-  return this->timeZoneOffset_min;
+TimeZoneOffset Header::getTimeZoneOffsetInMin() const {
+  return this->timeZoneOffsetInMin;
 }
 
 Version Header::getPcoreVersion() const {
@@ -75,7 +75,7 @@ DataForm Header::getDataForm() const {
 
 bool Header::operator==(const IPCore<HeaderProtobuf>& header) const {
   if (const auto* derived = dynamic_cast<const Header*>(&header)) {
-    return this->timeZoneOffset_min == derived->timeZoneOffset_min && this->pcoreVersion == derived->pcoreVersion &&
+    return this->timeZoneOffsetInMin == derived->timeZoneOffsetInMin && this->pcoreVersion == derived->pcoreVersion &&
            this->dataForm == derived->dataForm;
   }
   return false;
@@ -92,7 +92,7 @@ void Header::serialize(HeaderProtobuf* headerProtobuf) const {
   if (!this->isSet()) {
     return;
   }
-  headerProtobuf->set_time_zone_offset_min(this->timeZoneOffset_min);
+  headerProtobuf->set_time_zone_offset_min(this->timeZoneOffsetInMin);
   VersionProtobuf versionProtobuf;
   this->pcoreVersion.serialize(&versionProtobuf);
   headerProtobuf->mutable_pcore_version()->CopyFrom(versionProtobuf);
@@ -122,7 +122,7 @@ HeaderJson Header::toJson() const {
   if (!this->isSet()) {
     return headerJson;
   }
-  TimeZoneOffsetJson timeZoneOffsetJson(this->timeZoneOffset_min);
+  TimeZoneOffsetJson timeZoneOffsetJson(this->timeZoneOffsetInMin);
   headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffsetJson;
   headerJson[PcoreJson::Key::pcore_version] = this->pcoreVersion.toJson();
   headerJson[PcoreJson::Key::data_form] = PcoreJson::Convert::dataFormToString(this->dataForm);
@@ -131,14 +131,14 @@ HeaderJson Header::toJson() const {
 
 bool Header::isSet() const {
   // clang-format off
-  return this->timeZoneOffset_min != 0
+  return this->timeZoneOffsetInMin != 0
       || this->pcoreVersion.isSet()
       || this->dataForm != DataForm::DATA_FORM_NONE;
   // clang-format on
 }
 
 void Header::checkTimeZoneOffset() const {
-  if (840 < this->timeZoneOffset_min || this->timeZoneOffset_min < -720) {
+  if (840 < this->timeZoneOffsetInMin || this->timeZoneOffsetInMin < -720) {
     throw std::invalid_argument("timeZoneOffset must be between -720 and 840");
   }
 }

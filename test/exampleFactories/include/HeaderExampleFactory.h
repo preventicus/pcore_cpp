@@ -39,13 +39,13 @@ using namespace PCore;
 
 class HeaderExampleFactory {
  public:
-  static TimeZoneOffset timeZoneOffsetPositive_min();
-  static TimeZoneOffset timeZoneOffsetNegative_min();
-  static TimeZoneOffset timeZoneOffsetNotSet_min();
-  static TimeZoneOffset timeZoneOffsetMaxValue_min();
-  static TimeZoneOffset timeZoneOffsetMinValue_min();
-  static TimeZoneOffset timeZoneOffsetPositiveInvalid_min();
-  static TimeZoneOffset timeZoneOffsetNegativeInvalid_min();
+  static TimeZoneOffset timeZoneOffsetPositiveInMin();
+  static TimeZoneOffset timeZoneOffsetNegativeInMin();
+  static TimeZoneOffset timeZoneOffsetNotSetInMin();
+  static TimeZoneOffset timeZoneOffsetMaxValueInMin();
+  static TimeZoneOffset timeZoneOffsetMinValueInMin();
+  static TimeZoneOffset timeZoneOffsetPositiveInvalidInMin();
+  static TimeZoneOffset timeZoneOffsetNegativeInvalidInMin();
 
   static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
   static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();

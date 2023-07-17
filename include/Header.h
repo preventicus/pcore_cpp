@@ -47,12 +47,12 @@ using TimeZoneOffsetJson = Json::Value;
 namespace PCore {
 class Header final : public IPCore<HeaderProtobuf> {
  public:
-  explicit Header(Version version, TimeZoneOffset timeZoneOffset_min, DataForm dataForm);
+  explicit Header(Version version, TimeZoneOffset timeZoneOffsetInMin, DataForm dataForm);
   explicit Header(const HeaderProtobuf& headerProtobuf);
   explicit Header(const HeaderJson& header);
   explicit Header();
 
-  [[nodiscard]] TimeZoneOffset getTimeZoneOffset() const;
+  [[nodiscard]] TimeZoneOffset getTimeZoneOffsetInMin() const;
   [[nodiscard]] Version getPcoreVersion() const;
   [[nodiscard]] DataForm getDataForm() const;
 
@@ -66,7 +66,7 @@ class Header final : public IPCore<HeaderProtobuf> {
 
  private:
   void checkTimeZoneOffset() const;
-  TimeZoneOffset timeZoneOffset_min;
+  TimeZoneOffset timeZoneOffsetInMin;
   Version pcoreVersion;
   DataForm dataForm;
 };

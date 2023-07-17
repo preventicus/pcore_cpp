@@ -34,74 +34,74 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "HeaderExampleFactory.h"
 #include "PcoreJson.h"
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetPositive_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetPositiveInMin() {
   return 120;
 }
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNegative_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNegativeInMin() {
   return -120;
 }
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNotSet_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNotSetInMin() {
   return 0;
 }
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetMaxValue_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetMaxValueInMin() {
   return 840;
 }
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetMinValue_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetMinValueInMin() {
   return -720;
 }
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetPositiveInvalid_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetPositiveInvalidInMin() {
   return 1000;
 }
 
-TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNegativeInvalid_min() {
+TimeZoneOffset HeaderExampleFactory::timeZoneOffsetNegativeInvalidInMin() {
   return -1000;
 }
 
 Header HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute() {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
-  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetPositive_min();
-  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_ABSOLUTE);
+  auto timeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetPositiveInMin();
+  return Header(version, timeZoneOffsetInMin, DataForm::DATA_FORM_ABSOLUTE);
 }
 
 Header HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential() {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
-  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetPositive_min();
-  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
+  auto timeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetPositiveInMin();
+  return Header(version, timeZoneOffsetInMin, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 Header HeaderExampleFactory::headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute() {
   auto version = VersionExampleFactory::versionWithMajor0Minor0Patch0();
-  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetPositive_min();
-  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_ABSOLUTE);
+  auto timeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetPositiveInMin();
+  return Header(version, timeZoneOffsetInMin, DataForm::DATA_FORM_ABSOLUTE);
 }
 
 Header HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute() {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
-  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetNegative_min();
-  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_ABSOLUTE);
+  auto timeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetNegativeInMin();
+  return Header(version, timeZoneOffsetInMin, DataForm::DATA_FORM_ABSOLUTE);
 }
 
 Header HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential() {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
-  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetNegative_min();
-  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
+  auto timeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetNegativeInMin();
+  return Header(version, timeZoneOffsetInMin, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 Header HeaderExampleFactory::headerWithVersionNotSetAndTimeZoneOffsetNotSetAndDataFormDifferential() {
   auto version = VersionExampleFactory::versionNotSet();
-  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetNotSet_min();
-  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
+  auto timeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetNotSetInMin();
+  return Header(version, timeZoneOffsetInMin, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 Header HeaderExampleFactory::headerWithVersionWithMajor1Minor2Patch0AndTimeZoneOffsetNotSetAndDataFormDifferential() {
   auto version = VersionExampleFactory::versionWithMajor1Minor2Patch0();
-  auto timeZoneOffset_min = HeaderExampleFactory::timeZoneOffsetNotSet_min();
-  return Header(version, timeZoneOffset_min, DataForm::DATA_FORM_DIFFERENTIAL);
+  auto timeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetNotSetInMin();
+  return Header(version, timeZoneOffsetInMin, DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
 Header HeaderExampleFactory::headerNotSet() {
@@ -113,8 +113,8 @@ HeaderJson HeaderExampleFactory::buildHeaderJson(const Header& header) {
   if (!header.isSet()) {
     return headerJson;
   }
-  TimeZoneOffsetJson timeZoneOffset_min(header.getTimeZoneOffset());
-  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffset_min;
+  TimeZoneOffsetJson timeZoneOffsetInMin(header.getTimeZoneOffsetInMin());
+  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffsetInMin;
   headerJson[PcoreJson::Key::pcore_version] = VersionExampleFactory::buildVersionJson(header.getPcoreVersion());
   headerJson[PcoreJson::Key::data_form] = PcoreJson::Convert::dataFormToString(header.getDataForm());
   return headerJson;
