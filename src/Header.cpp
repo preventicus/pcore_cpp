@@ -122,7 +122,8 @@ HeaderJson Header::toJson() const {
   if (!this->isSet()) {
     return headerJson;
   }
-  TimeZoneOffsetJson timeZoneOffsetJson(this->timeZoneOffsetInMin);
+  TimeZoneOffsetJson timeZoneOffsetJson(Json::intValue);
+  timeZoneOffsetJson = this->timeZoneOffsetInMin;
   headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffsetJson;
   headerJson[PcoreJson::Key::pcore_version] = this->pcoreVersion.toJson();
   headerJson[PcoreJson::Key::data_form] = PcoreJson::Convert::dataFormToString(this->dataForm);

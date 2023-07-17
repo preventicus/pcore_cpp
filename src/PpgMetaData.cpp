@@ -95,8 +95,9 @@ PpgMetaDataJson PpgMetaData::toJson() const {
   if (!this->isSet()) {
     return ppgMetaDataJson;
   }
-  WavelegthJson wavelengthJson(this->wavelengthInNm);
   if (this->wavelengthInNm != 0) {
+    WavelegthJson wavelengthJson(Json::uintValue);
+    wavelengthJson = this->wavelengthInNm;
     ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
   }
   if (this->color != ColorProtobuf::COLOR_NONE) {

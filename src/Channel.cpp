@@ -337,8 +337,7 @@ ChannelJson Channel::toJson() const {
   }
   switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      AbsoluteBlockJson absoluteBlockJson(this->absoluteBlock.toJson());
-      channelJson[PcoreJson::Key::absolute_block] = absoluteBlockJson;
+      channelJson[PcoreJson::Key::absolute_block] = this->absoluteBlock.toJson();
       switch (this->sensorType) {
         case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
           channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();

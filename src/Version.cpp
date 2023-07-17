@@ -92,9 +92,12 @@ VersionJson Version::toJson() const {
   if (!this->isSet()) {
     return versionJson;
   }
-  MajorJson majorJson(this->major);
-  MinorJson minorJson(this->minor);
-  PatchJson patchJson(this->patch);
+  MajorJson majorJson(Json::uintValue);
+  MinorJson minorJson(Json::uintValue);
+  PatchJson patchJson(Json::uintValue);
+  majorJson = this->major;
+  minorJson = this->minor;
+  patchJson = this->patch;
   versionJson[PcoreJson::Key::major] = majorJson;
   versionJson[PcoreJson::Key::minor] = minorJson;
   versionJson[PcoreJson::Key::patch] = patchJson;

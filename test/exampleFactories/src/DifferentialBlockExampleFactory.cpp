@@ -80,7 +80,7 @@ DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksForTestSer
 }
 
 DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJson(const DifferentialBlocks& differentialBlocks) {
-  DifferentialBlocksJson differentialBlocksJson;
+  DifferentialBlocksJson differentialBlocksJson(Json::arrayValue);
   for (const auto& differentialBlock : differentialBlocks) {
     differentialBlocksJson.append(DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock));
   }

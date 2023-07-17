@@ -113,8 +113,9 @@ HeaderJson HeaderExampleFactory::buildHeaderJson(const Header& header) {
   if (!header.isSet()) {
     return headerJson;
   }
-  TimeZoneOffsetJson timeZoneOffsetInMin(header.getTimeZoneOffsetInMin());
-  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffsetInMin;
+  TimeZoneOffsetJson timeZoneOffsetJson(Json::intValue);
+  timeZoneOffsetJson = header.getTimeZoneOffsetInMin();
+  headerJson[PcoreJson::Key::time_zone_offset_min] = timeZoneOffsetJson;
   headerJson[PcoreJson::Key::pcore_version] = VersionExampleFactory::buildVersionJson(header.getPcoreVersion());
   headerJson[PcoreJson::Key::data_form] = PcoreJson::Convert::dataFormToString(header.getDataForm());
   return headerJson;
