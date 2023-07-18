@@ -144,10 +144,16 @@ TEST(DataTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(data.serialize(&dataProtobuf));
 }
 
-TEST(DataTest, TestSerializeThrow) {
+TEST(DataTest, TestSerializeThrowDueToNullPointer) {
   auto data = DataExampleFactory::dataNotSet();
   DataProtobuf* dataProtobuf = nullptr;
   EXPECT_THROW(data.serialize(dataProtobuf), std::invalid_argument);
+}
+
+TEST(DataTest, TestSerializeThrowDueToDataFromAbsolute) {
+  auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
+  DataProtobuf dataProtobuf;
+  EXPECT_THROW(data.serialize(&dataProtobuf), std::runtime_error);
 }
 
 TEST(DataTest, TestSwitchDataFormWithDataWithRawForSwitchDataFormTestInAbsoluteForm) {

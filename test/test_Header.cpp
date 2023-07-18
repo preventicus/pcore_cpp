@@ -204,7 +204,7 @@ TEST(HeaderTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(header.serialize(&headerProtobuf));
 }
 
-TEST(HeaderTest, TestSerializeThrow) {
+TEST(HeaderTest, TestSerializeThrowDueToNullPointer) {
   auto header = HeaderExampleFactory::headerNotSet();
   HeaderProtobuf* headerProtobuf = nullptr;
   EXPECT_THROW(header.serialize(headerProtobuf), std::invalid_argument);

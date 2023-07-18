@@ -112,7 +112,7 @@ TEST(DifferentialBlockTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(differentialBlock.serialize(&differentialBlockProtobuf));
 }
 
-TEST(DifferentialBlockTest, TestSerializeThrow) {
+TEST(DifferentialBlockTest, TestSerializeThrowDueToNullPointer) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   DifferentialBlockProtobuf* differentialBlockProtobuf = nullptr;
   EXPECT_THROW(differentialBlock.serialize(differentialBlockProtobuf), std::invalid_argument);

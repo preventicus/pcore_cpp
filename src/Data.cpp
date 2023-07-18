@@ -70,6 +70,9 @@ void Data::serialize(DataProtobuf* dataProtobuf) const {
   if (!this->isSet()) {
     return;
   }
+  if (this->getHeader().getDataForm() != DataForm::DATA_FORM_DIFFERENTIAL) {
+    throw std::runtime_error("Serialize is only possible for differential data form");
+  }
   HeaderProtobuf headerProtobuf;
   this->header.serialize(&headerProtobuf);
   dataProtobuf->mutable_header()->CopyFrom(headerProtobuf);

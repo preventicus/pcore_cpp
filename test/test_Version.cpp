@@ -172,7 +172,7 @@ TEST(VersionTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(version.serialize(&versionProtobuf));
 }
 
-TEST(VersionTest, TestSerializeThrow) {
+TEST(VersionTest, TestSerializeThrowDueToNullPointer) {
   auto version = VersionExampleFactory::versionNotSet();
   VersionProtobuf* versionProtobuf = nullptr;
   EXPECT_THROW(version.serialize(versionProtobuf), std::invalid_argument);

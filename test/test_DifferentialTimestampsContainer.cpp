@@ -161,7 +161,7 @@ TEST(DifferentialTimestampsTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(differentialTimestampsContainer.serialize(&differentialTimestampContainerProtobuf));
 }
 
-TEST(DifferentialTimestampsTest, TestSerializeThrow) {
+TEST(DifferentialTimestampsTest, TestSerializeThrowDueToNullPointer) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   DifferentialTimestampContainerProtobuf* differentialTimestampContainerProtobuf = nullptr;
   EXPECT_THROW(differentialTimestampsContainer.serialize(differentialTimestampContainerProtobuf), std::invalid_argument);

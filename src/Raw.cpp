@@ -87,6 +87,9 @@ void Raw::serialize(RawProtobuf* rawProtobuf) const {
   if (!this->isSet()) {
     return;
   }
+  if (this->dataForm != DataForm::DATA_FORM_DIFFERENTIAL) {
+    throw std::runtime_error("Serialize is only possible for differential data form");
+  }
   for (const auto& sensor : this->sensors) {
     auto* sensorProtobuf = rawProtobuf->add_sensors();
     sensor.serialize(sensorProtobuf);

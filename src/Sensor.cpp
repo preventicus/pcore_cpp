@@ -165,6 +165,9 @@ void Sensor::serialize(SensorProtobuf* sensorProtobuf) const {
   if (!this->isSet()) {
     return;
   }
+  if (this->dataForm != DataForm::DATA_FORM_DIFFERENTIAL) {
+    throw std::runtime_error("Serialize is only possible for differential data form");
+  }
   for (const auto& channel : this->channels) {
     auto* channelProtobuf = sensorProtobuf->add_channels();
     channel.serialize(channelProtobuf);

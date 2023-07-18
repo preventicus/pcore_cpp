@@ -336,10 +336,16 @@ TEST(SensorTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(sensor.serialize(&sensorProtobuf));
 }
 
-TEST(SensorTest, TestSerializeThrow) {
+TEST(SensorTest, TestSerializeThrowDueToNullPointer) {
   auto sensor = SensorExampleFactory::sensorNotSet();
   SensorProtobuf* sensorProtobuf = nullptr;
   EXPECT_THROW(sensor.serialize(sensorProtobuf), std::invalid_argument);
+}
+
+TEST(SensorTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
+  auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  SensorProtobuf sensorProtobuf;
+  EXPECT_THROW(sensor.serialize(&sensorProtobuf), std::runtime_error);
 }
 
 TEST(SensorTest, TestSwitchDataFormWithSensorForSwitchDataFromTestInAbsoluteForm) {

@@ -209,7 +209,7 @@ TEST(AccMetaDataTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(accMetaData.serialize(&accMetaDataProtobuf));
 }
 
-TEST(AccMetaDataTest, TestSerializeThrow) {
+TEST(AccMetaDataTest, TestSerializeThrowDueToNullPointer) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   AccMetaDataProtobuf* accMetaDataProtobuf = nullptr;
   EXPECT_THROW(accMetaData.serialize(accMetaDataProtobuf), std::invalid_argument);

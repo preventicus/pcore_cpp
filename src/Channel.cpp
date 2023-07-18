@@ -208,6 +208,9 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
   if (!this->isSet()) {
     return;
   }
+  if (this->dataForm != DataForm::DATA_FORM_DIFFERENTIAL) {
+    throw std::runtime_error("Serialize is only possible for differential data form");
+  }
   if (accMetaData.isSet() == ppgMetaData.isSet()) {
     throw std::invalid_argument("just one type of MetaData can be initialized");
   }

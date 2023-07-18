@@ -221,7 +221,7 @@ TEST(PpgMetaDataTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(ppgMetaDataG1.serialize(&ppgMetaDataProtobuf));
 }
 
-TEST(PpgMetaDataTest, TestSerializeThrow) {
+TEST(PpgMetaDataTest, TestSerializeThrowDueToNullPointer) {
   auto ppgMetaDataG1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   PpgMetaDataProtobuf* ppgMetaDataProtobuf = nullptr;
   EXPECT_THROW(ppgMetaDataG1.serialize(ppgMetaDataProtobuf), std::invalid_argument);

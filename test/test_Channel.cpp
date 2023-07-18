@@ -283,10 +283,16 @@ TEST(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndPpgMetaData) 
   EXPECT_TRUE(Channel(channelProtobuf) == channel);
 }
 
-TEST(ChannelTest, TestSerializeThrow) {
+TEST(ChannelTest, TestSerializeThrowDueToNullPointer) {
   auto channel = ChannelExampleFactory::channelNotSet();
   ChannelProtobuf* channelProtobuf = nullptr;
   EXPECT_THROW(channel.serialize(channelProtobuf), std::invalid_argument);
+}
+
+TEST(ChannelTest, TestSerializeThrowDueToDataFromAbsolute) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndNoSetMetaData();
+  ChannelProtobuf channelProtobuf;
+  EXPECT_THROW(channel.serialize(&channelProtobuf), std::runtime_error);
 }
 
 TEST(ChannelTest, TestSerializeWithChannelNotSet) {
@@ -298,7 +304,7 @@ TEST(ChannelTest, TestSerializeWithChannelNotSet) {
 }
 
 TEST(ChannelTest, TestSerializeNoThrow) {
-  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
   ChannelProtobuf channelProtobuf;
   EXPECT_NO_THROW(channel.serialize(&channelProtobuf));
 }

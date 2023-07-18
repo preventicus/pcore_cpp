@@ -162,10 +162,16 @@ TEST(RawTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(raw.serialize(&rawProtobuf));
 }
 
-TEST(RawTest, TestSerializeThrow) {
+TEST(RawTest, TestSerializeThrowDueToNullPointer) {
   auto raw = RawExampleFactory::rawNotSet();
   RawProtobuf* rawProtobuf = nullptr;
   EXPECT_THROW(raw.serialize(rawProtobuf), std::invalid_argument);
+}
+
+TEST(RawTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  RawProtobuf rawProtobuf;
+  EXPECT_THROW(raw.serialize(&rawProtobuf), std::runtime_error);
 }
 
 TEST(RawTest, TestSwitchDataFormWithRawForSwitschDataFormTestInAbsoluteForm) {
