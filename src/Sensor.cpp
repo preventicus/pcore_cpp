@@ -137,7 +137,7 @@ bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const {
   return this->sensorType == derived->sensorType
       && this->differentialTimestampsContainer == derived->differentialTimestampsContainer
       && this->absoluteTimestampsContainer == derived->absoluteTimestampsContainer
-      && this->dataForm == derived->dataForm;  // TODO unittest for dataForm
+      && this->dataForm == derived->dataForm;
   // clang-format on
 }
 

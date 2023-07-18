@@ -177,7 +177,7 @@ bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const {
       && this->ppgMetaData == derived->ppgMetaData
       && this->absoluteBlock == derived->absoluteBlock
       && this->sensorType == derived->sensorType
-      && this->dataForm == derived->dataForm;  // TODO add unittests for sensortype and dataform
+      && this->dataForm == derived->dataForm;
   // clang-format off
 }
 

@@ -91,6 +91,18 @@ Sensor SensorExampleFactory::sensorNoneWithZeroChannelsInAbsoluteForm() {
   return Sensor(channels, absoluteTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_NONE);
 }
 
+Sensor SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm() {
+  Channels channels;
+  auto absoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerNotSet();
+  return Sensor(channels, absoluteTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_NONE);
+}
+
+Sensor SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetDifferentialForm() {
+  Channels channels;
+  auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
+  return Sensor(channels, differentialTimestampsContainer, SensorTypeProtobuf::SENSOR_TYPE_NONE);
+}
+
 Sensor SensorExampleFactory::sensorNotSet() {
   return Sensor();
 }

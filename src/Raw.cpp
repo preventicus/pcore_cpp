@@ -73,7 +73,7 @@ bool Raw::operator==(const IPCore<RawProtobuf>& raw) const {
       return false;
     }
   }
-  return this->dataForm == derived->dataForm;  // TODO unittests for dataform
+  return this->dataForm == derived->dataForm;
 }
 
 bool Raw::operator!=(const IPCore<RawProtobuf>& raw) const {

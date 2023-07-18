@@ -223,6 +223,18 @@ TEST(SensorTest, TestIsEqualWithSensorPpgWithOneChannelsInAbsoluteFormAndSensorP
   EXPECT_FALSE(sensor1 == sensor2);
 }
 
+TEST(SensorTest, TestIsEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  EXPECT_TRUE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteFormAndSensorNoneWithZeroChannelsInNotSetDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetDifferentialForm();
+  EXPECT_FALSE(sensor1 == sensor2);
+}
+
 TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
   auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
@@ -256,6 +268,18 @@ TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialFormAnd
 TEST(SensorTest, TestIsNotEqualWithSensorPpgWithOneChannelsInAbsoluteFormAndSensorPpgWithTwoChannelsInAbsoluteForm) {
   auto sensor1 = SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm();
   auto sensor2 = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  EXPECT_FALSE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteFormAndSensorNoneWithZeroChannelsInNotSetDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetDifferentialForm();
   EXPECT_TRUE(sensor1 != sensor2);
 }
 
