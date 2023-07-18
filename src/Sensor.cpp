@@ -45,9 +45,7 @@ Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestamps
     : sensorType(sensorTypeProtobuf),
       channels(std::move(channels)),
       absoluteTimestampsContainer(std::move(absoluteTimestampsContainer)),
-      dataForm(DataForm::DATA_FORM_ABSOLUTE) {
-  this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
-}
+      dataForm(DataForm::DATA_FORM_ABSOLUTE) {}
 
 Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
     : sensorType(PcoreProtobuf::Convert::senorTypeFromString(sensorJson[PcoreJson::Key::sensor_type].asString())),
