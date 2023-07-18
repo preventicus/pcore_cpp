@@ -154,7 +154,8 @@ bool Sensor::isSet() const {
   // clang-format off
   return this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
       || this->absoluteTimestampsContainer.isSet()
-      || this->differentialTimestampsContainer.isSet();
+      || this->differentialTimestampsContainer.isSet()
+      || this->dataForm != DataForm::DATA_FORM_NONE;
   // clang-format on
 }
 

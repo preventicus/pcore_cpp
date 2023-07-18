@@ -49,7 +49,7 @@ PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
         }
         return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
       }()) {
-  if (this->color != ColorProtobuf::COLOR_NONE && this->wavelengthInNm != 0) {
+  if (this->hasColor() && this->hasWavelength()) {
     throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
   }
 }
@@ -76,7 +76,7 @@ bool PpgMetaData::hasWavelength() const {
 }
 
 bool PpgMetaData::isSet() const {
-  return this->color != ColorProtobuf::COLOR_NONE || this->wavelengthInNm != 0;
+  return this->hasColor() || this->hasWavelength();
 }
 
 bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
@@ -95,12 +95,12 @@ PpgMetaDataJson PpgMetaData::toJson() const {
   if (!this->isSet()) {
     return ppgMetaDataJson;
   }
-  if (this->wavelengthInNm != 0) {
+  if (this->hasWavelength()) {
     WavelegthJson wavelengthJson(Json::uintValue);
     wavelengthJson = this->wavelengthInNm;
     ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
   }
-  if (this->color != ColorProtobuf::COLOR_NONE) {
+  if (this->hasColor()) {
     ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(this->color);
   }
   return ppgMetaDataJson;
@@ -113,13 +113,13 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
   if (!this->isSet()) {
     return;
   }
-  if (this->color != ColorProtobuf::COLOR_NONE && this->wavelengthInNm != 0) {
+  if (this->hasColor() && this->hasWavelength()) {
     throw std::invalid_argument("only one parameter has to be initialized");
   }
-  if (this->color != ColorProtobuf::COLOR_NONE) {
+  if (this->hasColor()) {
     ppgMetaDataProtobuf->set_color(this->color);
   }
-  if (this->wavelengthInNm != 0) {
+  if (this->hasWavelength()) {
     ppgMetaDataProtobuf->set_wavelength_nm(this->wavelengthInNm);
   }
 }
