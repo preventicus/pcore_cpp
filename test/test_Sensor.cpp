@@ -137,14 +137,9 @@ TEST(SensorTest, TestGetFirstUnixTimestampWithSensorAccWithTwoChannelsInAbsolute
   EXPECT_TRUE(firstUnixTimestamp1InMs == firstUnixTimestamp2InMs);
 }
 
-TEST(SensorTest, TestGetFirstUnixTimestampThrowRuntimeError) {
-  auto sensor = SensorExampleFactory::sensorNotSet();
-  EXPECT_THROW(std::ignore = sensor.getFirstUnixTimestampInMs(), std::runtime_error);
-}
-
 TEST(SensorTest, TestGetFirstUnixTimestampThrowInvalideArgument) {
   auto sensor = SensorExampleFactory::sensorNotSet();
-  EXPECT_THROW(std::ignore = sensor.getFirstUnixTimestampInMs(), std::runtime_error);
+  EXPECT_TRUE(sensor.getFirstUnixTimestampInMs() == UnixTimestampsExampleFactory::firstTimestampNotSetInMs());
 }
 
 TEST(SensorTest, TestGetLastUnixTimestampWithSensorAccWithTwoChannelsInAbsoluteForm) {

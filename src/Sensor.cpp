@@ -211,21 +211,13 @@ void Sensor::switchDataForm() {
 UnixTimestamp Sensor::getFirstUnixTimestampInMs() const {
   switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      if (this->absoluteTimestampsContainer.isSet()) {
-        return this->absoluteTimestampsContainer.getFirstUnixTimestampInMs();
-      } else {
-        throw std::runtime_error("absoluteTimestampsContainer is not set");
-      }
+      return this->absoluteTimestampsContainer.getFirstUnixTimestampInMs();
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
-      if (this->differentialTimestampsContainer.isSet()) {
-        return this->differentialTimestampsContainer.getFirstUnixTimestampInMs();
-      } else {
-        throw std::runtime_error("differentialTimestampsContainer is not set");
-      }
+      return this->differentialTimestampsContainer.getFirstUnixTimestampInMs();
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::runtime_error("dataForm is none");
+      return 0;
     }
   }
 }

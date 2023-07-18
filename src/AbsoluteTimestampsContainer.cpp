@@ -47,16 +47,16 @@ UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestampsInMs() const {
   return this->unixTimestampsInMs;
 }
 
-UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestampInMs() const {  // TODO unittests
+UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestampInMs() const {
   if (!isSet()) {
-    throw std::runtime_error("unixTimestampsInMs is not set");
+    return 0;
   }
   return this->unixTimestampsInMs.front();
 }
 
-UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const {  // TODO unittests
+UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const {
   if (!isSet()) {
-    throw std::runtime_error("unixTimestampsInMs is not set");
+    return 0;
   }
   return this->unixTimestampsInMs.back();
 }
