@@ -35,6 +35,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
+
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf)
     : sensorType(sensorTypeProtobuf),
       channels(std::move(channels)),
@@ -97,16 +101,16 @@ Sensor::Sensor()
       absoluteTimestampsContainer(AbsoluteTimestampsContainer()),
       dataForm(DataForm::DATA_FORM_NONE) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+
 SensorTypeProtobuf Sensor::getSensorType() const {
   return this->sensorType;
 }
 
 Channels Sensor::getChannels() const {
   return this->channels;
-}
-
-DataForm Sensor::getDataFrom() const {
-  return this->dataForm;
 }
 
 DifferentialTimestampsContainer Sensor::getDifferentialTimestampsContainer() const {
@@ -117,31 +121,56 @@ AbsoluteTimestampsContainer Sensor::getAbsoluteTimestampsContainer() const {
   return this->absoluteTimestampsContainer;
 }
 
-bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const {
-  const auto* derived = dynamic_cast<const Sensor*>(&sensor);
-  if (derived == nullptr) {
-    return false;
-  }
-  const auto numberOfChannels = this->channels.size();
-  if (numberOfChannels != derived->channels.size()) {
-    return false;
-  }
-  for (size_t i = 0; i < numberOfChannels; i++) {
-    if (this->channels[i] != derived->channels[i]) {
-      return false;
-    }
-  }
-  // clang-format off
-  return this->sensorType == derived->sensorType
-      && this->differentialTimestampsContainer == derived->differentialTimestampsContainer
-      && this->absoluteTimestampsContainer == derived->absoluteTimestampsContainer
-      && this->dataForm == derived->dataForm;
-  // clang-format on
+DataForm Sensor::getDataFrom() const {
+  return this->dataForm;
 }
 
-bool Sensor::operator!=(const IPCore<SensorProtobuf>& sensor) const {
-  return !(*this == sensor);
+UnixTimestamp Sensor::getFirstUnixTimestampInMs() const {
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      return this->absoluteTimestampsContainer.getFirstUnixTimestampInMs();
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      return this->differentialTimestampsContainer.getFirstUnixTimestampInMs();
+    }
+    case DataForm::DATA_FORM_NONE: {
+      return 0;
+    }
+  }
 }
+
+UnixTimestamp Sensor::getLastUnixTimestampInMs() const {
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      if (this->absoluteTimestampsContainer.isSet()) {
+        return absoluteTimestampsContainer.getLastUnixTimestampInMs();
+      } else {
+        throw std::runtime_error("absoluteTimestampsContainer is not set");
+      }
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      if (this->differentialTimestampsContainer.isSet()) {
+        const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
+        const auto numberOfElementsInLastBlock = differentialBlocksOfFirstChannel.back().getDifferentialValues().size();
+        const auto firstUnixTimestampInLastBlock = this->calculateFirstUnixTimestampInLastBlock();
+        return this->differentialTimestampsContainer.getLastUnixTimestampInMs(firstUnixTimestampInLastBlock, numberOfElementsInLastBlock);
+      } else {
+        throw std::runtime_error("differentialTimestampsContainer is not set");
+      }
+    }
+    case DataForm::DATA_FORM_NONE: {
+      throw std::runtime_error("dataForm is none");
+    }
+  }
+}
+
+Duration Sensor::getDurationInMs() const {
+  return this->getLastUnixTimestampInMs() - this->getFirstUnixTimestampInMs();
+}
+
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
 
 bool Sensor::isSet() const {
   for (const auto& channel : this->channels) {
@@ -155,6 +184,29 @@ bool Sensor::isSet() const {
       || this->differentialTimestampsContainer.isSet()
       || this->dataForm != DataForm::DATA_FORM_NONE;
   // clang-format on
+}
+
+SensorJson Sensor::toJson() const {
+  SensorJson sensorJson;
+  if (!this->isSet()) {
+    return sensorJson;
+  }
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      sensorJson[PcoreJson::Key::absolute_timestamps_container] = this->absoluteTimestampsContainer.toJson();
+      break;
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      sensorJson[PcoreJson::Key::differential_timestamps_container] = this->differentialTimestampsContainer.toJson();
+      break;
+    }
+    default: {
+      return sensorJson;
+    }
+  }
+  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::vectorToJson(this->channels);
+  sensorJson[PcoreJson::Key::sensor_type] = PcoreProtobuf::Convert::senorTypeToString(this->sensorType);
+  return sensorJson;
 }
 
 void Sensor::serialize(SensorProtobuf* sensorProtobuf) const {
@@ -207,73 +259,35 @@ void Sensor::switchDataForm() {
   }
 }
 
-UnixTimestamp Sensor::getFirstUnixTimestampInMs() const {
-  switch (this->dataForm) {
-    case DataForm::DATA_FORM_ABSOLUTE: {
-      return this->absoluteTimestampsContainer.getFirstUnixTimestampInMs();
-    }
-    case DataForm::DATA_FORM_DIFFERENTIAL: {
-      return this->differentialTimestampsContainer.getFirstUnixTimestampInMs();
-    }
-    case DataForm::DATA_FORM_NONE: {
-      return 0;
+bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const {
+  const auto* derived = dynamic_cast<const Sensor*>(&sensor);
+  if (derived == nullptr) {
+    return false;
+  }
+  const auto numberOfChannels = this->channels.size();
+  if (numberOfChannels != derived->channels.size()) {
+    return false;
+  }
+  for (size_t i = 0; i < numberOfChannels; i++) {
+    if (this->channels[i] != derived->channels[i]) {
+      return false;
     }
   }
+  // clang-format off
+  return this->sensorType == derived->sensorType
+      && this->differentialTimestampsContainer == derived->differentialTimestampsContainer
+      && this->absoluteTimestampsContainer == derived->absoluteTimestampsContainer
+      && this->dataForm == derived->dataForm;
+  // clang-format on
 }
 
-UnixTimestamp Sensor::getLastUnixTimestampInMs() const {
-  switch (this->dataForm) {
-    case DataForm::DATA_FORM_ABSOLUTE: {
-      if (this->absoluteTimestampsContainer.isSet()) {
-        return absoluteTimestampsContainer.getLastUnixTimestampInMs();
-      } else {
-        throw std::runtime_error("absoluteTimestampsContainer is not set");
-      }
-    }
-    case DataForm::DATA_FORM_DIFFERENTIAL: {
-      if (this->differentialTimestampsContainer.isSet()) {
-        const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
-        const auto numberOfElementsInLastBlock = differentialBlocksOfFirstChannel.back().getDifferentialValues().size();
-        const auto firstUnixTimestampInLastBlock = this->calculateFirstUnixTimestampInLastBlock();
-        return this->differentialTimestampsContainer.getLastUnixTimestampInMs(firstUnixTimestampInLastBlock, numberOfElementsInLastBlock);
-      } else {
-        throw std::runtime_error("differentialTimestampsContainer is not set");
-      }
-    }
-    case DataForm::DATA_FORM_NONE: {
-      throw std::runtime_error("dataForm is none");
-    }
-  }
+bool Sensor::operator!=(const IPCore<SensorProtobuf>& sensor) const {
+  return !(*this == sensor);
 }
 
-Duration Sensor::getDurationInMs() const {
-  return this->getLastUnixTimestampInMs() - this->getFirstUnixTimestampInMs();
-}
-
-BlockIdxs Sensor::findBlockIdxs() const {
-  BlockIdxs blockIdxs;
-  if (!this->absoluteTimestampsContainer.isSet()) {
-    return blockIdxs;
-  }
-  TimeDifference referenceTimeDifference = 0;
-  bool isNewBlock = true;
-  blockIdxs.push_back(0);
-  const auto absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestampsInMs();
-  const auto numberOfElements = absoluteUnixTimestamps.size();
-  for (size_t i = 1; i < numberOfElements; i++) {
-    const TimeDifference timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
-    if (isNewBlock) {
-      referenceTimeDifference = timeDifference;
-      isNewBlock = false;
-    }
-    if (timeDifference != referenceTimeDifference) {
-      blockIdxs.push_back(i);
-      isNewBlock = true;
-    }
-  }
-  return blockIdxs;
-}
-
+////////////////////////////////////////////////////////////////
+//                     Calculate Methode                      //
+////////////////////////////////////////////////////////////////
 AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const {
   if (this->channels.empty()) {
     return AbsoluteTimestampsContainer();
@@ -349,27 +363,28 @@ DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const Ab
   return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferencesInMs, timestampsDifferencesInMs);
 }
 
-SensorJson Sensor::toJson() const {
-  SensorJson sensorJson;
-  if (!this->isSet()) {
-    return sensorJson;
+BlockIdxs Sensor::findBlockIdxs() const {
+  BlockIdxs blockIdxs;
+  if (!this->absoluteTimestampsContainer.isSet()) {
+    return blockIdxs;
   }
-  switch (this->dataForm) {
-    case DataForm::DATA_FORM_ABSOLUTE: {
-      sensorJson[PcoreJson::Key::absolute_timestamps_container] = this->absoluteTimestampsContainer.toJson();
-      break;
+  TimeDifference referenceTimeDifference = 0;
+  bool isNewBlock = true;
+  blockIdxs.push_back(0);
+  const auto absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestampsInMs();
+  const auto numberOfElements = absoluteUnixTimestamps.size();
+  for (size_t i = 1; i < numberOfElements; i++) {
+    const TimeDifference timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
+    if (isNewBlock) {
+      referenceTimeDifference = timeDifference;
+      isNewBlock = false;
     }
-    case DataForm::DATA_FORM_DIFFERENTIAL: {
-      sensorJson[PcoreJson::Key::differential_timestamps_container] = this->differentialTimestampsContainer.toJson();
-      break;
-    }
-    default: {
-      return sensorJson;
+    if (timeDifference != referenceTimeDifference) {
+      blockIdxs.push_back(i);
+      isNewBlock = true;
     }
   }
-  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::vectorToJson(this->channels);
-  sensorJson[PcoreJson::Key::sensor_type] = PcoreProtobuf::Convert::senorTypeToString(this->sensorType);
-  return sensorJson;
+  return blockIdxs;
 }
 
 UnixTimestamp Sensor::calculateFirstUnixTimestampInLastBlock() const {

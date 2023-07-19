@@ -36,6 +36,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace PCore;
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs) : unixTimestampsInMs(std::move(unixTimestampsInMs)) {}
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
@@ -43,6 +46,9 @@ AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestamp
 
 AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestampsInMs({}) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestampsInMs() const {
   return this->unixTimestampsInMs;
 }
@@ -61,12 +67,12 @@ UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const {
   return this->unixTimestampsInMs.back();
 }
 
-bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
-  return this->unixTimestampsInMs == absoluteTimestampsContainer.unixTimestampsInMs;
-}
+////////////////////////////////////////////////////////////////
+//                       Public Methods                       //
+////////////////////////////////////////////////////////////////
 
-bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
-  return this->unixTimestampsInMs != absoluteTimestampsContainer.unixTimestampsInMs;
+bool AbsoluteTimestampsContainer::isSet() const {
+  return !this->unixTimestampsInMs.empty();
 }
 
 AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
@@ -78,6 +84,10 @@ AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
   return absoluteTimestampsContainerJson;
 }
 
-bool AbsoluteTimestampsContainer::isSet() const {
-  return !this->unixTimestampsInMs.empty();
+bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
+  return this->unixTimestampsInMs == absoluteTimestampsContainer.unixTimestampsInMs;
+}
+
+bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
+  return this->unixTimestampsInMs != absoluteTimestampsContainer.unixTimestampsInMs;
 }

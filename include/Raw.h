@@ -46,13 +46,23 @@ using RawJson = Json::Value;
 namespace PCore {
 class Raw final : public IPCore<RawProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit Raw(Sensors sensors, DataForm dataForm);
   explicit Raw(const RawProtobuf& rawProtobuf);
   explicit Raw(const RawJson& rawJson, DataForm dataForm);
   explicit Raw();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] Sensors getSensors() const;
   [[nodiscard]] DataForm getDataFrom() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] RawJson toJson() const final;
   void serialize(RawProtobuf* rawProtobuf) const final;
   void switchDataForm() final;
@@ -62,6 +72,9 @@ class Raw final : public IPCore<RawProtobuf> {
   bool operator!=(const IPCore<RawProtobuf>& raw) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   Sensors sensors;
   DataForm dataForm;
 };

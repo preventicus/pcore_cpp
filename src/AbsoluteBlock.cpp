@@ -37,6 +37,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace PCore;
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) : absoluteValues(std::move(absoluteValues)) {}
 
 AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson)
@@ -44,20 +47,18 @@ AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson)
 
 AbsoluteBlock::AbsoluteBlock() : absoluteValues({}) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 AbsoluteValues AbsoluteBlock::getAbsoluteValues() const {
   return this->absoluteValues;
 }
 
+////////////////////////////////////////////////////////////////
+//                       Public Methods                       //
+////////////////////////////////////////////////////////////////
 bool AbsoluteBlock::isSet() const {
   return !this->absoluteValues.empty();
-}
-
-bool AbsoluteBlock::operator==(const AbsoluteBlock& absoluteBlock) const {
-  return this->absoluteValues == absoluteBlock.absoluteValues;
-}
-
-bool AbsoluteBlock::operator!=(const AbsoluteBlock& absoluteBlock) const {
-  return this->absoluteValues != absoluteBlock.absoluteValues;
 }
 
 AbsoluteBlockJson AbsoluteBlock::toJson() const {
@@ -68,3 +69,12 @@ AbsoluteBlockJson AbsoluteBlock::toJson() const {
   absoluteBlockJson[PcoreJson::Key::absolute_values] = PcoreJson::Convert::vectorToJson(this->absoluteValues);
   return absoluteBlockJson;
 }
+
+bool AbsoluteBlock::operator==(const AbsoluteBlock& absoluteBlock) const {
+  return this->absoluteValues == absoluteBlock.absoluteValues;
+}
+
+bool AbsoluteBlock::operator!=(const AbsoluteBlock& absoluteBlock) const {
+  return this->absoluteValues != absoluteBlock.absoluteValues;
+}
+

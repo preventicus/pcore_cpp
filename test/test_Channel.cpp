@@ -35,6 +35,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Channel.h"
 #include "ChannelExampleFactory.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(ChannelTest, TestGetPpgMetaDataWithChannelNotSet) {
   auto channel = ChannelExampleFactory::channelNotSet();
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
@@ -112,6 +116,10 @@ TEST(ChannelTest, TestGetSensorTypeWithChannelWithAbsoluteBlockAndPpgMetaData) {
   EXPECT_TRUE(channel.getSensorType() == SensorTypeProtobuf::SENSOR_TYPE_PPG);
 }
 
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
+
 TEST(ChannelTest, TestIsEqualWithChannelWithAbsoluteBlockAndAccMetaData) {
   auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
   auto channel2 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
@@ -183,6 +191,10 @@ TEST(ChannelTest, TestIsEqualChannelNotSet) {
   auto channel2 = ChannelExampleFactory::channelNotSet();
   EXPECT_TRUE(channel1 == channel2);
 }
+
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
 
 TEST(ChannelTest, TestIsNotEqualWithChannelWithAbsoluteBlockAndAccMetaData) {
   auto channel1 = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
@@ -256,42 +268,82 @@ TEST(ChannelTest, TestIsNotEqualWithChannelNotSet) {
   EXPECT_FALSE(channel1 != channel2);
 }
 
-TEST(ChannelTest, TestSwitchDataFormWithBlockIdxsWithChannelWithAbsoluteValuesForSwitchDataFormTest) {
-  BlockIdxs blockIdxs = {0, 11, 20};
-  auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest();
-  channelWithAbsoluteBlock.switchDataForm(blockIdxs);
-  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockNotSet();
-  EXPECT_TRUE(channelWithAbsoluteBlock.getAbsoluteBlock() == absoluteBlock);
-  auto expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest();
-  auto actualDifferentialBlocks = channelWithAbsoluteBlock.getDifferentialBlocks();
-  auto actualDifferentialBlocksSize = actualDifferentialBlocks.size();
-  EXPECT_EQ(actualDifferentialBlocksSize, expectedDifferentialBlocks.size());
-  for (size_t i = 0; i < actualDifferentialBlocksSize; i++) {
-    EXPECT_TRUE(actualDifferentialBlocks[i] == expectedDifferentialBlocks[i]);
-  }
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(ChannelTest, TestToJsonWithChannelWithDifferentialBlocksAndAccMetaData) {
+  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
+  auto channelJson1 = channel.toJson();
+  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
+  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
-TEST(ChannelTest, TestSwitchDataFormWithChannelWithDifferentialValuesForSwitchDataFormTest) {
-  auto channelWithDifferentialBlocks = ChannelExampleFactory::channelWithDifferentialValuesForSwitchDataFormTest();
-  channelWithDifferentialBlocks.switchDataForm();
-  EXPECT_EQ(channelWithDifferentialBlocks.getDifferentialBlocks().size(), 0);
-  auto expectedAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest();
-  auto actualAbsoluteBlock = channelWithDifferentialBlocks.getAbsoluteBlock();
-  EXPECT_TRUE(actualAbsoluteBlock == expectedAbsoluteBlock);
+TEST(ChannelTest, TestToJsonWithChannelWithDifferentialBlocksAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  auto channelJson1 = channel.toJson();
+  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
+  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
 }
 
-TEST(ChannelTest, TestSwitchDataFormWithBlockIdxsWithChannelNotSet) {
+TEST(ChannelTest, TestToJsonWithChannelWithAbsoluteBlockAndAccMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  auto channelJson1 = channel.toJson();
+  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
+  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
+}
+
+TEST(ChannelTest, TestToJsonWithChannelWithAbsoluteBlockAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  auto channelJson1 = channel.toJson();
+  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
+  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
+}
+
+TEST(ChannelTest, TestToJsonWithChannelNotSet) {
   auto channel = ChannelExampleFactory::channelNotSet();
-  BlockIdxs blockIdxs = {};
-  channel.switchDataForm(blockIdxs);
+  auto channelJson1 = channel.toJson();
+  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
+  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(ChannelTest, TestIsSetWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
   EXPECT_FALSE(channel.isSet());
 }
 
-TEST(ChannelTest, TestSwitchDataFormWithChannelNotSet) {
-  auto channel = ChannelExampleFactory::channelNotSet();
-  channel.switchDataForm();
-  EXPECT_FALSE(channel.isSet());
+TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
+  EXPECT_TRUE(channel.isSet());
 }
+
+TEST(ChannelTest, TestIsSetWithChannelWithDifferentialBlocksAndPpgMetaData) {
+  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndAccMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithNotSetAbsoluteBlockAndNoSetMetaData) {
+  auto channel = ChannelExampleFactory::channelWithNotSetAbsoluteBlockAndNoSetMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndNoSetMetaData) {
+  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndNoSetMetaData();
+  EXPECT_TRUE(channel.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
 
 TEST(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndAccMetaData) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
@@ -333,67 +385,43 @@ TEST(ChannelTest, TestSerializeNoThrow) {
   EXPECT_NO_THROW(channel.serialize(&channelProtobuf));
 }
 
-TEST(ChannelTest, TestToJsonWithChannelWithDifferentialBlocksAndAccMetaData) {
-  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData();
-  auto channelJson1 = channel.toJson();
-  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
-  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
+TEST(ChannelTest, TestSwitchDataFormWithBlockIdxsWithChannelWithAbsoluteValuesForSwitchDataFormTest) {
+  BlockIdxs blockIdxs = {0, 11, 20};
+  auto channelWithAbsoluteBlock = ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest();
+  channelWithAbsoluteBlock.switchDataForm(blockIdxs);
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockNotSet();
+  EXPECT_TRUE(channelWithAbsoluteBlock.getAbsoluteBlock() == absoluteBlock);
+  auto expectedDifferentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest();
+  auto actualDifferentialBlocks = channelWithAbsoluteBlock.getDifferentialBlocks();
+  auto actualDifferentialBlocksSize = actualDifferentialBlocks.size();
+  EXPECT_EQ(actualDifferentialBlocksSize, expectedDifferentialBlocks.size());
+  for (size_t i = 0; i < actualDifferentialBlocksSize; i++) {
+    EXPECT_TRUE(actualDifferentialBlocks[i] == expectedDifferentialBlocks[i]);
+  }
 }
 
-TEST(ChannelTest, TestToJsonWithChannelWithDifferentialBlocksAndPpgMetaData) {
-  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
-  auto channelJson1 = channel.toJson();
-  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
-  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
+TEST(ChannelTest, TestSwitchDataFormWithChannelWithDifferentialValuesForSwitchDataFormTest) {
+  auto channelWithDifferentialBlocks = ChannelExampleFactory::channelWithDifferentialValuesForSwitchDataFormTest();
+  channelWithDifferentialBlocks.switchDataForm();
+  EXPECT_EQ(channelWithDifferentialBlocks.getDifferentialBlocks().size(), 0);
+  auto expectedAbsoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest();
+  auto actualAbsoluteBlock = channelWithDifferentialBlocks.getAbsoluteBlock();
+  EXPECT_TRUE(actualAbsoluteBlock == expectedAbsoluteBlock);
 }
 
-TEST(ChannelTest, TestToJsonWithChannelWithAbsoluteBlockAndAccMetaData) {
-  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
-  auto channelJson1 = channel.toJson();
-  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
-  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
-}
-
-TEST(ChannelTest, TestToJsonWithChannelWithAbsoluteBlockAndPpgMetaData) {
-  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
-  auto channelJson1 = channel.toJson();
-  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
-  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
-}
-
-TEST(ChannelTest, TestToJsonWithChannelNotSet) {
+TEST(ChannelTest, TestSwitchDataFormWithBlockIdxsWithChannelNotSet) {
   auto channel = ChannelExampleFactory::channelNotSet();
-  auto channelJson1 = channel.toJson();
-  auto channelJson2 = ChannelExampleFactory::buildChannelJson(channel);
-  EXPECT_TRUE(channelJson1.toStyledString() == channelJson2.toStyledString());
-}
-
-TEST(ChannelTest, TestIsSetWithChannelNotSet) {
-  auto channel = ChannelExampleFactory::channelNotSet();
+  BlockIdxs blockIdxs = {};
+  channel.switchDataForm(blockIdxs);
   EXPECT_FALSE(channel.isSet());
 }
 
-TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndPpgMetaData) {
-  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData();
-  EXPECT_TRUE(channel.isSet());
-}
-
-TEST(ChannelTest, TestIsSetWithChannelWithDifferentialBlocksAndPpgMetaData) {
-  auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
-  EXPECT_TRUE(channel.isSet());
-}
-
-TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndAccMetaData) {
-  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData();
-  EXPECT_TRUE(channel.isSet());
-}
-
-TEST(ChannelTest, TestIsSetWithChannelWithNotSetAbsoluteBlockAndNoSetMetaData) {
-  auto channel = ChannelExampleFactory::channelWithNotSetAbsoluteBlockAndNoSetMetaData();
-  EXPECT_TRUE(channel.isSet());
-}
-
-TEST(ChannelTest, TestIsSetWithChannelWithAbsoluteBlockAndNoSetMetaData) {
-  auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndNoSetMetaData();
-  EXPECT_TRUE(channel.isSet());
+TEST(ChannelTest, TestSwitchDataFormWithChannelNotSet) {
+  auto channel = ChannelExampleFactory::channelNotSet();
+  channel.switchDataForm();
+  EXPECT_FALSE(channel.isSet());
 }

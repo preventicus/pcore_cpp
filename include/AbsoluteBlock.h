@@ -43,11 +43,21 @@ using AbsoluteBlockJson = Json::Value;
 namespace PCore {
 class AbsoluteBlock final {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit AbsoluteBlock(AbsoluteValues absoluteValues);
   explicit AbsoluteBlock(const AbsoluteBlockJson& absoluteBlock);
   explicit AbsoluteBlock();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] AbsoluteValues getAbsoluteValues() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                       Public Methods                       //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] bool isSet() const;
   [[nodiscard]] AbsoluteBlockJson toJson() const;
 
@@ -55,6 +65,9 @@ class AbsoluteBlock final {
   bool operator!=(const AbsoluteBlock& absoluteBlock) const;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   AbsoluteValues absoluteValues;
 };
 }  // namespace PCore

@@ -54,6 +54,9 @@ using DifferentialBlocks = std::vector<DifferentialBlock>;
 namespace PCore {
 class Channel final : public IPCore<ChannelProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit Channel(AccMetaData accMetadata, AbsoluteBlock absoluteBlock);
   explicit Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock);
   explicit Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks);
@@ -62,32 +65,43 @@ class Channel final : public IPCore<ChannelProtobuf> {
   explicit Channel(const ChannelProtobuf& channelProtobuf);
   explicit Channel();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const;
   [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const;
   [[nodiscard]] AccMetaData getAccMetaData() const;
   [[nodiscard]] PpgMetaData getPpgMetaData() const;
   [[nodiscard]] SensorTypeProtobuf getSensorType() const;
   [[nodiscard]] DataForm getDataForm() const;
-
   [[nodiscard]] bool hasAccMetaData() const;
   [[nodiscard]] bool hasPpgMetaData() const;
   [[nodiscard]] bool hasDifferentialBlocks() const;
   [[nodiscard]] bool hasAbsoluteBlock() const;
 
-  bool operator==(const IPCore<ChannelProtobuf>& channel) const final;
-  bool operator!=(const IPCore<ChannelProtobuf>& channel) const final;
-
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] ChannelJson toJson() const final;
   void serialize(ChannelProtobuf* channelProtobuf) const final;
   void switchDataForm(const BlockIdxs& blockIdxs);
   void switchDataForm() final;
-  [[nodiscard]] bool isSet() const final;
+
+  bool operator==(const IPCore<ChannelProtobuf>& channel) const final;
+  bool operator!=(const IPCore<ChannelProtobuf>& channel) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                     Calculate Methode                      //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const;
   [[nodiscard]] DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, const AbsoluteValues& absoluteValues) const;
   [[nodiscard]] AbsoluteBlock calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const;
 
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   PpgMetaData ppgMetaData;
   AccMetaData accMetaData;
   DifferentialBlocks differentialBlocks;

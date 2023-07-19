@@ -54,6 +54,9 @@ using TimestampsDifferencesJson = Json::Value;
 namespace PCore {
 class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestampContainerProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestampInMs,
                                            BlocksDifferences blocksDifferencesInMs,
                                            TimestampsDifferences timestampsDifferencesInMs);
@@ -61,25 +64,37 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
   explicit DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
   explicit DifferentialTimestampsContainer();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
   [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs(UnixTimestamp firstUnixTimestampInLastBlock, size_t numberOfElementsInLastBlock) const;
   [[nodiscard]] BlocksDifferences getBlocksDifferencesInMs() const;
   [[nodiscard]] TimestampsDifferences getTimestampsDifferencesInMs() const;
 
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] DifferentialTimestampsContainerJson toJson() const final;
+  void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const final;
+  void switchDataForm() final;
+
+  bool operator==(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
+  bool operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
+
+  ////////////////////////////////////////////////////////////////
+  //                     Calculate Methode                      //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const;
   [[nodiscard]] UnixTimestamp calculateLastUnixTimestampInBlock(const BlockIdx& blockIdx,
                                                                 UnixTimestamp firstUnixTimestampInBlockInMs,
                                                                 const DifferentialBlock& lastDifferentialBlock) const;
 
-  void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const final;
-  void switchDataForm() final;
-  [[nodiscard]] bool isSet() const final;
-
-  bool operator==(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
-  bool operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
-
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   UnixTimestamp firstUnixTimestampInMs;
   BlocksDifferences blocksDifferencesInMs;
   TimestampsDifferences timestampsDifferencesInMs;

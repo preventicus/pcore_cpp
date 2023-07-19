@@ -42,16 +42,26 @@ using AccMetaDataJson = Json::Value;
 namespace PCore {
 class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit AccMetaData(NormProtobuf norm);
   explicit AccMetaData(CoordinateProtobuf coordinate);
   explicit AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf);
   explicit AccMetaData(const AccMetaDataJson& accMetaDataJson);
   explicit AccMetaData();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] CoordinateProtobuf getCoordinate() const;
   [[nodiscard]] NormProtobuf getNorm() const;
   [[nodiscard]] bool hasNorm() const;
   [[nodiscard]] bool hasCoordinate() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] bool isSet() const final;
   [[nodiscard]] AccMetaDataJson toJson() const final;
   void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const final;
@@ -61,6 +71,9 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
   bool operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   CoordinateProtobuf coordinate;
   NormProtobuf norm;
 };

@@ -34,6 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "RawExampleFactory.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(RawTest, TestGetSensorWithSensorPpgWithTwoChannelsInDifferentialForm) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
   auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
@@ -63,6 +67,10 @@ TEST(RawTest, TestGetDataFormWithRawNotSet) {
   auto raw = RawExampleFactory::rawNotSet();
   EXPECT_TRUE(raw.getDataFrom() == DataForm::DATA_FORM_NONE);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
 
 TEST(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
   auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
@@ -106,6 +114,10 @@ TEST(RawTest, TestIsEqualWithRawWithZeroSensorsInDifferentialFormAndRawNotSet) {
   EXPECT_FALSE(raw1 == raw2);
 }
 
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
 TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
   auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
   auto raw2 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
@@ -147,6 +159,75 @@ TEST(RawTest, TestIsNotEqualWithRawWithZeroSensorsInDifferentialFormAndRawNotSet
   auto raw2 = RawExampleFactory::rawNotSet();
   EXPECT_TRUE(raw1 != raw2);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestToJsonWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestIsSetWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  EXPECT_FALSE(raw.isSet());
+}
+
+TEST(RawTest, TestIsSetWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw.isSet());
+}
+
+TEST(RawTest, TestIsSetWithRawWithZeroSensorsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  EXPECT_TRUE(raw.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
 
 TEST(RawTest, TestSerializeWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
   auto raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
@@ -198,6 +279,10 @@ TEST(RawTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
   EXPECT_THROW(raw.serialize(&rawProtobuf), std::runtime_error);
 }
 
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
 TEST(RawTest, TestSwitchDataFormWithRawForSwitschDataFormTestInAbsoluteForm) {
   auto raw = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
   raw.switchDataForm();
@@ -216,61 +301,4 @@ TEST(RawTest, TestSwitchDataFormWithRawNotSet) {
   auto raw = RawExampleFactory::rawNotSet();
   raw.switchDataForm();
   EXPECT_FALSE(raw.isSet());
-}
-
-TEST(RawTest, TestToJsonWithRawNotSet) {
-  auto raw = RawExampleFactory::rawNotSet();
-  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
-  auto rawJson2 = raw.toJson();
-  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
-}
-
-TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
-  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
-  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
-  auto rawJson2 = raw.toJson();
-  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
-}
-
-TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
-  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
-  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
-  auto rawJson2 = raw.toJson();
-  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
-}
-
-TEST(RawTest, TestToJsonWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm) {
-  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
-  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
-  auto rawJson2 = raw.toJson();
-  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
-}
-
-TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm) {
-  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm();
-  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
-  auto rawJson2 = raw.toJson();
-  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
-}
-
-TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInDifferentialForm) {
-  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
-  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
-  auto rawJson2 = raw.toJson();
-  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
-}
-
-TEST(RawTest, TestIsSetWithRawNotSet) {
-  auto raw = RawExampleFactory::rawNotSet();
-  EXPECT_FALSE(raw.isSet());
-}
-
-TEST(RawTest, TestIsSetWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
-  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
-  EXPECT_TRUE(raw.isSet());
-}
-
-TEST(RawTest, TestIsSetWithRawWithZeroSensorsInDifferentialForm) {
-  auto raw = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
-  EXPECT_TRUE(raw.isSet());
 }

@@ -47,25 +47,41 @@ using TimeZoneOffsetJson = Json::Value;
 namespace PCore {
 class Header final : public IPCore<HeaderProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit Header(Version version, TimeZoneOffset timeZoneOffsetInMin, DataForm dataForm);
   explicit Header(const HeaderProtobuf& headerProtobuf);
   explicit Header(const HeaderJson& header);
   explicit Header();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] TimeZoneOffset getTimeZoneOffsetInMin() const;
   [[nodiscard]] Version getPcoreVersion() const;
   [[nodiscard]] DataForm getDataForm() const;
 
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] HeaderJson toJson() const final;
   void serialize(HeaderProtobuf* headerProtobuf) const final;
   void switchDataForm() final;
-  [[nodiscard]] bool isSet() const final;
 
   bool operator==(const IPCore<HeaderProtobuf>& header) const final;
   bool operator!=(const IPCore<HeaderProtobuf>& header) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                       Helper Methods                       //
+  ////////////////////////////////////////////////////////////////
   void checkTimeZoneOffset() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   TimeZoneOffset timeZoneOffsetInMin;
   Version pcoreVersion;
   DataForm dataForm;

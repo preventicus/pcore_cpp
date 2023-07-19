@@ -34,6 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AbsoluteBlockExampleFactory.h"
 #include "gtest/gtest.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(AbsoluteBlockTest, TestGetWithAbsoluteBlockWithThreePositiveAbsoluteValues) {
   auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithThreePositiveAbsoluteValues();
   auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesWithThreePositiveElements();
@@ -45,6 +49,10 @@ TEST(AbsoluteBlockTest, TestGetWithAbsoluteBlockNotSet) {
   auto absoluteValues = AbsoluteValuesExampleFactory::absoluteValuesNotSet();
   EXPECT_EQ(absoluteBlock.getAbsoluteValues(), absoluteValues);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
 
 TEST(AbsoluteBlockTest, TestIsEqualWithThreeMixedAbsoluteValues) {
   auto absoluteBlock1 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
@@ -76,6 +84,10 @@ TEST(AbsoluteBlockTest, TestIsEqualWithAbsoluteBlockWithThreeMixedAbsoluteValues
   EXPECT_FALSE(absoluteBlock1 == absoluteBlock2);
 }
 
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
 TEST(AbsoluteBlockTest, TestIsNotEqualWithAbsoluteBlockWithThreeMixedAbsoluteValues) {
   auto absoluteBlock1 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
   auto absoluteBlock2 = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
@@ -105,6 +117,10 @@ TEST(AbsoluteBlockTest, TestIsNotEqualWithAbsoluteBlockWithThreeMixedAbsoluteVal
   auto absoluteBlock2 = AbsoluteBlockExampleFactory::absoluteBlockWithOneAbsoluteValue();
   EXPECT_TRUE(absoluteBlock1 != absoluteBlock2);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
 
 TEST(AbsoluteBlockTest, TestToJsonWithAbsoluteBlockWithThreePositiveAbsoluteValues) {
   auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithThreePositiveAbsoluteValues();
@@ -140,6 +156,10 @@ TEST(AbsoluteBlockTest, TestToJsonWithAbsoluteBlockWithThreeNegativeAbsoluteValu
   auto absoluteBlockJson2 = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
   EXPECT_TRUE(absoluteBlockJson1.toStyledString() == absoluteBlockJson2.toStyledString());
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
 
 TEST(AbsoluteBlockTest, TestIsSetWithAbsoluteBlockWithOneAbsoluteValue) {
   auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithOneAbsoluteValue();

@@ -46,22 +46,35 @@ using DataJson = Json::Value;
 namespace PCore {
 class Data final : public IPCore<DataProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit Data(Raw raw, Header header);
   explicit Data(const DataProtobuf& DataProtobuf);
   explicit Data(const DataJson& dataJson);
   explicit Data();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] Raw getRaw() const;
   [[nodiscard]] Header getHeader() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
+  [[nodiscard]] bool isSet() const final;
   [[nodiscard]] DataJson toJson() const final;
   void serialize(DataProtobuf* dataProtobuf) const final;
   void switchDataForm() final;
-  [[nodiscard]] bool isSet() const final;
 
   bool operator==(const IPCore<DataProtobuf>& data) const final;
   bool operator!=(const IPCore<DataProtobuf>& data) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   Header header;
   Raw raw;
 };

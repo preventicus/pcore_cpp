@@ -43,20 +43,32 @@ using UnixTimestampsJson = Json::Value;
 namespace PCore {
 class AbsoluteTimestampsContainer final {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs);
   explicit AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson);
   explicit AbsoluteTimestampsContainer();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] UnixTimestamps getUnixTimestampsInMs() const;
   [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
   [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const;
-  [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const;
-  [[nodiscard]] bool isSet() const;
 
+  ////////////////////////////////////////////////////////////////
+  //                       Public Methods                       //
+  ////////////////////////////////////////////////////////////////
+  [[nodiscard]] bool isSet() const;
+  [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const;
   bool operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;
   bool operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   UnixTimestamps unixTimestampsInMs;
 };
 }  // namespace PCore

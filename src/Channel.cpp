@@ -36,6 +36,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 Channel::Channel(AccMetaData accMetaData, AbsoluteBlock absoluteBlock)
     : ppgMetaData(PpgMetaData()),
       accMetaData(std::move(accMetaData)),
@@ -134,6 +137,9 @@ Channel::Channel()
       sensorType(SensorTypeProtobuf::SENSOR_TYPE_NONE),
       dataForm(DataForm::DATA_FORM_NONE) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 DifferentialBlocks Channel::getDifferentialBlocks() const {
   return this->differentialBlocks;
 }
@@ -158,33 +164,6 @@ DataForm Channel::getDataForm() const {
   return this->dataForm;
 }
 
-bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const {
-  const auto* derived = dynamic_cast<const Channel*>(&channel);
-  if (derived == nullptr) {
-    return false;
-  }
-  const auto numberOfElements = this->differentialBlocks.size();
-  if (numberOfElements != derived->differentialBlocks.size()) {
-    return false;
-  }
-  for (size_t i = 0; i < numberOfElements; i++) {
-    if (this->differentialBlocks[i] != derived->differentialBlocks[i]) {
-      return false;
-    }
-  }
-  // clang-format off
-  return this->accMetaData == derived->accMetaData
-      && this->ppgMetaData == derived->ppgMetaData
-      && this->absoluteBlock == derived->absoluteBlock
-      && this->sensorType == derived->sensorType
-      && this->dataForm == derived->dataForm;
-  // clang-format off
-}
-
-bool Channel::operator!=(const IPCore<ChannelProtobuf>& channel) const {
-  return !(*this == channel);
-}
-
 bool Channel::hasAccMetaData() const {
   return this->accMetaData.isSet();
 }
@@ -199,6 +178,71 @@ bool Channel::hasDifferentialBlocks() const {
 
 bool Channel::hasAbsoluteBlock() const {
   return this->absoluteBlock.isSet();
+}
+
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+bool Channel::isSet() const {
+  for (const auto& differentialBlock : this->differentialBlocks) {
+    if (differentialBlock.isSet()) {
+      return true;
+    }
+  }
+  // clang-format off
+  return this->ppgMetaData.isSet()
+      || this->accMetaData.isSet()
+      || this->absoluteBlock.isSet()
+      || this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
+      || this->dataForm != DataForm::DATA_FORM_NONE;
+  // clang-format on
+}
+
+ChannelJson Channel::toJson() const {
+  ChannelJson channelJson;
+  if (!this->isSet()) {
+    return channelJson;
+  }
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      channelJson[PcoreJson::Key::absolute_block] = this->absoluteBlock.toJson();
+      switch (this->sensorType) {
+        case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
+          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
+          break;
+        }
+        case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
+          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
+          break;
+        }
+        default: {
+          throw std::runtime_error("sensorTypeProtobuf is not set");
+        }
+      }
+      break;
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      channelJson[PcoreJson::Key::differential_blocks] = PcoreJson::Convert::vectorToJson(this->differentialBlocks);
+      switch (this->sensorType) {
+        case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
+          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
+          break;
+        }
+        case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
+          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
+          break;
+        }
+        default: {
+          throw std::runtime_error("sensorTypeProtobuf is not set");
+        }
+      }
+      break;
+    }
+    default: {
+      throw std::runtime_error("dataForm is not set");
+    }
+  }
+  return channelJson;
 }
 
 void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
@@ -249,20 +293,36 @@ void Channel::switchDataForm() {
   this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
 }
 
-bool Channel::isSet() const {
-  for (const auto& differentialBlock : this->differentialBlocks) {
-    if (differentialBlock.isSet()) {
-      return true;
+bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const {
+  const auto* derived = dynamic_cast<const Channel*>(&channel);
+  if (derived == nullptr) {
+    return false;
+  }
+  const auto numberOfElements = this->differentialBlocks.size();
+  if (numberOfElements != derived->differentialBlocks.size()) {
+    return false;
+  }
+  for (size_t i = 0; i < numberOfElements; i++) {
+    if (this->differentialBlocks[i] != derived->differentialBlocks[i]) {
+      return false;
     }
   }
   // clang-format off
-  return this->ppgMetaData.isSet()
-      || this->accMetaData.isSet()
-      || this->absoluteBlock.isSet()
-      || this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
-      || this->dataForm != DataForm::DATA_FORM_NONE;
-  // clang-format on
+  return this->accMetaData == derived->accMetaData
+      && this->ppgMetaData == derived->ppgMetaData
+      && this->absoluteBlock == derived->absoluteBlock
+      && this->sensorType == derived->sensorType
+      && this->dataForm == derived->dataForm;
+  // clang-format off
 }
+
+bool Channel::operator!=(const IPCore<ChannelProtobuf>& channel) const {
+  return !(*this == channel);
+}
+
+////////////////////////////////////////////////////////////////
+//                     Calculate Methode                      //
+////////////////////////////////////////////////////////////////
 
 DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const {
   DifferentialBlocks differentialBlocks;
@@ -333,49 +393,4 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differen
   return AbsoluteBlock(absoluteValues);
 }
 
-ChannelJson Channel::toJson() const {
-  ChannelJson channelJson;
-  if (!this->isSet()) {
-    return channelJson;
-  }
-  switch (this->dataForm) {
-    case DataForm::DATA_FORM_ABSOLUTE: {
-      channelJson[PcoreJson::Key::absolute_block] = this->absoluteBlock.toJson();
-      switch (this->sensorType) {
-        case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
-          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
-          break;
-        }
-        case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
-          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
-          break;
-        }
-        default: {
-          throw std::runtime_error("sensorTypeProtobuf is not set");
-        }
-      }
-      break;
-    }
-    case DataForm::DATA_FORM_DIFFERENTIAL: {
-      channelJson[PcoreJson::Key::differential_blocks] = PcoreJson::Convert::vectorToJson(this->differentialBlocks);
-      switch (this->sensorType) {
-        case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
-          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
-          break;
-        }
-        case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
-          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
-          break;
-        }
-        default: {
-          throw std::runtime_error("sensorTypeProtobuf is not set");
-        }
-      }
-      break;
-    }
-    default: {
-      throw std::runtime_error("dataForm is not set");
-    }
-  }
-  return channelJson;
-}
+

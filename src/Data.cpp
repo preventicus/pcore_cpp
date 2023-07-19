@@ -35,6 +35,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include "PcoreJson.h"
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 Data::Data(Raw raw, Header header) : header(std::move(header)), raw(std::move(raw)) {}
 
 Data::Data(const DataProtobuf& DataProtobuf) : header(Header(DataProtobuf.header())), raw(Raw(DataProtobuf.raw())) {}
@@ -44,6 +47,9 @@ Data::Data(const DataJson& dataJson)
 
 Data::Data() : header(Header()), raw(Raw()) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 Raw Data::getRaw() const {
   return this->raw;
 }
@@ -52,15 +58,23 @@ Header Data::getHeader() const {
   return this->header;
 }
 
-bool Data::operator==(const IPCore<DataProtobuf>& data) const {
-  if (const auto* derived = dynamic_cast<const Data*>(&data)) {
-    return this->header == derived->header && this->raw == derived->raw;
-  }
-  return false;
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+bool Data::isSet() const {
+  return this->raw.isSet() || this->header.isSet();
 }
 
-bool Data::operator!=(const IPCore<DataProtobuf>& data) const {
-  return !(*this == data);
+Json::Value Data::toJson() const {
+  DataJson data;
+  if (!this->isSet()) {
+    return data;
+  }
+  data[PcoreJson::Key::header] = this->header.toJson();
+  data[PcoreJson::Key::raw] = this->raw.toJson();
+  Json::Value json;
+  json[PcoreJson::Key::data] = data;
+  return json;
 }
 
 void Data::serialize(DataProtobuf* dataProtobuf) const {
@@ -89,18 +103,16 @@ void Data::switchDataForm() {
   this->header.switchDataForm();
 }
 
-Json::Value Data::toJson() const {
-  DataJson data;
-  if (!this->isSet()) {
-    return data;
+bool Data::operator==(const IPCore<DataProtobuf>& data) const {
+  if (const auto* derived = dynamic_cast<const Data*>(&data)) {
+    return this->header == derived->header && this->raw == derived->raw;
   }
-  data[PcoreJson::Key::header] = this->header.toJson();
-  data[PcoreJson::Key::raw] = this->raw.toJson();
-  Json::Value json;
-  json[PcoreJson::Key::data] = data;
-  return json;
+  return false;
 }
 
-bool Data::isSet() const {
-  return this->raw.isSet() || this->header.isSet();
+bool Data::operator!=(const IPCore<DataProtobuf>& data) const {
+  return !(*this == data);
 }
+
+
+

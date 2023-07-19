@@ -49,14 +49,24 @@ using PatchJson = Json::Value;
 namespace PCore {
 class Version final : public IPCore<VersionProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit Version(Major major, Minor minor, Patch patch);
   explicit Version(const VersionProtobuf& versionProtobuf);
   explicit Version(const VersionJson& jsonVersion);
   explicit Version();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] Major getMajor() const;
   [[nodiscard]] Minor getMinor() const;
   [[nodiscard]] Patch getPatch() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] VersionJson toJson() const final;
   void serialize(VersionProtobuf* versionProtobuf) const final;
   void switchDataForm() final;
@@ -65,6 +75,9 @@ class Version final : public IPCore<VersionProtobuf> {
   bool operator!=(const IPCore<VersionProtobuf>& version) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   Major major;
   Minor minor;
   Patch patch;

@@ -35,6 +35,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreJson.h"
 using namespace PCore;
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 AccMetaData::AccMetaData(CoordinateProtobuf coordinate) : coordinate(coordinate), norm(NormProtobuf::NORM_NONE) {}
 
 AccMetaData::AccMetaData(NormProtobuf norm) : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(norm) {}
@@ -52,6 +55,9 @@ AccMetaData::AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf)
 
 AccMetaData::AccMetaData() : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(NormProtobuf::NORM_NONE) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 CoordinateProtobuf AccMetaData::getCoordinate() const {
   return this->coordinate;
 }
@@ -68,19 +74,26 @@ bool AccMetaData::hasCoordinate() const {
   return this->coordinate != CoordinateProtobuf::COORDINATE_NONE;
 }
 
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
 bool AccMetaData::isSet() const {
   return this->hasNorm() || this->hasCoordinate();
 }
 
-bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
-  if (const auto* derived = dynamic_cast<const AccMetaData*>(&accMetaData)) {
-    return this->coordinate == derived->coordinate && this->norm == derived->norm;
+Json::Value AccMetaData::toJson() const {
+  AccMetaDataJson accMetaDataJson;
+  if (!this->isSet()) {
+    return accMetaDataJson;
   }
-  return false;
-}
-
-bool AccMetaData::operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
-  return !(*this == accMetaData);
+  if (this->hasNorm()) {
+    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(this->norm);
+  }
+  if (this->hasCoordinate()) {
+    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(this->coordinate);
+  }
+  return accMetaDataJson;
 }
 
 void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
@@ -105,16 +118,13 @@ void AccMetaData::switchDataForm() {
   throw std::runtime_error("should not be called");
 }
 
-Json::Value AccMetaData::toJson() const {
-  AccMetaDataJson accMetaDataJson;
-  if (!this->isSet()) {
-    return accMetaDataJson;
+bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+  if (const auto* derived = dynamic_cast<const AccMetaData*>(&accMetaData)) {
+    return this->coordinate == derived->coordinate && this->norm == derived->norm;
   }
-  if (this->hasNorm()) {
-    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(this->norm);
-  }
-  if (this->hasCoordinate()) {
-    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(this->coordinate);
-  }
-  return accMetaDataJson;
+  return false;
+}
+
+bool AccMetaData::operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+  return !(*this == accMetaData);
 }

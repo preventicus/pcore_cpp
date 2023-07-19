@@ -35,6 +35,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "SensorExampleFactory.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(SensorTest, TestGetChannelsWithSensorAccWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
   Channels channels1;
@@ -187,6 +191,10 @@ TEST(SensorTest, TestGetDurationWithSensorNotSet) {
   EXPECT_THROW(std::ignore = sensor.getDurationInMs(), std::runtime_error);
 }
 
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
+
 TEST(SensorTest, TestIsEqualWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
   auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
@@ -234,6 +242,10 @@ TEST(SensorTest, TestIsEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteFormAn
   auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetDifferentialForm();
   EXPECT_FALSE(sensor1 == sensor2);
 }
+
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
 
 TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
@@ -283,6 +295,10 @@ TEST(SensorTest, TestIsNotEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteFor
   EXPECT_TRUE(sensor1 != sensor2);
 }
 
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
 TEST(SensorTest, TestToJsonWithSensorPpgWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
   auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor);
@@ -324,6 +340,39 @@ TEST(SensorTest, TestToJsonWithSensorPpgWithOneChannelsInAbsoluteForm) {
   auto sensorJson2 = sensor.toJson();
   EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestIsSetWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorAccWithZeroChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithZeroChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
 
 TEST(SensorTest, TestSerializeWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
@@ -367,6 +416,10 @@ TEST(SensorTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
   EXPECT_THROW(sensor.serialize(&sensorProtobuf), std::runtime_error);
 }
 
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
 TEST(SensorTest, TestSwitchDataFormWithSensorForSwitchDataFromTestInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm();
   auto sensorInDifferentialForm = SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm();
@@ -387,27 +440,3 @@ TEST(SensorTest, TestSwitchDataFormWithSensorNotSet) {
   EXPECT_FALSE(sensor.isSet());
 }
 
-TEST(SensorTest, TestIsSetWithSensorNotSet) {
-  auto sensor = SensorExampleFactory::sensorNotSet();
-  EXPECT_FALSE(sensor.isSet());
-}
-
-TEST(SensorTest, TestIsSetWithSensorAccWithTwoChannelsInDifferentialForm) {
-  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
-  EXPECT_TRUE(sensor.isSet());
-}
-
-TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInAbsoluteForm) {
-  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInAbsoluteForm();
-  EXPECT_TRUE(sensor.isSet());
-}
-
-TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInDifferentialForm) {
-  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInDifferentialForm();
-  EXPECT_TRUE(sensor.isSet());
-}
-
-TEST(SensorTest, TestIsSetWithSensorAccWithZeroChannelsInDifferentialForm) {
-  auto sensor = SensorExampleFactory::sensorAccWithZeroChannelsInDifferentialForm();
-  EXPECT_TRUE(sensor.isSet());
-}

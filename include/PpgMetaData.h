@@ -43,19 +43,28 @@ using PpgMetaDataJson = Json::Value;
 namespace PCore {
 class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit PpgMetaData(ColorProtobuf colorProtobuf);
   explicit PpgMetaData(Wavelength wavelengthInNm);
   explicit PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf);
   explicit PpgMetaData(const PpgMetaDataJson& ppgMetaData);
   explicit PpgMetaData();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] ColorProtobuf getColor() const;
   [[nodiscard]] Wavelength getWavelengthInNm() const;
   [[nodiscard]] bool hasColor() const;
   [[nodiscard]] bool hasWavelength() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] bool isSet() const final;
   [[nodiscard]] PpgMetaDataJson toJson() const final;
-
   void serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const final;
   void switchDataForm() final;
 
@@ -63,6 +72,9 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
   bool operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   ColorProtobuf color;
   Wavelength wavelengthInNm;
 };

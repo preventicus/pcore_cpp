@@ -34,6 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "DataExampleFactory.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(DataTest, TestGetRawWithDataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data = DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
@@ -61,6 +65,10 @@ TEST(DataTest, TestGetHeaderWithDataNotSet) {
   auto header2 = data.getHeader();
   EXPECT_TRUE(header1 == header2);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
 
 TEST(DataTest, TestIsEqualWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
@@ -96,6 +104,10 @@ TEST(
   EXPECT_FALSE(data1 == data2);
 }
 
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
 TEST(DataTest, TestIsNotEqualWithdataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   auto data2 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
@@ -130,6 +142,54 @@ TEST(
   EXPECT_TRUE(data1 != data2);
 }
 
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(DataTest, TestToJsonWithDataNotSet) {
+  auto data = DataExampleFactory::dataNotSet();
+  auto dataJson1 = DataExampleFactory::buildDataJson(data);
+  auto dataJson2 = data.toJson();
+  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
+}
+
+TEST(DataTest, TestToJsonWithDataWithRawForSwitchDataFormTestInAbsoluteForm) {
+  auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
+  auto dataJson1 = DataExampleFactory::buildDataJson(data);
+  auto dataJson2 = data.toJson();
+  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
+}
+
+TEST(DataTest, TestToJsonWithDataWithRawForSwitchDataFormTestInDifferentialForm) {
+  auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
+  auto dataJson1 = DataExampleFactory::buildDataJson(data);
+  auto dataJson2 = data.toJson();
+  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(DataTest, TestIsSetWithDataNotSet) {
+  auto data = DataExampleFactory::dataNotSet();
+  EXPECT_FALSE(data.isSet());
+}
+
+TEST(DataTest, TestIsSetWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
+  auto data = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
+  EXPECT_TRUE(data.isSet());
+}
+
+TEST(DataTest, TestIsSetWithDataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet) {
+  auto data = DataExampleFactory::dataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet();
+  EXPECT_TRUE(data.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
+
 TEST(DataTest, TestSerializeWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
   auto data1 = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
   DataProtobuf dataProtobuf;
@@ -156,6 +216,10 @@ TEST(DataTest, TestSerializeThrowDueToDataFromAbsolute) {
   EXPECT_THROW(data.serialize(&dataProtobuf), std::runtime_error);
 }
 
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
 TEST(DataTest, TestSwitchDataFormWithDataWithRawForSwitchDataFormTestInAbsoluteForm) {
   auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
   data.switchDataForm();
@@ -174,40 +238,4 @@ TEST(DataTest, TestSwitchDataFormWithDataNotSet) {
   auto data = DataExampleFactory::dataNotSet();
   data.switchDataForm();
   EXPECT_FALSE(data.isSet());
-}
-
-TEST(DataTest, TestToJsonWithDataNotSet) {
-  auto data = DataExampleFactory::dataNotSet();
-  auto dataJson1 = DataExampleFactory::buildDataJson(data);
-  auto dataJson2 = data.toJson();
-  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
-}
-
-TEST(DataTest, TestToJsonWithDataWithRawForSwitchDataFormTestInAbsoluteForm) {
-  auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
-  auto dataJson1 = DataExampleFactory::buildDataJson(data);
-  auto dataJson2 = data.toJson();
-  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
-}
-
-TEST(DataTest, TestToJsonWithDataWithRawForSwitchDataFormTestInDifferentialForm) {
-  auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm();
-  auto dataJson1 = DataExampleFactory::buildDataJson(data);
-  auto dataJson2 = data.toJson();
-  EXPECT_TRUE(dataJson1.toStyledString() == dataJson2.toStyledString());
-}
-
-TEST(DataTest, TestIsSetWithDataNotSet) {
-  auto data = DataExampleFactory::dataNotSet();
-  EXPECT_FALSE(data.isSet());
-}
-
-TEST(DataTest, TestIsSetWithDataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative) {
-  auto data = DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative();
-  EXPECT_TRUE(data.isSet());
-}
-
-TEST(DataTest, TestIsSetWithDataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet) {
-  auto data = DataExampleFactory::dataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet();
-  EXPECT_TRUE(data.isSet());
 }

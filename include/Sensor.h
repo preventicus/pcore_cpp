@@ -50,21 +50,31 @@ using ChannelsJson = Json::Value;
 namespace PCore {
 class Sensor final : public IPCore<SensorProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
   explicit Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
   explicit Sensor(const SensorJson& sensorJson, DataForm dataForm);
   explicit Sensor(const SensorProtobuf& sensorProtobuf);
   explicit Sensor();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] SensorTypeProtobuf getSensorType() const;
   [[nodiscard]] Channels getChannels() const;
   [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const;
   [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const;
+  [[nodiscard]] DataForm getDataFrom() const;
   [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
   [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const;
   [[nodiscard]] Duration getDurationInMs() const;
-  [[nodiscard]] DataForm getDataFrom() const;
 
+
+  ////////////////////////////////////////////////////////////////
+  //                     Interface Methode                      //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] bool isSet() const final;
   [[nodiscard]] SensorJson toJson() const final;
   void serialize(SensorProtobuf* sensorProtobuf) const final;
@@ -74,13 +84,18 @@ class Sensor final : public IPCore<SensorProtobuf> {
   bool operator!=(const IPCore<SensorProtobuf>& sensor) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] AbsoluteTimestampsContainer calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
   [[nodiscard]] DifferentialTimestampsContainer calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
                                                                                 const BlockIdxs& blockIdxs) const;
   [[nodiscard]] BlockIdxs findBlockIdxs() const;
-
   [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInLastBlock() const;
 
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   SensorTypeProtobuf sensorType;
   Channels channels;
   DifferentialTimestampsContainer differentialTimestampsContainer;

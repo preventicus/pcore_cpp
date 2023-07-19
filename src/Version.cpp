@@ -36,6 +36,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace PCore;
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+
 Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
 
 Version::Version(const VersionJson& versionJson)
@@ -47,6 +51,10 @@ Version::Version(const VersionProtobuf& versionProtobuf)
     : major(versionProtobuf.major()), minor(versionProtobuf.minor()), patch(versionProtobuf.patch()) {}
 
 Version::Version() : major(0), minor(0), patch(0) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 
 Major Version::getMajor() const {
   return this->major;
@@ -60,31 +68,16 @@ Patch Version::getPatch() const {
   return this->patch;
 }
 
-bool Version::operator==(const IPCore<VersionProtobuf>& version) const {
-  if (const auto* derived = dynamic_cast<const Version*>(&version)) {
-    return this->major == derived->major && this->minor == derived->minor && this->patch == derived->patch;
-  }
-  return false;
-}
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
 
-bool Version::operator!=(const IPCore<VersionProtobuf>& version) const {
-  return !(*this == version);
-}
-
-void Version::serialize(VersionProtobuf* versionProtobuf) const {
-  if (versionProtobuf == nullptr) {
-    throw std::invalid_argument("Error in serialize: versionProtobuf is a null pointer");
-  }
-  if (!this->isSet()) {
-    return;
-  }
-  versionProtobuf->set_major(this->major);
-  versionProtobuf->set_minor(this->minor);
-  versionProtobuf->set_patch(this->patch);
-}
-
-void Version::switchDataForm() {
-  throw std::runtime_error("should not be called");
+bool Version::isSet() const {
+  // clang-format off
+  return this->major != 0
+      || this->minor != 0
+      || this->patch != 0;
+  // clang-format on
 }
 
 VersionJson Version::toJson() const {
@@ -104,10 +97,29 @@ VersionJson Version::toJson() const {
   return versionJson;
 }
 
-bool Version::isSet() const {
-  // clang-format off
-  return this->major != 0
-      || this->minor != 0
-      || this->patch != 0;
-  // clang-format on
+void Version::serialize(VersionProtobuf* versionProtobuf) const {
+  if (versionProtobuf == nullptr) {
+    throw std::invalid_argument("Error in serialize: versionProtobuf is a null pointer");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  versionProtobuf->set_major(this->major);
+  versionProtobuf->set_minor(this->minor);
+  versionProtobuf->set_patch(this->patch);
+}
+
+void Version::switchDataForm() {
+  throw std::runtime_error("should not be called");
+}
+
+bool Version::operator==(const IPCore<VersionProtobuf>& version) const {
+  if (const auto* derived = dynamic_cast<const Version*>(&version)) {
+    return this->major == derived->major && this->minor == derived->minor && this->patch == derived->patch;
+  }
+  return false;
+}
+
+bool Version::operator!=(const IPCore<VersionProtobuf>& version) const {
+  return !(*this == version);
 }

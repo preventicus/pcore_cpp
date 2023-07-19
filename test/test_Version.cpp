@@ -34,6 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "VersionExampleFactory.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(VersionTest, TestGetMajorWithVersionWithMajor2Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   EXPECT_EQ(version.getMajor(), VersionExampleFactory::majorTwo());
@@ -63,6 +67,10 @@ TEST(VersionTest, TestGetPatchWithVersionNotSet) {
   auto version = VersionExampleFactory::versionNotSet();
   EXPECT_EQ(version.getPatch(), VersionExampleFactory::patchZero());
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
 
 TEST(VersionTest, TestIsEqualWithVersionWithMajor2Minor1Patch0) {
   auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
@@ -100,6 +108,10 @@ TEST(VersionTest, TestIsEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajo
   EXPECT_FALSE(version1 == version2);
 }
 
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
 TEST(VersionTest, TestIsNotEqualWithVersionWithMajor2Minor1Patch0) {
   auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
   auto version2 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
@@ -136,6 +148,10 @@ TEST(VersionTest, TestIsNotEqualWithVersionWithMajor1Minor1Patch0AndVersionWithM
   EXPECT_TRUE(version1 != version2);
 }
 
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
 TEST(VersionTest, TestToJsonWithVersionWithMajor1Minor1Patch0) {
   auto version = VersionExampleFactory::versionWithMajor1Minor1Patch0();
   auto versionJson1 = VersionExampleFactory::buildVersionJson(version);
@@ -149,6 +165,34 @@ TEST(VersionTest, TestToJsonWithVersionNotSet) {
   auto versionJson2 = version.toJson();
   EXPECT_TRUE(versionJson1.toStyledString() == versionJson2.toStyledString());
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(VersionTest, TestIsSetWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_FALSE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor1Minor2Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor1Minor2Patch0();
+  EXPECT_TRUE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor2Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor0Minor2Patch0();
+  EXPECT_TRUE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor0Patch1) {
+  auto version = VersionExampleFactory::versionWithMajor0Minor0Patch1();
+  EXPECT_TRUE(version.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
 
 TEST(VersionTest, TestSerializeWithVersionNotSet) {
   auto version1 = VersionExampleFactory::versionNotSet();
@@ -178,27 +222,12 @@ TEST(VersionTest, TestSerializeThrowDueToNullPointer) {
   EXPECT_THROW(version.serialize(versionProtobuf), std::invalid_argument);
 }
 
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
 TEST(VersionTest, TestSwitchDataFormWithVersionNotSet) {
   auto version = VersionExampleFactory::versionNotSet();
   EXPECT_THROW(version.switchDataForm(), std::runtime_error);
 }
 
-TEST(VersionTest, TestIsSetWithVersionNotSet) {
-  auto version = VersionExampleFactory::versionNotSet();
-  EXPECT_FALSE(version.isSet());
-}
-
-TEST(VersionTest, TestIsSetWithVersionVersionWithMajor1Minor2Patch0) {
-  auto version = VersionExampleFactory::versionWithMajor1Minor2Patch0();
-  EXPECT_TRUE(version.isSet());
-}
-
-TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor2Patch0) {
-  auto version = VersionExampleFactory::versionWithMajor0Minor2Patch0();
-  EXPECT_TRUE(version.isSet());
-}
-
-TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor0Patch1) {
-  auto version = VersionExampleFactory::versionWithMajor0Minor0Patch1();
-  EXPECT_TRUE(version.isSet());
-}

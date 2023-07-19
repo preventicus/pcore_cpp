@@ -38,6 +38,9 @@ using namespace PCore;
 
 using WavelegthJson = Json::Value;
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) : color(colorProtobuf), wavelengthInNm(0) {}
 
 PpgMetaData::PpgMetaData(Wavelength wavelengthInNm) : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(wavelengthInNm) {}
@@ -59,6 +62,9 @@ PpgMetaData::PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf)
 
 PpgMetaData::PpgMetaData() : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(0) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 ColorProtobuf PpgMetaData::getColor() const {
   return this->color;
 }
@@ -75,19 +81,12 @@ bool PpgMetaData::hasWavelength() const {
   return this->wavelengthInNm > 0;
 }
 
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
 bool PpgMetaData::isSet() const {
   return this->hasColor() || this->hasWavelength();
-}
-
-bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
-  if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
-    return this->color == derived->color && this->wavelengthInNm == derived->wavelengthInNm;
-  }
-  return false;
-}
-
-bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
-  return !(*this == ppgMetaData);
 }
 
 PpgMetaDataJson PpgMetaData::toJson() const {
@@ -126,4 +125,15 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
 
 void PpgMetaData::switchDataForm() {
   throw std::runtime_error("should not be called");
+}
+
+bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+  if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
+    return this->color == derived->color && this->wavelengthInNm == derived->wavelengthInNm;
+  }
+  return false;
+}
+
+bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+  return !(*this == ppgMetaData);
 }

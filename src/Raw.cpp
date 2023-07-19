@@ -36,6 +36,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
 
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 Raw::Raw(Sensors sensors, DataForm dataForm) : sensors(std::move(sensors)), dataForm(dataForm) {}
 
 Raw::Raw(const RawProtobuf& rawProtobuf)
@@ -51,6 +54,9 @@ Raw::Raw(const RawJson& rawJson, DataForm dataForm)
 
 Raw::Raw() : sensors({}), dataForm(DataForm::DATA_FORM_NONE) {}
 
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
 Sensors Raw::getSensors() const {
   return this->sensors;
 }
@@ -59,25 +65,26 @@ DataForm Raw::getDataFrom() const {
   return this->dataForm;
 }
 
-bool Raw::operator==(const IPCore<RawProtobuf>& raw) const {
-  const auto* derived = dynamic_cast<const Raw*>(&raw);
-  if (derived == nullptr) {
-    return false;
-  }
-  const auto numberOfSensors = this->sensors.size();
-  if (numberOfSensors != derived->sensors.size()) {
-    return false;
-  }
-  for (size_t i = 0; i < numberOfSensors; i++) {
-    if (this->sensors[i] != derived->sensors[i]) {
-      return false;
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
+bool Raw::isSet() const {
+  for (const auto& sensor : this->sensors) {
+    if (sensor.isSet()) {
+      return true;
     }
   }
-  return this->dataForm == derived->dataForm;
+  return this->dataForm != DataForm::DATA_FORM_NONE;
 }
 
-bool Raw::operator!=(const IPCore<RawProtobuf>& raw) const {
-  return !(*this == raw);
+RawJson Raw::toJson() const {
+  RawJson rawJson;
+  if (!this->isSet()) {
+    return rawJson;
+  }
+  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::vectorToJson(this->sensors);
+  return rawJson;
 }
 
 void Raw::serialize(RawProtobuf* rawProtobuf) const {
@@ -118,20 +125,23 @@ void Raw::switchDataForm() {
   }
 }
 
-RawJson Raw::toJson() const {
-  RawJson rawJson;
-  if (!this->isSet()) {
-    return rawJson;
+bool Raw::operator==(const IPCore<RawProtobuf>& raw) const {
+  const auto* derived = dynamic_cast<const Raw*>(&raw);
+  if (derived == nullptr) {
+    return false;
   }
-  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::vectorToJson(this->sensors);
-  return rawJson;
-}
-
-bool Raw::isSet() const {
-  for (const auto& sensor : this->sensors) {
-    if (sensor.isSet()) {
-      return true;
+  const auto numberOfSensors = this->sensors.size();
+  if (numberOfSensors != derived->sensors.size()) {
+    return false;
+  }
+  for (size_t i = 0; i < numberOfSensors; i++) {
+    if (this->sensors[i] != derived->sensors[i]) {
+      return false;
     }
   }
-  return this->dataForm != DataForm::DATA_FORM_NONE;
+  return this->dataForm == derived->dataForm;
+}
+
+bool Raw::operator!=(const IPCore<RawProtobuf>& raw) const {
+  return !(*this == raw);
 }

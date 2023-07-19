@@ -34,6 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "DifferentialBlockExampleFactory.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(DifferentialBlockTest, TestGetWithDifferentialBlockWithThreePositiveDifferentialValues) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues();
   auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements();
@@ -45,6 +49,10 @@ TEST(DifferentialBlockTest, TestGetWithDifferentialBlockNotSet) {
   auto differentialValues = DifferentialValuesExampleFactory::differentialValuesNotSet();
   EXPECT_EQ(differentialBlock.getDifferentialValues(), differentialValues);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
 
 TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
@@ -76,6 +84,10 @@ TEST(DifferentialBlockTest, TestIsEqualWithDifferentialBlockWithThreeMixedDiffer
   EXPECT_FALSE(differentialBlock1 == differentialBlock2);
 }
 
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
 TEST(DifferentialBlockTest, TestIsNotEqualWithDifferentialBlockWithThreeMixedDifferentialValues) {
   auto differentialBlock1 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
@@ -105,6 +117,63 @@ TEST(DifferentialBlockTest, TestIsNotEqualWithDifferentialBlockWithThreeMixedDif
   auto differentialBlock2 = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
   EXPECT_TRUE(differentialBlock1 != differentialBlock2);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreePositiveDifferentialValues) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues();
+  auto differentialBlockJson1 = differentialBlock.toJson();
+  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
+  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
+}
+
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeMixedDifferentialValues) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
+  auto differentialBlockJson1 = differentialBlock.toJson();
+  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
+  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
+}
+
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeNegativeDifferentialValues) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
+  auto differentialBlockJson1 = differentialBlock.toJson();
+  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
+  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
+}
+
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockNotSet) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
+  auto differentialBlockJson1 = differentialBlock.toJson();
+  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
+  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
+}
+
+TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithOneDifferentialValues) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
+  auto differentialBlockJson1 = differentialBlock.toJson();
+  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
+  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(DifferentialBlockTest, TestIsSetWithDifferentialBlockWithOneDifferentialValues) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
+  EXPECT_TRUE(differentialBlock.isSet());
+}
+
+TEST(DifferentialBlockTest, TestIsSetWithDifferentialBlockNotSet) {
+  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
+  EXPECT_FALSE(differentialBlock.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
 
 TEST(DifferentialBlockTest, TestSerializeNoThrow) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
@@ -158,50 +227,9 @@ TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeMixedDiff
   EXPECT_TRUE(differentialBlock1 == differentialBlock2);
 }
 
-TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreePositiveDifferentialValues) {
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues();
-  auto differentialBlockJson1 = differentialBlock.toJson();
-  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
-  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
-}
-
-TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeMixedDifferentialValues) {
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
-  auto differentialBlockJson1 = differentialBlock.toJson();
-  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
-  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
-}
-
-TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithThreeNegativeDifferentialValues) {
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues();
-  auto differentialBlockJson1 = differentialBlock.toJson();
-  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
-  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
-}
-
-TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockNotSet) {
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
-  auto differentialBlockJson1 = differentialBlock.toJson();
-  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
-  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
-}
-
-TEST(DifferentialBlockTest, TestToJsonWithDifferentialBlockWithOneDifferentialValues) {
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
-  auto differentialBlockJson1 = differentialBlock.toJson();
-  auto differentialBlockJson2 = DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock);
-  EXPECT_TRUE(differentialBlockJson1.toStyledString() == differentialBlockJson2.toStyledString());
-}
-
-TEST(DifferentialBlockTest, TestIsSetWithDifferentialBlockWithOneDifferentialValues) {
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues();
-  EXPECT_TRUE(differentialBlock.isSet());
-}
-
-TEST(DifferentialBlockTest, TestIsSetWithDifferentialBlockNotSet) {
-  auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
-  EXPECT_FALSE(differentialBlock.isSet());
-}
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
 
 TEST(DifferentialBlockTest, TestSwitchDataFormWithDifferentialBlockNotSet) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();

@@ -34,6 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gTest/gTest.h>
 #include "AccMetaDataExampleFactory.h"
 
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
+
 TEST(AccMetaDataTest, TestGetCoordinateWithAccMetaDataWithCoordinateX) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   EXPECT_EQ(accMetaData.getCoordinate(), CoordinateProtobuf::COORDINATE_X);
@@ -53,6 +57,10 @@ TEST(AccMetaDataTest, TestGetNormWithAccMetaDataNotSet) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_NONE);
 }
+
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
 
 TEST(AccMetaDataTest, TestIsEqualWithAccMetaDataWithCoordinateX) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
@@ -96,6 +104,10 @@ TEST(AccMetaDataTest, TestIsEqualAccMetaDataNotSet) {
   EXPECT_TRUE(accMetaData1 == accMetaData2);
 }
 
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
 TEST(AccMetaDataTest, TestIsNotEqualWithAccMetaDataWithCoordinateX) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   auto accMetaData2 = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
@@ -138,6 +150,49 @@ TEST(AccMetaDataTest, TestIsNotEqualWithAccMetaDataNotSet) {
   EXPECT_FALSE(accMetaData1 != accMetaData2);
 }
 
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithCoordinateX) {
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
+  auto accMetaDataJson1 = accMetaData.toJson();
+  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
+}
+
+TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithCoordinateY) {
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
+  auto accMetaDataJson1 = accMetaData.toJson();
+  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
+}
+
+TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithCoordinateZ) {
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
+  auto accMetaDataJson1 = accMetaData.toJson();
+  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
+}
+
+TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithNormEuclideanDifferencesNorm) {
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
+  auto accMetaDataJson1 = accMetaData.toJson();
+  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
+}
+
+TEST(AccMetaDataTest, TestToJsonWithAccMetaDataNotSet) {
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
+  auto accMetaDataJson1 = accMetaData.toJson();
+  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
 TEST(AccMetaDataTest, TestIsSetWithAccMetaDataWithCoordinateX) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   EXPECT_TRUE(accMetaData.isSet());
@@ -162,6 +217,10 @@ TEST(AccMetaDataTest, TestIsSetWithAccMetaDataNotSet) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
   EXPECT_FALSE(accMetaData.isSet());
 }
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
 
 TEST(AccMetaDataTest, TestSerializeWithAccMetaDataNotSet) {
   auto accMetaData1 = AccMetaDataExampleFactory::accMetaDataNotSet();
@@ -215,40 +274,18 @@ TEST(AccMetaDataTest, TestSerializeThrowDueToNullPointer) {
   EXPECT_THROW(accMetaData.serialize(accMetaDataProtobuf), std::invalid_argument);
 }
 
-TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithCoordinateX) {
-  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  auto accMetaDataJson1 = accMetaData.toJson();
-  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
-  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
-}
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
 
-TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithCoordinateY) {
-  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
-  auto accMetaDataJson1 = accMetaData.toJson();
-  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
-  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
-}
-
-TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithCoordinateZ) {
-  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateZ();
-  auto accMetaDataJson1 = accMetaData.toJson();
-  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
-  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
-}
-
-TEST(AccMetaDataTest, TestToJsonWithAccMetaDataWithNormEuclideanDifferencesNorm) {
-  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
-  auto accMetaDataJson1 = accMetaData.toJson();
-  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
-  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
-}
-
-TEST(AccMetaDataTest, TestToJsonWithAccMetaDataNotSet) {
+TEST(AccMetaDataTest, TestSwitchDataFormWithAccMetaDataNotSet) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
-  auto accMetaDataJson1 = accMetaData.toJson();
-  auto accMetaDataJson2 = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
-  EXPECT_TRUE(accMetaDataJson1.toStyledString() == accMetaDataJson2.toStyledString());
+  EXPECT_THROW(accMetaData.switchDataForm(), std::runtime_error);
 }
+
+////////////////////////////////////////////////////////////////
+//                      Test has Methods                      //
+////////////////////////////////////////////////////////////////
 
 TEST(AccMetaDataTest, TestHasNormWithAccMetaDataWithNormEuclideanDifferencesNorm) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
@@ -268,9 +305,4 @@ TEST(AccMetaDataTest, TestHasCoordinateWithAccMetaDataWithCoordinateY) {
 TEST(AccMetaDataTest, TestHasCoordinateWithAccMetaDataWithCoordinateNone) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateNone();
   EXPECT_FALSE(accMetaData.hasCoordinate());
-}
-
-TEST(AccMetaDataTest, TestSwitchDataFormWithAccMetaDataNotSet) {
-  auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
-  EXPECT_THROW(accMetaData.switchDataForm(), std::runtime_error);
 }

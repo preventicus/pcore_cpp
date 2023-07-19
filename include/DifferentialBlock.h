@@ -49,12 +49,22 @@ using DifferentialBlockJson = Json::Value;
 namespace PCore {
 class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
  public:
+  ////////////////////////////////////////////////////////////////
+  //                       Constructors                         //
+  ////////////////////////////////////////////////////////////////
   explicit DifferentialBlock(DifferentialValues differentialValues);
   explicit DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf);
   explicit DifferentialBlock(const DifferentialBlockJson& differentialBlockJson);
   explicit DifferentialBlock();
 
+  ////////////////////////////////////////////////////////////////
+  //                          Getter                            //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] DifferentialValues getDifferentialValues() const;
+
+  ////////////////////////////////////////////////////////////////
+  //                      IPCore Methods                        //
+  ////////////////////////////////////////////////////////////////
   [[nodiscard]] bool isSet() const final;
   [[nodiscard]] DifferentialBlockJson toJson() const final;
   void serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const final;
@@ -64,6 +74,9 @@ class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
   bool operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const final;
 
  private:
+  ////////////////////////////////////////////////////////////////
+  //                          Members                           //
+  ////////////////////////////////////////////////////////////////
   DifferentialValues differentialValues;
 };
 }  // namespace PCore
