@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include "Exceptions.h"
 #include "VersionExampleFactory.h"
 
 ////////////////////////////////////////////////////////////////
@@ -219,7 +220,7 @@ TEST(VersionTest, TestSerializeNoThrow) {
 TEST(VersionTest, TestSerializeThrowDueToNullPointer) {
   auto version = VersionExampleFactory::versionNotSet();
   VersionProtobuf* versionProtobuf = nullptr;
-  EXPECT_THROW(version.serialize(versionProtobuf), std::invalid_argument);
+  EXPECT_THROW(version.serialize(versionProtobuf), NullPointerException);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -228,6 +229,5 @@ TEST(VersionTest, TestSerializeThrowDueToNullPointer) {
 
 TEST(VersionTest, TestSwitchDataFormWithVersionNotSet) {
   auto version = VersionExampleFactory::versionNotSet();
-  EXPECT_THROW(version.switchDataForm(), std::runtime_error);
+  EXPECT_THROW(version.switchDataForm(), ShouldNotBeCalledException);
 }
-

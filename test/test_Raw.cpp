@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include "Exceptions.h"
 #include "RawExampleFactory.h"
 
 ////////////////////////////////////////////////////////////////
@@ -270,13 +271,13 @@ TEST(RawTest, TestSerializeNoThrow) {
 TEST(RawTest, TestSerializeThrowDueToNullPointer) {
   auto raw = RawExampleFactory::rawNotSet();
   RawProtobuf* rawProtobuf = nullptr;
-  EXPECT_THROW(raw.serialize(rawProtobuf), std::invalid_argument);
+  EXPECT_THROW(raw.serialize(rawProtobuf), NullPointerException);
 }
 
 TEST(RawTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
   auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
   RawProtobuf rawProtobuf;
-  EXPECT_THROW(raw.serialize(&rawProtobuf), std::runtime_error);
+  EXPECT_THROW(raw.serialize(&rawProtobuf), WrongDataFormException);
 }
 
 ////////////////////////////////////////////////////////////////

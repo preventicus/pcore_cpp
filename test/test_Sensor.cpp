@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
-
+#include "Exceptions.h"
 #include "SensorExampleFactory.h"
 
 ////////////////////////////////////////////////////////////////
@@ -160,16 +160,6 @@ TEST(SensorTest, TestGetLastUnixTimestampWithSensorAccWithTwoChannelsInDifferent
   EXPECT_TRUE(lastUnixTimestamp1InMs == lastUnixTimestamp2InMs);
 }
 
-TEST(SensorTest, TestGetLastUnixTimestampThrowRuntimeError) {
-  auto sensor = SensorExampleFactory::sensorNotSet();
-  EXPECT_THROW(std::ignore = sensor.getLastUnixTimestampInMs(), std::runtime_error);
-}
-
-TEST(SensorTest, TestGetLastUnixTimestampThrowInvalidArgument) {
-  auto sensor = SensorExampleFactory::sensorNotSet();
-  EXPECT_THROW(std::ignore = sensor.getLastUnixTimestampInMs(), std::runtime_error);
-}
-
 TEST(SensorTest, TestGetDurationWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
   auto duration = sensor.getDurationInMs();
@@ -184,11 +174,6 @@ TEST(SensorTest, TestGetDurationWithSensorAccWithTwoChannelsInAbsoluteForm) {
   auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampInMs();
   auto lastUnixTimestampInMs = UnixTimestampsExampleFactory::lastTimestampInMs();
   EXPECT_EQ(duration, lastUnixTimestampInMs - firstUnixTimestampInMs);
-}
-
-TEST(SensorTest, TestGetDurationWithSensorNotSet) {
-  auto sensor = SensorExampleFactory::sensorNotSet();
-  EXPECT_THROW(std::ignore = sensor.getDurationInMs(), std::runtime_error);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -407,13 +392,13 @@ TEST(SensorTest, TestSerializeNoThrow) {
 TEST(SensorTest, TestSerializeThrowDueToNullPointer) {
   auto sensor = SensorExampleFactory::sensorNotSet();
   SensorProtobuf* sensorProtobuf = nullptr;
-  EXPECT_THROW(sensor.serialize(sensorProtobuf), std::invalid_argument);
+  EXPECT_THROW(sensor.serialize(sensorProtobuf), NullPointerException);
 }
 
 TEST(SensorTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
   SensorProtobuf sensorProtobuf;
-  EXPECT_THROW(sensor.serialize(&sensorProtobuf), std::runtime_error);
+  EXPECT_THROW(sensor.serialize(&sensorProtobuf), WrongDataFormException);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -439,4 +424,3 @@ TEST(SensorTest, TestSwitchDataFormWithSensorNotSet) {
   sensor.switchDataForm();
   EXPECT_FALSE(sensor.isSet());
 }
-

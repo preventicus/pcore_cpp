@@ -49,27 +49,27 @@ class Data final : public IPCore<DataProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit Data(Raw raw, Header header);
-  explicit Data(const DataProtobuf& DataProtobuf);
+  explicit Data(Raw raw, Header header) noexcept;
+  explicit Data(const DataProtobuf& DataProtobuf) noexcept;
   explicit Data(const DataJson& dataJson);
-  explicit Data();
+  explicit Data() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] Raw getRaw() const;
-  [[nodiscard]] Header getHeader() const;
+  [[nodiscard]] Raw getRaw() const noexcept;
+  [[nodiscard]] Header getHeader() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] DataJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] DataJson toJson() const noexcept final;
   void serialize(DataProtobuf* dataProtobuf) const final;
-  void switchDataForm() final;
+  void switchDataForm() noexcept final;
 
-  bool operator==(const IPCore<DataProtobuf>& data) const final;
-  bool operator!=(const IPCore<DataProtobuf>& data) const final;
+  bool operator==(const IPCore<DataProtobuf>& data) const noexcept final;
+  bool operator!=(const IPCore<DataProtobuf>& data) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////

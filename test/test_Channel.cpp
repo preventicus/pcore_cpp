@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "Channel.h"
 #include "ChannelExampleFactory.h"
+#include "Exceptions.h"
 
 ////////////////////////////////////////////////////////////////
 //                        Test Getter                         //
@@ -362,13 +363,13 @@ TEST(ChannelTest, TestSerializeWithChannelWithDifferentialValuesAndPpgMetaData) 
 TEST(ChannelTest, TestSerializeThrowDueToNullPointer) {
   auto channel = ChannelExampleFactory::channelNotSet();
   ChannelProtobuf* channelProtobuf = nullptr;
-  EXPECT_THROW(channel.serialize(channelProtobuf), std::invalid_argument);
+  EXPECT_THROW(channel.serialize(channelProtobuf), NullPointerException);
 }
 
 TEST(ChannelTest, TestSerializeThrowDueToDataFromAbsolute) {
   auto channel = ChannelExampleFactory::channelWithAbsoluteBlockAndNoSetMetaData();
   ChannelProtobuf channelProtobuf;
-  EXPECT_THROW(channel.serialize(&channelProtobuf), std::runtime_error);
+  EXPECT_THROW(channel.serialize(&channelProtobuf), WrongDataFormException);
 }
 
 TEST(ChannelTest, TestSerializeWithChannelNotSet) {

@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gtest/gtest.h>
 #include "DataExampleFactory.h"
+#include "Exceptions.h"
 
 ////////////////////////////////////////////////////////////////
 //                        Test Getter                         //
@@ -207,13 +208,13 @@ TEST(DataTest, TestSerializeNoThrow) {
 TEST(DataTest, TestSerializeThrowDueToNullPointer) {
   auto data = DataExampleFactory::dataNotSet();
   DataProtobuf* dataProtobuf = nullptr;
-  EXPECT_THROW(data.serialize(dataProtobuf), std::invalid_argument);
+  EXPECT_THROW(data.serialize(dataProtobuf), NullPointerException);
 }
 
 TEST(DataTest, TestSerializeThrowDueToDataFromAbsolute) {
   auto data = DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm();
   DataProtobuf dataProtobuf;
-  EXPECT_THROW(data.serialize(&dataProtobuf), std::runtime_error);
+  EXPECT_THROW(data.serialize(&dataProtobuf), WrongDataFormException);
 }
 
 ////////////////////////////////////////////////////////////////

@@ -53,25 +53,25 @@ class Header final : public IPCore<HeaderProtobuf> {
   explicit Header(Version version, TimeZoneOffset timeZoneOffsetInMin, DataForm dataForm);
   explicit Header(const HeaderProtobuf& headerProtobuf);
   explicit Header(const HeaderJson& header);
-  explicit Header();
+  explicit Header() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] TimeZoneOffset getTimeZoneOffsetInMin() const;
-  [[nodiscard]] Version getPcoreVersion() const;
-  [[nodiscard]] DataForm getDataForm() const;
+  [[nodiscard]] TimeZoneOffset getTimeZoneOffsetInMin() const noexcept;
+  [[nodiscard]] Version getPcoreVersion() const noexcept;
+  [[nodiscard]] DataForm getDataForm() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] HeaderJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] HeaderJson toJson() const noexcept final;
   void serialize(HeaderProtobuf* headerProtobuf) const final;
-  void switchDataForm() final;
+  void switchDataForm() noexcept final;
 
-  bool operator==(const IPCore<HeaderProtobuf>& header) const final;
-  bool operator!=(const IPCore<HeaderProtobuf>& header) const final;
+  bool operator==(const IPCore<HeaderProtobuf>& header) const noexcept final;
+  bool operator!=(const IPCore<HeaderProtobuf>& header) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////

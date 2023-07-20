@@ -49,27 +49,27 @@ class Raw final : public IPCore<RawProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit Raw(Sensors sensors, DataForm dataForm);
-  explicit Raw(const RawProtobuf& rawProtobuf);
+  explicit Raw(Sensors sensors, DataForm dataForm) noexcept;
+  explicit Raw(const RawProtobuf& rawProtobuf) noexcept;
   explicit Raw(const RawJson& rawJson, DataForm dataForm);
-  explicit Raw();
+  explicit Raw() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] Sensors getSensors() const;
-  [[nodiscard]] DataForm getDataFrom() const;
+  [[nodiscard]] Sensors getSensors() const noexcept;
+  [[nodiscard]] DataForm getDataFrom() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] RawJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] RawJson toJson() const noexcept final;
   void serialize(RawProtobuf* rawProtobuf) const final;
-  void switchDataForm() final;
-  [[nodiscard]] bool isSet() const final;
+  void switchDataForm() noexcept final;
 
-  bool operator==(const IPCore<RawProtobuf>& raw) const final;
-  bool operator!=(const IPCore<RawProtobuf>& raw) const final;
+  bool operator==(const IPCore<RawProtobuf>& raw) const noexcept final;
+  bool operator!=(const IPCore<RawProtobuf>& raw) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////

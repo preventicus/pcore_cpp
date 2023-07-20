@@ -52,26 +52,26 @@ class DifferentialBlock final : public IPCore<DifferentialBlockProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit DifferentialBlock(DifferentialValues differentialValues);
-  explicit DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf);
-  explicit DifferentialBlock(const DifferentialBlockJson& differentialBlockJson);
-  explicit DifferentialBlock();
+  explicit DifferentialBlock(DifferentialValues differentialValues) noexcept;
+  explicit DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf) noexcept;
+  explicit DifferentialBlock(const DifferentialBlockJson& differentialBlockJson) noexcept;
+  explicit DifferentialBlock() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] DifferentialValues getDifferentialValues() const;
+  [[nodiscard]] DifferentialValues getDifferentialValues() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] DifferentialBlockJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] DifferentialBlockJson toJson() const noexcept final;
   void serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const final;
-  bool operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const final;
+  bool operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const noexcept final;
+  bool operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////

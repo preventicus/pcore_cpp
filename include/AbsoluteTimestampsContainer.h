@@ -46,24 +46,24 @@ class AbsoluteTimestampsContainer final {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs);
-  explicit AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson);
-  explicit AbsoluteTimestampsContainer();
+  explicit AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs) noexcept;
+  explicit AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampContainerJson) noexcept;
+  explicit AbsoluteTimestampsContainer() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] UnixTimestamps getUnixTimestampsInMs() const;
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const;
+  [[nodiscard]] UnixTimestamps getUnixTimestampsInMs() const noexcept;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const noexcept;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                       Public Methods                       //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const;
-  [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const;
-  bool operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;
-  bool operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const;
+  [[nodiscard]] bool isSet() const noexcept;
+  [[nodiscard]] AbsoluteTimestampsContainerJson toJson() const noexcept;
+  bool operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const noexcept;
+  bool operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const noexcept;
 
  private:
   ////////////////////////////////////////////////////////////////

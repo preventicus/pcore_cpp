@@ -32,45 +32,46 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AccMetaData.h"
+#include "Exceptions.h"
 #include "PcoreJson.h"
+
 using namespace PCore;
 
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-AccMetaData::AccMetaData(CoordinateProtobuf coordinate) : coordinate(coordinate), norm(NormProtobuf::NORM_NONE) {}
+AccMetaData::AccMetaData(CoordinateProtobuf coordinate) noexcept : coordinate(coordinate), norm(NormProtobuf::NORM_NONE) {}
 
-AccMetaData::AccMetaData(NormProtobuf norm) : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(norm) {}
+AccMetaData::AccMetaData(NormProtobuf norm) noexcept : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(norm) {}
 
 AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
     : coordinate(PcoreProtobuf::Convert::coordinateProtobufFromString(accMetaDataJson[PcoreJson::Key::coordinate].asString())),
       norm(PcoreProtobuf::Convert::normProtobufFromString(accMetaDataJson[PcoreJson::Key::norm].asString())) {
-  if (this->hasNorm() && this->hasCoordinate()) {
-    throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
-  }
+  if (this->hasNorm() && this->hasCoordinate())
+    throw OnlyOneParameterAllowedException("AccMetaData", "Norm", "Coordinate");
 }
 
-AccMetaData::AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf)
+AccMetaData::AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf) noexcept
     : coordinate(accMetaDataProtobuf.coordinate()), norm(accMetaDataProtobuf.norm()) {}
 
-AccMetaData::AccMetaData() : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(NormProtobuf::NORM_NONE) {}
+AccMetaData::AccMetaData() noexcept : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(NormProtobuf::NORM_NONE) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-CoordinateProtobuf AccMetaData::getCoordinate() const {
+CoordinateProtobuf AccMetaData::getCoordinate() const noexcept {
   return this->coordinate;
 }
 
-NormProtobuf AccMetaData::getNorm() const {
+NormProtobuf AccMetaData::getNorm() const noexcept {
   return this->norm;
 }
 
-bool AccMetaData::hasNorm() const {
+bool AccMetaData::hasNorm() const noexcept {
   return this->norm != NormProtobuf::NORM_NONE;
 }
 
-bool AccMetaData::hasCoordinate() const {
+bool AccMetaData::hasCoordinate() const noexcept {
   return this->coordinate != CoordinateProtobuf::COORDINATE_NONE;
 }
 
@@ -78,11 +79,11 @@ bool AccMetaData::hasCoordinate() const {
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
 
-bool AccMetaData::isSet() const {
+bool AccMetaData::isSet() const noexcept {
   return this->hasNorm() || this->hasCoordinate();
 }
 
-Json::Value AccMetaData::toJson() const {
+Json::Value AccMetaData::toJson() const noexcept {
   AccMetaDataJson accMetaDataJson;
   if (!this->isSet()) {
     return accMetaDataJson;
@@ -98,13 +99,13 @@ Json::Value AccMetaData::toJson() const {
 
 void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
   if (accMetaDataProtobuf == nullptr) {
-    throw std::invalid_argument("accMetaDataProtobuf is a null pointer");
+    throw NullPointerException("AccMetaData::serialize", "accMetaDataProtobuf");
   }
   if (!this->isSet()) {
     return;
   }
   if (this->hasCoordinate() && this->hasNorm()) {
-    throw std::invalid_argument("only one enum type has to be initialized");
+    throw OnlyOneParameterAllowedException("AccMetaData::serialize", "Coordinate", "Norm");
   }
   if (this->hasCoordinate()) {
     accMetaDataProtobuf->set_coordinate(this->coordinate);
@@ -115,16 +116,16 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
 }
 
 void AccMetaData::switchDataForm() {
-  throw std::runtime_error("should not be called");
+  throw ShouldNotBeCalledException("AccMetaData::switchDataForm");
 }
 
-bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const noexcept {
   if (const auto* derived = dynamic_cast<const AccMetaData*>(&accMetaData)) {
     return this->coordinate == derived->coordinate && this->norm == derived->norm;
   }
   return false;
 }
 
-bool AccMetaData::operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const {
+bool AccMetaData::operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const noexcept {
   return !(*this == accMetaData);
 }

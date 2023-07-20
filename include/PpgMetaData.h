@@ -46,30 +46,30 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit PpgMetaData(ColorProtobuf colorProtobuf);
-  explicit PpgMetaData(Wavelength wavelengthInNm);
-  explicit PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf);
-  explicit PpgMetaData(const PpgMetaDataJson& ppgMetaData);
-  explicit PpgMetaData();
+  explicit PpgMetaData(ColorProtobuf colorProtobuf) noexcept;
+  explicit PpgMetaData(Wavelength wavelengthInNm) noexcept;
+  explicit PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf) noexcept;
+  explicit PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson);
+  explicit PpgMetaData() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] ColorProtobuf getColor() const;
-  [[nodiscard]] Wavelength getWavelengthInNm() const;
-  [[nodiscard]] bool hasColor() const;
-  [[nodiscard]] bool hasWavelength() const;
+  [[nodiscard]] ColorProtobuf getColor() const noexcept;
+  [[nodiscard]] Wavelength getWavelengthInNm() const noexcept;
+  [[nodiscard]] bool hasColor() const noexcept;
+  [[nodiscard]] bool hasWavelength() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] PpgMetaDataJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] PpgMetaDataJson toJson() const noexcept final;
   void serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
-  bool operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const final;
+  bool operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const noexcept final;
+  bool operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////

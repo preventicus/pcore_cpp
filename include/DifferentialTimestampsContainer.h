@@ -59,29 +59,30 @@ class DifferentialTimestampsContainer final : public IPCore<DifferentialTimestam
   ////////////////////////////////////////////////////////////////
   explicit DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestampInMs,
                                            BlocksDifferences blocksDifferencesInMs,
-                                           TimestampsDifferences timestampsDifferencesInMs);
-  explicit DifferentialTimestampsContainer(const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf);
+                                           TimestampsDifferences timestampsDifferencesInMs) noexcept;
+  explicit DifferentialTimestampsContainer(const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf) noexcept;
   explicit DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson);
-  explicit DifferentialTimestampsContainer();
+  explicit DifferentialTimestampsContainer() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs(UnixTimestamp firstUnixTimestampInLastBlock, size_t numberOfElementsInLastBlock) const;
-  [[nodiscard]] BlocksDifferences getBlocksDifferencesInMs() const;
-  [[nodiscard]] TimestampsDifferences getTimestampsDifferencesInMs() const;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const noexcept;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs(UnixTimestamp firstUnixTimestampInLastBlock,
+                                                       size_t numberOfElementsInLastBlock) const noexcept;
+  [[nodiscard]] BlocksDifferences getBlocksDifferencesInMs() const noexcept;
+  [[nodiscard]] TimestampsDifferences getTimestampsDifferencesInMs() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] DifferentialTimestampsContainerJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] DifferentialTimestampsContainerJson toJson() const noexcept final;
   void serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
-  bool operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const final;
+  bool operator==(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const noexcept final;
+  bool operator!=(const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const noexcept final;
 
   ////////////////////////////////////////////////////////////////
   //                     Calculate Methode                      //

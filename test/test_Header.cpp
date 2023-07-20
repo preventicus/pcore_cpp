@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include "Exceptions.h"
 #include "HeaderExampleFactory.h"
 #include "PcoreJson.h"
 
@@ -251,7 +252,7 @@ TEST(HeaderTest, TestSerializeNoThrow) {
 TEST(HeaderTest, TestSerializeThrowDueToNullPointer) {
   auto header = HeaderExampleFactory::headerNotSet();
   HeaderProtobuf* headerProtobuf = nullptr;
-  EXPECT_THROW(header.serialize(headerProtobuf), std::invalid_argument);
+  EXPECT_THROW(header.serialize(headerProtobuf), NullPointerException);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -285,11 +286,11 @@ TEST(HeaderTest, TestSwitchDataFormWithHeaderNotSet) {
 TEST(HeaderTest, TestConstructorThrowWithTimeZoneOffsetPositiveInvalid) {
   auto version = VersionExampleFactory::versionWithMajor0Minor0Patch0();
   auto invalidPositiveTimeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetPositiveInvalidInMin();
-  EXPECT_THROW(Header(version, invalidPositiveTimeZoneOffsetInMin, DataForm::DATA_FORM_ABSOLUTE), std::invalid_argument);
+  EXPECT_THROW(Header(version, invalidPositiveTimeZoneOffsetInMin, DataForm::DATA_FORM_ABSOLUTE), WrongValueException);
 }
 
 TEST(HeaderTest, TestConstructorThrowWithTimeZoneOffsetNagativeInvalid) {
   auto version = VersionExampleFactory::versionWithMajor0Minor0Patch0();
   auto invalidPositiveTimeZoneOffsetInMin = HeaderExampleFactory::timeZoneOffsetNegativeInvalidInMin();
-  EXPECT_THROW(Header(version, invalidPositiveTimeZoneOffsetInMin, DataForm::DATA_FORM_ABSOLUTE), std::invalid_argument);
+  EXPECT_THROW(Header(version, invalidPositiveTimeZoneOffsetInMin, DataForm::DATA_FORM_ABSOLUTE), WrongValueException);
 }

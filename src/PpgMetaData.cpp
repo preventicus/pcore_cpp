@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "PpgMetaData.h"
+#include "Exceptions.h"
 #include "PcoreJson.h"
 
 using namespace PCore;
@@ -41,43 +42,43 @@ using WavelegthJson = Json::Value;
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) : color(colorProtobuf), wavelengthInNm(0) {}
+PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) noexcept : color(colorProtobuf), wavelengthInNm(0) {}
 
-PpgMetaData::PpgMetaData(Wavelength wavelengthInNm) : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(wavelengthInNm) {}
+PpgMetaData::PpgMetaData(Wavelength wavelengthInNm) noexcept : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(wavelengthInNm) {}
 
 PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
     : color(PcoreProtobuf::Convert::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString())), wavelengthInNm([&]() {
         if (ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asInt() < 0) {
-          throw std::invalid_argument("wavelengthInNm is negative in json.");
+          throw WrongValueException("PpgMetaData", "wavelengthInNm is negative in json.");
         }
         return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
       }()) {
   if (this->hasColor() && this->hasWavelength()) {
-    throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
+    throw OnlyOneParameterAllowedException("PpgMetaData", "Color", "Wavelength");
   }
 }
 
-PpgMetaData::PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf)
+PpgMetaData::PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf) noexcept
     : color(ppgMetaDataProtobuf.color()), wavelengthInNm(ppgMetaDataProtobuf.wavelength_nm()) {}
 
-PpgMetaData::PpgMetaData() : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(0) {}
+PpgMetaData::PpgMetaData() noexcept : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(0) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-ColorProtobuf PpgMetaData::getColor() const {
+ColorProtobuf PpgMetaData::getColor() const noexcept {
   return this->color;
 }
 
-Wavelength PpgMetaData::getWavelengthInNm() const {
+Wavelength PpgMetaData::getWavelengthInNm() const noexcept {
   return this->wavelengthInNm;
 }
 
-bool PpgMetaData::hasColor() const {
+bool PpgMetaData::hasColor() const noexcept {
   return this->color != ColorProtobuf::COLOR_NONE;
 }
 
-bool PpgMetaData::hasWavelength() const {
+bool PpgMetaData::hasWavelength() const noexcept {
   return this->wavelengthInNm > 0;
 }
 
@@ -85,11 +86,11 @@ bool PpgMetaData::hasWavelength() const {
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
 
-bool PpgMetaData::isSet() const {
+bool PpgMetaData::isSet() const noexcept {
   return this->hasColor() || this->hasWavelength();
 }
 
-PpgMetaDataJson PpgMetaData::toJson() const {
+PpgMetaDataJson PpgMetaData::toJson() const noexcept {
   PpgMetaDataJson ppgMetaDataJson;
   if (!this->isSet()) {
     return ppgMetaDataJson;
@@ -107,13 +108,13 @@ PpgMetaDataJson PpgMetaData::toJson() const {
 
 void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
   if (ppgMetaDataProtobuf == nullptr) {
-    throw std::invalid_argument("Error in serialize: ppgMetaDataProtobuf is a null pointer");
+    throw NullPointerException("PpgMetaData::serialize", "ppgMetaDataProtobuf");
   }
   if (!this->isSet()) {
     return;
   }
   if (this->hasColor() && this->hasWavelength()) {
-    throw std::invalid_argument("only one parameter has to be initialized");
+    throw OnlyOneParameterAllowedException("PpgMetaData::serialize", "Color", "Wavelength");
   }
   if (this->hasColor()) {
     ppgMetaDataProtobuf->set_color(this->color);
@@ -124,16 +125,16 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
 }
 
 void PpgMetaData::switchDataForm() {
-  throw std::runtime_error("should not be called");
+  throw ShouldNotBeCalledException("PpgMetaData::switchDataForm");
 }
 
-bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const noexcept {
   if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
     return this->color == derived->color && this->wavelengthInNm == derived->wavelengthInNm;
   }
   return false;
 }
 
-bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const {
+bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const noexcept {
   return !(*this == ppgMetaData);
 }

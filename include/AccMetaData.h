@@ -45,30 +45,30 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit AccMetaData(NormProtobuf norm);
-  explicit AccMetaData(CoordinateProtobuf coordinate);
-  explicit AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf);
+  explicit AccMetaData(NormProtobuf norm) noexcept;
+  explicit AccMetaData(CoordinateProtobuf coordinate) noexcept;
+  explicit AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf) noexcept;
   explicit AccMetaData(const AccMetaDataJson& accMetaDataJson);
-  explicit AccMetaData();
+  explicit AccMetaData() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] CoordinateProtobuf getCoordinate() const;
-  [[nodiscard]] NormProtobuf getNorm() const;
-  [[nodiscard]] bool hasNorm() const;
-  [[nodiscard]] bool hasCoordinate() const;
+  [[nodiscard]] CoordinateProtobuf getCoordinate() const noexcept;
+  [[nodiscard]] NormProtobuf getNorm() const noexcept;
+  [[nodiscard]] bool hasNorm() const noexcept;
+  [[nodiscard]] bool hasCoordinate() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] AccMetaDataJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] AccMetaDataJson toJson() const noexcept final;
   void serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const final;
   void switchDataForm() final;
 
-  bool operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
-  bool operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const final;
+  bool operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const noexcept final;
+  bool operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////

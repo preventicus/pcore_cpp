@@ -33,37 +33,38 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DifferentialBlock.h"
 #include <utility>
+#include "Exceptions.h"
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
 
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) : differentialValues(std::move(differentialValues)) {}
+DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) noexcept : differentialValues(std::move(differentialValues)) {}
 
-DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf)
+DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf) noexcept
     : differentialValues(PcoreProtobuf::Convert::protobufToVector<DifferentialValue>(differentialBlockProtobuf.differential_values())) {}
 
-DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson)
+DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson) noexcept
     : differentialValues(PcoreJson::Convert::jsonToVector<DifferentialValue>(differentialBlockJson, PcoreJson::Key::differential_values)) {}
 
-DifferentialBlock::DifferentialBlock() : differentialValues({}){};
+DifferentialBlock::DifferentialBlock() noexcept : differentialValues({}){};
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-DifferentialValues DifferentialBlock::getDifferentialValues() const {
+DifferentialValues DifferentialBlock::getDifferentialValues() const noexcept {
   return this->differentialValues;
 }
 
 ////////////////////////////////////////////////////////////////
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
-bool DifferentialBlock::isSet() const {
+bool DifferentialBlock::isSet() const noexcept {
   return !this->differentialValues.empty();
 }
 
-DifferentialBlockJson DifferentialBlock::toJson() const {
+DifferentialBlockJson DifferentialBlock::toJson() const noexcept {
   DifferentialBlockJson differentialBlockJson;
   if (!this->isSet()) {
     return differentialBlockJson;
@@ -74,7 +75,7 @@ DifferentialBlockJson DifferentialBlock::toJson() const {
 
 void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const {
   if (differentialBlockProtobuf == nullptr) {
-    throw std::invalid_argument("Error in serialize: differentialBlockProtobuf is a null pointer");
+    throw NullPointerException("DifferentialBlock::serialize", "differentialBlockProtobuf");
   }
   if (!this->isSet()) {
     return;
@@ -85,16 +86,16 @@ void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockPr
 }
 
 void DifferentialBlock::switchDataForm() {
-  throw std::runtime_error("should not be called");
+  throw ShouldNotBeCalledException("DifferentialBlock::switchDataForm");
 }
 
-bool DifferentialBlock::operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const {
+bool DifferentialBlock::operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const noexcept {
   if (const auto* derived = dynamic_cast<const DifferentialBlock*>(&differentialBlock)) {
     return this->differentialValues == derived->differentialValues;
   }
   return false;
 }
 
-bool DifferentialBlock::operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const {
+bool DifferentialBlock::operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const noexcept {
   return !(*this == differentialBlock);
 }

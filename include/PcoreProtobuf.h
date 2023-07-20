@@ -53,7 +53,7 @@ namespace PcoreProtobuf {
 class Convert {
  public:
   template <typename T, typename P, typename... Args>
-  static std::vector<T> protobufToVector(P values, const Args&... args) {
+  static std::vector<T> protobufToVector(P values, const Args&... args) noexcept {
     std::vector<T> vector;
     vector.reserve(values.size());
 
@@ -69,7 +69,7 @@ class Convert {
     return vector;
   }
 
-  static CoordinateProtobufString coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf) {
+  static CoordinateProtobufString coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf) noexcept {
     switch (coordinateProtobuf) {
       case CoordinateProtobuf::COORDINATE_X: {
         return "COORDINATE_X";
@@ -86,7 +86,7 @@ class Convert {
     }
   }
 
-  static CoordinateProtobuf coordinateProtobufFromString(const CoordinateProtobufString& coordinateProtobufString) {
+  static CoordinateProtobuf coordinateProtobufFromString(const CoordinateProtobufString& coordinateProtobufString) noexcept {
     if (coordinateProtobufString == "COORDINATE_X") {
       return CoordinateProtobuf::COORDINATE_X;
     } else if (coordinateProtobufString == "COORDINATE_Y") {
@@ -98,7 +98,7 @@ class Convert {
     }
   }
 
-  static NormStringProtobuf normProtobufToString(NormProtobuf normProtobuf) {
+  static NormStringProtobuf normProtobufToString(NormProtobuf normProtobuf) noexcept {
     switch (normProtobuf) {
       case NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM: {
         return "NORM_EUCLIDEAN_DIFFERENCES_NORM";
@@ -109,7 +109,7 @@ class Convert {
     }
   }
 
-  static NormProtobuf normProtobufFromString(const NormStringProtobuf& normProtobufString) {
+  static NormProtobuf normProtobufFromString(const NormStringProtobuf& normProtobufString) noexcept {
     if (normProtobufString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
       return NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM;
     } else {
@@ -117,7 +117,7 @@ class Convert {
     }
   }
 
-  static ColorStringProtobuf colorProtobufToString(ColorProtobuf colorProtobuf) {
+  static ColorStringProtobuf colorProtobufToString(ColorProtobuf colorProtobuf) noexcept {
     switch (colorProtobuf) {
       case ColorProtobuf::COLOR_RED: {
         return "COLOR_RED";
@@ -134,7 +134,7 @@ class Convert {
     }
   }
 
-  static ColorProtobuf colorProtobufFromString(const ColorStringProtobuf& colorStringProtobuf) {
+  static ColorProtobuf colorProtobufFromString(const ColorStringProtobuf& colorStringProtobuf) noexcept {
     if (colorStringProtobuf == "COLOR_RED") {
       return ColorProtobuf::COLOR_RED;
     } else if (colorStringProtobuf == "COLOR_BLUE") {
@@ -146,7 +146,7 @@ class Convert {
     }
   }
 
-  static SensorTypeProtobuf senorTypeFromString(const SensorTypeString& senorTypeString) {
+  static SensorTypeProtobuf senorTypeFromString(const SensorTypeString& senorTypeString) noexcept {
     if (senorTypeString == "SENSOR_TYPE_PPG") {
       return SensorTypeProtobuf::SENSOR_TYPE_PPG;
     } else if (senorTypeString == "SENSOR_TYPE_ACC") {
@@ -156,7 +156,7 @@ class Convert {
     }
   }
 
-  static SensorTypeString senorTypeToString(const SensorTypeProtobuf sensorTypeProtobuf) {
+  static SensorTypeString senorTypeToString(const SensorTypeProtobuf sensorTypeProtobuf) noexcept {
     switch (sensorTypeProtobuf) {
       case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
         return "SENSOR_TYPE_ACC";

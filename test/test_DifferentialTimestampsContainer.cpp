@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferencesExampleFactory.h"
 #include "DifferentialBlockExampleFactory.h"
 #include "DifferentialTimestampsContainerExampleFactory.h"
+#include "Exceptions.h"
 #include "UnixTimestampsExampleFactory.h"
 
 ////////////////////////////////////////////////////////////////
@@ -241,7 +242,7 @@ TEST(DifferentialTimestampsTest, TestSerializeNoThrow) {
 TEST(DifferentialTimestampsTest, TestSerializeThrowDueToNullPointer) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   DifferentialTimestampContainerProtobuf* differentialTimestampContainerProtobuf = nullptr;
-  EXPECT_THROW(differentialTimestampsContainer.serialize(differentialTimestampContainerProtobuf), std::invalid_argument);
+  EXPECT_THROW(differentialTimestampsContainer.serialize(differentialTimestampContainerProtobuf), NullPointerException);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -250,7 +251,7 @@ TEST(DifferentialTimestampsTest, TestSerializeThrowDueToNullPointer) {
 
 TEST(DifferentialTimestampsTest, TestSwitchDataFormWithDifferentialTimestampsContainerNotSet) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
-  EXPECT_THROW(differentialTimestampsContainer.switchDataForm(), std::runtime_error);
+  EXPECT_THROW(differentialTimestampsContainer.switchDataForm(), ShouldNotBeCalledException);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -278,13 +279,13 @@ TEST(DifferentialTimestampsTest, TestCalculateFirstUnixTimestampInBlockWithDiffe
 TEST(DifferentialTimestampsTest, TestCalculateFirstUnixTimestampInBlockWithDifferentialTimestampsContainerNotSet) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
   BlockIdx blockIdx = 0;
-  EXPECT_THROW(std::ignore = differentialTimestampsContainer.calculateFirstUnixTimestampInBlock(blockIdx), std::invalid_argument);
+  EXPECT_THROW(std::ignore = differentialTimestampsContainer.calculateFirstUnixTimestampInBlock(blockIdx), WrongValueException);
 }
 
 TEST(DifferentialTimestampsTest, TestCalculateFirstUnixTimestampInBlockThrowInvalidArgument) {
   auto differentialTimestampsContainer = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
   BlockIdx blockIdx = differentialTimestampsContainer.getBlocksDifferencesInMs().size() + 1;
-  EXPECT_THROW(std::ignore = differentialTimestampsContainer.calculateFirstUnixTimestampInBlock(blockIdx), std::invalid_argument);
+  EXPECT_THROW(std::ignore = differentialTimestampsContainer.calculateFirstUnixTimestampInBlock(blockIdx), WrongValueException);
 }
 
 TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockWithDifferentialTimestampsContainerWithThreeBlocks) {
@@ -318,7 +319,7 @@ TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockWithDiffer
   auto firstUnixTimestampInBlock = 0;
   EXPECT_THROW(
       std::ignore = differentialTimestampsContainer.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock),
-      std::invalid_argument);
+      WrongValueException);
 }
 
 TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockThrowInvalidArgument) {
@@ -328,5 +329,5 @@ TEST(DifferentialTimestampsTest, TestCalculateLastUnixTimestampInBlockThrowInval
   auto firstUnixTimestampInBlock = 0;
   EXPECT_THROW(
       std::ignore = differentialTimestampsContainer.calculateLastUnixTimestampInBlock(blockIdx, firstUnixTimestampInBlock, differentialBlock),
-      std::invalid_argument);
+      WrongValueException);
 }

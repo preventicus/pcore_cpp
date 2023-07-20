@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include "Exceptions.h"
 #include "PpgMetaDataExampleFactory.h"
 
 ////////////////////////////////////////////////////////////////
@@ -283,7 +284,7 @@ TEST(PpgMetaDataTest, TestSerializeNoThrow) {
 TEST(PpgMetaDataTest, TestSerializeThrowDueToNullPointer) {
   auto ppgMetaDataG1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
   PpgMetaDataProtobuf* ppgMetaDataProtobuf = nullptr;
-  EXPECT_THROW(ppgMetaDataG1.serialize(ppgMetaDataProtobuf), std::invalid_argument);
+  EXPECT_THROW(ppgMetaDataG1.serialize(ppgMetaDataProtobuf), NullPointerException);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -292,7 +293,7 @@ TEST(PpgMetaDataTest, TestSerializeThrowDueToNullPointer) {
 
 TEST(PpgMetaDataTest, TestSwitchDataFormWithPpgMetaDataNotSet) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-  EXPECT_THROW(ppgMetaData.switchDataForm(), std::runtime_error);
+  EXPECT_THROW(ppgMetaData.switchDataForm(), ShouldNotBeCalledException);
 }
 
 ////////////////////////////////////////////////////////////////

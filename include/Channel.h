@@ -57,47 +57,49 @@ class Channel final : public IPCore<ChannelProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit Channel(AccMetaData accMetadata, AbsoluteBlock absoluteBlock);
-  explicit Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock);
-  explicit Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks);
-  explicit Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks);
+  explicit Channel(AccMetaData accMetadata, AbsoluteBlock absoluteBlock) noexcept;
+  explicit Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock) noexcept;
+  explicit Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks) noexcept;
+  explicit Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks) noexcept;
   explicit Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm);
-  explicit Channel(const ChannelProtobuf& channelProtobuf);
-  explicit Channel();
+  explicit Channel(const ChannelProtobuf& channelProtobuf) noexcept;
+  explicit Channel() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const;
-  [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const;
-  [[nodiscard]] AccMetaData getAccMetaData() const;
-  [[nodiscard]] PpgMetaData getPpgMetaData() const;
-  [[nodiscard]] SensorTypeProtobuf getSensorType() const;
-  [[nodiscard]] DataForm getDataForm() const;
-  [[nodiscard]] bool hasAccMetaData() const;
-  [[nodiscard]] bool hasPpgMetaData() const;
-  [[nodiscard]] bool hasDifferentialBlocks() const;
-  [[nodiscard]] bool hasAbsoluteBlock() const;
+  [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const noexcept;
+  [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const noexcept;
+  [[nodiscard]] AccMetaData getAccMetaData() const noexcept;
+  [[nodiscard]] PpgMetaData getPpgMetaData() const noexcept;
+  [[nodiscard]] SensorTypeProtobuf getSensorType() const noexcept;
+  [[nodiscard]] DataForm getDataForm() const noexcept;
+  [[nodiscard]] bool hasAccMetaData() const noexcept;
+  [[nodiscard]] bool hasPpgMetaData() const noexcept;
+  [[nodiscard]] bool hasDifferentialBlocks() const noexcept;
+  [[nodiscard]] bool hasAbsoluteBlock() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] ChannelJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] ChannelJson toJson() const noexcept final;
   void serialize(ChannelProtobuf* channelProtobuf) const final;
-  void switchDataForm(const BlockIdxs& blockIdxs);
-  void switchDataForm() final;
+  void switchDataForm(const BlockIdxs& blockIdxs) noexcept;
+  void switchDataForm() noexcept final;
 
-  bool operator==(const IPCore<ChannelProtobuf>& channel) const final;
-  bool operator!=(const IPCore<ChannelProtobuf>& channel) const final;
+  bool operator==(const IPCore<ChannelProtobuf>& channel) const noexcept final;
+  bool operator!=(const IPCore<ChannelProtobuf>& channel) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////
   //                     Calculate Methode                      //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const;
-  [[nodiscard]] DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx, BlockIdx toBlockIdx, const AbsoluteValues& absoluteValues) const;
-  [[nodiscard]] AbsoluteBlock calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const;
+  [[nodiscard]] DifferentialBlocks calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const noexcept;
+  [[nodiscard]] DifferentialBlock createDifferentialBlock(BlockIdx fromBlockIdx,
+                                                          BlockIdx toBlockIdx,
+                                                          const AbsoluteValues& absoluteValues) const noexcept;
+  [[nodiscard]] AbsoluteBlock calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Members                           //

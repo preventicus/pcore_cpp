@@ -39,28 +39,29 @@ using namespace PCore;
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs) : unixTimestampsInMs(std::move(unixTimestampsInMs)) {}
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs) noexcept
+    : unixTimestampsInMs(std::move(unixTimestampsInMs)) {}
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson)
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson) noexcept
     : unixTimestampsInMs(PcoreJson::Convert::jsonToVector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms)) {}
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() : unixTimestampsInMs({}) {}
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() noexcept : unixTimestampsInMs({}) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestampsInMs() const {
+UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestampsInMs() const noexcept {
   return this->unixTimestampsInMs;
 }
 
-UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestampInMs() const {
+UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestampInMs() const noexcept {
   if (!isSet()) {
     return 0;
   }
   return this->unixTimestampsInMs.front();
 }
 
-UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const {
+UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const noexcept {
   if (!isSet()) {
     return 0;
   }
@@ -71,11 +72,11 @@ UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const {
 //                       Public Methods                       //
 ////////////////////////////////////////////////////////////////
 
-bool AbsoluteTimestampsContainer::isSet() const {
+bool AbsoluteTimestampsContainer::isSet() const noexcept {
   return !this->unixTimestampsInMs.empty();
 }
 
-AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
+AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const noexcept {
   AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
   if (!this->isSet()) {
     return absoluteTimestampsContainerJson;
@@ -84,10 +85,10 @@ AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const {
   return absoluteTimestampsContainerJson;
 }
 
-bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
+bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const noexcept {
   return this->unixTimestampsInMs == absoluteTimestampsContainer.unixTimestampsInMs;
 }
 
-bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const {
+bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const noexcept {
   return this->unixTimestampsInMs != absoluteTimestampsContainer.unixTimestampsInMs;
 }

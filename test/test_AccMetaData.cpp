@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gTest/gTest.h>
 #include "AccMetaDataExampleFactory.h"
+#include "Exceptions.h"
 
 ////////////////////////////////////////////////////////////////
 //                        Test Getter                         //
@@ -271,7 +272,7 @@ TEST(AccMetaDataTest, TestSerializeNoThrow) {
 TEST(AccMetaDataTest, TestSerializeThrowDueToNullPointer) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
   AccMetaDataProtobuf* accMetaDataProtobuf = nullptr;
-  EXPECT_THROW(accMetaData.serialize(accMetaDataProtobuf), std::invalid_argument);
+  EXPECT_THROW(accMetaData.serialize(accMetaDataProtobuf), NullPointerException);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -280,7 +281,7 @@ TEST(AccMetaDataTest, TestSerializeThrowDueToNullPointer) {
 
 TEST(AccMetaDataTest, TestSwitchDataFormWithAccMetaDataNotSet) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
-  EXPECT_THROW(accMetaData.switchDataForm(), std::runtime_error);
+  EXPECT_THROW(accMetaData.switchDataForm(), ShouldNotBeCalledException);
 }
 
 ////////////////////////////////////////////////////////////////

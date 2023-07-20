@@ -53,45 +53,45 @@ class Sensor final : public IPCore<SensorProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
-  explicit Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf);
+  explicit Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf) noexcept;
+  explicit Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf) noexcept;
   explicit Sensor(const SensorJson& sensorJson, DataForm dataForm);
-  explicit Sensor(const SensorProtobuf& sensorProtobuf);
-  explicit Sensor();
+  explicit Sensor(const SensorProtobuf& sensorProtobuf) noexcept;
+  explicit Sensor() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] SensorTypeProtobuf getSensorType() const;
-  [[nodiscard]] Channels getChannels() const;
-  [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const;
-  [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const;
-  [[nodiscard]] DataForm getDataFrom() const;
-  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const;
-  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const;
-  [[nodiscard]] Duration getDurationInMs() const;
-
+  [[nodiscard]] SensorTypeProtobuf getSensorType() const noexcept;
+  [[nodiscard]] Channels getChannels() const noexcept;
+  [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const noexcept;
+  [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const noexcept;
+  [[nodiscard]] DataForm getDataFrom() const noexcept;
+  [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const noexcept;
+  [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const noexcept;
+  [[nodiscard]] Duration getDurationInMs() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                     Interface Methode                      //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const final;
-  [[nodiscard]] SensorJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] SensorJson toJson() const noexcept final;
   void serialize(SensorProtobuf* sensorProtobuf) const final;
-  void switchDataForm() final;
+  void switchDataForm() noexcept final;
 
-  bool operator==(const IPCore<SensorProtobuf>& sensor) const final;
-  bool operator!=(const IPCore<SensorProtobuf>& sensor) const final;
+  bool operator==(const IPCore<SensorProtobuf>& sensor) const noexcept final;
+  bool operator!=(const IPCore<SensorProtobuf>& sensor) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] AbsoluteTimestampsContainer calculateAbsoluteTimestamps(const DifferentialTimestampsContainer& differentialTimestampsContainer) const;
+  [[nodiscard]] AbsoluteTimestampsContainer calculateAbsoluteTimestamps(
+      const DifferentialTimestampsContainer& differentialTimestampsContainer) const noexcept;
   [[nodiscard]] DifferentialTimestampsContainer calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
-                                                                                const BlockIdxs& blockIdxs) const;
-  [[nodiscard]] BlockIdxs findBlockIdxs() const;
-  [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInLastBlock() const;
+                                                                                const BlockIdxs& blockIdxs) const noexcept;
+  [[nodiscard]] BlockIdxs findBlockIdxs() const noexcept;
+  [[nodiscard]] UnixTimestamp calculateFirstUnixTimestampInLastBlock() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Members                           //

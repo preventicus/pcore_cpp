@@ -33,15 +33,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Raw.h"
 #include <utility>
+#include "Exceptions.h"
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
 
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-Raw::Raw(Sensors sensors, DataForm dataForm) : sensors(std::move(sensors)), dataForm(dataForm) {}
+Raw::Raw(Sensors sensors, DataForm dataForm) noexcept : sensors(std::move(sensors)), dataForm(dataForm) {}
 
-Raw::Raw(const RawProtobuf& rawProtobuf)
+Raw::Raw(const RawProtobuf& rawProtobuf) noexcept
     : sensors(PcoreProtobuf::Convert::protobufToVector<Sensor>(rawProtobuf.sensors())), dataForm([&]() {
         if (rawProtobuf.sensors().empty()) {
           return DataForm::DATA_FORM_NONE;
@@ -52,16 +53,16 @@ Raw::Raw(const RawProtobuf& rawProtobuf)
 Raw::Raw(const RawJson& rawJson, DataForm dataForm)
     : sensors(PcoreJson::Convert::jsonToVector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)), dataForm(dataForm) {}
 
-Raw::Raw() : sensors({}), dataForm(DataForm::DATA_FORM_NONE) {}
+Raw::Raw() noexcept : sensors({}), dataForm(DataForm::DATA_FORM_NONE) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-Sensors Raw::getSensors() const {
+Sensors Raw::getSensors() const noexcept {
   return this->sensors;
 }
 
-DataForm Raw::getDataFrom() const {
+DataForm Raw::getDataFrom() const noexcept {
   return this->dataForm;
 }
 
@@ -69,7 +70,7 @@ DataForm Raw::getDataFrom() const {
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
 
-bool Raw::isSet() const {
+bool Raw::isSet() const noexcept {
   for (const auto& sensor : this->sensors) {
     if (sensor.isSet()) {
       return true;
@@ -78,7 +79,7 @@ bool Raw::isSet() const {
   return this->dataForm != DataForm::DATA_FORM_NONE;
 }
 
-RawJson Raw::toJson() const {
+RawJson Raw::toJson() const noexcept {
   RawJson rawJson;
   if (!this->isSet()) {
     return rawJson;
@@ -89,13 +90,13 @@ RawJson Raw::toJson() const {
 
 void Raw::serialize(RawProtobuf* rawProtobuf) const {
   if (rawProtobuf == nullptr) {
-    throw std::invalid_argument("rawProtobuf is a null pointer");
+    throw NullPointerException("Raw::serialize", "rawProtobuf");
   }
   if (!this->isSet()) {
     return;
   }
   if (this->dataForm != DataForm::DATA_FORM_DIFFERENTIAL) {
-    throw std::runtime_error("Serialize is only possible for differential data form");
+    throw WrongDataFormException("Raw::serialize", "only for differential data form");
   }
   for (const auto& sensor : this->sensors) {
     auto* sensorProtobuf = rawProtobuf->add_sensors();
@@ -103,7 +104,7 @@ void Raw::serialize(RawProtobuf* rawProtobuf) const {
   }
 }
 
-void Raw::switchDataForm() {
+void Raw::switchDataForm() noexcept {
   if (!this->isSet()) {
     return;
   }
@@ -120,12 +121,12 @@ void Raw::switchDataForm() {
       break;
     }
     case DataForm::DATA_FORM_NONE: {
-      throw std::runtime_error("dataForm is NONE");  // should not happen, since it is intercepted by isSet guard above
+      return;
     }
   }
 }
 
-bool Raw::operator==(const IPCore<RawProtobuf>& raw) const {
+bool Raw::operator==(const IPCore<RawProtobuf>& raw) const noexcept {
   const auto* derived = dynamic_cast<const Raw*>(&raw);
   if (derived == nullptr) {
     return false;
@@ -142,6 +143,6 @@ bool Raw::operator==(const IPCore<RawProtobuf>& raw) const {
   return this->dataForm == derived->dataForm;
 }
 
-bool Raw::operator!=(const IPCore<RawProtobuf>& raw) const {
+bool Raw::operator!=(const IPCore<RawProtobuf>& raw) const noexcept {
   return !(*this == raw);
 }

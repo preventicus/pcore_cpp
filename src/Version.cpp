@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Version.h"
+#include "Exceptions.h"
 #include "PcoreJson.h"
 
 using namespace PCore;
@@ -40,31 +41,31 @@ using namespace PCore;
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
 
-Version::Version(Major major, Minor minor, Patch patch) : major(major), minor(minor), patch(patch) {}
+Version::Version(Major major, Minor minor, Patch patch) noexcept : major(major), minor(minor), patch(patch) {}
 
 Version::Version(const VersionJson& versionJson)
     : major(PcoreJson::Convert::jsonToValue<Major>(versionJson, PcoreJson::Key::major)),
       minor(PcoreJson::Convert::jsonToValue<Minor>(versionJson, PcoreJson::Key::minor)),
       patch(PcoreJson::Convert::jsonToValue<Patch>(versionJson, PcoreJson::Key::patch)) {}
 
-Version::Version(const VersionProtobuf& versionProtobuf)
+Version::Version(const VersionProtobuf& versionProtobuf) noexcept
     : major(versionProtobuf.major()), minor(versionProtobuf.minor()), patch(versionProtobuf.patch()) {}
 
-Version::Version() : major(0), minor(0), patch(0) {}
+Version::Version() noexcept : major(0), minor(0), patch(0) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
 
-Major Version::getMajor() const {
+Major Version::getMajor() const noexcept {
   return this->major;
 }
 
-Minor Version::getMinor() const {
+Minor Version::getMinor() const noexcept {
   return this->minor;
 }
 
-Patch Version::getPatch() const {
+Patch Version::getPatch() const noexcept {
   return this->patch;
 }
 
@@ -72,7 +73,7 @@ Patch Version::getPatch() const {
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
 
-bool Version::isSet() const {
+bool Version::isSet() const noexcept {
   // clang-format off
   return this->major != 0
       || this->minor != 0
@@ -80,7 +81,7 @@ bool Version::isSet() const {
   // clang-format on
 }
 
-VersionJson Version::toJson() const {
+VersionJson Version::toJson() const noexcept {
   VersionJson versionJson;
   if (!this->isSet()) {
     return versionJson;
@@ -99,7 +100,7 @@ VersionJson Version::toJson() const {
 
 void Version::serialize(VersionProtobuf* versionProtobuf) const {
   if (versionProtobuf == nullptr) {
-    throw std::invalid_argument("Error in serialize: versionProtobuf is a null pointer");
+    throw NullPointerException("Version::serialize", "versionProtobuf");
   }
   if (!this->isSet()) {
     return;
@@ -110,16 +111,16 @@ void Version::serialize(VersionProtobuf* versionProtobuf) const {
 }
 
 void Version::switchDataForm() {
-  throw std::runtime_error("should not be called");
+  throw ShouldNotBeCalledException("Version::switchDataForm");
 }
 
-bool Version::operator==(const IPCore<VersionProtobuf>& version) const {
+bool Version::operator==(const IPCore<VersionProtobuf>& version) const noexcept {
   if (const auto* derived = dynamic_cast<const Version*>(&version)) {
     return this->major == derived->major && this->minor == derived->minor && this->patch == derived->patch;
   }
   return false;
 }
 
-bool Version::operator!=(const IPCore<VersionProtobuf>& version) const {
+bool Version::operator!=(const IPCore<VersionProtobuf>& version) const noexcept {
   return !(*this == version);
 }

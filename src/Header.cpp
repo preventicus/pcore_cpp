@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Header.h"
 
 #include <utility>
+#include "Exceptions.h"
 #include "PcoreJson.h"
 
 ////////////////////////////////////////////////////////////////
@@ -62,21 +63,21 @@ Header::Header(const HeaderJson& headerJson)
   this->checkTimeZoneOffset();
 }
 
-Header::Header() : timeZoneOffsetInMin(0), pcoreVersion(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
+Header::Header() noexcept : timeZoneOffsetInMin(0), pcoreVersion(Version()), dataForm(DataForm::DATA_FORM_NONE) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
 
-TimeZoneOffset Header::getTimeZoneOffsetInMin() const {
+TimeZoneOffset Header::getTimeZoneOffsetInMin() const noexcept {
   return this->timeZoneOffsetInMin;
 }
 
-Version Header::getPcoreVersion() const {
+Version Header::getPcoreVersion() const noexcept {
   return this->pcoreVersion;
 }
 
-DataForm Header::getDataForm() const {
+DataForm Header::getDataForm() const noexcept {
   return this->dataForm;
 }
 
@@ -84,7 +85,7 @@ DataForm Header::getDataForm() const {
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
 
-bool Header::isSet() const {
+bool Header::isSet() const noexcept {
   // clang-format off
   return this->timeZoneOffsetInMin != 0
       || this->pcoreVersion.isSet()
@@ -92,7 +93,7 @@ bool Header::isSet() const {
   // clang-format on
 }
 
-HeaderJson Header::toJson() const {
+HeaderJson Header::toJson() const noexcept {
   HeaderJson headerJson;
   if (!this->isSet()) {
     return headerJson;
@@ -107,7 +108,7 @@ HeaderJson Header::toJson() const {
 
 void Header::serialize(HeaderProtobuf* headerProtobuf) const {
   if (headerProtobuf == nullptr) {
-    throw std::invalid_argument("Error in serialize: headerProtobuf is a null pointer");
+    throw NullPointerException("Header::serialize", "headerProtobuf");
   }
   if (!this->isSet()) {
     return;
@@ -118,7 +119,7 @@ void Header::serialize(HeaderProtobuf* headerProtobuf) const {
   headerProtobuf->mutable_pcore_version()->CopyFrom(versionProtobuf);
 }
 
-void Header::switchDataForm() {
+void Header::switchDataForm() noexcept {
   if (!this->isSet()) {
     return;
   }
@@ -132,12 +133,12 @@ void Header::switchDataForm() {
       break;
     }
     default: {
-      throw std::runtime_error("DataForm is NONE");  // should not happen, since it is intercepted by isSet guard above
+      return;
     }
   }
 }
 
-bool Header::operator==(const IPCore<HeaderProtobuf>& header) const {
+bool Header::operator==(const IPCore<HeaderProtobuf>& header) const noexcept {
   if (const auto* derived = dynamic_cast<const Header*>(&header)) {
     return this->timeZoneOffsetInMin == derived->timeZoneOffsetInMin && this->pcoreVersion == derived->pcoreVersion &&
            this->dataForm == derived->dataForm;
@@ -145,7 +146,7 @@ bool Header::operator==(const IPCore<HeaderProtobuf>& header) const {
   return false;
 }
 
-bool Header::operator!=(const IPCore<HeaderProtobuf>& header) const {
+bool Header::operator!=(const IPCore<HeaderProtobuf>& header) const noexcept {
   return !(*this == header);
 }
 
@@ -155,6 +156,6 @@ bool Header::operator!=(const IPCore<HeaderProtobuf>& header) const {
 
 void Header::checkTimeZoneOffset() const {
   if (840 < this->timeZoneOffsetInMin || this->timeZoneOffsetInMin < -720) {
-    throw std::invalid_argument("timeZoneOffset must be between -720 and 840");
+    throw WrongValueException("Header::checkTimeZoneOffset", "timeZoneOffset must be between -720 and 840");
   }
 }

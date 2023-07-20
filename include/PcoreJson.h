@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <string>
 #include "DataForm.h"
+#include "Exceptions.h"
 #include "json/json.h"
 
 using JsonKey = std::string;
@@ -74,7 +75,7 @@ const JsonKey norm = "norm";
 class Convert {
  public:
   template <typename T, typename... Args>
-  static std::vector<T> jsonToVector(const Json::Value& jsonValue, const JsonKey& jsonKey, const Args&... args) {
+  static std::vector<T> jsonToVector(const Json::Value& jsonValue, const JsonKey& jsonKey, const Args&... args) noexcept {
     Json::Value values = jsonValue[jsonKey];
     std::vector<T> vector;
     vector.reserve(values.size());
@@ -100,7 +101,7 @@ class Convert {
   }
 
   template <typename T>
-  static Json::Value vectorToJson(std::vector<T> vector) {
+  static Json::Value vectorToJson(std::vector<T> vector) noexcept {
     Json::Value jsonValues(Json::arrayValue);
 
     if constexpr (std::is_same_v<T, int32_t>) {
@@ -129,13 +130,13 @@ class Convert {
       return jsonValue[jsonKey].asInt();
     } else if constexpr (std::is_same_v<T, uint32_t>) {
       if (jsonValue[jsonKey].asInt() < 0) {
-        throw std::invalid_argument(jsonKey + " is negative in json.");
+        throw PCore::WrongValueException("jsonToValue", jsonKey + " is negative in json.");
       }
       return jsonValue[jsonKey].asUInt();
     }
   }
 
-  static DataForm dataFormFromString(const DataFormString& dataFormString) {
+  static DataForm dataFormFromString(const DataFormString& dataFormString) noexcept {
     if (dataFormString == "DATA_FORM_ABSOLUTE") {
       return DataForm::DATA_FORM_ABSOLUTE;
     } else if (dataFormString == "DATA_FORM_DIFFERENTIAL") {
@@ -145,7 +146,7 @@ class Convert {
     }
   }
 
-  static DataFormString dataFormToString(const DataForm dataForm) {
+  static DataFormString dataFormToString(const DataForm dataForm) noexcept {
     switch (dataForm) {
       case DataForm::DATA_FORM_ABSOLUTE: {
         return "DATA_FORM_ABSOLUTE";

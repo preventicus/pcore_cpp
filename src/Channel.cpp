@@ -33,13 +33,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Channel.h"
 #include <utility>
+#include "Exceptions.h"
 #include "PcoreJson.h"
 #include "PcoreProtobuf.h"
 
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-Channel::Channel(AccMetaData accMetaData, AbsoluteBlock absoluteBlock)
+Channel::Channel(AccMetaData accMetaData, AbsoluteBlock absoluteBlock) noexcept
     : ppgMetaData(PpgMetaData()),
       accMetaData(std::move(accMetaData)),
       differentialBlocks(DifferentialBlocks()),
@@ -47,7 +48,7 @@ Channel::Channel(AccMetaData accMetaData, AbsoluteBlock absoluteBlock)
       sensorType(SensorTypeProtobuf::SENSOR_TYPE_ACC),
       dataForm(DataForm::DATA_FORM_ABSOLUTE) {}
 
-Channel::Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock)
+Channel::Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock) noexcept
     : ppgMetaData(std::move(ppgMetaData)),
       accMetaData(AccMetaData()),
       differentialBlocks(DifferentialBlocks()),
@@ -55,7 +56,7 @@ Channel::Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock)
       sensorType(SensorTypeProtobuf::SENSOR_TYPE_PPG),
       dataForm(DataForm::DATA_FORM_ABSOLUTE) {}
 
-Channel::Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks)
+Channel::Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks) noexcept
     : ppgMetaData(PpgMetaData()),
       accMetaData(std::move(accMetaData)),
       differentialBlocks(std::move(differentialBlocks)),
@@ -63,7 +64,7 @@ Channel::Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks)
       sensorType(SensorTypeProtobuf::SENSOR_TYPE_ACC),
       dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
 
-Channel::Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks)
+Channel::Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks) noexcept
     : ppgMetaData(std::move(ppgMetaData)),
       accMetaData(AccMetaData()),
       differentialBlocks(std::move(differentialBlocks)),
@@ -83,7 +84,7 @@ Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypePr
             return PcoreJson::Convert::jsonToVector<DifferentialBlock>(channelJson, PcoreJson::Key::differential_blocks);
           }
           default: {
-            throw std::runtime_error("DataForm is NONE");
+            throw DataFormIsNoneException("Channel");
           }
         }
       }()),
@@ -96,18 +97,18 @@ Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypePr
             return AbsoluteBlock();
           }
           default: {
-            throw std::runtime_error("DataForm is NONE");
+            throw DataFormIsNoneException("Channel");
           }
         }
       }()),
       sensorType(sensorTypeProtobuf),
       dataForm(dataForm) {
   if (sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_NONE) {
-    throw std::runtime_error("SensorType is not set");
+    throw SensorTypeIsNoneException("Channel");
   }
 }
 
-Channel::Channel(const ChannelProtobuf& channelProtobuf)
+Channel::Channel(const ChannelProtobuf& channelProtobuf) noexcept
     : ppgMetaData(PpgMetaData(channelProtobuf.ppg_metadata())),
       accMetaData(AccMetaData(channelProtobuf.acc_metadata())),
       differentialBlocks(PcoreProtobuf::Convert::protobufToVector<DifferentialBlock>(channelProtobuf.differential_blocks())),
@@ -129,7 +130,7 @@ Channel::Channel(const ChannelProtobuf& channelProtobuf)
         }
       }()) {}
 
-Channel::Channel()
+Channel::Channel() noexcept
     : ppgMetaData(PpgMetaData()),
       accMetaData(AccMetaData()),
       differentialBlocks(DifferentialBlocks()),
@@ -140,50 +141,50 @@ Channel::Channel()
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-DifferentialBlocks Channel::getDifferentialBlocks() const {
+DifferentialBlocks Channel::getDifferentialBlocks() const noexcept {
   return this->differentialBlocks;
 }
 
-AbsoluteBlock Channel::getAbsoluteBlock() const {
+AbsoluteBlock Channel::getAbsoluteBlock() const noexcept {
   return this->absoluteBlock;
 }
 
-AccMetaData Channel::getAccMetaData() const {
+AccMetaData Channel::getAccMetaData() const noexcept {
   return this->accMetaData;
 }
 
-PpgMetaData Channel::getPpgMetaData() const {
+PpgMetaData Channel::getPpgMetaData() const noexcept {
   return this->ppgMetaData;
 }
 
-SensorTypeProtobuf Channel::getSensorType() const {
+SensorTypeProtobuf Channel::getSensorType() const noexcept {
   return this->sensorType;
 }
 
-DataForm Channel::getDataForm() const {
+DataForm Channel::getDataForm() const noexcept {
   return this->dataForm;
 }
 
-bool Channel::hasAccMetaData() const {
+bool Channel::hasAccMetaData() const noexcept {
   return this->accMetaData.isSet();
 }
 
-bool Channel::hasPpgMetaData() const {
+bool Channel::hasPpgMetaData() const noexcept {
   return this->ppgMetaData.isSet();
 }
 
-bool Channel::hasDifferentialBlocks() const {
+bool Channel::hasDifferentialBlocks() const noexcept {
   return !this->differentialBlocks.empty();
 }
 
-bool Channel::hasAbsoluteBlock() const {
+bool Channel::hasAbsoluteBlock() const noexcept {
   return this->absoluteBlock.isSet();
 }
 
 ////////////////////////////////////////////////////////////////
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
-bool Channel::isSet() const {
+bool Channel::isSet() const noexcept {
   for (const auto& differentialBlock : this->differentialBlocks) {
     if (differentialBlock.isSet()) {
       return true;
@@ -198,7 +199,7 @@ bool Channel::isSet() const {
   // clang-format on
 }
 
-ChannelJson Channel::toJson() const {
+ChannelJson Channel::toJson() const noexcept {
   ChannelJson channelJson;
   if (!this->isSet()) {
     return channelJson;
@@ -216,7 +217,7 @@ ChannelJson Channel::toJson() const {
           break;
         }
         default: {
-          throw std::runtime_error("sensorTypeProtobuf is not set");
+          return channelJson;
         }
       }
       break;
@@ -233,13 +234,13 @@ ChannelJson Channel::toJson() const {
           break;
         }
         default: {
-          throw std::runtime_error("sensorTypeProtobuf is not set");
+          return channelJson;
         }
       }
       break;
     }
     default: {
-      throw std::runtime_error("dataForm is not set");
+      return channelJson;
     }
   }
   return channelJson;
@@ -247,16 +248,16 @@ ChannelJson Channel::toJson() const {
 
 void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
   if (channelProtobuf == nullptr) {
-    throw std::invalid_argument("Error in serialize: differentialBlockProtobuf is a null pointer");
+    throw NullPointerException("Channel::serialize", "channelProtobuf");
   }
   if (!this->isSet()) {
     return;
   }
   if (this->dataForm != DataForm::DATA_FORM_DIFFERENTIAL) {
-    throw std::runtime_error("Serialize is only possible for differential data form");
+    throw WrongDataFormException("Channel::serialize", "only for differential data form");
   }
   if (this->hasAccMetaData() && this->hasPpgMetaData()) {
-    throw std::invalid_argument("just one type of MetaData can be initialized");
+    throw OnlyOneParameterAllowedException("Channel::serialize", "AccMetaData", "PpgMetaData");
   }
   if (this->hasAccMetaData()) {
     AccMetaDataProtobuf accMetaDataProtobuf;
@@ -267,7 +268,7 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
     this->ppgMetaData.serialize(&ppgMetaDataProtobuf);
     channelProtobuf->mutable_ppg_metadata()->CopyFrom(ppgMetaDataProtobuf);
   } else {
-    throw std::invalid_argument("SensorType is not set");
+    throw SensorTypeIsNoneException("Channel::serialize");
   }
   for (const auto& differentialBlock : this->differentialBlocks) {
     auto* differentialBlockProtobuf = channelProtobuf->add_differential_blocks();
@@ -275,7 +276,7 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
   }
 }
 
-void Channel::switchDataForm(const BlockIdxs& blockIdxs) {
+void Channel::switchDataForm(const BlockIdxs& blockIdxs) noexcept {
   if (!this->isSet()) {
     return;
   }
@@ -284,7 +285,7 @@ void Channel::switchDataForm(const BlockIdxs& blockIdxs) {
   this->dataForm = DataForm::DATA_FORM_DIFFERENTIAL;
 }
 
-void Channel::switchDataForm() {
+void Channel::switchDataForm() noexcept {
   if (!this->isSet()) {
     return;
   }
@@ -293,7 +294,7 @@ void Channel::switchDataForm() {
   this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
 }
 
-bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const {
+bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const noexcept {
   const auto* derived = dynamic_cast<const Channel*>(&channel);
   if (derived == nullptr) {
     return false;
@@ -316,7 +317,7 @@ bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const {
   // clang-format off
 }
 
-bool Channel::operator!=(const IPCore<ChannelProtobuf>& channel) const {
+bool Channel::operator!=(const IPCore<ChannelProtobuf>& channel) const noexcept {
   return !(*this == channel);
 }
 
@@ -324,7 +325,7 @@ bool Channel::operator!=(const IPCore<ChannelProtobuf>& channel) const {
 //                     Calculate Methode                      //
 ////////////////////////////////////////////////////////////////
 
-DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const {
+DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& absoluteBlock, const BlockIdxs& blockIdxs) const noexcept {
   DifferentialBlocks differentialBlocks;
   const auto numberOfBlocks = blockIdxs.size();
   /*
@@ -367,7 +368,7 @@ DifferentialBlocks Channel::calculateDifferentialBlocks(const AbsoluteBlock& abs
 
 DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx,
                                                    const BlockIdx toBlockIdx,
-                                                   const AbsoluteValues& absoluteValues) const {
+                                                   const AbsoluteValues& absoluteValues) const noexcept {
   DifferentialValues differentialValues;
   differentialValues.push_back(absoluteValues[fromBlockIdx]);
   for (size_t i = fromBlockIdx + 1; i <= toBlockIdx; i++) {
@@ -376,7 +377,7 @@ DifferentialBlock Channel::createDifferentialBlock(const BlockIdx fromBlockIdx,
   return DifferentialBlock(differentialValues);
 }
 
-AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) const {
+AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) noexcept {
   AbsoluteValues absoluteValues;
   size_t numberOfElements = 0;
   for (const auto& differentialBlock : differentialBlocks) {
@@ -392,5 +393,3 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differen
   }
   return AbsoluteBlock(absoluteValues);
 }
-
-

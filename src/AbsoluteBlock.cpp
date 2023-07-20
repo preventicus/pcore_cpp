@@ -40,28 +40,28 @@ using namespace PCore;
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) : absoluteValues(std::move(absoluteValues)) {}
+AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) noexcept : absoluteValues(std::move(absoluteValues)) {}
 
-AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson)
+AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson) noexcept
     : absoluteValues(PcoreJson::Convert::jsonToVector<AbsoluteValue>(absoluteBlockJson, PcoreJson::Key::absolute_values)) {}
 
-AbsoluteBlock::AbsoluteBlock() : absoluteValues({}) {}
+AbsoluteBlock::AbsoluteBlock() noexcept : absoluteValues({}) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-AbsoluteValues AbsoluteBlock::getAbsoluteValues() const {
+AbsoluteValues AbsoluteBlock::getAbsoluteValues() const noexcept {
   return this->absoluteValues;
 }
 
 ////////////////////////////////////////////////////////////////
 //                       Public Methods                       //
 ////////////////////////////////////////////////////////////////
-bool AbsoluteBlock::isSet() const {
+bool AbsoluteBlock::isSet() const noexcept {
   return !this->absoluteValues.empty();
 }
 
-AbsoluteBlockJson AbsoluteBlock::toJson() const {
+AbsoluteBlockJson AbsoluteBlock::toJson() const noexcept {
   AbsoluteBlockJson absoluteBlockJson;
   if (!isSet()) {
     return absoluteBlockJson;
@@ -70,11 +70,10 @@ AbsoluteBlockJson AbsoluteBlock::toJson() const {
   return absoluteBlockJson;
 }
 
-bool AbsoluteBlock::operator==(const AbsoluteBlock& absoluteBlock) const {
+bool AbsoluteBlock::operator==(const AbsoluteBlock& absoluteBlock) const noexcept {
   return this->absoluteValues == absoluteBlock.absoluteValues;
 }
 
-bool AbsoluteBlock::operator!=(const AbsoluteBlock& absoluteBlock) const {
+bool AbsoluteBlock::operator!=(const AbsoluteBlock& absoluteBlock) const noexcept {
   return this->absoluteValues != absoluteBlock.absoluteValues;
 }
-

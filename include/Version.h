@@ -52,27 +52,27 @@ class Version final : public IPCore<VersionProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit Version(Major major, Minor minor, Patch patch);
-  explicit Version(const VersionProtobuf& versionProtobuf);
+  explicit Version(Major major, Minor minor, Patch patch) noexcept;
+  explicit Version(const VersionProtobuf& versionProtobuf) noexcept;
   explicit Version(const VersionJson& jsonVersion);
-  explicit Version();
+  explicit Version() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] Major getMajor() const;
-  [[nodiscard]] Minor getMinor() const;
-  [[nodiscard]] Patch getPatch() const;
+  [[nodiscard]] Major getMajor() const noexcept;
+  [[nodiscard]] Minor getMinor() const noexcept;
+  [[nodiscard]] Patch getPatch() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] VersionJson toJson() const final;
+  [[nodiscard]] bool isSet() const noexcept final;
+  [[nodiscard]] VersionJson toJson() const noexcept final;
   void serialize(VersionProtobuf* versionProtobuf) const final;
   void switchDataForm() final;
-  [[nodiscard]] bool isSet() const final;
-  bool operator==(const IPCore<VersionProtobuf>& version) const final;
-  bool operator!=(const IPCore<VersionProtobuf>& version) const final;
+  bool operator==(const IPCore<VersionProtobuf>& version) const noexcept final;
+  bool operator!=(const IPCore<VersionProtobuf>& version) const noexcept final;
 
  private:
   ////////////////////////////////////////////////////////////////

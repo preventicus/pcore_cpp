@@ -46,23 +46,23 @@ class AbsoluteBlock final {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit AbsoluteBlock(AbsoluteValues absoluteValues);
-  explicit AbsoluteBlock(const AbsoluteBlockJson& absoluteBlock);
-  explicit AbsoluteBlock();
+  explicit AbsoluteBlock(AbsoluteValues absoluteValues) noexcept;
+  explicit AbsoluteBlock(const AbsoluteBlockJson& absoluteBlock) noexcept;
+  explicit AbsoluteBlock() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] AbsoluteValues getAbsoluteValues() const;
+  [[nodiscard]] AbsoluteValues getAbsoluteValues() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                       Public Methods                       //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] bool isSet() const;
-  [[nodiscard]] AbsoluteBlockJson toJson() const;
+  [[nodiscard]] bool isSet() const noexcept;
+  [[nodiscard]] AbsoluteBlockJson toJson() const noexcept;
 
-  bool operator==(const AbsoluteBlock& absoluteBlock) const;
-  bool operator!=(const AbsoluteBlock& absoluteBlock) const;
+  bool operator==(const AbsoluteBlock& absoluteBlock) const noexcept;
+  bool operator!=(const AbsoluteBlock& absoluteBlock) const noexcept;
 
  private:
   ////////////////////////////////////////////////////////////////

@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gtest/gtest.h>
 #include "DifferentialBlockExampleFactory.h"
+#include "Exceptions.h"
 
 ////////////////////////////////////////////////////////////////
 //                        Test Getter                         //
@@ -184,7 +185,7 @@ TEST(DifferentialBlockTest, TestSerializeNoThrow) {
 TEST(DifferentialBlockTest, TestSerializeThrowDueToNullPointer) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues();
   DifferentialBlockProtobuf* differentialBlockProtobuf = nullptr;
-  EXPECT_THROW(differentialBlock.serialize(differentialBlockProtobuf), std::invalid_argument);
+  EXPECT_THROW(differentialBlock.serialize(differentialBlockProtobuf), NullPointerException);
 }
 
 TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreePositiveDifferentialValues) {
@@ -233,5 +234,5 @@ TEST(DifferentialBlockTest, TestSerializeWithDifferentialBlockWithThreeMixedDiff
 
 TEST(DifferentialBlockTest, TestSwitchDataFormWithDifferentialBlockNotSet) {
   auto differentialBlock = DifferentialBlockExampleFactory::differentialBlockNotSet();
-  EXPECT_THROW(differentialBlock.switchDataForm(), std::runtime_error);
+  EXPECT_THROW(differentialBlock.switchDataForm(), ShouldNotBeCalledException);
 }

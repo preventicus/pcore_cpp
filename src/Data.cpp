@@ -33,39 +33,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Data.h"
 #include <utility>
+#include "Exceptions.h"
 #include "PcoreJson.h"
 
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-Data::Data(Raw raw, Header header) : header(std::move(header)), raw(std::move(raw)) {}
+Data::Data(Raw raw, Header header) noexcept : header(std::move(header)), raw(std::move(raw)) {}
 
-Data::Data(const DataProtobuf& DataProtobuf) : header(Header(DataProtobuf.header())), raw(Raw(DataProtobuf.raw())) {}
+Data::Data(const DataProtobuf& DataProtobuf) noexcept : header(Header(DataProtobuf.header())), raw(Raw(DataProtobuf.raw())) {}
 
 Data::Data(const DataJson& dataJson)
     : header(Header(dataJson[PcoreJson::Key::header])), raw(Raw(dataJson[PcoreJson::Key::raw], header.getDataForm())) {}
 
-Data::Data() : header(Header()), raw(Raw()) {}
+Data::Data() noexcept : header(Header()), raw(Raw()) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-Raw Data::getRaw() const {
+Raw Data::getRaw() const noexcept {
   return this->raw;
 }
 
-Header Data::getHeader() const {
+Header Data::getHeader() const noexcept {
   return this->header;
 }
 
 ////////////////////////////////////////////////////////////////
 //                      IPCore Methods                        //
 ////////////////////////////////////////////////////////////////
-bool Data::isSet() const {
+bool Data::isSet() const noexcept {
   return this->raw.isSet() || this->header.isSet();
 }
 
-Json::Value Data::toJson() const {
+Json::Value Data::toJson() const noexcept {
   DataJson data;
   if (!this->isSet()) {
     return data;
@@ -79,13 +80,13 @@ Json::Value Data::toJson() const {
 
 void Data::serialize(DataProtobuf* dataProtobuf) const {
   if (dataProtobuf == nullptr) {
-    throw std::invalid_argument("Error in serialize: dataProtobuf is a null pointer");
+    throw NullPointerException("Data::serialize", "dataProtobuf");
   }
   if (!this->isSet()) {
     return;
   }
   if (this->getHeader().getDataForm() != DataForm::DATA_FORM_DIFFERENTIAL) {
-    throw std::runtime_error("Serialize is only possible for differential data form");
+    throw WrongDataFormException("Data::serialize", "only for differential data form");
   }
   HeaderProtobuf headerProtobuf;
   this->header.serialize(&headerProtobuf);
@@ -95,7 +96,7 @@ void Data::serialize(DataProtobuf* dataProtobuf) const {
   dataProtobuf->mutable_raw()->CopyFrom(rawProtobuf);
 }
 
-void Data::switchDataForm() {
+void Data::switchDataForm() noexcept {
   if (!this->isSet()) {
     return;
   }
@@ -103,16 +104,13 @@ void Data::switchDataForm() {
   this->header.switchDataForm();
 }
 
-bool Data::operator==(const IPCore<DataProtobuf>& data) const {
+bool Data::operator==(const IPCore<DataProtobuf>& data) const noexcept {
   if (const auto* derived = dynamic_cast<const Data*>(&data)) {
     return this->header == derived->header && this->raw == derived->raw;
   }
   return false;
 }
 
-bool Data::operator!=(const IPCore<DataProtobuf>& data) const {
+bool Data::operator!=(const IPCore<DataProtobuf>& data) const noexcept {
   return !(*this == data);
 }
-
-
-
