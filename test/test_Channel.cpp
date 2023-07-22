@@ -42,8 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 TEST(ChannelTest, TestGetPpgMetaDataWithChannelNotSet) {
   auto channel = ChannelExampleFactory::channelNotSet();
-  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-  EXPECT_TRUE(channel.getPpgMetaData() == ppgMetaData);
+  EXPECT_TRUE(channel.getPpgMetaData() == std::nullopt);
 }
 
 TEST(ChannelTest, TestGetPpgMetaDataWithChannelWithAbsoluteBlockAndPpgMetaData) {
@@ -54,8 +53,7 @@ TEST(ChannelTest, TestGetPpgMetaDataWithChannelWithAbsoluteBlockAndPpgMetaData) 
 
 TEST(ChannelTest, TestGetAccMetaDataWithChannelNotSet) {
   auto channel = ChannelExampleFactory::channelNotSet();
-  auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
-  EXPECT_TRUE(channel.getAccMetaData() == accMetaData);
+  EXPECT_TRUE(channel.getAccMetaData() == std::nullopt);
 }
 
 TEST(ChannelTest, TestGetAccMetaDataWithChannelWithAbsoluteBlockAndAccMetaData) {

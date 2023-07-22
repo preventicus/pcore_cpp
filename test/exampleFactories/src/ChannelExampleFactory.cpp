@@ -108,22 +108,22 @@ ChannelJson ChannelExampleFactory::buildChannelJson(const Channel& channel) {
     auto absoluteBlock = channel.getAbsoluteBlock();
     channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
     auto accMetaData = channel.getAccMetaData();
-    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(*accMetaData);
   } else if (channel.hasAbsoluteBlock() && channel.hasPpgMetaData()) {
     auto absoluteBlock = channel.getAbsoluteBlock();
     channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(absoluteBlock);
     auto ppgMetaData = channel.getPpgMetaData();
-    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(*ppgMetaData);
   } else if (channel.hasDifferentialBlocks() && channel.hasAccMetaData()) {
     auto differentialBlocks = channel.getDifferentialBlocks();
     channelJson[PcoreJson::Key::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(differentialBlocks);
     auto accMetaData = channel.getAccMetaData();
-    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(accMetaData);
+    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(*accMetaData);
   } else if (channel.hasDifferentialBlocks() && channel.hasPpgMetaData()) {
     auto differentialBlocks = channel.getDifferentialBlocks();
     channelJson[PcoreJson::Key::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(differentialBlocks);
     auto ppgMetaData = channel.getPpgMetaData();
-    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(*ppgMetaData);
   }
   return channelJson;
 }

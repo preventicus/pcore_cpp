@@ -41,40 +41,39 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
 Channel::Channel(AccMetaData accMetaData, AbsoluteBlock absoluteBlock) noexcept
-    : ppgMetaData(PpgMetaData()),
-      accMetaData(std::move(accMetaData)),
+    : metaData(std::move(accMetaData)),
       differentialBlocks(DifferentialBlocks()),
       absoluteBlock(std::move(absoluteBlock)),
-      sensorType(SensorTypeProtobuf::SENSOR_TYPE_ACC),
       dataForm(DataForm::DATA_FORM_ABSOLUTE) {}
 
 Channel::Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock) noexcept
-    : ppgMetaData(std::move(ppgMetaData)),
-      accMetaData(AccMetaData()),
+    : metaData(std::move(ppgMetaData)),
       differentialBlocks(DifferentialBlocks()),
       absoluteBlock(std::move(absoluteBlock)),
-      sensorType(SensorTypeProtobuf::SENSOR_TYPE_PPG),
       dataForm(DataForm::DATA_FORM_ABSOLUTE) {}
 
 Channel::Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks) noexcept
-    : ppgMetaData(PpgMetaData()),
-      accMetaData(std::move(accMetaData)),
+    : metaData(std::move(accMetaData)),
       differentialBlocks(std::move(differentialBlocks)),
       absoluteBlock(AbsoluteBlock()),
-      sensorType(SensorTypeProtobuf::SENSOR_TYPE_ACC),
       dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
 
 Channel::Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks) noexcept
-    : ppgMetaData(std::move(ppgMetaData)),
-      accMetaData(AccMetaData()),
+    : metaData(std::move(ppgMetaData)),
       differentialBlocks(std::move(differentialBlocks)),
       absoluteBlock(AbsoluteBlock()),
-      sensorType(SensorTypeProtobuf::SENSOR_TYPE_PPG),
       dataForm(DataForm::DATA_FORM_DIFFERENTIAL) {}
 
 Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm)
-    : ppgMetaData(sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_PPG ? PpgMetaData(channelJson[PcoreJson::Key::ppg_metadata]) : PpgMetaData()),
-      accMetaData(sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_ACC ? AccMetaData(channelJson[PcoreJson::Key::acc_metadata]) : AccMetaData()),
+    : metaData([&]() -> MetaData {
+        if (channelJson.isMember(PcoreJson::Key::ppg_metadata)) {
+          return PpgMetaData(channelJson[PcoreJson::Key::ppg_metadata]);
+        } else if (channelJson.isMember(PcoreJson::Key::acc_metadata)) {
+          return AccMetaData(channelJson[PcoreJson::Key::acc_metadata]);
+        } else {
+          return std::nullopt;
+        }
+      }()),
       differentialBlocks([&]() {
         switch (dataForm) {
           case DATA_FORM_ABSOLUTE: {
@@ -101,7 +100,6 @@ Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypePr
           }
         }
       }()),
-      sensorType(sensorTypeProtobuf),
       dataForm(dataForm) {
   if (sensorTypeProtobuf == SensorTypeProtobuf::SENSOR_TYPE_NONE) {
     throw SensorTypeIsNoneException("Channel");
@@ -109,19 +107,17 @@ Channel::Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypePr
 }
 
 Channel::Channel(const ChannelProtobuf& channelProtobuf) noexcept
-    : ppgMetaData(PpgMetaData(channelProtobuf.ppg_metadata())),
-      accMetaData(AccMetaData(channelProtobuf.acc_metadata())),
-      differentialBlocks(PcoreProtobuf::Convert::protobufToVector<DifferentialBlock>(channelProtobuf.differential_blocks())),
-      absoluteBlock(AbsoluteBlock()),
-      sensorType([&]() {
+    : metaData([&]() -> MetaData {
         if (channelProtobuf.has_acc_metadata()) {
-          return SensorTypeProtobuf::SENSOR_TYPE_ACC;
+          return AccMetaData(channelProtobuf.acc_metadata());
         } else if (channelProtobuf.has_ppg_metadata()) {
-          return SensorTypeProtobuf::SENSOR_TYPE_PPG;
+          return PpgMetaData(channelProtobuf.ppg_metadata());
         } else {
-          return SensorTypeProtobuf::SENSOR_TYPE_NONE;
+          return std::nullopt;
         }
       }()),
+      differentialBlocks(PcoreProtobuf::Convert::protobufToVector<DifferentialBlock>(channelProtobuf.differential_blocks())),
+      absoluteBlock(AbsoluteBlock()),
       dataForm([&]() {
         if (channelProtobuf.has_ppg_metadata() || channelProtobuf.has_acc_metadata() || !channelProtobuf.differential_blocks().empty()) {
           return DataForm::DATA_FORM_DIFFERENTIAL;
@@ -131,12 +127,7 @@ Channel::Channel(const ChannelProtobuf& channelProtobuf) noexcept
       }()) {}
 
 Channel::Channel() noexcept
-    : ppgMetaData(PpgMetaData()),
-      accMetaData(AccMetaData()),
-      differentialBlocks(DifferentialBlocks()),
-      absoluteBlock(AbsoluteBlock()),
-      sensorType(SensorTypeProtobuf::SENSOR_TYPE_NONE),
-      dataForm(DataForm::DATA_FORM_NONE) {}
+    : metaData(std::nullopt), differentialBlocks(DifferentialBlocks()), absoluteBlock(AbsoluteBlock()), dataForm(DataForm::DATA_FORM_NONE) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
@@ -149,16 +140,34 @@ AbsoluteBlock Channel::getAbsoluteBlock() const noexcept {
   return this->absoluteBlock;
 }
 
-AccMetaData Channel::getAccMetaData() const noexcept {
-  return this->accMetaData;
+std::optional<AccMetaData> Channel::getAccMetaData() const noexcept {
+  if (!this->metaData.has_value()) {
+    return std::nullopt;
+  }
+  if (!std::holds_alternative<AccMetaData>(*this->metaData)) {
+    return std::nullopt;
+  }
+  return std::get<AccMetaData>(*this->metaData);
 }
 
-PpgMetaData Channel::getPpgMetaData() const noexcept {
-  return this->ppgMetaData;
+std::optional<PpgMetaData> Channel::getPpgMetaData() const noexcept {
+  if (!this->metaData.has_value()) {
+    return std::nullopt;
+  }
+  if (!std::holds_alternative<PpgMetaData>(*this->metaData)) {
+    return std::nullopt;
+  }
+  return std::get<PpgMetaData>(*this->metaData);
 }
 
 SensorTypeProtobuf Channel::getSensorType() const noexcept {
-  return this->sensorType;
+  if (!this->metaData.has_value()) {
+    return SensorTypeProtobuf::SENSOR_TYPE_NONE;
+  } else if (std::holds_alternative<AccMetaData>(*this->metaData)) {
+    return SensorTypeProtobuf::SENSOR_TYPE_ACC;
+  } else {
+    return SensorTypeProtobuf::SENSOR_TYPE_PPG;
+  }
 }
 
 DataForm Channel::getDataForm() const noexcept {
@@ -166,11 +175,24 @@ DataForm Channel::getDataForm() const noexcept {
 }
 
 bool Channel::hasAccMetaData() const noexcept {
-  return this->accMetaData.isSet();
+  if (!this->metaData.has_value()) {
+    return false;
+  }
+  if (!std::holds_alternative<AccMetaData>(*this->metaData)) {
+    return false;
+  }
+  return std::get<AccMetaData>(*this->metaData).isSet();
+  ;
 }
 
 bool Channel::hasPpgMetaData() const noexcept {
-  return this->ppgMetaData.isSet();
+  if (!this->metaData.has_value()) {
+    return false;
+  }
+  if (!std::holds_alternative<PpgMetaData>(*this->metaData)) {
+    return false;
+  }
+  return std::get<PpgMetaData>(*this->metaData).isSet();
 }
 
 bool Channel::hasDifferentialBlocks() const noexcept {
@@ -191,10 +213,10 @@ bool Channel::isSet() const noexcept {
     }
   }
   // clang-format off
-  return this->ppgMetaData.isSet()
-      || this->accMetaData.isSet()
+  return this->hasPpgMetaData()
+      || this->hasAccMetaData()
       || this->absoluteBlock.isSet()
-      || this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
+      || this->getSensorType() != SensorTypeProtobuf::SENSOR_TYPE_NONE
       || this->dataForm != DataForm::DATA_FORM_NONE;
   // clang-format on
 }
@@ -207,13 +229,13 @@ ChannelJson Channel::toJson() const noexcept {
   switch (this->dataForm) {
     case DataForm::DATA_FORM_ABSOLUTE: {
       channelJson[PcoreJson::Key::absolute_block] = this->absoluteBlock.toJson();
-      switch (this->sensorType) {
+      switch (this->getSensorType()) {
         case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
-          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
+          channelJson[PcoreJson::Key::ppg_metadata] = this->getPpgMetaData()->toJson();
           break;
         }
         case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
-          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
+          channelJson[PcoreJson::Key::acc_metadata] = this->getAccMetaData()->toJson();
           break;
         }
         default: {
@@ -224,13 +246,13 @@ ChannelJson Channel::toJson() const noexcept {
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       channelJson[PcoreJson::Key::differential_blocks] = PcoreJson::Convert::vectorToJson(this->differentialBlocks);
-      switch (this->sensorType) {
+      switch (this->getSensorType()) {
         case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
-          channelJson[PcoreJson::Key::ppg_metadata] = this->ppgMetaData.toJson();
+          channelJson[PcoreJson::Key::ppg_metadata] = this->getPpgMetaData()->toJson();
           break;
         }
         case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
-          channelJson[PcoreJson::Key::acc_metadata] = this->accMetaData.toJson();
+          channelJson[PcoreJson::Key::acc_metadata] = this->getAccMetaData()->toJson();
           break;
         }
         default: {
@@ -256,23 +278,26 @@ void Channel::serialize(ChannelProtobuf* channelProtobuf) const {
   if (this->dataForm != DataForm::DATA_FORM_DIFFERENTIAL) {
     throw WrongDataFormException("Channel::serialize", "only for differential data form");
   }
-  if (this->hasAccMetaData() && this->hasPpgMetaData()) {
-    throw OnlyOneParameterAllowedException("Channel::serialize", "AccMetaData", "PpgMetaData");
-  }
-  if (this->hasAccMetaData()) {
-    AccMetaDataProtobuf accMetaDataProtobuf;
-    this->accMetaData.serialize(&accMetaDataProtobuf);
-    channelProtobuf->mutable_acc_metadata()->CopyFrom(accMetaDataProtobuf);
-  } else if (this->hasPpgMetaData()) {
-    PpgMetaDataProtobuf ppgMetaDataProtobuf;
-    this->ppgMetaData.serialize(&ppgMetaDataProtobuf);
-    channelProtobuf->mutable_ppg_metadata()->CopyFrom(ppgMetaDataProtobuf);
-  } else {
-    throw SensorTypeIsNoneException("Channel::serialize");
-  }
   for (const auto& differentialBlock : this->differentialBlocks) {
     auto* differentialBlockProtobuf = channelProtobuf->add_differential_blocks();
     differentialBlock.serialize(differentialBlockProtobuf);
+  }
+  switch (this->getSensorType()) {
+    case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
+      PpgMetaDataProtobuf ppgMetaDataProtobuf;
+      this->getPpgMetaData()->serialize(&ppgMetaDataProtobuf);
+      channelProtobuf->mutable_ppg_metadata()->CopyFrom(ppgMetaDataProtobuf);
+      break;
+    }
+    case SensorTypeProtobuf::SENSOR_TYPE_ACC: {
+      AccMetaDataProtobuf accMetaDataProtobuf;
+      this->getAccMetaData()->serialize(&accMetaDataProtobuf);
+      channelProtobuf->mutable_acc_metadata()->CopyFrom(accMetaDataProtobuf);
+      break;
+    }
+    default: {
+      return;
+    }
   }
 }
 
@@ -308,11 +333,18 @@ bool Channel::operator==(const IPCore<ChannelProtobuf>& channel) const noexcept 
       return false;
     }
   }
+  if (this->metaData.has_value() != derived->metaData.has_value()) {
+    return false;
+  }
+  bool isEqualMetaData = !this->metaData.has_value() && !derived->metaData.has_value();
+  if (this->metaData.has_value() && derived->metaData.has_value()) {
+    isEqualMetaData = *this->metaData == *derived->metaData;
+  }
+
   // clang-format off
-  return this->accMetaData == derived->accMetaData
-      && this->ppgMetaData == derived->ppgMetaData
+  return isEqualMetaData
       && this->absoluteBlock == derived->absoluteBlock
-      && this->sensorType == derived->sensorType
+      && this->getSensorType() == derived->getSensorType()
       && this->dataForm == derived->dataForm;
   // clang-format off
 }

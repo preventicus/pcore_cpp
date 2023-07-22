@@ -50,6 +50,7 @@ using DifferentialBlocks = std::vector<DifferentialBlock>;
 using ChannelJson = Json::Value;
 using DifferentialBlocksJson = Json::Value;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
+using MetaData = std::optional<std::variant<AccMetaData, PpgMetaData>>;
 
 namespace PCore {
 class Channel final : public IPCore<ChannelProtobuf> {
@@ -57,7 +58,7 @@ class Channel final : public IPCore<ChannelProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit Channel(AccMetaData accMetadata, AbsoluteBlock absoluteBlock) noexcept;
+  explicit Channel(AccMetaData accMetaData, AbsoluteBlock absoluteBlock) noexcept;
   explicit Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock) noexcept;
   explicit Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks) noexcept;
   explicit Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks) noexcept;
@@ -70,8 +71,8 @@ class Channel final : public IPCore<ChannelProtobuf> {
   ////////////////////////////////////////////////////////////////
   [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const noexcept;
   [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const noexcept;
-  [[nodiscard]] AccMetaData getAccMetaData() const noexcept;
-  [[nodiscard]] PpgMetaData getPpgMetaData() const noexcept;
+  [[nodiscard]] std::optional<AccMetaData> getAccMetaData() const noexcept;
+  [[nodiscard]] std::optional<PpgMetaData> getPpgMetaData() const noexcept;
   [[nodiscard]] SensorTypeProtobuf getSensorType() const noexcept;
   [[nodiscard]] DataForm getDataForm() const noexcept;
   [[nodiscard]] bool hasAccMetaData() const noexcept;
@@ -104,11 +105,9 @@ class Channel final : public IPCore<ChannelProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                          Members                           //
   ////////////////////////////////////////////////////////////////
-  PpgMetaData ppgMetaData;
-  AccMetaData accMetaData;
+  MetaData metaData;
   DifferentialBlocks differentialBlocks;
   AbsoluteBlock absoluteBlock;
-  SensorTypeProtobuf sensorType;
   DataForm dataForm;
 };
 }  // namespace PCore
