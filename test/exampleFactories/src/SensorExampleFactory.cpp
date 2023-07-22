@@ -128,15 +128,15 @@ SensorJson SensorExampleFactory::buildSensorJson(const Sensor& sensor) {
   }
   switch (sensor.getDataFrom()) {
     case DataForm::DATA_FORM_ABSOLUTE: {
-      auto absoluteTimestampsContainer = sensor.getAbsoluteTimestampsContainer();
+      auto absoluteTimestampsContainer = sensor.getTimestamps<AbsoluteTimestampsContainer>();
       sensorJson[PcoreJson::Key::absolute_timestamps_container] =
-          AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(absoluteTimestampsContainer);
+          AbsoluteTimestampsContainerExampleFactory::buildAbsoluteTimestampsContainerJson(*absoluteTimestampsContainer);
       break;
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
-      auto differentialTimestampsContainer = sensor.getDifferentialTimestampsContainer();
+      auto differentialTimestampsContainer = sensor.getTimestamps<DifferentialTimestampsContainer>();
       sensorJson[PcoreJson::Key::differential_timestamps_container] =
-          DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(differentialTimestampsContainer);
+          DifferentialTimestampsContainerExampleFactory::buildDifferentialTimestampsContainerJson(*differentialTimestampsContainer);
       break;
     }
     case DATA_FORM_NONE:

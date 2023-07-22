@@ -79,6 +79,9 @@ UnixTimestamp DifferentialTimestampsContainer::getFirstUnixTimestampInMs() const
 
 UnixTimestamp DifferentialTimestampsContainer::getLastUnixTimestampInMs(UnixTimestamp firstUnixTimestampInLastBlock,
                                                                         size_t numberOfElementsInLastBlock) const noexcept {
+  if (!this->isSet()) {
+    return 0;
+  }
   return firstUnixTimestampInLastBlock + this->timestampsDifferencesInMs.back() * (numberOfElementsInLastBlock - 1);
 }
 

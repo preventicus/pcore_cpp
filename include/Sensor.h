@@ -46,6 +46,7 @@ using Channels = std::vector<Channel>;
 using SensorJson = Json::Value;
 using Duration = uint64_t;
 using ChannelsJson = Json::Value;
+using Timestamps = std::optional<std::variant<AbsoluteTimestampsContainer, DifferentialTimestampsContainer>>;
 
 namespace PCore {
 class Sensor final : public IPCore<SensorProtobuf> {
@@ -64,8 +65,10 @@ class Sensor final : public IPCore<SensorProtobuf> {
   ////////////////////////////////////////////////////////////////
   [[nodiscard]] SensorTypeProtobuf getSensorType() const noexcept;
   [[nodiscard]] Channels getChannels() const noexcept;
-  [[nodiscard]] DifferentialTimestampsContainer getDifferentialTimestampsContainer() const noexcept;
-  [[nodiscard]] AbsoluteTimestampsContainer getAbsoluteTimestampsContainer() const noexcept;
+  template <typename T>
+  [[nodiscard]] std::optional<T> getTimestamps() const noexcept;
+  template <typename T>
+  [[nodiscard]] bool hasTimestamps() const noexcept;
   [[nodiscard]] DataForm getDataFrom() const noexcept;
   [[nodiscard]] UnixTimestamp getFirstUnixTimestampInMs() const noexcept;
   [[nodiscard]] UnixTimestamp getLastUnixTimestampInMs() const noexcept;
@@ -98,8 +101,6 @@ class Sensor final : public IPCore<SensorProtobuf> {
   ////////////////////////////////////////////////////////////////
   SensorTypeProtobuf sensorType;
   Channels channels;
-  DifferentialTimestampsContainer differentialTimestampsContainer;
-  AbsoluteTimestampsContainer absoluteTimestampsContainer;
-  DataForm dataForm;
+  Timestamps timestamps;
 };
 }  // namespace PCore
