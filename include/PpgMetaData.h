@@ -40,6 +40,8 @@ using PpgMetaDataProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_PpgMetad
 using Wavelength = uint32_t;
 using PpgMetaDataJson = Json::Value;
 
+using Light = std::optional<std::variant<Wavelength, ColorProtobuf>>;
+
 namespace PCore {
 class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
  public:
@@ -55,10 +57,11 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] ColorProtobuf getColor() const noexcept;
-  [[nodiscard]] Wavelength getWavelengthInNm() const noexcept;
-  [[nodiscard]] bool hasColor() const noexcept;
-  [[nodiscard]] bool hasWavelength() const noexcept;
+
+  template <typename L>
+  [[nodiscard]] std::optional<L> getLight() const noexcept;
+  template <typename L>
+  [[nodiscard]] bool hasLight() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
@@ -75,7 +78,6 @@ class PpgMetaData final : public IPCore<PpgMetaDataProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                          Members                           //
   ////////////////////////////////////////////////////////////////
-  ColorProtobuf color;
-  Wavelength wavelengthInNm;
+  Light light;
 };
 }  // namespace PCore

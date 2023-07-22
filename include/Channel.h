@@ -50,34 +50,38 @@ using DifferentialBlocks = std::vector<DifferentialBlock>;
 using ChannelJson = Json::Value;
 using DifferentialBlocksJson = Json::Value;
 using DifferentialBlocks = std::vector<DifferentialBlock>;
+using MetaData = std::optional<std::variant<AccMetaData, PpgMetaData>>;
+using Values = std::optional<std::variant<AbsoluteBlock, DifferentialBlocks>>;
 
 namespace PCore {
+
 class Channel final : public IPCore<ChannelProtobuf> {
  public:
   ////////////////////////////////////////////////////////////////
   //                       Constructors                         //
   ////////////////////////////////////////////////////////////////
-  explicit Channel(AccMetaData accMetadata, AbsoluteBlock absoluteBlock) noexcept;
+  explicit Channel(AccMetaData accMetaData, AbsoluteBlock absoluteBlock) noexcept;
   explicit Channel(PpgMetaData ppgMetaData, AbsoluteBlock absoluteBlock) noexcept;
   explicit Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks) noexcept;
   explicit Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks) noexcept;
-  explicit Channel(const ChannelJson& channelJson, SensorTypeProtobuf sensorTypeProtobuf, DataForm dataForm);
+  explicit Channel(const ChannelJson& channelJson);
   explicit Channel(const ChannelProtobuf& channelProtobuf) noexcept;
   explicit Channel() noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] DifferentialBlocks getDifferentialBlocks() const noexcept;
-  [[nodiscard]] AbsoluteBlock getAbsoluteBlock() const noexcept;
-  [[nodiscard]] AccMetaData getAccMetaData() const noexcept;
-  [[nodiscard]] PpgMetaData getPpgMetaData() const noexcept;
+  template <typename V>
+  [[nodiscard]] std::optional<V> getValues() const noexcept;
+  template <typename M>
+  [[nodiscard]] std::optional<M> getMetaData() const noexcept;
+  template <typename V>
+  [[nodiscard]] bool hasValues() const noexcept;
+  template <typename M>
+  [[nodiscard]] bool hasMetaData() const noexcept;
+
   [[nodiscard]] SensorTypeProtobuf getSensorType() const noexcept;
   [[nodiscard]] DataForm getDataForm() const noexcept;
-  [[nodiscard]] bool hasAccMetaData() const noexcept;
-  [[nodiscard]] bool hasPpgMetaData() const noexcept;
-  [[nodiscard]] bool hasDifferentialBlocks() const noexcept;
-  [[nodiscard]] bool hasAbsoluteBlock() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
@@ -101,14 +105,15 @@ class Channel final : public IPCore<ChannelProtobuf> {
                                                           const AbsoluteValues& absoluteValues) const noexcept;
   [[nodiscard]] AbsoluteBlock calculateAbsoluteBlock(const DifferentialBlocks& differentialBlocks) noexcept;
 
+  void serializeValues(ChannelProtobuf* channelProtobuf) const;
+  void serializeMetaData(ChannelProtobuf* channelProtobuf) const;
+
+  bool operator==(const Values& values) const noexcept;
+  bool operator==(const MetaData& metaData) const noexcept;
   ////////////////////////////////////////////////////////////////
   //                          Members                           //
   ////////////////////////////////////////////////////////////////
-  PpgMetaData ppgMetaData;
-  AccMetaData accMetaData;
-  DifferentialBlocks differentialBlocks;
-  AbsoluteBlock absoluteBlock;
-  SensorTypeProtobuf sensorType;
-  DataForm dataForm;
+  MetaData metaData;
+  Values values;
 };
 }  // namespace PCore

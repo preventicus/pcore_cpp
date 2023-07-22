@@ -40,39 +40,64 @@ using namespace PCore;
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-AccMetaData::AccMetaData(CoordinateProtobuf coordinate) noexcept : coordinate(coordinate), norm(NormProtobuf::NORM_NONE) {}
+AccMetaData::AccMetaData(CoordinateProtobuf coordinate) noexcept : type(coordinate) {}
 
-AccMetaData::AccMetaData(NormProtobuf norm) noexcept : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(norm) {}
+AccMetaData::AccMetaData(NormProtobuf norm) noexcept : type(norm) {}
 
 AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
-    : coordinate(PcoreProtobuf::Convert::coordinateProtobufFromString(accMetaDataJson[PcoreJson::Key::coordinate].asString())),
-      norm(PcoreProtobuf::Convert::normProtobufFromString(accMetaDataJson[PcoreJson::Key::norm].asString())) {
-  if (this->hasNorm() && this->hasCoordinate())
+    : type([&]() -> Type {
+        if (accMetaDataJson.isMember(PcoreJson::Key::coordinate)) {
+          return PcoreProtobuf::Convert::coordinateProtobufFromString(accMetaDataJson[PcoreJson::Key::coordinate].asString());
+        } else if (accMetaDataJson.isMember(PcoreJson::Key::norm)) {
+          return PcoreProtobuf::Convert::normProtobufFromString(accMetaDataJson[PcoreJson::Key::norm].asString());
+        } else {
+          return std::nullopt;
+        }
+      }()) {
+  if (this->hasType<NormProtobuf>() && this->hasType<CoordinateProtobuf>())
     throw OnlyOneParameterAllowedException("AccMetaData", "Norm", "Coordinate");
 }
 
 AccMetaData::AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf) noexcept
-    : coordinate(accMetaDataProtobuf.coordinate()), norm(accMetaDataProtobuf.norm()) {}
+    : type([&]() -> Type {
+        if (accMetaDataProtobuf.has_coordinate()) {
+          return accMetaDataProtobuf.coordinate();
+        } else if (accMetaDataProtobuf.has_norm()) {
+          return accMetaDataProtobuf.norm();
+        } else {
+          return std::nullopt;
+        }
+      }()) {}
 
-AccMetaData::AccMetaData() noexcept : coordinate(CoordinateProtobuf::COORDINATE_NONE), norm(NormProtobuf::NORM_NONE) {}
+AccMetaData::AccMetaData() noexcept : type(std::nullopt) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-CoordinateProtobuf AccMetaData::getCoordinate() const noexcept {
-  return this->coordinate;
+template <typename T>
+std::optional<T> AccMetaData::getType() const noexcept {
+  if (!this->type.has_value()) {
+    return std::nullopt;
+  }
+  if (!std::holds_alternative<T>(*this->type)) {
+    return std::nullopt;
+  }
+  return std::get<T>(*this->type);
 }
 
-NormProtobuf AccMetaData::getNorm() const noexcept {
-  return this->norm;
-}
-
-bool AccMetaData::hasNorm() const noexcept {
-  return this->norm != NormProtobuf::NORM_NONE;
-}
-
-bool AccMetaData::hasCoordinate() const noexcept {
-  return this->coordinate != CoordinateProtobuf::COORDINATE_NONE;
+template <typename T>
+bool AccMetaData::hasType() const noexcept {
+  if (!this->type.has_value()) {
+    return false;
+  }
+  if (!std::holds_alternative<T>(*this->type)) {
+    return false;
+  }
+  if constexpr (std::is_same_v<T, NormProtobuf>) {
+    return std::get<T>(*this->type) != NormProtobuf::NORM_NONE;
+  } else {
+    return std::get<T>(*this->type) != CoordinateProtobuf::COORDINATE_NONE;
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -80,7 +105,7 @@ bool AccMetaData::hasCoordinate() const noexcept {
 ////////////////////////////////////////////////////////////////
 
 bool AccMetaData::isSet() const noexcept {
-  return this->hasNorm() || this->hasCoordinate();
+  return this->hasType<NormProtobuf>() || this->hasType<CoordinateProtobuf>();
 }
 
 Json::Value AccMetaData::toJson() const noexcept {
@@ -88,11 +113,11 @@ Json::Value AccMetaData::toJson() const noexcept {
   if (!this->isSet()) {
     return accMetaDataJson;
   }
-  if (this->hasNorm()) {
-    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(this->norm);
+  if (this->hasType<NormProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(*this->getType<NormProtobuf>());
   }
-  if (this->hasCoordinate()) {
-    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(this->coordinate);
+  if (this->hasType<CoordinateProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(*this->getType<CoordinateProtobuf>());
   }
   return accMetaDataJson;
 }
@@ -104,14 +129,14 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
   if (!this->isSet()) {
     return;
   }
-  if (this->hasCoordinate() && this->hasNorm()) {
+  if (this->hasType<CoordinateProtobuf>() && this->hasType<NormProtobuf>()) {
     throw OnlyOneParameterAllowedException("AccMetaData::serialize", "Coordinate", "Norm");
   }
-  if (this->hasCoordinate()) {
-    accMetaDataProtobuf->set_coordinate(this->coordinate);
+  if (this->hasType<CoordinateProtobuf>()) {
+    accMetaDataProtobuf->set_coordinate(*this->getType<CoordinateProtobuf>());
   }
-  if (this->hasNorm()) {
-    accMetaDataProtobuf->set_norm(this->norm);
+  if (this->hasType<NormProtobuf>()) {
+    accMetaDataProtobuf->set_norm(*this->getType<NormProtobuf>());
   }
 }
 
@@ -121,7 +146,13 @@ void AccMetaData::switchDataForm() {
 
 bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const noexcept {
   if (const auto* derived = dynamic_cast<const AccMetaData*>(&accMetaData)) {
-    return this->coordinate == derived->coordinate && this->norm == derived->norm;
+    if (this->type.has_value() != derived->type.has_value()) {
+      return false;
+    }
+    if (!this->type.has_value() && !derived->type.has_value()) {
+      return true;
+    }
+    return this->type == derived->type;
   }
   return false;
 }

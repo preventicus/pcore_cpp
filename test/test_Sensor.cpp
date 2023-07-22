@@ -88,42 +88,38 @@ TEST(SensorTest, TestGetDataFormWithSensorAccWithTwoChannelsInAbsoluteForm) {
 TEST(SensorTest, TestGetAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
   auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
-  auto absoluteTimestampsContainer2 = sensor.getAbsoluteTimestampsContainer();
+  auto absoluteTimestampsContainer2 = *sensor.getTimestamps<AbsoluteTimestampsContainer>();
   EXPECT_TRUE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
 }
 
 TEST(SensorTest, TestGetAbsoluteTimestampsContainerWithSensorNotSet) {
   auto sensor = SensorExampleFactory::sensorNotSet();
-  auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerNotSet();
-  auto absoluteTimestampsContainer2 = sensor.getAbsoluteTimestampsContainer();
-  EXPECT_TRUE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
+  auto absoluteTimestampsContainer = sensor.getTimestamps<AbsoluteTimestampsContainer>();
+  EXPECT_EQ(absoluteTimestampsContainer, std::nullopt);
 }
 
 TEST(SensorTest, TestGetAbsoluteTimestampsWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
-  auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerNotSet();
-  auto absoluteTimestampsContainer2 = sensor.getAbsoluteTimestampsContainer();
-  EXPECT_TRUE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
+  auto absoluteTimestampsContainer = sensor.getTimestamps<AbsoluteTimestampsContainer>();
+  EXPECT_EQ(absoluteTimestampsContainer, std::nullopt);
 }
 
 TEST(SensorTest, TestGetDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
-  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
-  auto differentialTimestampsContainer2 = sensor.getDifferentialTimestampsContainer();
-  EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
+  auto differentialTimestampsContainer = sensor.getTimestamps<DifferentialTimestampsContainer>();
+  EXPECT_EQ(differentialTimestampsContainer, std::nullopt);
 }
 
 TEST(SensorTest, TestGetDifferentialTimestampsWithSensorNotSet) {
   auto sensor = SensorExampleFactory::sensorNotSet();
-  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerNotSet();
-  auto differentialTimestampsContainer2 = sensor.getDifferentialTimestampsContainer();
-  EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
+  auto differentialTimestampsContainer = sensor.getTimestamps<DifferentialTimestampsContainer>();
+  EXPECT_EQ(differentialTimestampsContainer, std::nullopt);
 }
 
 TEST(SensorTest, TestGetDifferentialTimestampsWithSensorAccWithTwoChannelsInDifferentialForm) {
   auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
   auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
-  auto differentialTimestampsContainer2 = sensor.getDifferentialTimestampsContainer();
+  auto differentialTimestampsContainer2 = *sensor.getTimestamps<DifferentialTimestampsContainer>();
   EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
@@ -423,4 +419,38 @@ TEST(SensorTest, TestSwitchDataFormWithSensorNotSet) {
   auto sensor = SensorExampleFactory::sensorNotSet();
   sensor.switchDataForm();
   EXPECT_FALSE(sensor.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                      Test has Methods                      //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
 }

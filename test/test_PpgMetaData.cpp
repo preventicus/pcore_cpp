@@ -41,22 +41,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 TEST(PpgMetaDataTest, TestGetColorWithPpgMetDataWithColorGreen) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
-  EXPECT_EQ(ppgMetaData.getColor(), ColorProtobuf::COLOR_GREEN);
+  EXPECT_EQ(ppgMetaData.getLight<ColorProtobuf>(), ColorProtobuf::COLOR_GREEN);
 }
 
 TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataWithWavelength255) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
-  EXPECT_EQ(ppgMetaData.getWavelengthInNm(), 255);
+  EXPECT_EQ(ppgMetaData.getLight<Wavelength>(), 255);
 }
 
 TEST(PpgMetaDataTest, TestGetColorWithPpgMetaDataNotSet) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-  EXPECT_EQ(ppgMetaData.getColor(), ColorProtobuf::COLOR_NONE);
+  EXPECT_EQ(ppgMetaData.getLight<ColorProtobuf>(), std::nullopt);
 }
 
 TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataNotSet) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-  EXPECT_EQ(ppgMetaData.getWavelengthInNm(), 0);
+  EXPECT_EQ(ppgMetaData.getLight<Wavelength>(), std::nullopt);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -302,20 +302,20 @@ TEST(PpgMetaDataTest, TestSwitchDataFormWithPpgMetaDataNotSet) {
 
 TEST(PpgMetaDataTest, TestHasColorWithPpgMetDataWithColorBlue) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
-  EXPECT_TRUE(ppgMetaData.hasColor());
+  EXPECT_TRUE(ppgMetaData.hasLight<ColorProtobuf>());
 }
 
 TEST(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithColorNone) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithColorNone();
-  EXPECT_FALSE(ppgMetaData.hasColor());
+  EXPECT_FALSE(ppgMetaData.hasLight<ColorProtobuf>());
 }
 
 TEST(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithWavelength255) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
-  EXPECT_TRUE(ppgMetaData.hasWavelength());
+  EXPECT_TRUE(ppgMetaData.hasLight<Wavelength>());
 }
 
 TEST(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithWavelength0) {
   auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0();
-  EXPECT_FALSE(ppgMetaData.hasWavelength());
+  EXPECT_FALSE(ppgMetaData.hasLight<Wavelength>());
 }

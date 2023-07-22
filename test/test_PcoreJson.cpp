@@ -64,7 +64,7 @@ TEST(PcoreJson, TestJsonToValueWithVersion) {
 
 TEST(PcoreJson, TestJsonToVectorWithDifferentialBlock) {
   auto channel = ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData();
-  auto differentialBlocksExpected = channel.getDifferentialBlocks();
+  auto differentialBlocksExpected = *channel.getValues<DifferentialBlocks>();
   auto channelJson = ChannelExampleFactory::buildChannelJson(channel);
   auto differentialBlocksResult = PcoreJson::Convert::jsonToVector<DifferentialBlock>(channelJson, PcoreJson::Key::differential_blocks);
 
@@ -147,8 +147,7 @@ TEST(PcoreJson, TestJsonToVectorWithChannel) {
   auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
   auto channelsExpected = sensor.getChannels();
   auto sensorJson = SensorExampleFactory::buildSensorJson(sensor);
-  auto channelsResult = PcoreJson::Convert::jsonToVector<Channel>(sensorJson, PcoreJson::Key::channels, SensorTypeProtobuf::SENSOR_TYPE_PPG,
-                                                                  DataForm::DATA_FORM_DIFFERENTIAL);
+  auto channelsResult = PcoreJson::Convert::jsonToVector<Channel>(sensorJson, PcoreJson::Key::channels);
 
   EXPECT_TRUE(channelsExpected.size() == channelsResult.size());
   for (size_t i = 0; i < channelsExpected.size(); i++) {
