@@ -42,44 +42,69 @@ using WavelegthJson = Json::Value;
 ////////////////////////////////////////////////////////////////
 //                       Constructors                         //
 ////////////////////////////////////////////////////////////////
-PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) noexcept : color(colorProtobuf), wavelengthInNm(0) {}
+PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) noexcept : light(colorProtobuf) {}
 
-PpgMetaData::PpgMetaData(Wavelength wavelengthInNm) noexcept : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(wavelengthInNm) {}
+PpgMetaData::PpgMetaData(Wavelength wavelengthInNm) noexcept : light(wavelengthInNm) {}
 
 PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
-    : color(PcoreProtobuf::Convert::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString())), wavelengthInNm([&]() {
-        if (ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asInt() < 0) {
-          throw WrongValueException("PpgMetaData", "wavelengthInNm is negative in json.");
+    : light([&]() -> Light {
+        if (ppgMetaDataJson.isMember(PcoreJson::Key::wavelength_nm)) {
+          if (ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asInt() < 0) {
+            throw WrongValueException("PpgMetaData", "wavelengthInNm is negative in json.");
+          }
+          return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
+        } else if (ppgMetaDataJson.isMember(PcoreJson::Key::color)) {
+          return PcoreProtobuf::Convert::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString());
+        } else {
+          return std::nullopt;
         }
-        return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
       }()) {
-  if (this->hasColor() && this->hasWavelength()) {
+  if (this->hasLight<ColorProtobuf>() && this->hasLight<Wavelength>()) {
     throw OnlyOneParameterAllowedException("PpgMetaData", "Color", "Wavelength");
   }
 }
 
 PpgMetaData::PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf) noexcept
-    : color(ppgMetaDataProtobuf.color()), wavelengthInNm(ppgMetaDataProtobuf.wavelength_nm()) {}
+    : light([&]() -> Light {
+        if (ppgMetaDataProtobuf.has_color()) {
+          return ppgMetaDataProtobuf.color();
+        } else if (ppgMetaDataProtobuf.has_wavelength_nm()) {
+          return ppgMetaDataProtobuf.wavelength_nm();
+        } else {
+          return std::nullopt;
+        }
+      }()) {}
 
-PpgMetaData::PpgMetaData() noexcept : color(ColorProtobuf::COLOR_NONE), wavelengthInNm(0) {}
+PpgMetaData::PpgMetaData() noexcept : light(std::nullopt) {}
 
 ////////////////////////////////////////////////////////////////
 //                          Getter                            //
 ////////////////////////////////////////////////////////////////
-ColorProtobuf PpgMetaData::getColor() const noexcept {
-  return this->color;
+
+template <typename L>
+[[nodiscard]] std::optional<L> PpgMetaData::getLight() const noexcept {
+  if (!this->light.has_value()) {
+    return std::nullopt;
+  }
+  if (!std::holds_alternative<L>(*this->light)) {
+    return std::nullopt;
+  }
+  return std::get<L>(*this->light);
 }
 
-Wavelength PpgMetaData::getWavelengthInNm() const noexcept {
-  return this->wavelengthInNm;
-}
-
-bool PpgMetaData::hasColor() const noexcept {
-  return this->color != ColorProtobuf::COLOR_NONE;
-}
-
-bool PpgMetaData::hasWavelength() const noexcept {
-  return this->wavelengthInNm > 0;
+template <typename L>
+[[nodiscard]] bool PpgMetaData::hasLight() const noexcept {
+  if (!this->light.has_value()) {
+    return false;
+  }
+  if (!std::holds_alternative<L>(*this->light)) {
+    return false;
+  }
+  if constexpr (std::is_same_v<L, Wavelength>) {
+    return std::get<L>(*this->light) != 0;
+  } else {
+    return std::get<L>(*this->light) != ColorProtobuf::COLOR_NONE;
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -87,7 +112,7 @@ bool PpgMetaData::hasWavelength() const noexcept {
 ////////////////////////////////////////////////////////////////
 
 bool PpgMetaData::isSet() const noexcept {
-  return this->hasColor() || this->hasWavelength();
+  return this->hasLight<ColorProtobuf>() || this->hasLight<Wavelength>();
 }
 
 PpgMetaDataJson PpgMetaData::toJson() const noexcept {
@@ -95,13 +120,13 @@ PpgMetaDataJson PpgMetaData::toJson() const noexcept {
   if (!this->isSet()) {
     return ppgMetaDataJson;
   }
-  if (this->hasWavelength()) {
+  if (this->hasLight<Wavelength>()) {
     WavelegthJson wavelengthJson(Json::uintValue);
-    wavelengthJson = this->wavelengthInNm;
+    wavelengthJson = *this->getLight<Wavelength>();
     ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
   }
-  if (this->hasColor()) {
-    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(this->color);
+  if (this->hasLight<ColorProtobuf>()) {
+    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(*this->getLight<ColorProtobuf>());
   }
   return ppgMetaDataJson;
 }
@@ -113,14 +138,14 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
   if (!this->isSet()) {
     return;
   }
-  if (this->hasColor() && this->hasWavelength()) {
+  if (this->hasLight<ColorProtobuf>() && this->hasLight<Wavelength>()) {
     throw OnlyOneParameterAllowedException("PpgMetaData::serialize", "Color", "Wavelength");
   }
-  if (this->hasColor()) {
-    ppgMetaDataProtobuf->set_color(this->color);
+  if (this->hasLight<ColorProtobuf>()) {
+    ppgMetaDataProtobuf->set_color(*this->getLight<ColorProtobuf>());
   }
-  if (this->hasWavelength()) {
-    ppgMetaDataProtobuf->set_wavelength_nm(this->wavelengthInNm);
+  if (this->hasLight<Wavelength>()) {
+    ppgMetaDataProtobuf->set_wavelength_nm(*this->getLight<Wavelength>());
   }
 }
 
@@ -130,7 +155,13 @@ void PpgMetaData::switchDataForm() {
 
 bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const noexcept {
   if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
-    return this->color == derived->color && this->wavelengthInNm == derived->wavelengthInNm;
+    if (this->light.has_value() != derived->light.has_value()) {
+      return false;
+    }
+    if (!this->light.has_value() && !derived->light.has_value()) {
+      return true;
+    }
+    return this->light == derived->light;
   }
   return false;
 }

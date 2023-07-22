@@ -71,10 +71,10 @@ PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(const PpgMetaDat
   if (!ppgMetaData.isSet()) {
     return ppgMetaDataJson;
   }
-  if (ppgMetaData.hasWavelength()) {
-    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = ppgMetaData.getWavelengthInNm();
-  } else if (ppgMetaData.hasColor()) {
-    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(ppgMetaData.getColor());
+  if (ppgMetaData.hasLight<Wavelength>()) {
+    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = *ppgMetaData.getLight<Wavelength>();
+  } else if (ppgMetaData.hasLight<ColorProtobuf>()) {
+    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(*ppgMetaData.getLight<ColorProtobuf>());
   }
   return ppgMetaDataJson;
 }
