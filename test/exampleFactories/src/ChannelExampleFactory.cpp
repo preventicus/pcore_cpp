@@ -104,10 +104,6 @@ ChannelJson ChannelExampleFactory::buildChannelJson(const Channel& channel) {
   if (!channel.isSet()) {
     return channelJson;
   }
-
-  bool a = channel.hasValues<DifferentialBlocks>();
-  bool b = channel.hasMetaData<AccMetaData>();
-
   if (channel.hasValues<AbsoluteBlock>() && channel.hasMetaData<AccMetaData>()) {
     auto absoluteBlock = channel.getValues<AbsoluteBlock>();
     channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(*absoluteBlock);

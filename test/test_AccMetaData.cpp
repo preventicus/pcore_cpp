@@ -41,22 +41,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 TEST(AccMetaDataTest, TestGetCoordinateWithAccMetaDataWithCoordinateX) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  EXPECT_EQ(accMetaData.getCoordinate(), CoordinateProtobuf::COORDINATE_X);
+  EXPECT_EQ(accMetaData.getType<CoordinateProtobuf>(), CoordinateProtobuf::COORDINATE_X);
 }
 
 TEST(AccMetaDataTest, TestGetNormWithAccMetaDataWithNormEuclideanDifferencesNorm) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
-  EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+  EXPECT_EQ(accMetaData.getType<NormProtobuf>(), NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM);
 }
 
 TEST(AccMetaDataTest, TestGetCoordinateWithAccMetaDataNotSet) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
-  EXPECT_EQ(accMetaData.getCoordinate(), CoordinateProtobuf::COORDINATE_NONE);
+  EXPECT_EQ(accMetaData.getType<CoordinateProtobuf>(), std::nullopt);
 }
 
 TEST(AccMetaDataTest, TestGetNormWithAccMetaDataNotSet) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataNotSet();
-  EXPECT_EQ(accMetaData.getNorm(), NormProtobuf::NORM_NONE);
+  EXPECT_EQ(accMetaData.getType<NormProtobuf>(), std::nullopt);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -290,20 +290,20 @@ TEST(AccMetaDataTest, TestSwitchDataFormWithAccMetaDataNotSet) {
 
 TEST(AccMetaDataTest, TestHasNormWithAccMetaDataWithNormEuclideanDifferencesNorm) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
-  EXPECT_TRUE(accMetaData.hasNorm());
+  EXPECT_TRUE(accMetaData.hasType<NormProtobuf>());
 }
 
 TEST(AccMetaDataTest, TestHasNormWithAccMetaDataWithNormNone) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormNone();
-  EXPECT_FALSE(accMetaData.hasNorm());
+  EXPECT_FALSE(accMetaData.hasType<NormProtobuf>());
 }
 
 TEST(AccMetaDataTest, TestHasCoordinateWithAccMetaDataWithCoordinateY) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
-  EXPECT_TRUE(accMetaData.hasCoordinate());
+  EXPECT_TRUE(accMetaData.hasType<CoordinateProtobuf>());
 }
 
 TEST(AccMetaDataTest, TestHasCoordinateWithAccMetaDataWithCoordinateNone) {
   auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateNone();
-  EXPECT_FALSE(accMetaData.hasCoordinate());
+  EXPECT_FALSE(accMetaData.hasType<CoordinateProtobuf>());
 }

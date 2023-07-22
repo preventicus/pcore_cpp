@@ -39,6 +39,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using AccMetaDataProtobuf = com::preventicus::pcore::Raw_Sensor_Channel_AccMetadata;
 using AccMetaDataJson = Json::Value;
 
+using Type = std::optional<std::variant<CoordinateProtobuf, NormProtobuf>>;
+
 namespace PCore {
 class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
  public:
@@ -54,10 +56,10 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                          Getter                            //
   ////////////////////////////////////////////////////////////////
-  [[nodiscard]] CoordinateProtobuf getCoordinate() const noexcept;
-  [[nodiscard]] NormProtobuf getNorm() const noexcept;
-  [[nodiscard]] bool hasNorm() const noexcept;
-  [[nodiscard]] bool hasCoordinate() const noexcept;
+  template <typename T>
+  [[nodiscard]] std::optional<T> getType() const noexcept;
+  template <typename T>
+  [[nodiscard]] bool hasType() const noexcept;
 
   ////////////////////////////////////////////////////////////////
   //                      IPCore Methods                        //
@@ -74,7 +76,6 @@ class AccMetaData final : public IPCore<AccMetaDataProtobuf> {
   ////////////////////////////////////////////////////////////////
   //                          Members                           //
   ////////////////////////////////////////////////////////////////
-  CoordinateProtobuf coordinate;
-  NormProtobuf norm;
+  Type type;
 };
 }  // namespace PCore

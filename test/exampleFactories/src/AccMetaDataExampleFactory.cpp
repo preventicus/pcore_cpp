@@ -41,10 +41,10 @@ AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(const AccMetaDat
   if (!accMetaData.isSet()) {
     return accMetaDataJson;
   }
-  if (accMetaData.hasCoordinate()) {
-    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(accMetaData.getCoordinate());
-  } else if (accMetaData.hasNorm()) {
-    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(accMetaData.getNorm());
+  if (accMetaData.hasType<CoordinateProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(*accMetaData.getType<CoordinateProtobuf>());
+  } else if (accMetaData.hasType<NormProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(*accMetaData.getType<NormProtobuf>());
   }
   return accMetaDataJson;
 }
