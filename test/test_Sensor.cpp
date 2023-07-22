@@ -420,3 +420,37 @@ TEST(SensorTest, TestSwitchDataFormWithSensorNotSet) {
   sensor.switchDataForm();
   EXPECT_FALSE(sensor.isSet());
 }
+
+////////////////////////////////////////////////////////////////
+//                      Test has Methods                      //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
+}
