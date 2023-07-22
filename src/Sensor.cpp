@@ -54,7 +54,7 @@ Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestamps
 
 Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
     : sensorType(PcoreProtobuf::Convert::senorTypeFromString(sensorJson[PcoreJson::Key::sensor_type].asString())),
-      channels(PcoreJson::Convert::jsonToVector<Channel>(sensorJson, PcoreJson::Key::channels, this->sensorType, dataForm)),
+      channels(PcoreJson::Convert::jsonToVector<Channel>(sensorJson, PcoreJson::Key::channels)),
       differentialTimestampsContainer([&]() {
         switch (dataForm) {
           case DataForm::DATA_FORM_ABSOLUTE: {
@@ -151,8 +151,11 @@ UnixTimestamp Sensor::getLastUnixTimestampInMs() const noexcept {
     }
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       if (this->differentialTimestampsContainer.isSet()) {
-        const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
-        const auto numberOfElementsInLastBlock = differentialBlocksOfFirstChannel.back().getDifferentialValues().size();
+        const auto differentialBlocksOfFirstChannel = this->channels.front().getValues<DifferentialBlocks>();
+        if (!differentialBlocksOfFirstChannel.has_value()) {
+          return 0;
+        }
+        const auto numberOfElementsInLastBlock = differentialBlocksOfFirstChannel->back().getDifferentialValues().size();
         const auto firstUnixTimestampInLastBlock = this->calculateFirstUnixTimestampInLastBlock();
         return this->differentialTimestampsContainer.getLastUnixTimestampInMs(firstUnixTimestampInLastBlock, numberOfElementsInLastBlock);
       } else {
@@ -294,13 +297,16 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(
   if (this->channels.empty()) {
     return AbsoluteTimestampsContainer();
   }
-  const auto differentialBlocksOfFirstChannel = this->channels.front().getDifferentialBlocks();
+  const auto differentialBlocksOfFirstChannel = this->channels.front().getValues<DifferentialBlocks>();
+  if (!differentialBlocksOfFirstChannel.has_value()) {
+    return AbsoluteTimestampsContainer();
+  }
   const auto timestampsDifferencesInMs = differentialTimestampsContainer.getTimestampsDifferencesInMs();
   const auto blocksDifferencesInMs = differentialTimestampsContainer.getBlocksDifferencesInMs();
   auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestampInMs();
 
   size_t numberOfElements = 0;
-  for (const auto& differentialBlockOfFirstChannel : differentialBlocksOfFirstChannel) {
+  for (const auto& differentialBlockOfFirstChannel : *differentialBlocksOfFirstChannel) {
     numberOfElements += differentialBlockOfFirstChannel.getDifferentialValues().size();
   }
   UnixTimestamps unixTimestampsInMs;
@@ -309,7 +315,7 @@ AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(
   const auto numberOfBlocksDifferences = blocksDifferencesInMs.size();
   for (size_t i = 0; i < numberOfBlocksDifferences; i++) {
     absoluteUnixTimestamp += blocksDifferencesInMs[i];
-    const auto numberOfDifferentialValues = differentialBlocksOfFirstChannel[i].getDifferentialValues().size();
+    const auto numberOfDifferentialValues = (*differentialBlocksOfFirstChannel)[i].getDifferentialValues().size();
     for (size_t j = 0; j < numberOfDifferentialValues; j++) {
       unixTimestampsInMs.emplace_back(absoluteUnixTimestamp + j * timestampsDifferencesInMs[i]);
     }
