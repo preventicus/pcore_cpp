@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include <filesystem>
 #include <fstream>
 #include "Data.h"
 
@@ -60,4 +61,98 @@ TEST(JsonTest, TestToJsonDifferentialForm) {
   Data(inputJson[PcoreJson::Key::data]).serialize(&dataProtobuf);
   auto outputJson = Data(dataProtobuf).toJson();
   EXPECT_TRUE(inputJson.toStyledString() == outputJson.toStyledString());
+}
+
+Json::Value calcCain(Json::Value inputJson) {
+  //  JsonInAbsoluteForm <------+
+  //   | 1.                     |
+  //   v                        |
+  //  DataInAbsoluteForm        |
+  //   | 2.                     |
+  //   v                        |
+  //  DataInDifferentialForm    |
+  //   | 3.                     |
+  //   v                        |
+  //  JsonInDifferentialForm    |
+  //   | 4.                     | 8.
+  //   v                        |
+  //  DataInDifferentialForm    |
+  //   | 5.                     |
+  //   v                        |
+  //  Protobuf                  |
+  //   | 6.                     |
+  //   v                        |
+  //  DataInDifferentialForm    |
+  //   | 7.                     |
+  //   v                        |
+  //   DataInAbsoluteForm ------+
+
+  // 1.
+  auto data = Data(inputJson[PcoreJson::Key::data]);
+  // 2.
+  data.switchDataForm();
+  // 3.
+  auto json = data.toJson();
+  // 4.
+  data = Data(json[PcoreJson::Key::data]);
+  // 5.
+  DataProtobuf dataProtobuf;
+  data.serialize(&dataProtobuf);
+  // 6.
+  data = Data(dataProtobuf);
+  // 7.
+  data.switchDataForm();
+  // 8.
+  return data.toJson();
+}
+
+TEST(JsonTest, TestToJsonRealisticData) {
+  std::string folderPath = "./../../test/JsonTestData/realisticData";
+
+  for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+    if (entry.path().extension() == ".json") {
+      std::ifstream inputFile(entry.path().string());
+      if (inputFile) {
+        Json::Value inputJson1;
+        inputFile >> inputJson1;
+        auto inputJson2 = calcCain(inputJson1);
+        EXPECT_TRUE(inputJson1.toStyledString() == inputJson2.toStyledString());
+        inputFile.close();
+      }
+    }
+  }
+}
+
+TEST(JsonTest, TestToJsonPessimalData) {
+  std::string folderPath = "./../../test/JsonTestData/pessimalData";
+
+  for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+    if (entry.path().extension() == ".json") {
+      std::ifstream inputFile(entry.path().string());
+      if (inputFile) {
+        Json::Value inputJson1;
+        inputFile >> inputJson1;
+        auto inputJson2 = calcCain(inputJson1);
+        EXPECT_TRUE(inputJson1.toStyledString() == inputJson2.toStyledString());
+        inputFile.close();
+      }
+    }
+  }
+}
+
+TEST(JsonTest, TestToJsonOptimalData) {
+  std::string folderPath = "./../../test/JsonTestData/optimalData";
+
+  for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+    if (entry.path().extension() == ".json") {
+      std::ifstream inputFile(entry.path().string());
+      if (inputFile) {
+        Json::Value inputJson1;
+        inputFile >> inputJson1;
+        auto inputJson2 = calcCain(inputJson1);
+        EXPECT_TRUE(inputJson1.toStyledString() == inputJson2.toStyledString());
+        inputFile.close();
+      }
+    }
+  }
 }

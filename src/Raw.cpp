@@ -114,11 +114,11 @@ void Raw::switchDataForm() noexcept {
   switch (this->dataForm) {
     case DataForm::DATA_FORM_DIFFERENTIAL: {
       this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
-      break;
+      return;
     }
     case DataForm::DATA_FORM_ABSOLUTE: {
       this->dataForm = DataForm::DATA_FORM_DIFFERENTIAL;
-      break;
+      return;
     }
     case DataForm::DATA_FORM_NONE: {
       return;
