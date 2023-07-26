@@ -1,5 +1,5 @@
 #[[
-Created by Jakob Glück 2023
+Created by Jakob Glueck 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 

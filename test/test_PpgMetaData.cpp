@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,129 +32,290 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include "Exceptions.h"
 #include "PpgMetaDataExampleFactory.h"
 
-class PpgMetaDataTest : public ::testing::Test {
- protected:
-  uint32_t noWavelength_mn = PpgMetaDataExampleFactory::noWavelength_nm();
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
 
-  PpgMetaData ppgMetDataWithColorGreen1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
-  PpgMetaData ppgMetDataWithColorGreen2 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
-  PpgMetaData ppgMetDataWithColorBlue1 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
-  PpgMetaData ppgMetDataWithColorBlue2 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
-  PpgMetaData ppgMetDataWithColorRed1 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
-  PpgMetaData ppgMetDataWithColorRed2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
-  PpgMetaData ppgMetDataWithWavelength1 = PpgMetaDataExampleFactory::ppgMetDataWithWavelength();
-  PpgMetaData ppgMetDataWithWavelength2 = PpgMetaDataExampleFactory::ppgMetDataWithWavelength();
-  PpgMetaData PpgMetaDataNotSet1 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-  PpgMetaData PpgMetaDataNotSet2 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
-};
-
-TEST_F(PpgMetaDataTest, TestGetColor) {
-  EXPECT_EQ(ppgMetDataWithColorGreen1.getColor(), ProtobufColor::COLOR_GREEN);
-  EXPECT_EQ(ppgMetDataWithColorGreen1.getWavelength(), this->noWavelength_mn);
+TEST(PpgMetaDataTest, TestGetColorWithPpgMetDataWithColorGreen) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  EXPECT_EQ(ppgMetaData.getLight<ColorProtobuf>(), ColorProtobuf::COLOR_GREEN);
 }
 
-TEST_F(PpgMetaDataTest, TestGetWavelength) {
-  EXPECT_EQ(ppgMetDataWithWavelength1.getColor(), ProtobufColor::COLOR_NONE);
-  EXPECT_EQ(ppgMetDataWithWavelength1.getWavelength(), PpgMetaDataExampleFactory::normalWavelength_nm());
+TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataWithWavelength255) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  EXPECT_EQ(ppgMetaData.getLight<Wavelength>(), 255);
 }
 
-TEST_F(PpgMetaDataTest, TestEmptyConstructor) {
-  EXPECT_EQ(PpgMetaDataNotSet1.getColor(), ProtobufColor::COLOR_NONE);
-  EXPECT_EQ(PpgMetaDataNotSet1.getWavelength(), this->noWavelength_mn);
+TEST(PpgMetaDataTest, TestGetColorWithPpgMetaDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_EQ(ppgMetaData.getLight<ColorProtobuf>(), std::nullopt);
 }
 
-TEST_F(PpgMetaDataTest, TestIsNotSet) {
-  EXPECT_EQ(this->PpgMetaDataNotSet1.isSet(), false);
+TEST(PpgMetaDataTest, TestGetWavelengthWithPpgMetaDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_EQ(ppgMetaData.getLight<Wavelength>(), std::nullopt);
 }
 
-TEST_F(PpgMetaDataTest, TestIsSet) {
-  EXPECT_EQ(this->ppgMetDataWithColorBlue1.isSet(), true);
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
+
+TEST(PpgMetaDataTest, TestIsEqualPpgMetDataWithColorRed) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualColorGreenAndEqualWavelength) {
-  EXPECT_TRUE(this->ppgMetDataWithWavelength1.isEqual(this->ppgMetDataWithWavelength2));
+TEST(PpgMetaDataTest, TestIsEqualPpgMetDataWithColorGreen) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualColorGreenAndDifferentWavelength) {
-  EXPECT_FALSE(this->ppgMetDataWithWavelength1.isEqual(this->ppgMetDataWithColorGreen1));
+TEST(PpgMetaDataTest, TestIsEqualPpgMetDataWithColorBlue) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareEqualColorGreen) {
-  EXPECT_TRUE(this->ppgMetDataWithColorGreen1.isEqual(this->ppgMetDataWithColorGreen2));
+TEST(PpgMetaDataTest, TestIsEqualPpgMetDataWithWavelength255) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareNotSetPpgMetData) {
-  EXPECT_TRUE(this->PpgMetaDataNotSet1.isEqual(this->PpgMetaDataNotSet2));
+TEST(PpgMetaDataTest, TestIsEqualWithPpgMetDataWithColorGreenAndPpgMetDataWithColorRed) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  EXPECT_FALSE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareDifferentColorAndEqualWavelength) {
-  EXPECT_FALSE(this->ppgMetDataWithColorBlue1.isEqual(this->ppgMetDataWithColorGreen1));
+TEST(PpgMetaDataTest, TestIsEqualWithPpgMetaDataWithWavelength255AndPpgMetaDataWithWavelength100) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
+  EXPECT_FALSE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareSetWavelength) {
-  EXPECT_TRUE(this->ppgMetDataWithColorRed1.isEqual(this->ppgMetDataWithColorRed2));
+TEST(PpgMetaDataTest, TestIsEqualWithPpgMetaDataNotSet) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareSerializeAndDeserializeMethodColorGreen) {
-  ProtobufPpgMetaData protobufPpgMetaData;
-  this->ppgMetDataWithColorGreen1.serialize(&protobufPpgMetaData);
-  PpgMetaData ppg = PpgMetaData(protobufPpgMetaData);
-  EXPECT_TRUE(this->ppgMetDataWithColorGreen1.isEqual(ppg));
+TEST(PpgMetaDataTest, TestIsEqualWithPpgMetDataWithColorGreenAndPpgMetaDataWithWavelength100) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
+  EXPECT_FALSE(ppgMetaData1 == ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareSerializeAndDeserializeMethodDifferentColor) {
-  ProtobufPpgMetaData protobufPpgMetaData1;
-  this->ppgMetDataWithColorBlue1.serialize(&protobufPpgMetaData1);
-  PpgMetaData basePpg = PpgMetaData(protobufPpgMetaData1);
-  ProtobufPpgMetaData protobufPpgMetaData2;
-  this->ppgMetDataWithColorGreen1.serialize(&protobufPpgMetaData2);
-  PpgMetaData comparablePpg = PpgMetaData(protobufPpgMetaData2);
-  EXPECT_FALSE(basePpg.isEqual(comparablePpg));
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
+TEST(PpgMetaDataTest, TestIsNotEqualPpgMetDataWithColorRed) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  EXPECT_FALSE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareSerializeAndDeserializeMethodSameColor) {
-  ProtobufPpgMetaData protobufPpgMetaData1;
-  this->ppgMetDataWithColorBlue1.serialize(&protobufPpgMetaData1);
-  PpgMetaData basePpg = PpgMetaData(protobufPpgMetaData1);
-  ProtobufPpgMetaData protobufPpgMetaData2;
-  this->ppgMetDataWithColorBlue2.serialize(&protobufPpgMetaData2);
-  PpgMetaData comparablePpg = PpgMetaData(protobufPpgMetaData2);
-  EXPECT_TRUE(basePpg.isEqual(comparablePpg));
+TEST(PpgMetaDataTest, TestIsNotEqualPpgMetDataWithColorGreen) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  EXPECT_FALSE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareSerializeAndDeserializeMethodDifferentWavelength) {
-  ProtobufPpgMetaData protobufPpgMetaData1;
-  this->ppgMetDataWithWavelength1.serialize(&protobufPpgMetaData1);
-  PpgMetaData basePpg = PpgMetaData(protobufPpgMetaData1);
-  ProtobufPpgMetaData protobufPpgMetaData2;
-  this->PpgMetaDataNotSet1.serialize(&protobufPpgMetaData2);
-  PpgMetaData comparablePpg = PpgMetaData(protobufPpgMetaData2);
-  EXPECT_FALSE(basePpg.isEqual(comparablePpg));
+TEST(PpgMetaDataTest, TestIsNotEqualPpgMetDataWithColorBlue) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  EXPECT_FALSE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CompareSerializeAndDeserializeMethodSameWavelength) {
-  ProtobufPpgMetaData protobufPpgMetaData1;
-  this->ppgMetDataWithWavelength1.serialize(&protobufPpgMetaData1);
-  PpgMetaData basePpg = PpgMetaData(protobufPpgMetaData1);
-  ProtobufPpgMetaData protobufPpgMetaData2;
-  this->ppgMetDataWithWavelength2.serialize(&protobufPpgMetaData2);
-  PpgMetaData comparablePpg = PpgMetaData(protobufPpgMetaData2);
-  EXPECT_TRUE(basePpg.isEqual(comparablePpg));
+TEST(PpgMetaDataTest, TestIsNotEqualPpgMetDataWithWavelength255) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  EXPECT_FALSE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CheckPpgPtr) {
-  ProtobufPpgMetaData protobufData;
-  this->ppgMetDataWithColorGreen1.serialize(&protobufData);
-  PpgMetaData ppg = PpgMetaData(protobufData);
-  ProtobufPpgMetaData* protobufDataPtr = &protobufData;
-  PpgMetaData* ptr = &ppg;
-  EXPECT_FALSE(ptr == nullptr);
-  EXPECT_FALSE(protobufDataPtr == nullptr);
+TEST(PpgMetaDataTest, TestIsNotEqualWithPpgMetDataWithColorGreenAndPpgMetDataWithColorRed) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  EXPECT_TRUE(ppgMetaData1 != ppgMetaData2);
 }
 
-TEST_F(PpgMetaDataTest, CheckNullPpgPtr) {
-  ProtobufPpgMetaData* protobufData = nullptr;
-  EXPECT_THROW(this->ppgMetDataWithColorGreen1.serialize(protobufData), std::invalid_argument);
+TEST(PpgMetaDataTest, TestIsNotEqualWithPpgMetaDataWithWavelength255AndPpgMetaDataWithWavelength100) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
+  EXPECT_TRUE(ppgMetaData1 != ppgMetaData2);
+}
+
+TEST(PpgMetaDataTest, TestIsNotEqualWithPpgMetaDataNotSet) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_FALSE(ppgMetaData1 != ppgMetaData2);
+}
+
+TEST(PpgMetaDataTest, TestIsNotEqualWithppgMetDataWithColorGreenAndPpgMetaDataWithWavelength100) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  auto ppgMetaData2 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100();
+  EXPECT_TRUE(ppgMetaData1 != ppgMetaData2);
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(PpgMetaDataTest, TestToJsonWithPpgMetaDataWithWavelength255) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  auto ppgMetaDataJson1 = ppgMetaData.toJson();
+  auto ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
+}
+
+TEST(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorRed) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  auto ppgMetaDataJson1 = ppgMetaData.toJson();
+  auto ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
+}
+
+TEST(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorGreen) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  auto ppgMetaDataJson1 = ppgMetaData.toJson();
+  auto ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
+}
+
+TEST(PpgMetaDataTest, TestToJsonWithPpgMetDataWithColorBlue) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  auto ppgMetaDataJson1 = ppgMetaData.toJson();
+  auto ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
+}
+
+TEST(PpgMetaDataTest, TestToJsonWithPpgMetDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  auto ppgMetaDataJson1 = ppgMetaData.toJson();
+  auto ppgMetaDataJson2 = PpgMetaDataExampleFactory::buildPpgMetaDataJson(ppgMetaData);
+  EXPECT_TRUE(ppgMetaDataJson1.toStyledString() == ppgMetaDataJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(PpgMetaDataTest, TestIsSetWithPpgMetaDataWithWavelength255) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  EXPECT_TRUE(ppgMetaData.isSet());
+}
+
+TEST(PpgMetaDataTest, TestIsSetWithPpgMetDataWithColorRed) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  EXPECT_TRUE(ppgMetaData.isSet());
+}
+
+TEST(PpgMetaDataTest, TestIsSetWithPpgMetDataWithColorGreen) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  EXPECT_TRUE(ppgMetaData.isSet());
+}
+
+TEST(PpgMetaDataTest, TestIsSetWithPpgMetDataWithColorBlue) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  EXPECT_TRUE(ppgMetaData.isSet());
+}
+
+TEST(PpgMetaDataTest, TestIsSetWithPpgMetaDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_FALSE(ppgMetaData.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
+
+TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetaDataWithWavelength255) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  PpgMetaDataProtobuf ppgMetaDataProtobuf;
+  ppgMetaData1.serialize(&ppgMetaDataProtobuf);
+  auto ppgMetaData2 = PpgMetaData(ppgMetaDataProtobuf);
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
+}
+
+TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetaDataNotSet) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  PpgMetaDataProtobuf ppgMetaDataProtobuf;
+  ppgMetaData1.serialize(&ppgMetaDataProtobuf);
+  auto ppgMetaData2 = PpgMetaData(ppgMetaDataProtobuf);
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
+}
+
+TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetDataWithColorRed) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorRed();
+  PpgMetaDataProtobuf ppgMetaDataProtobuf;
+  ppgMetaData1.serialize(&ppgMetaDataProtobuf);
+  auto ppgMetaData2 = PpgMetaData(ppgMetaDataProtobuf);
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
+}
+
+TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetDataWithColorGreen) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  PpgMetaDataProtobuf ppgMetaDataProtobuf;
+  ppgMetaData1.serialize(&ppgMetaDataProtobuf);
+  auto ppgMetaData2 = PpgMetaData(ppgMetaDataProtobuf);
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
+}
+
+TEST(PpgMetaDataTest, TestSerizlizeWithPpgMetDataWithColorBlue) {
+  auto ppgMetaData1 = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  PpgMetaDataProtobuf ppgMetaDataProtobuf;
+  ppgMetaData1.serialize(&ppgMetaDataProtobuf);
+  auto ppgMetaData2 = PpgMetaData(ppgMetaDataProtobuf);
+  EXPECT_TRUE(ppgMetaData1 == ppgMetaData2);
+}
+
+TEST(PpgMetaDataTest, TestSerializeNoThrow) {
+  auto ppgMetaDataG1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  PpgMetaDataProtobuf ppgMetaDataProtobuf;
+  EXPECT_NO_THROW(ppgMetaDataG1.serialize(&ppgMetaDataProtobuf));
+}
+
+TEST(PpgMetaDataTest, TestSerializeThrowDueToNullPointer) {
+  auto ppgMetaDataG1 = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
+  PpgMetaDataProtobuf* ppgMetaDataProtobuf = nullptr;
+  EXPECT_THROW(ppgMetaDataG1.serialize(ppgMetaDataProtobuf), NullPointerException);
+}
+
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
+TEST(PpgMetaDataTest, TestSwitchDataFormWithPpgMetaDataNotSet) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  EXPECT_THROW(ppgMetaData.switchDataForm(), ShouldNotBeCalledException);
+}
+
+////////////////////////////////////////////////////////////////
+//                      Test has Methods                      //
+////////////////////////////////////////////////////////////////
+
+TEST(PpgMetaDataTest, TestHasColorWithPpgMetDataWithColorBlue) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorBlue();
+  EXPECT_TRUE(ppgMetaData.hasLight<ColorProtobuf>());
+}
+
+TEST(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithColorNone) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithColorNone();
+  EXPECT_FALSE(ppgMetaData.hasLight<ColorProtobuf>());
+}
+
+TEST(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithWavelength255) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  EXPECT_TRUE(ppgMetaData.hasLight<Wavelength>());
+}
+
+TEST(PpgMetaDataTest, TestHasColorWithPpgMetaDataWithWavelength0) {
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0();
+  EXPECT_FALSE(ppgMetaData.hasLight<Wavelength>());
 }

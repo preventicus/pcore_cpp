@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,166 +32,106 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "ChannelExampleFactory.h"
+#include "PcoreJson.h"
 
-Channel ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
-  return Channel(accMetaData, differentialBlocks);
+Channel ChannelExampleFactory::channelWithAbsoluteValuesForSwitchDataFormTest() {
+  auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockForSwitchDataFormTest();
+  return Channel(ppgMetaData, absoluteBlock);
 }
 
-Channel ChannelExampleFactory::channelWithOneValueBlock() {
-  std::vector<size_t> blockIdxs = {0};
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockOneElement();
-  return Channel(accMetaData, absoluteBlock, blockIdxs);
-}
-
-Channel ChannelExampleFactory::channelWithNUllValueBlock() {
-  std::vector<size_t> blockIdxs = {};
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockEmpty();
-  return Channel(accMetaData, absoluteBlock, blockIdxs);
-}
-
-Channel ChannelExampleFactory::channelWithAccMetaDataWithCoordinateY() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateY();
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
-  return Channel(accMetaData, differentialBlocks);
-}
-
-Channel ChannelExampleFactory::channelWithAccMetaDataWithNorm() {
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
-  return Channel(accMetaData, differentialBlocks);
-}
-
-Channel ChannelExampleFactory::channelWithPpgMetaDataWithWavelength() {
-  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithWavelength();
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
+Channel ChannelExampleFactory::channelWithDifferentialValuesForSwitchDataFormTest() {
+  auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
+  auto differentialBlocks = DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest();
   return Channel(ppgMetaData, differentialBlocks);
 }
 
-Channel ChannelExampleFactory::channelWithPpgMetaDataWithColor() {
-  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithColorGreen();
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
+Channel ChannelExampleFactory::channelWithAbsoluteBlockForNotEqualTest() {
+  auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithThreeNegativeAbsoluteValues();
+  return Channel(ppgMetaData, absoluteBlock);
+}
+
+Channel ChannelExampleFactory::channelWithDifferentialBlocksForNotEqualTest() {
+  auto ppgMetaData = PpgMetaData(PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255());
+  DifferentialBlocks differentialBlocks;
+  differentialBlocks.emplace_back(DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues());
   return Channel(ppgMetaData, differentialBlocks);
 }
 
-Channel ChannelExampleFactory::channelWithPpgMetaDataWithComparableWavelength() {
-  PpgMetaData ppgMetaData = PpgMetaDataExampleFactory::ppgMetDataWithComparableWavelength();
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::normalDifferentialBlocks();
-  return Channel(ppgMetaData, differentialBlocks);
+Channel ChannelExampleFactory::channelWithAbsoluteBlockAndPpgMetaData() {
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  return Channel(ppgMetaData, absoluteBlock);
 }
 
-std::vector<Channel> ChannelExampleFactory::normalVectorWithChannel() {
-  std::vector<Channel> channelAccMetaDataSetCoordinate = {ChannelExampleFactory::channelWithAccMetaDataWithCoordinateX()};
-  return channelAccMetaDataSetCoordinate;
+Channel ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData() {
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
+  return Channel(accMetaData, absoluteBlock);
 }
 
-Channel ChannelExampleFactory::channelWithAbsoluteBlocks() {
-  std::vector<size_t> blockIdxs = {0, 10, 18, 23};
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlock();
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithCoordinateX();
-  return Channel(accMetaData, absoluteBlock, blockIdxs);
-}
-
-Channel ChannelExampleFactory::channelWithAbsoluteJsonDataPpg1() {
-  std::vector<size_t> blockIdxs = {0, 2, 4, 6};
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg1();
-  PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataPpg1();
-  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
-}
-
-Channel ChannelExampleFactory::channelWithAbsoluteJsonDataPpg2() {
-  std::vector<size_t> blockIdxs = {0, 2, 4, 6};
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockPpg2();
-  PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataPpg2();
-  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
-}
-
-Channel ChannelExampleFactory::channelWithAbsoluteJsonDataAcc() {
-  std::vector<size_t> blockIdxs = {0, 2, 4};
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteJsonDataBlockAcc();
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
-  return Channel(accMetaData, absoluteBlock, blockIdxs);
-}
-
-std::vector<Channel> ChannelExampleFactory::comparableVectorWithChannel() {
-  std::vector<Channel> channelAccMetaDataSetCoordinate = {ChannelExampleFactory::channelWithAbsoluteBlocks()};
-  return channelAccMetaDataSetCoordinate;
-}
-
-std::vector<Channel> ChannelExampleFactory::normalVectorWithAbsoluteJsonDataPpgChannel() {
-  std::vector<Channel> normalVectorWithAbsoluteJsonDataChannel = {ChannelExampleFactory::channelWithAbsoluteJsonDataPpg1(),
-                                                                  ChannelExampleFactory::channelWithAbsoluteJsonDataPpg2()};
-  return normalVectorWithAbsoluteJsonDataChannel;
-}
-
-std::vector<Channel> ChannelExampleFactory::normalVectorWithAbsoluteJsonDataAccChannel() {
-  std::vector<Channel> normalVectorWithAbsoluteJsonDataChannel = {ChannelExampleFactory::channelWithAbsoluteJsonDataAcc()};
-  return normalVectorWithAbsoluteJsonDataChannel;
-}
-
-Channel ChannelExampleFactory::channelWithDifferentialJsonDataPpg1() {
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::differentialJsonDataBlockPpg1();
-  PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataPpg1();
-  return Channel(ppgMetadata, differentialBlocks);
-}
-
-Channel ChannelExampleFactory::channelWithDifferentialJsonDataPpg2() {
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::differentialJsonDataBlockPpg2();
-
-  PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataPpg2();
-  return Channel(ppgMetadata, differentialBlocks);
-}
-
-Channel ChannelExampleFactory::channelWithDifferentialJsonDataAcc() {
-  std::vector<DifferentialBlock> differentialBlocks = DifferentialBlockExampleFactory::differentialJsonDataBlockAcc();
-  AccMetaData accMetaData = AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm();
+Channel ChannelExampleFactory::channelWithDifferentialBlocksAndAccMetaData() {
+  auto differentialBlocks = DifferentialBlockExampleFactory::differentialBlocksWithThreeMixedDifferentialBlocks();
+  auto accMetaData = AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm();
   return Channel(accMetaData, differentialBlocks);
 }
 
-Channel ChannelExampleFactory::channelWithOneValueInLastBlock() {
-  std::vector<size_t> blockIdxs = {0, 6};
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock();
-  PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1();
-  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
+Channel ChannelExampleFactory::channelWithDifferentialBlocksAndPpgMetaData() {
+  auto differentialBlocks = DifferentialBlockExampleFactory::differentialBlocksWithThreeMixedDifferentialBlocks();
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255();
+  return Channel(ppgMetaData, differentialBlocks);
 }
 
-Channel ChannelExampleFactory::channelWithEqualTimestampIntervals() {
-  std::vector<size_t> blockIdxs = {0};
-  AbsoluteBlock absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithOneValueInLastBlock();
-  PpgMetaData ppgMetadata = PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1();
-  return Channel(ppgMetadata, absoluteBlock, blockIdxs);
+Channel ChannelExampleFactory::channelWithAbsoluteBlockAndNoSetMetaData() {
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockWithThreeMixedAbsoluteValues();
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  return Channel(ppgMetaData, absoluteBlock);
 }
 
-std::vector<Channel> ChannelExampleFactory::normalVectorWithDifferentialJsonDataPpgChannel() {
-  std::vector<Channel> normalVectorWithAbsoluteJsonDataChannel = {ChannelExampleFactory::channelWithDifferentialJsonDataPpg1(),
-                                                                  ChannelExampleFactory::channelWithDifferentialJsonDataPpg2()};
-  return normalVectorWithAbsoluteJsonDataChannel;
+Channel ChannelExampleFactory::channelWithNotSetAbsoluteBlockAndNoSetMetaData() {
+  auto absoluteBlock = AbsoluteBlockExampleFactory::absoluteBlockNotSet();
+  auto ppgMetaData = PpgMetaDataExampleFactory::ppgMetaDataNotSet();
+  return Channel(ppgMetaData, absoluteBlock);
 }
 
-std::vector<Channel> ChannelExampleFactory::normalVectorWithDifferentialJsonDataAccChannel() {
-  std::vector<Channel> normalVectorWithAbsoluteJsonDataChannel = {ChannelExampleFactory::channelWithDifferentialJsonDataAcc()};
-  return normalVectorWithAbsoluteJsonDataChannel;
+Channel ChannelExampleFactory::channelNotSet() {
+  return Channel();
 }
 
-std::vector<Channel> ChannelExampleFactory::normalVectorWithOneValueBlock() {
-  std::vector<Channel> normalVectorWithOneValueBlock = {ChannelExampleFactory::channelWithOneValueBlock()};
-  return normalVectorWithOneValueBlock;
+ChannelJson ChannelExampleFactory::buildChannelJson(const Channel& channel) {
+  ChannelJson channelJson;
+  if (!channel.isSet()) {
+    return channelJson;
+  }
+  if (channel.hasValues<AbsoluteBlock>() && channel.hasMetaData<AccMetaData>()) {
+    auto absoluteBlock = channel.getValues<AbsoluteBlock>();
+    channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(*absoluteBlock);
+    auto accMetaData = channel.getMetaData<AccMetaData>();
+    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(*accMetaData);
+  } else if (channel.hasValues<AbsoluteBlock>() && channel.hasMetaData<PpgMetaData>()) {
+    auto absoluteBlock = channel.getValues<AbsoluteBlock>();
+    channelJson[PcoreJson::Key::absolute_block] = AbsoluteBlockExampleFactory::buildAbsoluteBlockJson(*absoluteBlock);
+    auto ppgMetaData = channel.getMetaData<PpgMetaData>();
+    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(*ppgMetaData);
+  } else if (channel.hasValues<DifferentialBlocks>() && channel.hasMetaData<AccMetaData>()) {
+    auto differentialBlocks = channel.getValues<DifferentialBlocks>();
+    channelJson[PcoreJson::Key::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(*differentialBlocks);
+    auto accMetaData = channel.getMetaData<AccMetaData>();
+    channelJson[PcoreJson::Key::acc_metadata] = AccMetaDataExampleFactory::buildAccMetaDataJson(*accMetaData);
+  } else if (channel.hasValues<DifferentialBlocks>() && channel.hasMetaData<PpgMetaData>()) {
+    auto differentialBlocks = channel.getValues<DifferentialBlocks>();
+    channelJson[PcoreJson::Key::differential_blocks] = DifferentialBlockExampleFactory::buildDifferentialBlocksJson(*differentialBlocks);
+    auto ppgMetaData = channel.getMetaData<PpgMetaData>();
+    channelJson[PcoreJson::Key::ppg_metadata] = PpgMetaDataExampleFactory::buildPpgMetaDataJson(*ppgMetaData);
+  }
+  return channelJson;
 }
 
-std::vector<Channel> ChannelExampleFactory::normalVectorWithNUllValueBlock() {
-  std::vector<Channel> normalVectorWithNUllValueBlock = {ChannelExampleFactory::channelWithNUllValueBlock()};
-  return normalVectorWithNUllValueBlock;
-}
-
-std::vector<Channel> ChannelExampleFactory::normalVectorWithOneValueInLastBlock() {
-  std::vector<Channel> normalVectorWithNUllValueBlock = {ChannelExampleFactory::channelWithOneValueInLastBlock()};
-  return normalVectorWithNUllValueBlock;
-}
-
-std::vector<Channel> ChannelExampleFactory::normalVectorWithEqualTimestampIntervals() {
-  std::vector<Channel> normalVectorWithNUllValueBlock = {ChannelExampleFactory::channelWithEqualTimestampIntervals()};
-  return normalVectorWithNUllValueBlock;
+ChannelsJson ChannelExampleFactory::buildChannelsJson(const Channels& channels) {
+  ChannelsJson channelsJson(Json::arrayValue);
+  for (const auto& channel : channels) {
+    channelsJson.append(ChannelExampleFactory::buildChannelJson(channel));
+  }
+  return channelsJson;
 }

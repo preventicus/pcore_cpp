@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -34,23 +34,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "Version.h"
 
+using namespace PCore;
+
 class VersionExampleFactory {
  public:
-  static uint32_t majorOne();
-  static uint32_t minorOne();
-  static uint32_t patchOne();
+  static Major majorOne();
+  static Minor minorOne();
+  static Patch patchOne();
 
-  static uint32_t majorTwo();
-  static uint32_t minorTwo();
-  static uint32_t patchTwo();
+  static Major majorTwo();
+  static Minor minorTwo();
+  static Patch patchTwo();
 
-  static uint32_t majorZero();
-  static uint32_t minorZero();
-  static uint32_t patchZero();
+  static Major majorZero();
+  static Minor minorZero();
+  static Patch patchZero();
 
-  static Version normalVersion();
-  static Version startVersion();
-  static Version highVersion();
-  static Version randomVersion();
-  static Version absoluteJsonDataVersion();
+  static Version versionWithMajor1Minor1Patch0();
+  static Version versionWithMajor0Minor0Patch0();
+  static Version versionWithMajor2Minor1Patch0();
+  static Version versionWithMajor1Minor2Patch0();
+  static Version versionWithMajor1Minor1Patch1();
+  static Version versionWithMajor0Minor2Patch0();
+  static Version versionWithMajor0Minor0Patch1();
+
+  static Version versionNotSet();
+
+  static VersionJson buildVersionJson(const Version& version);
 };

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,101 +32,202 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include "Exceptions.h"
 #include "VersionExampleFactory.h"
 
-class VersionTest : public ::testing::Test {
- protected:
-  Version normalVersion1 = VersionExampleFactory::normalVersion();
-  Version normalVersion2 = VersionExampleFactory::normalVersion();
-  Version startVersion1 = VersionExampleFactory::startVersion();
-  Version startVersion2 = VersionExampleFactory::startVersion();
-  Version highVersion1 = VersionExampleFactory::highVersion();
-  Version highVersion2 = VersionExampleFactory::highVersion();
-  Version randomVersion1 = VersionExampleFactory::randomVersion();
-  Version randomVersion2 = VersionExampleFactory::randomVersion();
-};
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
 
-TEST_F(VersionTest, TestGetMajor) {
-  EXPECT_EQ(this->normalVersion1.getMajor(), VersionExampleFactory::majorOne());
+TEST(VersionTest, TestGetMajorWithVersionWithMajor2Minor1Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  EXPECT_EQ(version.getMajor(), VersionExampleFactory::majorTwo());
 }
 
-TEST_F(VersionTest, TestGetMinor) {
-  EXPECT_EQ(this->normalVersion1.getMinor(), VersionExampleFactory::minorOne());
+TEST(VersionTest, TestGetMajorWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_EQ(version.getMajor(), VersionExampleFactory::majorZero());
 }
 
-TEST_F(VersionTest, TestGetPatch) {
-  EXPECT_EQ(this->normalVersion1.getPatch(), VersionExampleFactory::patchOne());
+TEST(VersionTest, TestGetMinorWithVersionWithMajor2Minor1Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  EXPECT_EQ(version.getMinor(), VersionExampleFactory::minorOne());
 }
 
-TEST_F(VersionTest, TestGetAll) {
-  EXPECT_EQ(this->randomVersion1.getMajor(), VersionExampleFactory::majorTwo());
-  EXPECT_EQ(this->randomVersion1.getMinor(), VersionExampleFactory::minorOne());
-  EXPECT_EQ(this->randomVersion1.getPatch(), VersionExampleFactory::patchZero());
+TEST(VersionTest, TestGetMinorWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_EQ(version.getMinor(), VersionExampleFactory::minorZero());
 }
 
-TEST_F(VersionTest, CompareEqualNormalVersion) {
-  EXPECT_TRUE(this->normalVersion1.isEqual(this->normalVersion2));
+TEST(VersionTest, TestGetPatchWithVersionWithMajor2Minor1Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  EXPECT_EQ(version.getPatch(), VersionExampleFactory::patchZero());
 }
 
-TEST_F(VersionTest, CompareDifferentNormalVersion) {
-  EXPECT_FALSE(this->normalVersion1.isEqual(this->startVersion1));
+TEST(VersionTest, TestGetPatchWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_EQ(version.getPatch(), VersionExampleFactory::patchZero());
 }
 
-TEST_F(VersionTest, CompareEqualStartVersion) {
-  EXPECT_TRUE(this->startVersion1.isEqual(startVersion2));
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
+
+TEST(VersionTest, TestIsEqualWithVersionWithMajor2Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  EXPECT_TRUE(version1 == version2);
 }
 
-TEST_F(VersionTest, CompareRandomAndNormalVersion) {
-  EXPECT_FALSE(this->normalVersion1.isEqual(this->randomVersion1));
+TEST(VersionTest, TestIsEqualWithVersionNotSet) {
+  auto version1 = VersionExampleFactory::versionNotSet();
+  auto version2 = VersionExampleFactory::versionNotSet();
+  EXPECT_TRUE(version1 == version2);
 }
 
-TEST_F(VersionTest, CompareEqualRandomVersion) {
-  EXPECT_TRUE(this->randomVersion1.isEqual(this->randomVersion2));
+TEST(VersionTest, TestIsEqualWithVersionNotSetAndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionNotSet();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  EXPECT_FALSE(version1 == version2);
 }
 
-TEST_F(VersionTest, CompareEqualHighVersion) {
-  EXPECT_TRUE(this->highVersion1.isEqual(this->highVersion2));
+TEST(VersionTest, TestIsEqualWithVersionWithMajor2Minor1Patch0AndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  EXPECT_FALSE(version1 == version2);
 }
 
-TEST_F(VersionTest, TestSerializeAndDeserializeNormalVersion) {
-  ProtobufVersion protobufVersion;
-  this->normalVersion1.serialize(&protobufVersion);
-  Version version2 = Version(protobufVersion);
-  EXPECT_TRUE(this->normalVersion1.isEqual(version2));
+TEST(VersionTest, TestIsEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor2Patch0();
+  EXPECT_FALSE(version1 == version2);
 }
 
-TEST_F(VersionTest, TestSerializeAndDeserialize0Version) {
-  ProtobufVersion protobufVersion;
-  this->startVersion1.serialize(&protobufVersion);
-  Version version2 = Version(protobufVersion);
-  EXPECT_TRUE(this->startVersion1.isEqual(version2));
+TEST(VersionTest, TestIsEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch1) {
+  auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch1();
+  EXPECT_FALSE(version1 == version2);
 }
 
-TEST_F(VersionTest, TestSerializeAndDeserializerandomVersion) {
-  ProtobufVersion protobufVersion;
-  this->randomVersion1.serialize(&protobufVersion);
-  Version version2 = Version(protobufVersion);
-  EXPECT_TRUE(this->randomVersion1.isEqual(version2));
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor2Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  EXPECT_FALSE(version1 != version2);
 }
 
-TEST_F(VersionTest, TestSerializeAndDeserializehighVersion) {
-  ProtobufVersion protobufVersion;
-  this->highVersion1.serialize(&protobufVersion);
-  Version version2 = Version(protobufVersion);
-  EXPECT_TRUE(this->highVersion1.isEqual(version2));
+TEST(VersionTest, TestIsNotEqualWithVersionNotSet) {
+  auto version1 = VersionExampleFactory::versionNotSet();
+  auto version2 = VersionExampleFactory::versionNotSet();
+  EXPECT_FALSE(version1 != version2);
 }
 
-TEST_F(VersionTest, CheckVersionPtr) {
-  ProtobufVersion protobufData;
-  this->normalVersion1.serialize(&protobufData);
-  Version version = Version(protobufData);
-  ProtobufVersion* protobufDataPtr = &protobufData;
-  Version* ptr = &version;
-  EXPECT_FALSE(ptr == nullptr);
-  EXPECT_FALSE(protobufDataPtr == nullptr);
+TEST(VersionTest, TestIsNotEqualWithVersionNotSetAndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionNotSet();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  EXPECT_TRUE(version1 != version2);
 }
 
-TEST_F(VersionTest, CheckVersionNullPtr) {
-  ProtobufVersion* protobufData = nullptr;
-  EXPECT_THROW(this->normalVersion1.serialize(protobufData), std::invalid_argument);
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor2Minor1Patch0AndVersionWithMajor1Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  EXPECT_TRUE(version1 != version2);
+}
+
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor2Patch0();
+  EXPECT_TRUE(version1 != version2);
+}
+
+TEST(VersionTest, TestIsNotEqualWithVersionWithMajor1Minor1Patch0AndVersionWithMajor1Minor2Patch1) {
+  auto version1 = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  auto version2 = VersionExampleFactory::versionWithMajor1Minor1Patch1();
+  EXPECT_TRUE(version1 != version2);
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(VersionTest, TestToJsonWithVersionWithMajor1Minor1Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor1Minor1Patch0();
+  auto versionJson1 = VersionExampleFactory::buildVersionJson(version);
+  auto versionJson2 = version.toJson();
+  EXPECT_TRUE(versionJson1.toStyledString() == versionJson2.toStyledString());
+}
+
+TEST(VersionTest, TestToJsonWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  auto versionJson1 = VersionExampleFactory::buildVersionJson(version);
+  auto versionJson2 = version.toJson();
+  EXPECT_TRUE(versionJson1.toStyledString() == versionJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(VersionTest, TestIsSetWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_FALSE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor1Minor2Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor1Minor2Patch0();
+  EXPECT_TRUE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor2Patch0) {
+  auto version = VersionExampleFactory::versionWithMajor0Minor2Patch0();
+  EXPECT_TRUE(version.isSet());
+}
+
+TEST(VersionTest, TestIsSetWithVersionVersionWithMajor0Minor0Patch1) {
+  auto version = VersionExampleFactory::versionWithMajor0Minor0Patch1();
+  EXPECT_TRUE(version.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
+
+TEST(VersionTest, TestSerializeWithVersionNotSet) {
+  auto version1 = VersionExampleFactory::versionNotSet();
+  VersionProtobuf versionProtobuf;
+  version1.serialize(&versionProtobuf);
+  auto version2 = Version(versionProtobuf);
+  EXPECT_TRUE(version1 == version2);
+}
+
+TEST(VersionTest, TestSerializeWithVersionWithMajor2Minor1Patch0) {
+  auto version1 = VersionExampleFactory::versionWithMajor2Minor1Patch0();
+  VersionProtobuf versionProtobuf;
+  version1.serialize(&versionProtobuf);
+  auto version2 = Version(versionProtobuf);
+  EXPECT_TRUE(version1 == version2);
+}
+
+TEST(VersionTest, TestSerializeNoThrow) {
+  auto version = VersionExampleFactory::versionWithMajor0Minor0Patch0();
+  VersionProtobuf versionProtobuf;
+  EXPECT_NO_THROW(version.serialize(&versionProtobuf));
+}
+
+TEST(VersionTest, TestSerializeThrowDueToNullPointer) {
+  auto version = VersionExampleFactory::versionNotSet();
+  VersionProtobuf* versionProtobuf = nullptr;
+  EXPECT_THROW(version.serialize(versionProtobuf), NullPointerException);
+}
+
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
+TEST(VersionTest, TestSwitchDataFormWithVersionNotSet) {
+  auto version = VersionExampleFactory::versionNotSet();
+  EXPECT_THROW(version.switchDataForm(), ShouldNotBeCalledException);
 }

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,28 +33,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "AbsoluteTimestampsContainer.h"
+#include "UnixTimestampsExampleFactory.h"
+
+using namespace PCore;
 
 class AbsoluteTimestampsContainerExampleFactory {
  public:
-  static std::vector<uint64_t> unixTimestampsNormal_ms();
-  static std::vector<uint64_t> unixTimestampsTwoElements_ms();
-  static std::vector<uint64_t> unixTimestampsOneElement_ms();
-  static std::vector<uint64_t> unixTimestamps0_ms();
-  static std::vector<uint64_t> unixTimestampsEmpty_ms();
-  static std::vector<uint64_t> normalUnixTimestamps_ms();
-  static std::vector<uint64_t> absoluteJsonDataUNixTimestampsPpg();
-  static std::vector<uint64_t> absoluteJsonDataUNixTimestampsAcc();
-  static std::vector<uint64_t> absoluteTimestampWithOneUnixInLastBlock();
-  static std::vector<uint64_t> absoluteTimestampWithEqualTimestampIntervals();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithThreeSmallTimestamps();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithThreeBigTimestamps();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithOneBigTimestamp();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestamp0();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerNotSet();
+  static AbsoluteTimestampsContainer absoluteTimestampsContainerWithTimestampsForSwitchDataFormTest();
 
-  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerPgg();
-  static AbsoluteTimestampsContainer absoluteJsonDataTimestampsContainerAcc();
-  static AbsoluteTimestampsContainer absoluteTimestampsNormal();
-  static AbsoluteTimestampsContainer absoluteUNixTimestampBlockWithOneUnixInLastBlock();
-  static AbsoluteTimestampsContainer absoluteTimestampsTwoElement();
-  static AbsoluteTimestampsContainer absoluteTimestampsOneElement();
-  static AbsoluteTimestampsContainer absoluteTimestamps0();
-  static AbsoluteTimestampsContainer absoluteTimestampsEmpty();
-  static AbsoluteTimestampsContainer normalAbsoluteTimestamps();
-  static AbsoluteTimestampsContainer absoluteTimestampsBlockWithEqualTimestampIntervals();
+  static AbsoluteTimestampsContainerJson buildAbsoluteTimestampsContainerJson(const AbsoluteTimestampsContainer& absoluteTimestampsContainer);
 };

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,68 +32,117 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Raw.h"
+#include <utility>
+#include "Exceptions.h"
+#include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
-Raw::Raw(std::vector<Sensor> sensors) : sensors(sensors) {}
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+Raw::Raw(Sensors sensors, DataForm dataForm) noexcept : sensors(std::move(sensors)), dataForm(dataForm) {}
 
-Raw::Raw(const ProtobufRaw& protobufRaw) {
-  this->deserialize(protobufRaw);
-}
+Raw::Raw(const RawProtobuf& rawProtobuf) noexcept
+    : sensors(PcoreProtobuf::Convert::protobufToVector<Sensor>(rawProtobuf.sensors())), dataForm([&]() {
+        if (rawProtobuf.sensors().empty()) {
+          return DataForm::DATA_FORM_NONE;
+        }
+        return DataForm::DATA_FORM_DIFFERENTIAL;
+      }()) {}
 
-Raw::Raw(Json::Value& raw, DataForm dataForm) {
-  std::vector<Sensor> sensors;
-  Json::Value rawSensorsJson = raw["sensors"];
-  Json::Value::ArrayIndex n = raw["sensors"].size();
-  sensors.reserve(n);
-  for (auto& sensor : rawSensorsJson) {
-    sensors.push_back(Sensor(sensor, dataForm));
-  }
-  this->sensors = sensors;
-}
+Raw::Raw(const RawJson& rawJson, DataForm dataForm)
+    : sensors(PcoreJson::Convert::jsonToVector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)), dataForm(dataForm) {}
 
-Raw::Raw() {
-  this->sensors = std::vector<Sensor>{};
-}
+Raw::Raw() noexcept : sensors({}), dataForm(DataForm::DATA_FORM_NONE) {}
 
-std::vector<Sensor> Raw::getSensors() {
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+Sensors Raw::getSensors() const noexcept {
   return this->sensors;
 }
 
-bool Raw::isEqual(Raw& raw) {
-  if (this->sensors.size() != raw.sensors.size()) {
+DataForm Raw::getDataFrom() const noexcept {
+  return this->dataForm;
+}
+
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
+bool Raw::isSet() const noexcept {
+  for (const auto& sensor : this->sensors) {
+    if (sensor.isSet()) {
+      return true;
+    }
+  }
+  return this->dataForm != DataForm::DATA_FORM_NONE;
+}
+
+RawJson Raw::toJson() const noexcept {
+  RawJson rawJson;
+  if (!this->isSet()) {
+    return rawJson;
+  }
+  rawJson[PcoreJson::Key::sensors] = PcoreJson::Convert::vectorToJson(this->sensors);
+  return rawJson;
+}
+
+void Raw::serialize(RawProtobuf* rawProtobuf) const {
+  if (rawProtobuf == nullptr) {
+    throw NullPointerException("Raw::serialize", "rawProtobuf");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  if (this->dataForm != DataForm::DATA_FORM_DIFFERENTIAL) {
+    throw WrongDataFormException("Raw::serialize", "only for differential data form");
+  }
+  for (const auto& sensor : this->sensors) {
+    auto* sensorProtobuf = rawProtobuf->add_sensors();
+    sensor.serialize(sensorProtobuf);
+  }
+}
+
+void Raw::switchDataForm() noexcept {
+  if (!this->isSet()) {
+    return;
+  }
+  for (auto& sensor : this->sensors) {
+    sensor.switchDataForm();
+  }
+  switch (this->dataForm) {
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      this->dataForm = DataForm::DATA_FORM_ABSOLUTE;
+      return;
+    }
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      this->dataForm = DataForm::DATA_FORM_DIFFERENTIAL;
+      return;
+    }
+    case DataForm::DATA_FORM_NONE: {
+      return;
+    }
+  }
+}
+
+bool Raw::operator==(const IPCore<RawProtobuf>& raw) const noexcept {
+  const auto* derived = dynamic_cast<const Raw*>(&raw);
+  if (derived == nullptr) {
     return false;
   }
-  for (size_t i = 0; i < this->sensors.size(); i++) {
-    if (!this->sensors[i].isEqual(raw.sensors[i])) {
+  const auto numberOfSensors = this->sensors.size();
+  if (numberOfSensors != derived->sensors.size()) {
+    return false;
+  }
+  for (size_t i = 0; i < numberOfSensors; i++) {
+    if (this->sensors[i] != derived->sensors[i]) {
       return false;
     }
   }
-  return true;
+  return this->dataForm == derived->dataForm;
 }
 
-void Raw::serialize(ProtobufRaw* protobufRaw) {
-  if (protobufRaw == nullptr) {
-    throw std::invalid_argument("protobufRaw is a null pointer");
-  }
-  for (auto& sensor : this->sensors) {
-    ProtobufSensor* protobufSensor = protobufRaw->add_sensors();
-    sensor.serialize(protobufSensor);
-  }
-}
-
-Json::Value Raw::toJson(DataForm dataForm) {
-  Json::Value sensors(Json::arrayValue);
-  Json::Value raw;
-  for (auto& sensor : this->sensors) {
-    sensors.append(sensor.toJson(dataForm));
-  }
-  raw["sensors"] = sensors;
-  return raw;
-}
-
-void Raw::deserialize(const ProtobufRaw& protobufRaw) {
-  std::vector<Sensor> sensors{};
-  for (auto& protobufSensor : protobufRaw.sensors()) {
-    sensors.push_back(Sensor(protobufSensor));
-  }
-  this->sensors = sensors;
+bool Raw::operator!=(const IPCore<RawProtobuf>& raw) const noexcept {
+  return !(*this == raw);
 }

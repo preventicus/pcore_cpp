@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,38 +32,63 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AbsoluteTimestampsContainer.h"
+#include "PcoreJson.h"
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(std::vector<uint64_t>& unixTimestamps_ms) : unixTimestamps_ms(unixTimestamps_ms) {}
+using namespace PCore;
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(Json::Value& absoluteTimestampsContainer) {
-  Json::Value absoluteTimestampsContainerJson = absoluteTimestampsContainer["unix_timestamps_ms"];
-  Json::Value::ArrayIndex n = absoluteTimestampsContainerJson.size();
-  std::vector<uint64_t> absoluteUnixTimestamps;
-  absoluteUnixTimestamps.reserve(n);
-  for (auto& absoluteTimestampJson : absoluteTimestampsContainerJson) {
-    absoluteUnixTimestamps.push_back(absoluteTimestampJson.asUInt64());
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(UnixTimestamps unixTimestampsInMs) noexcept
+    : unixTimestampsInMs(std::move(unixTimestampsInMs)) {}
+
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer(const AbsoluteTimestampsContainerJson& absoluteTimestampsContainerJson) noexcept
+    : unixTimestampsInMs(PcoreJson::Convert::jsonToVector<UnixTimestamp>(absoluteTimestampsContainerJson, PcoreJson::Key::unix_timestamps_ms)) {}
+
+AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() noexcept : unixTimestampsInMs({}) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+UnixTimestamps AbsoluteTimestampsContainer::getUnixTimestampsInMs() const noexcept {
+  return this->unixTimestampsInMs;
+}
+
+UnixTimestamp AbsoluteTimestampsContainer::getFirstUnixTimestampInMs() const noexcept {
+  if (!isSet()) {
+    return 0;
   }
-  this->unixTimestamps_ms = absoluteUnixTimestamps;
+  return this->unixTimestampsInMs.front();
 }
 
-AbsoluteTimestampsContainer::AbsoluteTimestampsContainer() {
-  this->unixTimestamps_ms = {};
-}
-
-std::vector<uint64_t> AbsoluteTimestampsContainer::getUnixTimestamps() {
-  return this->unixTimestamps_ms;
-}
-
-bool AbsoluteTimestampsContainer::isEqual(AbsoluteTimestampsContainer& timestamps) {
-  return this->unixTimestamps_ms == timestamps.unixTimestamps_ms;
-}
-
-Json::Value AbsoluteTimestampsContainer::toJson() {
-  Json::Value absoluteTimestampsContainer;
-  Json::Value absoluteUnixTimestamps(Json::arrayValue);
-  for (auto& unixTimestamp : this->unixTimestamps_ms) {
-    absoluteUnixTimestamps.append(unixTimestamp);
+UnixTimestamp AbsoluteTimestampsContainer::getLastUnixTimestampInMs() const noexcept {
+  if (!isSet()) {
+    return 0;
   }
-  absoluteTimestampsContainer["unix_timestamps_ms"] = absoluteUnixTimestamps;
-  return absoluteTimestampsContainer;
+  return this->unixTimestampsInMs.back();
+}
+
+////////////////////////////////////////////////////////////////
+//                       Public Methods                       //
+////////////////////////////////////////////////////////////////
+
+bool AbsoluteTimestampsContainer::isSet() const noexcept {
+  return !this->unixTimestampsInMs.empty();
+}
+
+AbsoluteTimestampsContainerJson AbsoluteTimestampsContainer::toJson() const noexcept {
+  AbsoluteTimestampsContainerJson absoluteTimestampsContainerJson;
+  if (!this->isSet()) {
+    return absoluteTimestampsContainerJson;
+  }
+  absoluteTimestampsContainerJson[PcoreJson::Key::unix_timestamps_ms] = PcoreJson::Convert::vectorToJson(this->unixTimestampsInMs);
+  return absoluteTimestampsContainerJson;
+}
+
+bool AbsoluteTimestampsContainer::operator==(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const noexcept {
+  return this->unixTimestampsInMs == absoluteTimestampsContainer.unixTimestampsInMs;
+}
+
+bool AbsoluteTimestampsContainer::operator!=(const AbsoluteTimestampsContainer& absoluteTimestampsContainer) const noexcept {
+  return this->unixTimestampsInMs != absoluteTimestampsContainer.unixTimestampsInMs;
 }

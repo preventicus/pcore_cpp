@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,76 +32,274 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
+#include "Exceptions.h"
 #include "RawExampleFactory.h"
 
-class RawTest : public ::testing::Test {
- protected:
-  Raw normalRawWithAccMetaData1 = RawExampleFactory::normalRaw();
-  Raw normalRawWithAccMetaData2 = RawExampleFactory::normalRaw();
-  Raw comparableRawWithPpgMetaData1 = RawExampleFactory::comparableRaw();
-  Raw comparableRawWithPpgMetaData2 = RawExampleFactory::comparableRaw();
-};
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
 
-TEST_F(RawTest, TestGetMethodeRaw) {
-  std::vector<Sensor> sensors = this->normalRawWithAccMetaData1.getSensors();
-  std::vector<Sensor> comparableSensors = SensorExampleFactory::normalVectorWithSensors();
-  for (size_t i = 0; i < sensors.size(); i++) {
-    EXPECT_TRUE(sensors[i].isEqual(comparableSensors[i]));
-  }
+TEST(RawTest, TestGetSensorWithSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto sensors = raw.getSensors();
+  EXPECT_EQ(sensors.size(), 1);
+  EXPECT_TRUE(sensors[0] == sensor);
 }
 
-TEST_F(RawTest, CompareEqualNormalRaw) {
-  EXPECT_TRUE(this->normalRawWithAccMetaData1.isEqual(this->normalRawWithAccMetaData2));
+TEST(RawTest, TestGetSensorWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  auto raw = RawExampleFactory::rawNotSet();
+  auto sensors = raw.getSensors();
+  EXPECT_TRUE(sensors.empty());
 }
 
-TEST_F(RawTest, CompareDifferentRaw) {
-  EXPECT_FALSE(this->normalRawWithAccMetaData1.isEqual(this->comparableRawWithPpgMetaData1));
+TEST(RawTest, TestGetDataFormWithRawWithSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw.getDataFrom() == DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
-TEST_F(RawTest, CompareEqualComparableRaw) {
-  EXPECT_TRUE(this->comparableRawWithPpgMetaData1.isEqual(this->comparableRawWithPpgMetaData2));
+TEST(RawTest, TestGetDataFormWithRawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(raw.getDataFrom() == DataForm::DATA_FORM_ABSOLUTE);
 }
 
-TEST_F(RawTest, TestSerializeAndDeserializeNormalRaw) {
-  ProtobufRaw protobufRaw;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw);
-  Raw raw = Raw(protobufRaw);
-  EXPECT_TRUE(this->normalRawWithAccMetaData1.isEqual(raw));
+TEST(RawTest, TestGetDataFormWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  EXPECT_TRUE(raw.getDataFrom() == DataForm::DATA_FORM_NONE);
 }
 
-TEST_F(RawTest, TestSerializeAndDeserializeComparableRaw) {
-  ProtobufRaw protobufRaw;
-  this->comparableRawWithPpgMetaData1.serialize(&protobufRaw);
-  Raw raw = Raw(protobufRaw);
-  EXPECT_TRUE(this->comparableRawWithPpgMetaData1.isEqual(raw));
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(raw1 == raw2);
 }
 
-TEST_F(RawTest, TestSerializeAndDeserializeEqualDifferentRaw) {
-  ProtobufRaw protobufRaw1;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw1);
-  Raw raw1 = Raw(protobufRaw1);
-  ProtobufRaw protobufRaw2;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw2);
-  Raw raw2 = Raw(protobufRaw2);
-  EXPECT_TRUE(raw1.isEqual(raw2));
+TEST(RawTest, TestIsEqualWithRawNotSet) {
+  auto raw1 = RawExampleFactory::rawNotSet();
+  auto raw2 = RawExampleFactory::rawNotSet();
+  EXPECT_TRUE(raw1 == raw2);
 }
 
-TEST_F(RawTest, TestSerializeAndDeserializeTwoDifferentRaw) {
-  ProtobufRaw protobufRaw1;
-  this->normalRawWithAccMetaData1.serialize(&protobufRaw1);
-  Raw raw1 = Raw(protobufRaw1);
-  ProtobufRaw protobufRaw2;
-  this->comparableRawWithPpgMetaData1.serialize(&protobufRaw2);
-  Raw raw2 = Raw(protobufRaw2);
-  EXPECT_FALSE(raw1.isEqual(raw2));
+TEST(RawTest, TestIsEqualWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(raw1 == raw2);
 }
 
-TEST_F(RawTest, CheckRawPtr) {
-  ProtobufRaw protobufRaw1;
-  EXPECT_NO_THROW(this->normalRawWithAccMetaData1.serialize(&protobufRaw1));
+TEST(RawTest, TestIsEqualWithrawNotSetAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawNotSet();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(raw1 == raw2);
 }
 
-TEST_F(RawTest, CheckRawNullPtr) {
-  ProtobufRaw* protobufRaw1 = nullptr;
-  EXPECT_THROW(this->normalRawWithAccMetaData1.serialize(protobufRaw1), std::invalid_argument);
+TEST(RawTest, TestIsEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(raw1 == raw2);
+}
+
+TEST(RawTest, TestIsEqualWithRawWithZeroSensorsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  auto raw2 = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  EXPECT_TRUE(raw1 == raw2);
+}
+
+TEST(RawTest, TestIsEqualWithRawWithZeroSensorsInDifferentialFormAndRawNotSet) {
+  auto raw1 = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  auto raw2 = RawExampleFactory::rawNotSet();
+  EXPECT_FALSE(raw1 == raw2);
+}
+
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawNotSet) {
+  auto raw1 = RawExampleFactory::rawNotSet();
+  auto raw2 = RawExampleFactory::rawNotSet();
+  EXPECT_FALSE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawNotSetAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawNotSet();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawWithOneSensorAccWithTwoChannelsInAbsoluteFormAndRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto raw2 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawWithZeroSensorsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  auto raw2 = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  EXPECT_FALSE(raw1 != raw2);
+}
+
+TEST(RawTest, TestIsNotEqualWithRawWithZeroSensorsInDifferentialFormAndRawNotSet) {
+  auto raw1 = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  auto raw2 = RawExampleFactory::rawNotSet();
+  EXPECT_TRUE(raw1 != raw2);
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestToJsonWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+TEST(RawTest, TestToJsonWithRawWithOneSensorAccWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
+  auto rawJson1 = RawExampleFactory::buildRawJson(raw);
+  auto rawJson2 = raw.toJson();
+  EXPECT_TRUE(rawJson1.toStyledString() == rawJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestIsSetWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  EXPECT_FALSE(raw.isSet());
+}
+
+TEST(RawTest, TestIsSetWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(raw.isSet());
+}
+
+TEST(RawTest, TestIsSetWithRawWithZeroSensorsInDifferentialForm) {
+  auto raw = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  EXPECT_TRUE(raw.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestSerializeWithRawWithOneSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
+  EXPECT_TRUE(raw1 == raw2);
+}
+
+TEST(RawTest, TestSerializeWithRawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
+  EXPECT_TRUE(raw1 == raw2);
+}
+
+TEST(RawTest, TestSerializeWithRawWithOneSensorsAccWithTwoChannelsInDifferentialForm) {
+  auto raw1 = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
+  EXPECT_TRUE(raw1 == raw2);
+}
+
+TEST(RawTest, TestSerializeWithRawNotSet) {
+  auto raw1 = RawExampleFactory::rawNotSet();
+  RawProtobuf rawProtobuf;
+  raw1.serialize(&rawProtobuf);
+  auto raw2 = Raw(rawProtobuf);
+  EXPECT_TRUE(raw1 == raw2);
+}
+
+TEST(RawTest, TestSerializeNoThrow) {
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  RawProtobuf rawProtobuf;
+  EXPECT_NO_THROW(raw.serialize(&rawProtobuf));
+}
+
+TEST(RawTest, TestSerializeThrowDueToNullPointer) {
+  auto raw = RawExampleFactory::rawNotSet();
+  RawProtobuf* rawProtobuf = nullptr;
+  EXPECT_THROW(raw.serialize(rawProtobuf), NullPointerException);
+}
+
+TEST(RawTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
+  auto raw = RawExampleFactory::rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  RawProtobuf rawProtobuf;
+  EXPECT_THROW(raw.serialize(&rawProtobuf), WrongDataFormException);
+}
+
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
+TEST(RawTest, TestSwitchDataFormWithRawForSwitschDataFormTestInAbsoluteForm) {
+  auto raw = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
+  raw.switchDataForm();
+  auto rawInDifferentialForm = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
+  EXPECT_TRUE(raw == rawInDifferentialForm);
+}
+
+TEST(RawTest, TestSwitchDataFormWithRawForSwitchDataFormTestInDifferentialForm) {
+  auto raw = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
+  raw.switchDataForm();
+  auto rawInAbsoluteForm = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
+  EXPECT_TRUE(raw == rawInAbsoluteForm);
+}
+
+TEST(RawTest, TestSwitchDataFormWithRawNotSet) {
+  auto raw = RawExampleFactory::rawNotSet();
+  raw.switchDataForm();
+  EXPECT_FALSE(raw.isSet());
 }

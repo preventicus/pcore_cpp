@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,142 +32,68 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DifferentialBlockExampleFactory.h"
+#include "PcoreJson.h"
 
-std::vector<int32_t> DifferentialBlockExampleFactory::differentialValuesNormal() {
-  return {30, 32, 54};
+DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues() {
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreePositiveElements();
+  return DifferentialBlock(differentialValues);
 }
 
-std::vector<int32_t> DifferentialBlockExampleFactory::differentialValuesNormalNeagtive() {
-  return {-23, -234, -13};
+DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues() {
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreeMixedElements();
+  return DifferentialBlock(differentialValues);
 }
 
-std::vector<int32_t> DifferentialBlockExampleFactory::differentialValuesOneNegative() {
-  return {-123};
+DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues() {
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesWithThreeNegativeElements();
+  return DifferentialBlock(differentialValues);
 }
 
-std::vector<int32_t> DifferentialBlockExampleFactory::differentialValuesOnePositive() {
-  return {123};
+DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithOneDifferentialValues() {
+  auto differentialValues = DifferentialValuesExampleFactory::differentialValuesOneElement();
+  return DifferentialBlock(differentialValues);
 }
 
-std::vector<int32_t> DifferentialBlockExampleFactory::differentialValues0() {
-  return {0};
+DifferentialBlock DifferentialBlockExampleFactory::differentialBlockNotSet() {
+  return DifferentialBlock();
 }
 
-std::vector<int32_t> DifferentialBlockExampleFactory::differentialValuesEmpty() {
-  return {};
+DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksWithThreeMixedDifferentialBlocks() {
+  return {DifferentialBlockExampleFactory::differentialBlockWithThreePositiveDifferentialValues(),
+          DifferentialBlockExampleFactory::differentialBlockWithThreeMixedDifferentialValues(),
+          DifferentialBlockExampleFactory::differentialBlockWithThreeNegativeDifferentialValues()};
 }
 
-DifferentialBlock DifferentialBlockExampleFactory::differentialBlockNormal() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::differentialValuesNormal();
-  return DifferentialBlock(differentialBlock);
+DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksForSwitchDataFormTest() {
+  DifferentialValues differentialValues1 = {1000, 8415, 678, -7682, -8979, -2021, 6795, 9364, 3324, -5773, -9561};
+  DifferentialValues differentialValues2 = {-9000, 4634, 9568, 5704, -3403, -9382, -6735, 2104, 9009};
+  DifferentialValues differentialValues3 = {10129, -762, -8456, -8373, -594, 7732, 8950};
+
+  return {DifferentialBlock(differentialValues1), DifferentialBlock(differentialValues2), DifferentialBlock(differentialValues3)};
 }
 
-DifferentialBlock DifferentialBlockExampleFactory::differentialBlockWithNegativeValues() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::differentialValuesNormalNeagtive();
-  return DifferentialBlock(differentialBlock);
+DifferentialBlocks DifferentialBlockExampleFactory::differentialBlocksForTestSerialize() {
+  DifferentialValues differentialValues1 = {3894, 34, -2389, 0, 43, -983};
+  DifferentialValues differentialValues2 = {473, 8934, 8348, 237, 384327873};
+
+  return {DifferentialBlock(differentialValues1), DifferentialBlock(differentialValues2)};
 }
 
-DifferentialBlock DifferentialBlockExampleFactory::differentialBlockOneNegativeValue() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::differentialValuesOneNegative();
-  return DifferentialBlock(differentialBlock);
+DifferentialBlocksJson DifferentialBlockExampleFactory::buildDifferentialBlocksJson(const DifferentialBlocks& differentialBlocks) {
+  DifferentialBlocksJson differentialBlocksJson(Json::arrayValue);
+  for (const auto& differentialBlock : differentialBlocks) {
+    differentialBlocksJson.append(DifferentialBlockExampleFactory::buildDifferentialBlockJson(differentialBlock));
+  }
+  return differentialBlocksJson;
 }
 
-DifferentialBlock DifferentialBlockExampleFactory::differentialBlockOnePositiveValue() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::differentialValuesOnePositive();
-  return DifferentialBlock(differentialBlock);
-}
-
-DifferentialBlock DifferentialBlockExampleFactory::differentialBlock0Value() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::differentialValues0();
-  return DifferentialBlock(differentialBlock);
-}
-
-DifferentialBlock DifferentialBlockExampleFactory::differentialBlockEmptyValue() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::differentialValuesEmpty();
-  return DifferentialBlock(differentialBlock);
-}
-
-std::vector<int32_t> DifferentialBlockExampleFactory::expectedDifferentialValues1() {
-  return {38763, 8, 9, 13, -9, -4, 0, 3, 7, -8};
-}
-
-std::vector<int32_t> DifferentialBlockExampleFactory::expectedDifferentialValues2() {
-  return {46321, 6, -9, -2, -3, 0, 0, 23};
-}
-
-std::vector<int32_t> DifferentialBlockExampleFactory::expectedDifferentialValues3() {
-  return {58772, 2, 1, 1, -3};
-}
-
-std::vector<int32_t> DifferentialBlockExampleFactory::expectedDifferentialValues4() {
-  return {19982, 0, -4};
-}
-
-DifferentialBlock DifferentialBlockExampleFactory::expectedDifferentialBlock1() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::expectedDifferentialValues1();
-  return DifferentialBlock(differentialBlock);
-}
-
-DifferentialBlock DifferentialBlockExampleFactory::expectedDifferentialBlock2() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::expectedDifferentialValues2();
-  return DifferentialBlock(differentialBlock);
-}
-
-DifferentialBlock DifferentialBlockExampleFactory::expectedDifferentialBlock3() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::expectedDifferentialValues3();
-  return DifferentialBlock(differentialBlock);
-}
-
-DifferentialBlock DifferentialBlockExampleFactory::expectedDifferentialBlock4() {
-  std::vector<int32_t> differentialBlock = DifferentialBlockExampleFactory::expectedDifferentialValues4();
-  return DifferentialBlock(differentialBlock);
-}
-
-std::vector<DifferentialBlock> DifferentialBlockExampleFactory::normalDifferentialBlocks() {
-  DifferentialBlock differentialBlock1 = DifferentialBlockExampleFactory::expectedDifferentialBlock1();
-  DifferentialBlock differentialBlock2 = DifferentialBlockExampleFactory::expectedDifferentialBlock2();
-  DifferentialBlock differentialBlock3 = DifferentialBlockExampleFactory::expectedDifferentialBlock3();
-  DifferentialBlock differentialBlock4 = DifferentialBlockExampleFactory::expectedDifferentialBlock4();
-  std::vector<DifferentialBlock> normalDifferentialBlocks = {differentialBlock1, differentialBlock2, differentialBlock3, differentialBlock4};
-  return normalDifferentialBlocks;
-}
-
-std::vector<DifferentialBlock> DifferentialBlockExampleFactory::differentialJsonDataBlockPpg1() {
-  std::vector<int32_t> differentialValues1 = {30021, -4, 3, 2, 1, -9, 0, 0, 2, 1};
-  std::vector<int32_t> differentialValues2 = {60432, 0, 0, 3, 1, -3, 2, 6, 5, 1, 6, 4, 2};
-  std::vector<int32_t> differentialValues3 = {20123, 40, -93, 3, 0, 57, 48, -84};
-  std::vector<int32_t> differentialValues4 = {93432, 4, 32, -30, 0, 0, 3, 9, -20};
-
-  DifferentialBlock differentialBlock1 = DifferentialBlock(differentialValues1);
-  DifferentialBlock differentialBlock2 = DifferentialBlock(differentialValues2);
-  DifferentialBlock differentialBlock3 = DifferentialBlock(differentialValues3);
-  DifferentialBlock differentialBlock4 = DifferentialBlock(differentialValues4);
-  std::vector<DifferentialBlock> normalDifferentialBlocks = {differentialBlock1, differentialBlock2, differentialBlock3, differentialBlock4};
-  return normalDifferentialBlocks;
-}
-
-std::vector<DifferentialBlock> DifferentialBlockExampleFactory::differentialJsonDataBlockPpg2() {
-  std::vector<int32_t> differentialValues1 = {606433, 5, 4, 2, 45, 6, 7, 3, 4, 7};
-  std::vector<int32_t> differentialValues2 = {489424, -49, -4, 3, 0, 0, 0, 4, 2, 7, 56, 3, 0};
-  std::vector<int32_t> differentialValues3 = {32332, 0, 0, 3, 2, 1, 3, -9};
-  std::vector<int32_t> differentialValues4 = {33732, 93, 3, 1, -9, 6, 3, 0, 7};
-
-  DifferentialBlock differentialBlock1 = DifferentialBlock(differentialValues1);
-  DifferentialBlock differentialBlock2 = DifferentialBlock(differentialValues2);
-  DifferentialBlock differentialBlock3 = DifferentialBlock(differentialValues3);
-  DifferentialBlock differentialBlock4 = DifferentialBlock(differentialValues4);
-  std::vector<DifferentialBlock> normalDifferentialBlocks = {differentialBlock1, differentialBlock2, differentialBlock3, differentialBlock4};
-  return normalDifferentialBlocks;
-}
-
-std::vector<DifferentialBlock> DifferentialBlockExampleFactory::differentialJsonDataBlockAcc() {
-  std::vector<int32_t> differentialValues1 = {434, 0, 5, 43, 3, 7, 5, 34, 2};
-  std::vector<int32_t> differentialValues2 = {342, 6, 54, 33, 3, 2, 4, -9};
-  std::vector<int32_t> differentialValues3 = {453, 6, 4, -9, -5, 2, 54};
-
-  DifferentialBlock differentialBlock1 = DifferentialBlock(differentialValues1);
-  DifferentialBlock differentialBlock2 = DifferentialBlock(differentialValues2);
-  DifferentialBlock differentialBlock3 = DifferentialBlock(differentialValues3);
-  std::vector<DifferentialBlock> normalDifferentialBlocks = {differentialBlock1, differentialBlock2, differentialBlock3};
-  return normalDifferentialBlocks;
+DifferentialBlockJson DifferentialBlockExampleFactory::buildDifferentialBlockJson(const DifferentialBlock& differentialBlock) {
+  DifferentialBlockJson differentialBlockJson;
+  if (!differentialBlock.isSet()) {
+    return differentialBlockJson;
+  }
+  auto differentialValues = differentialBlock.getDifferentialValues();
+  auto differentialValuesJson = DifferentialValuesExampleFactory::buildDifferentialValuesJson(differentialValues);
+  differentialBlockJson[PcoreJson::Key::differential_values] = differentialValuesJson;
+  return differentialBlockJson;
 }

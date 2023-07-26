@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -31,113 +31,149 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 #include "DifferentialTimestampsContainer.h"
+#include <utility>
+#include "Exceptions.h"
+#include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(uint64_t firstTimestamp_ms,
-                                                                 std::vector<uint32_t>& blockIntervals_ms,
-                                                                 std::vector<uint32_t>& timestampsIntervals_ms)
-    : firstTimestamp_ms(firstTimestamp_ms), blockIntervals_ms(blockIntervals_ms), timestampsIntervals_ms(timestampsIntervals_ms) {}
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(UnixTimestamp firstUnixTimestampInMs,
+                                                                 BlocksDifferences blocksDifferencesInMs,
+                                                                 TimestampsDifferences timestampsDifferencesInMs) noexcept
+    : firstUnixTimestampInMs(firstUnixTimestampInMs),
+      blocksDifferencesInMs(std::move(blocksDifferencesInMs)),
+      timestampsDifferencesInMs(std::move(timestampsDifferencesInMs)) {}
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestamps) {
-  this->deserialize(protobufDifferentialTimestamps);
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(
+    const DifferentialTimestampContainerProtobuf& differentialTimestampsContainerProtobuf) noexcept
+    : firstUnixTimestampInMs(differentialTimestampsContainerProtobuf.first_unix_timestamp_ms()),
+      blocksDifferencesInMs(
+          PcoreProtobuf::Convert::protobufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.blocks_differences_ms())),
+      timestampsDifferencesInMs(
+          PcoreProtobuf::Convert::protobufToVector<TimeDifference>(differentialTimestampsContainerProtobuf.timestamps_differences_ms())) {}
+
+DifferentialTimestampsContainer::DifferentialTimestampsContainer(const DifferentialTimestampsContainerJson& differentialTimestampsContainerJson)
+    : firstUnixTimestampInMs([&]() {
+        if (differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms].asInt64() < 0) {
+          throw WrongValueException("DifferentialTimestampsContainer", "firstUnixTimestampInMs is negative in json");
+        }
+        return differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms].asUInt64();
+      }()),
+      blocksDifferencesInMs(
+          PcoreJson::Convert::jsonToVector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::blocks_differences_ms)),
+      timestampsDifferencesInMs(
+          PcoreJson::Convert::jsonToVector<TimeDifference>(differentialTimestampsContainerJson, PcoreJson::Key::timestamps_differences_ms)) {}
+
+DifferentialTimestampsContainer::DifferentialTimestampsContainer() noexcept
+    : firstUnixTimestampInMs(0), blocksDifferencesInMs({}), timestampsDifferencesInMs({}) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+
+UnixTimestamp DifferentialTimestampsContainer::getFirstUnixTimestampInMs() const noexcept {
+  return this->firstUnixTimestampInMs;
 }
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer(Json::Value& differentialTimestampsContainer) {
-  Json::Value jsonBlockIntervals_ms = differentialTimestampsContainer["block_intervals_ms"];
-  Json::Value jsonTimestampIntervals_ms = differentialTimestampsContainer["timestamps_intervals_ms"];
-  std::vector<uint32_t> blockIntervals_ms = {};
-  std::vector<uint32_t> timestampIntervals_ms = {};
-
-  blockIntervals_ms.reserve(jsonBlockIntervals_ms.size());
-  timestampIntervals_ms.reserve(jsonTimestampIntervals_ms.size());
-  for (auto& jsonBlockInterval_ms : jsonBlockIntervals_ms) {
-    blockIntervals_ms.push_back(jsonBlockInterval_ms.asUInt());
+UnixTimestamp DifferentialTimestampsContainer::getLastUnixTimestampInMs(UnixTimestamp firstUnixTimestampInLastBlock,
+                                                                        size_t numberOfElementsInLastBlock) const noexcept {
+  if (!this->isSet()) {
+    return 0;
   }
-  for (auto& jsonTimestampInterval_ms : jsonTimestampIntervals_ms) {
-    timestampIntervals_ms.push_back(jsonTimestampInterval_ms.asUInt());
+  return firstUnixTimestampInLastBlock + this->timestampsDifferencesInMs.back() * (numberOfElementsInLastBlock - 1);
+}
+
+BlocksDifferences DifferentialTimestampsContainer::getBlocksDifferencesInMs() const noexcept {
+  return this->blocksDifferencesInMs;
+}
+
+TimestampsDifferences DifferentialTimestampsContainer::getTimestampsDifferencesInMs() const noexcept {
+  return this->timestampsDifferencesInMs;
+}
+
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
+bool DifferentialTimestampsContainer::isSet() const noexcept {
+  // clang-format off
+  return this->firstUnixTimestampInMs != 0
+     || !this->blocksDifferencesInMs.empty()
+     || !this->timestampsDifferencesInMs.empty();
+  // clang-format on
+}
+
+DifferentialTimestampsContainerJson DifferentialTimestampsContainer::toJson() const noexcept {
+  DifferentialTimestampsContainerJson differentialTimestampsContainerJson;
+  if (!this->isSet()) {
+    return differentialTimestampsContainerJson;
   }
-  this->blockIntervals_ms = blockIntervals_ms;
-  this->timestampsIntervals_ms = timestampIntervals_ms;
-  this->firstTimestamp_ms = differentialTimestampsContainer["first_timestamp_ms"].asUInt64();
+  UnixTimestampJson firstUnixTimestampJson(Json::uintValue);
+  firstUnixTimestampJson = this->firstUnixTimestampInMs;
+  differentialTimestampsContainerJson[PcoreJson::Key::first_unix_timestamp_ms] = firstUnixTimestampJson;
+  differentialTimestampsContainerJson[PcoreJson::Key::blocks_differences_ms] = PcoreJson::Convert::vectorToJson(this->blocksDifferencesInMs);
+  differentialTimestampsContainerJson[PcoreJson::Key::timestamps_differences_ms] = PcoreJson::Convert::vectorToJson(this->timestampsDifferencesInMs);
+  return differentialTimestampsContainerJson;
 }
 
-DifferentialTimestampsContainer::DifferentialTimestampsContainer() {
-  this->blockIntervals_ms = {};
-  this->timestampsIntervals_ms = {};
-  this->firstTimestamp_ms = 0;
-}
-
-uint64_t DifferentialTimestampsContainer::getFirstTimestamp() {
-  return this->firstTimestamp_ms;
-}
-
-std::vector<uint32_t> DifferentialTimestampsContainer::getBlockIntervals() {
-  return this->blockIntervals_ms;
-}
-
-std::vector<uint32_t> DifferentialTimestampsContainer::getTimestampsIntervals() {
-  return this->timestampsIntervals_ms;
-}
-
-bool DifferentialTimestampsContainer::isEqual(DifferentialTimestampsContainer& differentialTimestamps) {
-  return this->firstTimestamp_ms == differentialTimestamps.firstTimestamp_ms && this->blockIntervals_ms == differentialTimestamps.blockIntervals_ms &&
-         this->timestampsIntervals_ms == differentialTimestamps.timestampsIntervals_ms;
-}
-
-uint32_t DifferentialTimestampsContainer::calculateFirstTimestampInBlock(uint32_t blockIdx) {
-  if (this->blockIntervals_ms.size() <= blockIdx) {  // toDo : FOR-325
-    throw std::invalid_argument("blockIdx is higher than number of blockIntervals");
+void DifferentialTimestampsContainer::serialize(DifferentialTimestampContainerProtobuf* differentialTimestampsContainerProtobuf) const {
+  if (differentialTimestampsContainerProtobuf == nullptr) {
+    throw NullPointerException("DifferentialTimestampsContainer::serialize", "differentialTimestampsContainerProtobuf");
   }
-  uint64_t firstTimestamp = this->firstTimestamp_ms;
-  std::vector<uint32_t> blockintervals_ms = this->blockIntervals_ms;
+  if (!this->isSet()) {
+    return;
+  }
+  for (const auto& blocksDifferenceInMs : this->blocksDifferencesInMs) {
+    differentialTimestampsContainerProtobuf->add_blocks_differences_ms(blocksDifferenceInMs);
+  }
+  for (const auto& timestampsDifferenceInMs : this->timestampsDifferencesInMs) {
+    differentialTimestampsContainerProtobuf->add_timestamps_differences_ms(timestampsDifferenceInMs);
+  }
+  differentialTimestampsContainerProtobuf->set_first_unix_timestamp_ms(this->firstUnixTimestampInMs);
+}
+
+void DifferentialTimestampsContainer::switchDataForm() {
+  throw ShouldNotBeCalledException("DifferentialTimestampsContainer::switchDataForm");
+}
+
+bool DifferentialTimestampsContainer::operator==(
+    const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const noexcept {
+  if (const auto* derived = dynamic_cast<const DifferentialTimestampsContainer*>(&differentialTimestampsContainer)) {
+    return this->firstUnixTimestampInMs == derived->firstUnixTimestampInMs && this->blocksDifferencesInMs == derived->blocksDifferencesInMs &&
+           this->timestampsDifferencesInMs == derived->timestampsDifferencesInMs;
+  }
+  return false;
+}
+
+bool DifferentialTimestampsContainer::operator!=(
+    const IPCore<DifferentialTimestampContainerProtobuf>& differentialTimestampsContainer) const noexcept {
+  return !(*this == differentialTimestampsContainer);
+}
+
+////////////////////////////////////////////////////////////////
+//                     Calculate Methode                      //
+////////////////////////////////////////////////////////////////
+
+UnixTimestamp DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock(const BlockIdx& blockIdx) const {
+  if (this->blocksDifferencesInMs.size() <= blockIdx) {
+    throw WrongValueException("DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock",
+                              "blockIdx is bigger than size of blocksDifferences");
+  }
+  UnixTimestamp firstUnixTimestampInBlockInMs = this->firstUnixTimestampInMs;
   for (size_t i = 1; i <= blockIdx; i++) {
-    firstTimestamp += blockintervals_ms[i];
+    firstUnixTimestampInBlockInMs += this->blocksDifferencesInMs[i];
   }
-  return firstTimestamp;
+  return firstUnixTimestampInBlockInMs;
 }
 
-uint32_t DifferentialTimestampsContainer::calculateLastTimestampInBlock(uint32_t blockIdx,
-                                                                        uint32_t firstTimestampInBlock_ms,
-                                                                        DifferentialBlock differentialBlock) {
-  return firstTimestampInBlock_ms + differentialBlock.getDifferentialValues().size() * this->timestampsIntervals_ms[blockIdx];
-}
-
-Json::Value DifferentialTimestampsContainer::toJson() {
-  Json::Value differentialTimestampsContainer;
-  Json::Value firstTimestamp_ms(Json::uintValue);
-  Json::Value blockIntervals_ms(Json::arrayValue);
-  Json::Value timestampsIntervals_ms(Json::arrayValue);
-  for (auto& blockInterval_ms : this->blockIntervals_ms) {
-    blockIntervals_ms.append(blockInterval_ms);
+UnixTimestamp DifferentialTimestampsContainer::calculateLastUnixTimestampInBlock(const BlockIdx& blockIdx,
+                                                                                 const UnixTimestamp firstUnixTimestampInBlockInMs,
+                                                                                 const DifferentialBlock& lastDifferentialBlock) const {
+  if (this->timestampsDifferencesInMs.size() <= blockIdx) {
+    throw WrongValueException("DifferentialTimestampsContainer::calculateFirstUnixTimestampInBlock",
+                              "blockIdx is bigger than size of timestampsDifference");
   }
-  for (auto& timestampsInterval_ms : this->timestampsIntervals_ms) {
-    timestampsIntervals_ms.append(timestampsInterval_ms);
-  }
-  firstTimestamp_ms = this->firstTimestamp_ms;
-  differentialTimestampsContainer["first_timestamp_ms"] = firstTimestamp_ms;
-  differentialTimestampsContainer["block_intervals_ms"] = blockIntervals_ms;
-  differentialTimestampsContainer["timestamps_intervals_ms"] = timestampsIntervals_ms;
-  return differentialTimestampsContainer;
-}
-
-void DifferentialTimestampsContainer::serialize(ProtobufDifferentialTimestampContainer* protobufDifferentialTimestampContainer) {
-  if (protobufDifferentialTimestampContainer == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufDifferentialTimestampContainer is a null pointer");
-  }
-  for (auto& blockInterval_ms : this->blockIntervals_ms) {
-    protobufDifferentialTimestampContainer->add_block_intervals_ms(blockInterval_ms);
-  }
-  for (auto& timestampsInterval_ms : this->timestampsIntervals_ms) {
-    protobufDifferentialTimestampContainer->add_timestamps_intervals_ms(timestampsInterval_ms);
-  }
-  protobufDifferentialTimestampContainer->set_first_timestamp_ms(this->firstTimestamp_ms);
-}
-
-void DifferentialTimestampsContainer::deserialize(const ProtobufDifferentialTimestampContainer& protobufDifferentialTimestampContainer) {
-  this->firstTimestamp_ms = protobufDifferentialTimestampContainer.first_timestamp_ms();
-  for (auto& protobufBlockInterval : protobufDifferentialTimestampContainer.block_intervals_ms()) {
-    this->blockIntervals_ms.push_back(protobufBlockInterval);
-  }
-  for (auto& protobufTimestampsInterval : protobufDifferentialTimestampContainer.timestamps_intervals_ms()) {
-    this->timestampsIntervals_ms.push_back(protobufTimestampsInterval);
-  }
+  return firstUnixTimestampInBlockInMs + lastDifferentialBlock.getDifferentialValues().size() * this->timestampsDifferencesInMs[blockIdx];
 }

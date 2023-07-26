@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,21 +33,44 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AccMetaDataExampleFactory.h"
 #include "AccMetaData.h"
+#include "PcoreJson.h"
+#include "PcoreProtobuf.h"
+
+AccMetaDataJson AccMetaDataExampleFactory::buildAccMetaDataJson(const AccMetaData& accMetaData) {
+  AccMetaDataJson accMetaDataJson;
+  if (!accMetaData.isSet()) {
+    return accMetaDataJson;
+  }
+  if (accMetaData.hasType<CoordinateProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(*accMetaData.getType<CoordinateProtobuf>());
+  } else if (accMetaData.hasType<NormProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(*accMetaData.getType<NormProtobuf>());
+  }
+  return accMetaDataJson;
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormEuclideanDifferencesNorm() {
+  return AccMetaData(NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+}
+
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithNormNone() {
+  return AccMetaData(NormProtobuf::NORM_NONE);
+}
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateX() {
-  return AccMetaData(ProtobufCoordinate::COORDINATE_X);
+  return AccMetaData(CoordinateProtobuf::COORDINATE_X);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateY() {
-  return AccMetaData(ProtobufCoordinate::COORDINATE_Y);
+  return AccMetaData(CoordinateProtobuf::COORDINATE_Y);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateZ() {
-  return AccMetaData(ProtobufCoordinate::COORDINATE_Z);
+  return AccMetaData(CoordinateProtobuf::COORDINATE_Z);
 }
 
-AccMetaData AccMetaDataExampleFactory::accMetaDataWithEuclideanDifferenceNorm() {
-  return AccMetaData(ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM);
+AccMetaData AccMetaDataExampleFactory::accMetaDataWithCoordinateNone() {
+  return AccMetaData(CoordinateProtobuf::COORDINATE_NONE);
 }
 
 AccMetaData AccMetaDataExampleFactory::accMetaDataNotSet() {

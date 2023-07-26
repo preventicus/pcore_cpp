@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,63 +32,95 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Version.h"
+#include "Exceptions.h"
+#include "PcoreJson.h"
 
-Version::Version(uint32_t major, uint32_t minor, uint32_t patch) : major(major), minor(minor), patch(patch) {}
+using namespace PCore;
 
-Version::Version(Json::Value& version) {
-  this->major = version["major"].asUInt();
-  this->minor = version["minor"].asUInt();
-  this->patch = version["patch"].asUInt();
-}
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
 
-Version::Version(const ProtobufVersion& protobufVersion) {
-  this->deserialize(protobufVersion);
-}
+Version::Version(Major major, Minor minor, Patch patch) noexcept : major(major), minor(minor), patch(patch) {}
 
-Version::Version() {
-  this->major = 0;
-  this->minor = 0;
-  this->patch = 0;
-}
+Version::Version(const VersionJson& versionJson)
+    : major(PcoreJson::Convert::jsonToValue<Major>(versionJson, PcoreJson::Key::major)),
+      minor(PcoreJson::Convert::jsonToValue<Minor>(versionJson, PcoreJson::Key::minor)),
+      patch(PcoreJson::Convert::jsonToValue<Patch>(versionJson, PcoreJson::Key::patch)) {}
 
-uint32_t Version::getMajor() {
+Version::Version(const VersionProtobuf& versionProtobuf) noexcept
+    : major(versionProtobuf.major()), minor(versionProtobuf.minor()), patch(versionProtobuf.patch()) {}
+
+Version::Version() noexcept : major(0), minor(0), patch(0) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+
+Major Version::getMajor() const noexcept {
   return this->major;
 }
 
-uint32_t Version::getMinor() {
+Minor Version::getMinor() const noexcept {
   return this->minor;
 }
 
-uint32_t Version::getPatch() {
+Patch Version::getPatch() const noexcept {
   return this->patch;
 }
 
-bool Version::isEqual(Version& version) {
-  return this->major == version.major && this->minor == version.minor && this->patch == version.patch;
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
+bool Version::isSet() const noexcept {
+  // clang-format off
+  return this->major != 0
+      || this->minor != 0
+      || this->patch != 0;
+  // clang-format on
 }
 
-void Version::serialize(ProtobufVersion* protobufVersion) {
-  if (protobufVersion == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufVersion is a null pointer");
+VersionJson Version::toJson() const noexcept {
+  VersionJson versionJson;
+  if (!this->isSet()) {
+    return versionJson;
   }
-  protobufVersion->set_major(this->major);
-  protobufVersion->set_minor(this->minor);
-  protobufVersion->set_patch(this->patch);
+  MajorJson majorJson(Json::uintValue);
+  MinorJson minorJson(Json::uintValue);
+  PatchJson patchJson(Json::uintValue);
+  majorJson = this->major;
+  minorJson = this->minor;
+  patchJson = this->patch;
+  versionJson[PcoreJson::Key::major] = majorJson;
+  versionJson[PcoreJson::Key::minor] = minorJson;
+  versionJson[PcoreJson::Key::patch] = patchJson;
+  return versionJson;
 }
 
-Json::Value Version::toJson() {
-  Json::Value version;
-  Json::Value major(this->major);
-  Json::Value minor(this->minor);
-  Json::Value patch(this->patch);
-  version["major"] = major;
-  version["minor"] = minor;
-  version["patch"] = patch;
-  return version;
+void Version::serialize(VersionProtobuf* versionProtobuf) const {
+  if (versionProtobuf == nullptr) {
+    throw NullPointerException("Version::serialize", "versionProtobuf");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  versionProtobuf->set_major(this->major);
+  versionProtobuf->set_minor(this->minor);
+  versionProtobuf->set_patch(this->patch);
 }
 
-void Version::deserialize(const ProtobufVersion& protobufVersion) {
-  this->major = protobufVersion.major();
-  this->minor = protobufVersion.minor();
-  this->patch = protobufVersion.patch();
+void Version::switchDataForm() {
+  throw ShouldNotBeCalledException("Version::switchDataForm");
+}
+
+bool Version::operator==(const IPCore<VersionProtobuf>& version) const noexcept {
+  if (const auto* derived = dynamic_cast<const Version*>(&version)) {
+    return this->major == derived->major && this->minor == derived->minor && this->patch == derived->patch;
+  }
+  return false;
+}
+
+bool Version::operator!=(const IPCore<VersionProtobuf>& version) const noexcept {
+  return !(*this == version);
 }
