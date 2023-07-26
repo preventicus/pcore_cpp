@@ -61,16 +61,15 @@ class PcoreException : public std::exception {
   std::string message;
 };
 
-  /**
-   * @class PCore::NullPointerException
-   * @brief Exception thrown when a null pointer is encountered in a function.
-   *
-   * The `NullPointerException` class is used to indicate a situation where a null pointer is encountered
-   * in a function. It includes the name of the function and the name of the null pointer in the error message.
-   */
+/**
+ * @class PCore::NullPointerException
+ * @brief Exception thrown when a null pointer is encountered in a function.
+ *
+ * The `NullPointerException` class is used to indicate a situation where a null pointer is encountered
+ * in a function. It includes the name of the function and the name of the null pointer in the error message.
+ */
 class NullPointerException : public PcoreException {
  public:
-
   /**
    * @brief Construct a NullPointerException with the given function name and pointer name.
    * @param functionName The name of the function where the null pointer was encountered.
@@ -94,7 +93,7 @@ class NullPointerException : public PcoreException {
  */
 class WrongDataFormException : public PcoreException {
  public:
- /**
+  /**
    * @brief Construct a WrongDataFormException with the given function name and custom text message.
    * @param functionName The name of the function where the exception occurred.
    * @param text The custom text message describing the unexpected data form.

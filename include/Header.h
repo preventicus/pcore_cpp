@@ -39,9 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace PCore;
 
-
 using HeaderProtobuf = com::preventicus::pcore::Data_Header;
-
 
 using TimeZoneOffset = int32_t;
 using HeaderJson = Json::Value;

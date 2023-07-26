@@ -306,6 +306,5 @@ class Sensor final : public IPCore<SensorProtobuf> {
    * @brief The timestamps associated with the Sensor instance.
    */
   Timestamps timestamps;
-\
 };
 }  // namespace PCore

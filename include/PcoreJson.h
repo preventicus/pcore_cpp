@@ -121,9 +121,9 @@ class Convert {
   }
 
   /**
- * @brief Convert a vector of elements of type T to a JSON array.
- * @param vector The vector to convert.
- * @return The JSON array containing the converted elements.
+   * @brief Convert a vector of elements of type T to a JSON array.
+   * @param vector The vector to convert.
+   * @return The JSON array containing the converted elements.
    */
   template <typename T>
   static Json::Value vectorToJson(std::vector<T> vector) noexcept {

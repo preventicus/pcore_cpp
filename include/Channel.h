@@ -228,7 +228,6 @@ class Channel final : public IPCore<ChannelProtobuf> {
   template <typename M>
   [[nodiscard]] bool hasMetaData() const noexcept;
 
-
   /**
    * @brief Get the sensor type associated with the channel.
    * @return The SensorTypeProtobuf value representing the sensor type.

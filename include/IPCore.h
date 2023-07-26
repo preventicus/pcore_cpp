@@ -122,4 +122,4 @@ class IPCore {
    */
   virtual bool operator!=(const IPCore& pcore) const = 0;
 };
-}
+}  // namespace PCore
