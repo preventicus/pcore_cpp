@@ -38,20 +38,44 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "string"
 
 namespace PCore {
-
+/**
+ * @class PcoreException
+ * @brief Base class for custom exceptions in the PCore namespace.
+ */
 class PcoreException : public std::exception {
  public:
+  /**
+   * @brief Get the error message associated with the exception.
+   * @return The error message as a null-terminated character array.
+   */
   [[nodiscard]] const char* what() const noexcept final { return message.c_str(); }
 
  protected:
+  /**
+   * @brief Construct a PcoreException with the given function name.
+   * @param functionName The name of the function where the exception occurred.
+   */
   explicit PcoreException(std::string functionName) : functionName(std::move(functionName)), message() {}
 
   const std::string functionName;
   std::string message;
 };
 
+  /**
+   * @class PCore::NullPointerException
+   * @brief Exception thrown when a null pointer is encountered in a function.
+   *
+   * The `NullPointerException` class is used to indicate a situation where a null pointer is encountered
+   * in a function. It includes the name of the function and the name of the null pointer in the error message.
+   */
 class NullPointerException : public PcoreException {
  public:
+
+  /**
+   * @brief Construct a NullPointerException with the given function name and pointer name.
+   * @param functionName The name of the function where the null pointer was encountered.
+   * @param pointerName The name of the null pointer that caused the exception.
+   */
   explicit NullPointerException(const std::string& functionName, const std::string& pointerName) noexcept
       : PcoreException(functionName), pointerName(pointerName) {
     message = "NullPointerException: In " + functionName + " pointer " + pointerName + " is null.\n";
@@ -61,22 +85,20 @@ class NullPointerException : public PcoreException {
   const std::string pointerName;
 };
 
-class DataFormIsNoneException : public PcoreException {
- public:
-  explicit DataFormIsNoneException(const std::string& functionName) noexcept : PcoreException(functionName) {
-    message = "DataForm is NONE: In " + functionName + "\n";
-  }
-};
-
-class SensorTypeIsNoneException : public PcoreException {
- public:
-  explicit SensorTypeIsNoneException(const std::string& functionName) noexcept : PcoreException(functionName) {
-    message = "SensorType is NONE: In " + functionName + "\n";
-  }
-};
-
+/**
+ * @class PCore::WrongDataFormException
+ * @brief Exception thrown when the DataForm value is unexpected in a function.
+ *
+ * The `WrongDataFormException` class is used to indicate a situation where the `DataForm` value is unexpected
+ * in a function. It includes a custom text message to provide additional details.
+ */
 class WrongDataFormException : public PcoreException {
  public:
+ /**
+   * @brief Construct a WrongDataFormException with the given function name and custom text message.
+   * @param functionName The name of the function where the exception occurred.
+   * @param text The custom text message describing the unexpected data form.
+   */
   explicit WrongDataFormException(const std::string& functionName, const std::string& text) noexcept : PcoreException(functionName), text(text) {
     message = "Wrong DataForm: In " + functionName + ": " + text + "\n";
   }
@@ -85,8 +107,20 @@ class WrongDataFormException : public PcoreException {
   const std::string text;
 };
 
+/**
+ * @class PCore::WrongValueException
+ * @brief Exception thrown when a function receives an unexpected value.
+ *
+ * The `WrongValueException` class is used to indicate a situation where a function receives an unexpected value.
+ * It includes a custom text message to provide additional details.
+ */
 class WrongValueException : public PcoreException {
  public:
+  /**
+   * @brief Construct a WrongValueException with the given function name and custom text message.
+   * @param functionName The name of the function where the exception occurred.
+   * @param text The custom text message describing the unexpected value.
+   */
   explicit WrongValueException(const std::string& functionName, const std::string& text) noexcept : PcoreException(functionName), text(text) {
     message = "Wrong Value: In " + functionName + ": " + text + "\n";
   }
@@ -95,20 +129,19 @@ class WrongValueException : public PcoreException {
   const std::string text;
 };
 
-class OnlyOneParameterAllowedException : public PcoreException {
- public:
-  explicit OnlyOneParameterAllowedException(const std::string& functionName, const std::string& para1Name, const std::string& para2Name) noexcept
-      : PcoreException(functionName), para1Name(para1Name), para2Name(para2Name) {
-    message = "In " + functionName + " only " + para1Name + " or " + para2Name + " can be processed\n";
-  }
-
- private:
-  const std::string para1Name;
-  const std::string para2Name;
-};
-
+/**
+ * @class PCore::ShouldNotBeCalledException
+ * @brief Exception thrown when a function should not be called.
+ *
+ * The `ShouldNotBeCalledException` class is used to indicate a situation where a function should not be called,
+ * but it is called unexpectedly. It includes the name of the function in the error message.
+ */
 class ShouldNotBeCalledException : public PcoreException {
  public:
+  /**
+   * @brief Construct a ShouldNotBeCalledException with the given function name.
+   * @param functionName The name of the function that should not be called.
+   */
   explicit ShouldNotBeCalledException(const std::string& functionName) noexcept : PcoreException(functionName) {
     message = functionName + " should not be called\n";
   }

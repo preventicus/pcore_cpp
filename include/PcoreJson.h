@@ -37,7 +37,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Exceptions.h"
 #include "json/json.h"
 
+/**
+ * @typedef JsonKey
+ * @brief Alias for a string representing a JSON key.
+ */
 using JsonKey = std::string;
+
+/**
+ * @typedef DataFormString
+ * @brief Alias for a string representing a data form in JSON.
+ */
 using DataFormString = std::string;
 
 namespace PcoreJson {
@@ -72,8 +81,19 @@ const JsonKey coordinate = "coordinate";
 const JsonKey norm = "norm";
 }  // namespace Key
 
+/**
+ * @class Convert
+ * @brief A helper class that provides conversion functions between JSON values and standard types.
+ */
 class Convert {
  public:
+  /**
+   * @brief Convert a JSON array to a vector of elements of type T.
+   * @param jsonValue The JSON value containing the array to convert.
+   * @param jsonKey The key of the array in the JSON value.
+   * @param args Additional arguments used for element construction if T is a custom type.
+   * @return The vector containing the converted elements.
+   */
   template <typename T, typename... Args>
   static std::vector<T> jsonToVector(const Json::Value& jsonValue, const JsonKey& jsonKey, const Args&... args) noexcept {
     Json::Value values = jsonValue[jsonKey];
@@ -100,6 +120,11 @@ class Convert {
     return vector;
   }
 
+  /**
+ * @brief Convert a vector of elements of type T to a JSON array.
+ * @param vector The vector to convert.
+ * @return The JSON array containing the converted elements.
+   */
   template <typename T>
   static Json::Value vectorToJson(std::vector<T> vector) noexcept {
     Json::Value jsonValues(Json::arrayValue);
@@ -124,6 +149,12 @@ class Convert {
     return jsonValues;
   }
 
+  /**
+   * @brief Convert a JSON value to a value of type T.
+   * @param jsonValue The JSON value to convert.
+   * @param jsonKey The key of the value in the JSON object.
+   * @return The converted value of type T.
+   */
   template <typename T>
   static T jsonToValue(const Json::Value& jsonValue, const JsonKey& jsonKey) {
     if constexpr (std::is_same_v<T, int32_t>) {
@@ -136,6 +167,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a string representation of a data form to its DataForm enum value.
+   * @param dataFormString The string representation of the data form.
+   * @return The DataForm enum value corresponding to the string representation.
+   */
   static DataForm dataFormFromString(const DataFormString& dataFormString) noexcept {
     if (dataFormString == "DATA_FORM_ABSOLUTE") {
       return DataForm::DATA_FORM_ABSOLUTE;
@@ -146,6 +182,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a DataForm enum value to its string representation.
+   * @param dataForm The DataForm enum value to convert.
+   * @return The string representation of the DataForm enum value.
+   */
   static DataFormString dataFormToString(const DataForm dataForm) noexcept {
     switch (dataForm) {
       case DataForm::DATA_FORM_ABSOLUTE: {

@@ -50,7 +50,7 @@ Raw::Raw(const RawProtobuf& rawProtobuf) noexcept
         return DataForm::DATA_FORM_DIFFERENTIAL;
       }()) {}
 
-Raw::Raw(const RawJson& rawJson, DataForm dataForm)
+Raw::Raw(const RawJson& rawJson, DataForm dataForm) noexcept
     : sensors(PcoreJson::Convert::jsonToVector<Sensor>(rawJson, PcoreJson::Key::sensors, dataForm)), dataForm(dataForm) {}
 
 Raw::Raw() noexcept : sensors({}), dataForm(DataForm::DATA_FORM_NONE) {}

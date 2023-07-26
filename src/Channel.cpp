@@ -52,7 +52,7 @@ Channel::Channel(AccMetaData accMetaData, DifferentialBlocks differentialBlocks)
 Channel::Channel(PpgMetaData ppgMetaData, DifferentialBlocks differentialBlocks) noexcept
     : metaData(std::move(ppgMetaData)), values(std::move(differentialBlocks)) {}
 
-Channel::Channel(const ChannelJson& channelJson)
+Channel::Channel(const ChannelJson& channelJson) noexcept
     : metaData([&]() -> MetaData {
         if (channelJson.isMember(PcoreJson::Key::ppg_metadata)) {
           return PpgMetaData(channelJson[PcoreJson::Key::ppg_metadata]);
@@ -343,7 +343,7 @@ AbsoluteBlock Channel::calculateAbsoluteBlock(const DifferentialBlocks& differen
   return AbsoluteBlock(absoluteValues);
 }
 
-void Channel::serializeValues(ChannelProtobuf* channelProtobuf) const {
+void Channel::serializeValues(ChannelProtobuf* channelProtobuf) const noexcept {
   auto differentialBlocks = this->getValues<DifferentialBlocks>();
   if (!differentialBlocks.has_value()) {
     return;
@@ -354,7 +354,7 @@ void Channel::serializeValues(ChannelProtobuf* channelProtobuf) const {
   }
 }
 
-void Channel::serializeMetaData(ChannelProtobuf* channelProtobuf) const {
+void Channel::serializeMetaData(ChannelProtobuf* channelProtobuf) const noexcept {
   switch (this->getSensorType()) {
     case SensorTypeProtobuf::SENSOR_TYPE_PPG: {
       PpgMetaDataProtobuf ppgMetaDataProtobuf;

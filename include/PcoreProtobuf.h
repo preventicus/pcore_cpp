@@ -39,17 +39,66 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "protobuf/pcore_raw.pb.h"
 #include "protobuf/pcore_sensor_type.pb.h"
 
+/**
+ * @typedef SensorProtobuf
+ * @brief Alias for the Protobuf representation of a sensor.
+ */
 using SensorProtobuf = com::preventicus::pcore::Raw_Sensor;
+
+/**
+ * @typedef SensorTypeProtobuf
+ * @brief Alias for the Protobuf representation of a sensor type.
+ */
 using SensorTypeProtobuf = com::preventicus::pcore::SensorType;
+
+/**
+ * @typedef SensorTypeString
+ * @brief Alias for a string representing a sensor type.
+ */
 using SensorTypeString = std::string;
+
+/**
+ * @typedef CoordinateProtobufString
+ * @brief Alias for a string representing a coordinate in the Protobuf representation.
+ */
 using CoordinateProtobufString = std::string;
+
+/**
+ * @typedef CoordinateProtobuf
+ * @brief Alias for the Protobuf representation of a coordinate.
+ */
 using CoordinateProtobuf = com::preventicus::pcore::Coordinate;
+
+/**
+ * @typedef NormStringProtobuf
+ * @brief Alias for a string representing a norm in the Protobuf representation.
+ */
 using NormStringProtobuf = std::string;
+
+/**
+ * @typedef NormProtobuf
+ * @brief Alias for the Protobuf representation of a norm.
+ */
 using NormProtobuf = com::preventicus::pcore::Norm;
+
+/**
+ * @typedef ColorStringProtobuf
+ * @brief Alias for a string representing a color in the Protobuf representation.
+ */
 using ColorStringProtobuf = std::string;
+
+/**
+ * @typedef ColorProtobuf
+ * @brief Alias for the Protobuf representation of a color.
+ */
 using ColorProtobuf = com::preventicus::pcore::Color;
 
 namespace PcoreProtobuf {
+
+/**
+ * @class Convert
+ * @brief A helper class that provides conversion functions between Protobuf enums and strings.
+ */
 class Convert {
  public:
   template <typename T, typename P, typename... Args>
@@ -69,6 +118,11 @@ class Convert {
     return vector;
   }
 
+  /**
+   * @brief Convert a Protobuf coordinate to its string representation.
+   * @param coordinateProtobuf The Protobuf coordinate to convert.
+   * @return The string representation of the Protobuf coordinate.
+   */
   static CoordinateProtobufString coordinateProtobufToString(CoordinateProtobuf coordinateProtobuf) noexcept {
     switch (coordinateProtobuf) {
       case CoordinateProtobuf::COORDINATE_X: {
@@ -86,6 +140,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a string representation of a coordinate to its Protobuf enum value.
+   * @param coordinateProtobufString The string representation of the coordinate.
+   * @return The Protobuf coordinate enum value.
+   */
   static CoordinateProtobuf coordinateProtobufFromString(const CoordinateProtobufString& coordinateProtobufString) noexcept {
     if (coordinateProtobufString == "COORDINATE_X") {
       return CoordinateProtobuf::COORDINATE_X;
@@ -98,6 +157,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a Protobuf norm to its string representation.
+   * @param normProtobuf The Protobuf norm to convert.
+   * @return The string representation of the Protobuf norm.
+   */
   static NormStringProtobuf normProtobufToString(NormProtobuf normProtobuf) noexcept {
     switch (normProtobuf) {
       case NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM: {
@@ -109,6 +173,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a string representation of a norm to its Protobuf enum value.
+   * @param normProtobufString The string representation of the norm.
+   * @return The Protobuf norm enum value.
+   */
   static NormProtobuf normProtobufFromString(const NormStringProtobuf& normProtobufString) noexcept {
     if (normProtobufString == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
       return NormProtobuf::NORM_EUCLIDEAN_DIFFERENCES_NORM;
@@ -117,6 +186,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a Protobuf color to its string representation.
+   * @param colorProtobuf The Protobuf color to convert.
+   * @return The string representation of the Protobuf color.
+   */
   static ColorStringProtobuf colorProtobufToString(ColorProtobuf colorProtobuf) noexcept {
     switch (colorProtobuf) {
       case ColorProtobuf::COLOR_RED: {
@@ -134,6 +208,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a string representation of a color to its Protobuf enum value.
+   * @param colorStringProtobuf The string representation of the color.
+   * @return The Protobuf color enum value.
+   */
   static ColorProtobuf colorProtobufFromString(const ColorStringProtobuf& colorStringProtobuf) noexcept {
     if (colorStringProtobuf == "COLOR_RED") {
       return ColorProtobuf::COLOR_RED;
@@ -146,6 +225,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a string representation of a sensor type to its Protobuf enum value.
+   * @param sensorTypeString The string representation of the sensor type.
+   * @return The Protobuf sensor type enum value.
+   */
   static SensorTypeProtobuf senorTypeFromString(const SensorTypeString& senorTypeString) noexcept {
     if (senorTypeString == "SENSOR_TYPE_PPG") {
       return SensorTypeProtobuf::SENSOR_TYPE_PPG;
@@ -156,6 +240,11 @@ class Convert {
     }
   }
 
+  /**
+   * @brief Convert a Protobuf sensor type to its string representation.
+   * @param sensorTypeProtobuf The Protobuf sensor type to convert.
+   * @return The string representation of the Protobuf sensor type.
+   */
   static SensorTypeString senorTypeToString(const SensorTypeProtobuf sensorTypeProtobuf) noexcept {
     switch (sensorTypeProtobuf) {
       case SensorTypeProtobuf::SENSOR_TYPE_ACC: {

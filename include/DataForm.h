@@ -32,4 +32,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #pragma once
 
+/**
+ * @enum DataForm
+ * @brief Enumerates the different data forms.
+ *
+ * The DataForm enumeration defines three constants that represent the different data forms:
+ * - DATA_FORM_NONE: Indicates that no specific data form is set.
+ * - DATA_FORM_DIFFERENTIAL: Indicates that the data form is differential.
+ * - DATA_FORM_ABSOLUTE: Indicates that the data form is absolute.
+ *
+ * The DataForm enumeration provides a way to categorize the data form, allowing clients to handle and process data
+ * differently based on its form.
+ */
 enum DataForm { DATA_FORM_NONE, DATA_FORM_DIFFERENTIAL, DATA_FORM_ABSOLUTE };

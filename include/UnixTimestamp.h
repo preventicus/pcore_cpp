@@ -33,4 +33,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
+/**
+ * @typedef UnixTimestamp
+ * @brief Alias for the data type uint64_t used to represent timestamps in milliseconds in the Unix time format.
+ *
+ * The `UnixTimestamp` type is an unsigned 64-bit integer that represents timestamps in the Unix time format.
+ * Unix time is the number of milliseconds that have elapsed since January 1, 1970 (UTC).
+ */
 using UnixTimestamp = uint64_t;

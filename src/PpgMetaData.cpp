@@ -58,11 +58,7 @@ PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
         } else {
           return std::nullopt;
         }
-      }()) {
-  if (this->hasLight<ColorProtobuf>() && this->hasLight<Wavelength>()) {
-    throw OnlyOneParameterAllowedException("PpgMetaData", "Color", "Wavelength");
-  }
-}
+      }()) {}
 
 PpgMetaData::PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf) noexcept
     : light([&]() -> Light {
@@ -137,9 +133,6 @@ void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
   }
   if (!this->isSet()) {
     return;
-  }
-  if (this->hasLight<ColorProtobuf>() && this->hasLight<Wavelength>()) {
-    throw OnlyOneParameterAllowedException("PpgMetaData::serialize", "Color", "Wavelength");
   }
   if (this->hasLight<ColorProtobuf>()) {
     ppgMetaDataProtobuf->set_color(*this->getLight<ColorProtobuf>());

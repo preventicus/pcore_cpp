@@ -155,7 +155,7 @@ bool Header::operator!=(const IPCore<HeaderProtobuf>& header) const noexcept {
 ////////////////////////////////////////////////////////////////
 
 void Header::checkTimeZoneOffset() const {
-  if (840 < this->timeZoneOffsetInMin || this->timeZoneOffsetInMin < -720) {
+  if (840 <= this->timeZoneOffsetInMin || this->timeZoneOffsetInMin <= -720) {
     throw WrongValueException("Header::checkTimeZoneOffset", "timeZoneOffset must be between -720 and 840");
   }
 }

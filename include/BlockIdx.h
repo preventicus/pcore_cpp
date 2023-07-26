@@ -33,4 +33,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
+/**
+ * @typedef BlockIdx
+ * @brief Type alias for block index, represented as size_t.
+ *
+ * BlockIdx is used to represent the index of a block in a container.
+ */
 using BlockIdx = size_t;

@@ -53,10 +53,7 @@ AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
         } else {
           return std::nullopt;
         }
-      }()) {
-  if (this->hasType<NormProtobuf>() && this->hasType<CoordinateProtobuf>())
-    throw OnlyOneParameterAllowedException("AccMetaData", "Norm", "Coordinate");
-}
+      }()) {}
 
 AccMetaData::AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf) noexcept
     : type([&]() -> Type {
@@ -128,9 +125,6 @@ void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
   }
   if (!this->isSet()) {
     return;
-  }
-  if (this->hasType<CoordinateProtobuf>() && this->hasType<NormProtobuf>()) {
-    throw OnlyOneParameterAllowedException("AccMetaData::serialize", "Coordinate", "Norm");
   }
   if (this->hasType<CoordinateProtobuf>()) {
     accMetaDataProtobuf->set_coordinate(*this->getType<CoordinateProtobuf>());
