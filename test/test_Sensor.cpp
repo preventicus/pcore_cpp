@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,149 +32,425 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <gtest/gtest.h>
-
+#include "Exceptions.h"
 #include "SensorExampleFactory.h"
 
-class SensorTest : public ::testing::Test {
- protected:
-  Sensor normalSensorWithAccMetaData1 = SensorExampleFactory::normalSensor();
-  Sensor normalSensorWithAccMetaData2 = SensorExampleFactory::normalSensor();
-  Sensor comparableSensorWithPpgMetaData1 = SensorExampleFactory::comparableSensor();
-  Sensor comparableSensorWithPpgMetaData2 = SensorExampleFactory::comparableSensor();
-  Sensor normalSensorWithOneUnix = SensorExampleFactory::sensorWithOneUnixAndOneValue();
-  Sensor normalSensorWithNUllUnix = SensorExampleFactory::sensorWithNUllUnixAndNUllValue();
-  Sensor normalSensorWithOneUnixAndOneValueInLastBlock = SensorExampleFactory::sensorWithOneUnixAndOneValueInLastBlock();
-  Sensor normalSensorWithEqualTimestampsInterval = SensorExampleFactory::sensorWithEqualTimestampsInterval();
-};
-TEST_F(SensorTest, TestGetMethodStandardSensor) {
-  std::vector<Channel> channels = this->normalSensorWithAccMetaData1.getChannels();
-  std::vector<Channel> comparableChannels = ChannelExampleFactory::normalVectorWithChannel();
-  for (size_t i = 0; i < channels.size(); i++) {
-    EXPECT_TRUE(channels[i].isEqual(comparableChannels[i]));
-  }
-  DifferentialTimestampsContainer differentialTimestampsContainer = this->normalSensorWithAccMetaData1.getDifferentialTimestamps();
-  DifferentialTimestampsContainer comparableDifferentialTimestampsContainer =
-      DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps();
-  EXPECT_TRUE(differentialTimestampsContainer.isEqual(comparableDifferentialTimestampsContainer));
-  AbsoluteTimestampsContainer absoluteTimestampsContainer = this->normalSensorWithAccMetaData1.getAbsoluteTimestamps();
-  AbsoluteTimestampsContainer comparableAbsoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps();
-  EXPECT_TRUE(absoluteTimestampsContainer.isEqual(comparableAbsoluteTimestampsContainer));
-  EXPECT_EQ(this->normalSensorWithAccMetaData1.getSensorType(), ProtobufSensorType::SENSOR_TYPE_ACC);
-}
+////////////////////////////////////////////////////////////////
+//                        Test Getter                         //
+////////////////////////////////////////////////////////////////
 
-TEST_F(SensorTest, TestGetMethodComparableSensor) {
-  std::vector<Channel> channels = this->comparableSensorWithPpgMetaData1.getChannels();
-  std::vector<Channel> comparableChannels = ChannelExampleFactory::normalVectorWithChannel();
-  for (size_t i = 0; i < channels.size(); i++) {
-    EXPECT_TRUE(channels[i].isEqual(comparableChannels[i]));
-  }
-  DifferentialTimestampsContainer differentialTimestampsContainer = this->comparableSensorWithPpgMetaData1.getDifferentialTimestamps();
-  DifferentialTimestampsContainer comparableDifferentialTimestampsContainer =
-      DifferentialTimestampsContainerExampleFactory::normalDifferentialTimestamps();
-  EXPECT_TRUE(differentialTimestampsContainer.isEqual(comparableDifferentialTimestampsContainer));
-  AbsoluteTimestampsContainer absoluteTimestampsContainer = this->comparableSensorWithPpgMetaData1.getAbsoluteTimestamps();
-  AbsoluteTimestampsContainer comparableAbsoluteTimestampsContainer = AbsoluteTimestampsContainerExampleFactory::normalAbsoluteTimestamps();
-  EXPECT_TRUE(absoluteTimestampsContainer.isEqual(comparableAbsoluteTimestampsContainer));
-  EXPECT_EQ(this->comparableSensorWithPpgMetaData1.getSensorType(), ProtobufSensorType::SENSOR_TYPE_PPG);
-}
-
-TEST_F(SensorTest, TestSensorWithOneUnix) {
-  for (auto& unix : AbsoluteTimestampsContainerExampleFactory::unixTimestampsOneElement_ms()) {
-    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getFirstTimestamp(), unix);
-  }
-  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
-    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getBlockIntervals()[i],
-              DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms()[i]);
-  }
-  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms().size(); i++) {
-    EXPECT_EQ(this->normalSensorWithOneUnix.getDifferentialTimestamps().getTimestampsIntervals()[i],
-              DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms()[i]);
+TEST(SensorTest, TestGetChannelsWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  Channels channels1;
+  channels1.emplace_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
+  channels1.emplace_back(ChannelExampleFactory::channelWithAbsoluteBlockAndAccMetaData());
+  auto channels2 = sensor.getChannels();
+  for (size_t i = 0; i < channels1.size(); i++) {
+    EXPECT_TRUE(channels1[i] == channels2[i]);
   }
 }
 
-TEST_F(SensorTest, normalSensorWithNUllUnix) {
-  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getFirstTimestamp(),
-            DifferentialTimestampsContainerExampleFactory::zeroFirstTimestamp_ms());
-  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getBlockIntervals(),
-            DifferentialTimestampsContainerExampleFactory::emptyBlockIntervals_ms());
-  EXPECT_EQ(this->normalSensorWithNUllUnix.getDifferentialTimestamps().getTimestampsIntervals(),
-            DifferentialTimestampsContainerExampleFactory::emptyTimestampsIntervals_ms());
+TEST(SensorTest, TestGetChannelsWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_TRUE(sensor.getChannels().empty());
 }
 
-TEST_F(SensorTest, TestSensorWithOneUnixAndOneValueInLastBlock) {
-  EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getFirstTimestamp(),
-            AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithOneUnixInLastBlock()[0]);
-  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock().size(); i++) {
-    EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getBlockIntervals()[i],
-              DifferentialTimestampsContainerExampleFactory::normalBlockIntervals_msWithOneUnixInLastBlock()[i]);
-  }
-  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock().size(); i++) {
-    EXPECT_EQ(this->normalSensorWithOneUnixAndOneValueInLastBlock.getDifferentialTimestamps().getTimestampsIntervals()[i],
-              DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithOneUnixInLastBlock()[i]);
-  }
+TEST(SensorTest, TestGetSensorTypeWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_EQ(sensor.getSensorType(), SensorTypeProtobuf::SENSOR_TYPE_ACC);
 }
 
-TEST_F(SensorTest, TestSensorWithEqualTimestampsInterval) {
-  EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getFirstTimestamp(),
-            AbsoluteTimestampsContainerExampleFactory::absoluteTimestampWithEqualTimestampIntervals()[0]);
-  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms().size(); i++) {
-    EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getBlockIntervals()[i],
-              DifferentialTimestampsContainerExampleFactory::zeroBlockIntervals_ms()[i]);
-  }
-  for (size_t i = 0; i < DifferentialTimestampsContainerExampleFactory::zeroTimestampsIntervals_ms().size(); i++) {
-    EXPECT_EQ(this->normalSensorWithEqualTimestampsInterval.getDifferentialTimestamps().getTimestampsIntervals()[i],
-              DifferentialTimestampsContainerExampleFactory::normalTimestampsIntervals_msWithEqualDifferences()[i]);
-  }
+TEST(SensorTest, TestGetSensorTypeWithSensorPpgWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  EXPECT_EQ(sensor.getSensorType(), SensorTypeProtobuf::SENSOR_TYPE_PPG);
 }
 
-TEST_F(SensorTest, ComparableEqualNormalSensor) {
-  EXPECT_TRUE(this->normalSensorWithAccMetaData1.isEqual(this->normalSensorWithAccMetaData2));
+TEST(SensorTest, TestGetSensorTypeWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_EQ(sensor.getSensorType(), SensorTypeProtobuf::SENSOR_TYPE_NONE);
 }
 
-TEST_F(SensorTest, ComparableEqualComparableSensor) {
-  EXPECT_TRUE(this->comparableSensorWithPpgMetaData1.isEqual(this->comparableSensorWithPpgMetaData2));
+TEST(SensorTest, TestGetDataFormWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_EQ(sensor.getDataFrom(), DataForm::DATA_FORM_NONE);
 }
 
-TEST_F(SensorTest, ComparableDifferentSensor) {
-  EXPECT_FALSE(this->comparableSensorWithPpgMetaData1.isEqual(this->normalSensorWithAccMetaData1));
+TEST(SensorTest, TestGetDataFormWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_EQ(sensor.getDataFrom(), DataForm::DATA_FORM_DIFFERENTIAL);
 }
 
-TEST_F(SensorTest, ComparableDifferentComparableSensor) {
-  EXPECT_FALSE(this->comparableSensorWithPpgMetaData2.isEqual(this->normalSensorWithAccMetaData1));
+TEST(SensorTest, TestGetDataFormWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_EQ(sensor.getDataFrom(), DataForm::DATA_FORM_ABSOLUTE);
 }
 
-TEST_F(SensorTest, TestSerializeAndDeserializeMethodStandardSensor) {
-  ProtobufSensor protobufSensor;
-  this->normalSensorWithAccMetaData1.serialize(&protobufSensor);
-  Sensor sensor2 = Sensor(protobufSensor);
-  EXPECT_TRUE(this->normalSensorWithAccMetaData1.isEqual(sensor2));
+TEST(SensorTest, TestGetAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  auto absoluteTimestampsContainer1 = AbsoluteTimestampsContainerExampleFactory::absoluteTimestampsContainerWithThreeBigTimestamps();
+  auto absoluteTimestampsContainer2 = *sensor.getTimestamps<AbsoluteTimestampsContainer>();
+  EXPECT_TRUE(absoluteTimestampsContainer1 == absoluteTimestampsContainer2);
 }
 
-TEST_F(SensorTest, TestSerializeAndDeserializeMethodComparableSensor) {
-  ProtobufSensor protobufSensor;
-  this->comparableSensorWithPpgMetaData1.serialize(&protobufSensor);
-  Sensor sensor2 = Sensor(protobufSensor);
-  EXPECT_TRUE(this->comparableSensorWithPpgMetaData1.isEqual(sensor2));
+TEST(SensorTest, TestGetAbsoluteTimestampsContainerWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  auto absoluteTimestampsContainer = sensor.getTimestamps<AbsoluteTimestampsContainer>();
+  EXPECT_EQ(absoluteTimestampsContainer, std::nullopt);
 }
 
-TEST_F(SensorTest, TestMethodFirstTimestamp) {
-  EXPECT_EQ(this->normalSensorWithAccMetaData1.getFirstTimestamp(), DifferentialTimestampsContainerExampleFactory::expectedFirstTimestamps());
+TEST(SensorTest, TestGetAbsoluteTimestampsWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto absoluteTimestampsContainer = sensor.getTimestamps<AbsoluteTimestampsContainer>();
+  EXPECT_EQ(absoluteTimestampsContainer, std::nullopt);
 }
 
-TEST_F(SensorTest, TestMethodLastTimestamp) {
-  EXPECT_EQ(this->normalSensorWithAccMetaData1.getLastTimestamp(), DifferentialTimestampsContainerExampleFactory::lastTimestamp());
+TEST(SensorTest, TestGetDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  auto differentialTimestampsContainer = sensor.getTimestamps<DifferentialTimestampsContainer>();
+  EXPECT_EQ(differentialTimestampsContainer, std::nullopt);
 }
 
-TEST_F(SensorTest, TestMethodDuration) {
-  EXPECT_EQ(this->normalSensorWithAccMetaData1.getDuration(), DifferentialTimestampsContainerExampleFactory::duration());
+TEST(SensorTest, TestGetDifferentialTimestampsWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  auto differentialTimestampsContainer = sensor.getTimestamps<DifferentialTimestampsContainer>();
+  EXPECT_EQ(differentialTimestampsContainer, std::nullopt);
 }
 
-TEST_F(SensorTest, CheckSensorPtr) {
-  ProtobufSensor protobufSensor;
-  EXPECT_NO_THROW(this->comparableSensorWithPpgMetaData1.serialize(&protobufSensor));
+TEST(SensorTest, TestGetDifferentialTimestampsWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto differentialTimestampsContainer1 = DifferentialTimestampsContainerExampleFactory::differentialTimestampsContainerWithThreeBlocks();
+  auto differentialTimestampsContainer2 = *sensor.getTimestamps<DifferentialTimestampsContainer>();
+  EXPECT_TRUE(differentialTimestampsContainer1 == differentialTimestampsContainer2);
 }
 
-TEST_F(SensorTest, CheckSensorNullPtr) {
-  ProtobufSensor* protobufSensor = nullptr;
-  EXPECT_THROW(this->comparableSensorWithPpgMetaData1.serialize(protobufSensor), std::invalid_argument);
+TEST(SensorTest, TestGetFirstUnixTimestampWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto firstUnixTimestamp1InMs = sensor.getFirstUnixTimestampInMs();
+  auto firstUnixTimestamp2InMs = UnixTimestampsExampleFactory::firstTimestampInMs();
+  EXPECT_TRUE(firstUnixTimestamp1InMs == firstUnixTimestamp2InMs);
+}
+
+TEST(SensorTest, TestGetFirstUnixTimestampWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  auto firstUnixTimestamp1InMs = sensor.getFirstUnixTimestampInMs();
+  auto firstUnixTimestamp2InMs = UnixTimestampsExampleFactory::firstTimestampInMs();
+  EXPECT_TRUE(firstUnixTimestamp1InMs == firstUnixTimestamp2InMs);
+}
+
+TEST(SensorTest, TestGetFirstUnixTimestampThrowInvalideArgument) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_TRUE(sensor.getFirstUnixTimestampInMs() == UnixTimestampsExampleFactory::firstTimestampNotSetInMs());
+}
+
+TEST(SensorTest, TestGetLastUnixTimestampWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  auto lastUnixTimestamp1InMs = sensor.getLastUnixTimestampInMs();
+  auto lastUnixTimestamp2InMs = UnixTimestampsExampleFactory::lastTimestampInMs();
+  EXPECT_TRUE(lastUnixTimestamp1InMs == lastUnixTimestamp2InMs);
+}
+
+TEST(SensorTest, TestGetLastUnixTimestampWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto lastUnixTimestamp1InMs = sensor.getLastUnixTimestampInMs();
+  auto lastUnixTimestamp2InMs = UnixTimestampsExampleFactory::lastTimestampInMs();
+  EXPECT_TRUE(lastUnixTimestamp1InMs == lastUnixTimestamp2InMs);
+}
+
+TEST(SensorTest, TestGetDurationWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto duration = sensor.getDurationInMs();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampInMs();
+  auto lastUnixTimestampInMs = UnixTimestampsExampleFactory::lastTimestampInMs();
+  EXPECT_EQ(duration, lastUnixTimestampInMs - firstUnixTimestampInMs);
+}
+
+TEST(SensorTest, TestGetDurationWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  auto duration = sensor.getDurationInMs();
+  auto firstUnixTimestampInMs = UnixTimestampsExampleFactory::firstTimestampInMs();
+  auto lastUnixTimestampInMs = UnixTimestampsExampleFactory::lastTimestampInMs();
+  EXPECT_EQ(duration, lastUnixTimestampInMs - firstUnixTimestampInMs);
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isEqual                        //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestIsEqualWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorNotSet) {
+  auto sensor1 = SensorExampleFactory::sensorNotSet();
+  auto sensor2 = SensorExampleFactory::sensorNotSet();
+  EXPECT_TRUE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorNotSetAndSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorNotSet();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorAccWithTwoChannelsInDifferentialFormAndSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorAccWithTwoChannelsInDifferentialFormAndSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorPpgWithOneChannelsInAbsoluteFormAndSensorPpgWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  EXPECT_TRUE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestIsEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteFormAndSensorNoneWithZeroChannelsInNotSetDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetDifferentialForm();
+  EXPECT_FALSE(sensor1 == sensor2);
+}
+
+////////////////////////////////////////////////////////////////
+//                      Test isNotEqual                       //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorNotSet) {
+  auto sensor1 = SensorExampleFactory::sensorNotSet();
+  auto sensor2 = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorNotSetAndSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorNotSet();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialFormAndSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorAccWithTwoChannelsInDifferentialFormAndSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensor2 = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorPpgWithOneChannelsInAbsoluteFormAndSensorPpgWithTwoChannelsInAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  EXPECT_FALSE(sensor1 != sensor2);
+}
+
+TEST(SensorTest, TestIsNotEqualWithSensorNoneWithZeroChannelsInNotSetAbsoluteFormAndSensorNoneWithZeroChannelsInNotSetDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  auto sensor2 = SensorExampleFactory::sensorNoneWithZeroChannelsInNotSetDifferentialForm();
+  EXPECT_TRUE(sensor1 != sensor2);
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test toJson                         //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestToJsonWithSensorPpgWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor);
+  auto sensorJson2 = sensor.toJson();
+  EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
+}
+
+TEST(SensorTest, TestToJsonWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor);
+  auto sensorJson2 = sensor.toJson();
+  EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
+}
+
+TEST(SensorTest, TestToJsonWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor);
+  auto sensorJson2 = sensor.toJson();
+  EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
+}
+
+TEST(SensorTest, TestToJsonWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor);
+  auto sensorJson2 = sensor.toJson();
+  EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
+}
+
+TEST(SensorTest, TestToJsonWithSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor);
+  auto sensorJson2 = sensor.toJson();
+  EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
+}
+
+TEST(SensorTest, TestToJsonWithSensorPpgWithOneChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorPpgWithOneChannelsInAbsoluteForm();
+  auto sensorJson1 = SensorExampleFactory::buildSensorJson(sensor);
+  auto sensorJson2 = sensor.toJson();
+  EXPECT_TRUE(sensorJson1.toStyledString() == sensorJson2.toStyledString());
+}
+
+////////////////////////////////////////////////////////////////
+//                        Test isSet                          //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestIsSetWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorNoneWithZeroChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorNoneWithZeroChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+TEST(SensorTest, TestIsSetWithSensorAccWithZeroChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithZeroChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                       Test serialize                       //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestSerializeWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  SensorProtobuf sensorProtobuf;
+  sensor1.serialize(&sensorProtobuf);
+  auto sensor2 = Sensor(sensorProtobuf);
+  EXPECT_TRUE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestSerializeWithSensorNotSet) {
+  auto sensor1 = SensorExampleFactory::sensorNotSet();
+  SensorProtobuf sensorProtobuf;
+  sensor1.serialize(&sensorProtobuf);
+  auto sensor2 = Sensor(sensorProtobuf);
+  EXPECT_TRUE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestSerializeWithSensorPpgWithTwoChannelsInDifferentialForm) {
+  auto sensor1 = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  SensorProtobuf sensorProtobuf;
+  sensor1.serialize(&sensorProtobuf);
+  auto sensor2 = Sensor(sensorProtobuf);
+  EXPECT_TRUE(sensor1 == sensor2);
+}
+
+TEST(SensorTest, TestSerializeNoThrow) {
+  auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInDifferentialForm();
+  SensorProtobuf sensorProtobuf;
+  EXPECT_NO_THROW(sensor.serialize(&sensorProtobuf));
+}
+
+TEST(SensorTest, TestSerializeThrowDueToNullPointer) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  SensorProtobuf* sensorProtobuf = nullptr;
+  EXPECT_THROW(sensor.serialize(sensorProtobuf), NullPointerException);
+}
+
+TEST(SensorTest, TestSerializeThrowDueToWrongDataFromAbsolute) {
+  auto sensor = SensorExampleFactory::sensorPpgWithTwoChannelsInAbsoluteForm();
+  SensorProtobuf sensorProtobuf;
+  EXPECT_THROW(sensor.serialize(&sensorProtobuf), WrongDataFormException);
+}
+
+////////////////////////////////////////////////////////////////
+//                     Test switchDataForm                    //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestSwitchDataFormWithSensorForSwitchDataFromTestInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm();
+  auto sensorInDifferentialForm = SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm();
+  sensor.switchDataForm();
+  EXPECT_TRUE(sensor == sensorInDifferentialForm);
+}
+
+TEST(SensorTest, TestSwitchDataFormWithSensorForSwitchDataFromTestInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorForSwitchDataFromTestInDifferentialForm();
+  auto sensorInAbsoluteForm = SensorExampleFactory::sensorForSwitchDataFromTestInAbsoluteForm();
+  sensor.switchDataForm();
+  EXPECT_TRUE(sensor == sensorInAbsoluteForm);
+}
+
+TEST(SensorTest, TestSwitchDataFormWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  sensor.switchDataForm();
+  EXPECT_FALSE(sensor.isSet());
+}
+
+////////////////////////////////////////////////////////////////
+//                      Test has Methods                      //
+////////////////////////////////////////////////////////////////
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_FALSE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasDifferentialTimestampsContainerWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_TRUE(sensor.hasTimestamps<DifferentialTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorNotSet) {
+  auto sensor = SensorExampleFactory::sensorNotSet();
+  EXPECT_FALSE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInDifferentialForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInDifferentialForm();
+  EXPECT_FALSE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
+}
+
+TEST(SensorTest, TestHasAbsoluteTimestampsContainerWithSensorAccWithTwoChannelsInAbsoluteForm) {
+  auto sensor = SensorExampleFactory::sensorAccWithTwoChannelsInAbsoluteForm();
+  EXPECT_TRUE(sensor.hasTimestamps<AbsoluteTimestampsContainer>());
 }

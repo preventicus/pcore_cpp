@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,121 +32,133 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "PpgMetaData.h"
+#include "Exceptions.h"
+#include "PcoreJson.h"
 
-PpgMetaData::PpgMetaData(ProtobufColor color) {
-  this->color = color;
-  this->wavelength_nm = 0;
-}
+using namespace PCore;
 
-PpgMetaData::PpgMetaData(uint32_t wavelength_nm) {
-  this->wavelength_nm = wavelength_nm;
-  this->color = ProtobufColor::COLOR_NONE;
-}
+using WavelegthJson = Json::Value;
 
-PpgMetaData::PpgMetaData(Json::Value& ppgMetaData) {
-  if (ppgMetaData["wavelength_nm"].asUInt() != 0 && ppgMetaData["color"].asString() != "") {
-    throw std::invalid_argument("just one enum type of PpgMetaData can be initialized");
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+PpgMetaData::PpgMetaData(ColorProtobuf colorProtobuf) noexcept : light(colorProtobuf) {}
+
+PpgMetaData::PpgMetaData(Wavelength wavelengthInNm) noexcept : light(wavelengthInNm) {}
+
+PpgMetaData::PpgMetaData(const PpgMetaDataJson& ppgMetaDataJson)
+    : light([&]() -> Light {
+        if (ppgMetaDataJson.isMember(PcoreJson::Key::wavelength_nm)) {
+          if (ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asInt() < 0) {
+            throw WrongValueException("PpgMetaData", "wavelengthInNm is negative in json.");
+          }
+          return ppgMetaDataJson[PcoreJson::Key::wavelength_nm].asUInt();
+        } else if (ppgMetaDataJson.isMember(PcoreJson::Key::color)) {
+          return PcoreProtobuf::Convert::colorProtobufFromString(ppgMetaDataJson[PcoreJson::Key::color].asString());
+        } else {
+          return std::nullopt;
+        }
+      }()) {}
+
+PpgMetaData::PpgMetaData(const PpgMetaDataProtobuf& ppgMetaDataProtobuf) noexcept
+    : light([&]() -> Light {
+        if (ppgMetaDataProtobuf.has_color()) {
+          return ppgMetaDataProtobuf.color();
+        } else if (ppgMetaDataProtobuf.has_wavelength_nm()) {
+          return ppgMetaDataProtobuf.wavelength_nm();
+        } else {
+          return std::nullopt;
+        }
+      }()) {}
+
+PpgMetaData::PpgMetaData() noexcept : light(std::nullopt) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+
+template <typename L>
+[[nodiscard]] std::optional<L> PpgMetaData::getLight() const noexcept {
+  if (!this->light.has_value()) {
+    return std::nullopt;
   }
-  if (ppgMetaData["wavelength_nm"].asUInt() != 0) {
-    if (ppgMetaData["wavelength_nm"].asUInt() < 0) {
-      throw std::invalid_argument("wavelength_nm  not allowed to be less than zero");
+  if (!std::holds_alternative<L>(*this->light)) {
+    return std::nullopt;
+  }
+  return std::get<L>(*this->light);
+}
+
+template <typename L>
+[[nodiscard]] bool PpgMetaData::hasLight() const noexcept {
+  if (!this->light.has_value()) {
+    return false;
+  }
+  if (!std::holds_alternative<L>(*this->light)) {
+    return false;
+  }
+  if constexpr (std::is_same_v<L, Wavelength>) {
+    return std::get<L>(*this->light) != 0;
+  } else {
+    return std::get<L>(*this->light) != ColorProtobuf::COLOR_NONE;
+  }
+}
+
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
+bool PpgMetaData::isSet() const noexcept {
+  return this->hasLight<ColorProtobuf>() || this->hasLight<Wavelength>();
+}
+
+PpgMetaDataJson PpgMetaData::toJson() const noexcept {
+  PpgMetaDataJson ppgMetaDataJson;
+  if (!this->isSet()) {
+    return ppgMetaDataJson;
+  }
+  if (this->hasLight<Wavelength>()) {
+    WavelegthJson wavelengthJson(Json::uintValue);
+    wavelengthJson = *this->getLight<Wavelength>();
+    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = wavelengthJson;
+  }
+  if (this->hasLight<ColorProtobuf>()) {
+    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(*this->getLight<ColorProtobuf>());
+  }
+  return ppgMetaDataJson;
+}
+
+void PpgMetaData::serialize(PpgMetaDataProtobuf* ppgMetaDataProtobuf) const {
+  if (ppgMetaDataProtobuf == nullptr) {
+    throw NullPointerException("PpgMetaData::serialize", "ppgMetaDataProtobuf");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  if (this->hasLight<ColorProtobuf>()) {
+    ppgMetaDataProtobuf->set_color(*this->getLight<ColorProtobuf>());
+  }
+  if (this->hasLight<Wavelength>()) {
+    ppgMetaDataProtobuf->set_wavelength_nm(*this->getLight<Wavelength>());
+  }
+}
+
+void PpgMetaData::switchDataForm() {
+  throw ShouldNotBeCalledException("PpgMetaData::switchDataForm");
+}
+
+bool PpgMetaData::operator==(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const noexcept {
+  if (const auto* derived = dynamic_cast<const PpgMetaData*>(&ppgMetaData)) {
+    if (this->light.has_value() != derived->light.has_value()) {
+      return false;
     }
-    Json::Value wavelength = ppgMetaData["wavelength_nm"];
-    this->wavelength_nm = wavelength.asUInt();
-    this->color = ProtobufColor::COLOR_NONE;
-  }
-  if (ppgMetaData["color"].asString() != "") {
-    this->color = this->toEnum(ppgMetaData["color"]);
-    this->wavelength_nm = 0;
-  }
-}
-
-PpgMetaData::PpgMetaData(const ProtobufPpgMetaData& protobufPpgMetaData) {
-  this->deserialize(protobufPpgMetaData);
-}
-
-PpgMetaData::PpgMetaData() {
-  this->color = ProtobufColor::COLOR_NONE;
-  this->wavelength_nm = 0;
-}
-
-ProtobufColor PpgMetaData::getColor() {
-  return this->color;
-}
-
-uint32_t PpgMetaData::getWavelength() {
-  return this->wavelength_nm;
-}
-
-bool PpgMetaData::isSet() {
-  return !(this->color == ProtobufColor::COLOR_NONE && this->wavelength_nm == 0);
-}
-
-bool PpgMetaData::isEqual(PpgMetaData& ppgMetaData) {
-  return this->color == ppgMetaData.color && this->wavelength_nm == ppgMetaData.wavelength_nm;
-}
-
-Json::Value PpgMetaData::toJson() {
-  Json::Value ppgMetaData;
-  Json::Value wavelength_nm(this->wavelength_nm);
-  if (this->wavelength_nm != 0) {
-    ppgMetaData["wavelength_nm"] = wavelength_nm;
-  }
-  if (this->color != ProtobufColor::COLOR_NONE) {
-    ppgMetaData["color"] = this->toString(this->color);
-  }
-  return ppgMetaData;
-}
-
-void PpgMetaData::serialize(ProtobufPpgMetaData* protobufPpgMetaData) {
-  if (protobufPpgMetaData == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufPpgMetaData is a null pointer");
-  }
-  if (this->color != ProtobufColor::COLOR_NONE && this->wavelength_nm != 0) {
-    throw std::invalid_argument("one parameter has to be initialized");
-  }
-  if (this->color != ProtobufColor::COLOR_NONE) {
-    protobufPpgMetaData->set_color(this->color);
-  }
-  if (this->wavelength_nm != 0) {
-    protobufPpgMetaData->set_wavelength_nm(this->wavelength_nm);
-  }
-}
-
-void PpgMetaData::deserialize(const ProtobufPpgMetaData& protobufPpgMetaData) {
-  this->color = protobufPpgMetaData.color();
-  this->wavelength_nm = protobufPpgMetaData.wavelength_nm();
-}
-
-std::string PpgMetaData::toString(ProtobufColor color) {
-  std::string jsonColor;
-  switch (color) {
-    case ProtobufColor::COLOR_RED: {
-      jsonColor = "COLOR_RED";
+    if (!this->light.has_value() && !derived->light.has_value()) {
+      return true;
     }
-    case ProtobufColor::COLOR_BLUE: {
-      jsonColor = "COLOR_BLUE";
-    }
-    case ProtobufColor::COLOR_GREEN: {
-      jsonColor = "COLOR_GREEN";
-    }
-    default: {
-      break;
-    }
+    return this->light == derived->light;
   }
-  return jsonColor;
+  return false;
 }
 
-ProtobufColor PpgMetaData::toEnum(Json::Value color) {
-  ProtobufColor protobufColor;
-  if (color.asString() == "COLOR_RED") {
-    protobufColor = ProtobufColor::COLOR_RED;
-  }
-  if (color.asString() == "COLOR_BLUE") {
-    protobufColor = ProtobufColor::COLOR_BLUE;
-  }
-  if (color.asString() == "COLOR_GREEN") {
-    protobufColor = ProtobufColor::COLOR_GREEN;
-  }
-  return protobufColor;
+bool PpgMetaData::operator!=(const IPCore<PpgMetaDataProtobuf>& ppgMetaData) const noexcept {
+  return !(*this == ppgMetaData);
 }

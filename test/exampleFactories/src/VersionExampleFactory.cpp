@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,59 +32,89 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "VersionExampleFactory.h"
+#include "PcoreJson.h"
 
-uint32_t VersionExampleFactory::majorOne() {
+Major VersionExampleFactory::majorOne() {
   return 1;
 }
 
-uint32_t VersionExampleFactory::minorOne() {
+Minor VersionExampleFactory::minorOne() {
   return 1;
 }
 
-uint32_t VersionExampleFactory::patchOne() {
+Patch VersionExampleFactory::patchOne() {
   return 1;
 }
 
-uint32_t VersionExampleFactory::majorTwo() {
+Major VersionExampleFactory::majorTwo() {
   return 2;
 }
 
-uint32_t VersionExampleFactory::minorTwo() {
+Minor VersionExampleFactory::minorTwo() {
   return 2;
 }
 
-uint32_t VersionExampleFactory::patchTwo() {
+Patch VersionExampleFactory::patchTwo() {
   return 2;
 }
 
-uint32_t VersionExampleFactory::majorZero() {
+Major VersionExampleFactory::majorZero() {
   return 0;
 }
 
-uint32_t VersionExampleFactory::minorZero() {
+Minor VersionExampleFactory::minorZero() {
   return 0;
 }
 
-uint32_t VersionExampleFactory::patchZero() {
+Patch VersionExampleFactory::patchZero() {
   return 0;
 }
 
-Version VersionExampleFactory::normalVersion() {
+Version VersionExampleFactory::versionWithMajor1Minor1Patch0() {
+  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
+}
+
+Version VersionExampleFactory::versionWithMajor1Minor2Patch0() {
+  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorTwo(), VersionExampleFactory::patchZero());
+}
+
+Version VersionExampleFactory::versionWithMajor1Minor1Patch1() {
   return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchOne());
 }
 
-Version VersionExampleFactory::startVersion() {
+Version VersionExampleFactory::versionWithMajor0Minor2Patch0() {
+  return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorTwo(), VersionExampleFactory::patchZero());
+}
+
+Version VersionExampleFactory::versionWithMajor0Minor0Patch1() {
+  return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorZero(), VersionExampleFactory::patchOne());
+}
+
+Version VersionExampleFactory::versionWithMajor0Minor0Patch0() {
   return Version(VersionExampleFactory::majorZero(), VersionExampleFactory::minorZero(), VersionExampleFactory::patchZero());
 }
 
-Version VersionExampleFactory::highVersion() {
-  return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorTwo(), VersionExampleFactory::patchTwo());
-}
-
-Version VersionExampleFactory::randomVersion() {
+Version VersionExampleFactory::versionWithMajor2Minor1Patch0() {
   return Version(VersionExampleFactory::majorTwo(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
 }
 
-Version VersionExampleFactory::absoluteJsonDataVersion() {
-  return Version(VersionExampleFactory::majorOne(), VersionExampleFactory::minorOne(), VersionExampleFactory::patchZero());
+Version VersionExampleFactory::versionNotSet() {
+  return Version();
+}
+
+VersionJson VersionExampleFactory::buildVersionJson(const Version& version) {
+  VersionJson versionJson;
+  if (!version.isSet()) {
+    return versionJson;
+  }
+  MajorJson majorJson(Json::uintValue);
+  MinorJson minorJson(Json::uintValue);
+  PatchJson patchJson(Json::uintValue);
+  majorJson = version.getMajor();
+  minorJson = version.getMinor();
+  patchJson = version.getPatch();
+  versionJson[PcoreJson::Key::major] = majorJson;
+  versionJson[PcoreJson::Key::minor] = minorJson;
+  versionJson[PcoreJson::Key::patch] = patchJson;
+  return versionJson;
 }

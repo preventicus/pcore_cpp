@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,38 +32,48 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AbsoluteBlock.h"
+#include <utility>
+#include "PcoreJson.h"
 
-AbsoluteBlock::AbsoluteBlock(std::vector<int32_t>& absoluteValues) : absoluteValues(absoluteValues) {}
+using namespace PCore;
 
-AbsoluteBlock::AbsoluteBlock(Json::Value& absoluteBlock) {
-  Json::Value AbsoluteValuesJson = absoluteBlock["absolute_values"];
-  Json::Value::ArrayIndex n = AbsoluteValuesJson.size();
-  std::vector<int32_t> absoluteValues;
-  absoluteValues.reserve(n);
-  for (auto& AbsoluteValueJson : AbsoluteValuesJson) {
-    absoluteValues.push_back(AbsoluteValueJson.asInt());
-  }
-  this->absoluteValues = absoluteValues;
-}
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+AbsoluteBlock::AbsoluteBlock(AbsoluteValues absoluteValues) noexcept : absoluteValues(std::move(absoluteValues)) {}
 
-AbsoluteBlock::AbsoluteBlock() {
-  this->absoluteValues = {};
-}
+AbsoluteBlock::AbsoluteBlock(const AbsoluteBlockJson& absoluteBlockJson) noexcept
+    : absoluteValues(PcoreJson::Convert::jsonToVector<AbsoluteValue>(absoluteBlockJson, PcoreJson::Key::absolute_values)) {}
 
-std::vector<int32_t> AbsoluteBlock::getAbsoluteValues() {
+AbsoluteBlock::AbsoluteBlock() noexcept : absoluteValues({}) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+AbsoluteValues AbsoluteBlock::getAbsoluteValues() const noexcept {
   return this->absoluteValues;
 }
 
-bool AbsoluteBlock::isEqual(AbsoluteBlock& block) {
-  return this->absoluteValues == block.absoluteValues;
+////////////////////////////////////////////////////////////////
+//                       Public Methods                       //
+////////////////////////////////////////////////////////////////
+bool AbsoluteBlock::isSet() const noexcept {
+  return !this->absoluteValues.empty();
 }
 
-Json::Value AbsoluteBlock::toJson() {
-  Json::Value absoluteBlock;
-  Json::Value absoluteValues(Json::arrayValue);
-  for (auto& absoluteValue : this->absoluteValues) {
-    absoluteValues.append(absoluteValue);
+AbsoluteBlockJson AbsoluteBlock::toJson() const noexcept {
+  AbsoluteBlockJson absoluteBlockJson;
+  if (!isSet()) {
+    return absoluteBlockJson;
   }
-  absoluteBlock["absolute_values"] = absoluteValues;
-  return absoluteBlock;
+  absoluteBlockJson[PcoreJson::Key::absolute_values] = PcoreJson::Convert::vectorToJson(this->absoluteValues);
+  return absoluteBlockJson;
+}
+
+bool AbsoluteBlock::operator==(const AbsoluteBlock& absoluteBlock) const noexcept {
+  return this->absoluteValues == absoluteBlock.absoluteValues;
+}
+
+bool AbsoluteBlock::operator!=(const AbsoluteBlock& absoluteBlock) const noexcept {
+  return this->absoluteValues != absoluteBlock.absoluteValues;
 }

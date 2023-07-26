@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -35,20 +35,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Header.h"
 #include "VersionExampleFactory.h"
 
+using namespace PCore;
+
 class HeaderExampleFactory {
  public:
-  static int32_t positiveTimeZoneOffset_min();
-  static int32_t negativeTimeZoneOffset_min();
-  static int32_t invalidPositiveTimeZoneOffset_min();
-  static int32_t invalidNegativeTimeZoneOffset_min();
-  static int32_t noTimeZoneOffset_min();
-  static int32_t maxTimeZoneOffset_min();
-  static int32_t minTimeZoneOffset_min();
+  static TimeZoneOffset timeZoneOffsetPositiveInMin();
+  static TimeZoneOffset timeZoneOffsetNegativeInMin();
+  static TimeZoneOffset timeZoneOffsetNotSetInMin();
+  static TimeZoneOffset timeZoneOffsetMaxValueInMin();
+  static TimeZoneOffset timeZoneOffsetMinValueInMin();
+  static TimeZoneOffset timeZoneOffsetPositiveInvalidInMin();
+  static TimeZoneOffset timeZoneOffsetNegativeInvalidInMin();
 
-  static Header normalHeaderWithPositiveTimeZoneOffset_min();
-  static Header normalHeaderWithNegativeTimeZoneOffset_min();
-  static Header normalHeaderWithNoTimeZoneOffset_min();
-  static Header headerWithMaxTimeZoneOffset_min();
-  static Header headerWithMinTimeZoneOffset_min();
-  static Header absoluteJsonDataHeader();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  static Header headerWithVersionWithMajor0Minor0Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormAbsolute();
+  static Header headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
+  static Header headerWithVersionNotSetAndTimeZoneOffsetNotSetAndDataFormDifferential();
+  static Header headerWithVersionWithMajor1Minor2Patch0AndTimeZoneOffsetNotSetAndDataFormDifferential();
+
+  static Header headerNotSet();
+
+  static HeaderJson buildHeaderJson(const Header& header);
 };

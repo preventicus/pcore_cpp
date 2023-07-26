@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -34,13 +34,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "AccMetaData.h"
 
+using namespace PCore;
+
 class AccMetaDataExampleFactory {
  public:
+  static AccMetaData accMetaDataWithNormEuclideanDifferencesNorm();
+  static AccMetaData accMetaDataWithNormNone();
   static AccMetaData accMetaDataWithCoordinateX();
   static AccMetaData accMetaDataWithCoordinateY();
   static AccMetaData accMetaDataWithCoordinateZ();
-
-  static AccMetaData accMetaDataWithEuclideanDifferenceNorm();
-
+  static AccMetaData accMetaDataWithCoordinateNone();
   static AccMetaData accMetaDataNotSet();
+
+  static AccMetaDataJson buildAccMetaDataJson(const AccMetaData& accMetaData);
 };

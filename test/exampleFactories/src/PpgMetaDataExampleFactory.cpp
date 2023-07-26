@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,55 +32,49 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "PpgMetaDataExampleFactory.h"
-
-uint32_t PpgMetaDataExampleFactory::normalWavelength_nm() {
-  return 255;
-}
-
-uint32_t PpgMetaDataExampleFactory::comparableWavelength_nm() {
-  return 100;
-}
-
-uint32_t PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1() {
-  return 450;
-}
-
-uint32_t PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2() {
-  return 660;
-}
-
-uint32_t PpgMetaDataExampleFactory::noWavelength_nm() {
-  return 0;
-}
+#include "PcoreJson.h"
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorGreen() {
-  return PpgMetaData(ProtobufColor::COLOR_GREEN);
+  return PpgMetaData(ColorProtobuf::COLOR_GREEN);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorBlue() {
-  return PpgMetaData(ProtobufColor::COLOR_BLUE);
+  return PpgMetaData(ColorProtobuf::COLOR_BLUE);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithColorRed() {
-  return PpgMetaData(ProtobufColor::COLOR_RED);
+  return PpgMetaData(ColorProtobuf::COLOR_RED);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithWavelength() {
-  return PpgMetaData(PpgMetaDataExampleFactory::normalWavelength_nm());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithColorNone() {
+  return PpgMetaData(ColorProtobuf::COLOR_NONE);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::ppgMetDataWithComparableWavelength() {
-  return PpgMetaData(PpgMetaDataExampleFactory::comparableWavelength_nm());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength0() {
+  return PpgMetaData(0);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::absoluteJsonDataPpg1() {
-  return PpgMetaData(PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm1());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength255() {
+  return PpgMetaData(255);
 }
 
-PpgMetaData PpgMetaDataExampleFactory::absoluteJsonDataPpg2() {
-  return PpgMetaData(PpgMetaDataExampleFactory::absoluteJsonDataWavelength_nm2());
+PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataWithWavelength100() {
+  return PpgMetaData(100);
 }
 
 PpgMetaData PpgMetaDataExampleFactory::ppgMetaDataNotSet() {
   return PpgMetaData();
+}
+
+PpgMetaDataJson PpgMetaDataExampleFactory::buildPpgMetaDataJson(const PpgMetaData& ppgMetaData) {
+  PpgMetaDataJson ppgMetaDataJson;
+  if (!ppgMetaData.isSet()) {
+    return ppgMetaDataJson;
+  }
+  if (ppgMetaData.hasLight<Wavelength>()) {
+    ppgMetaDataJson[PcoreJson::Key::wavelength_nm] = *ppgMetaData.getLight<Wavelength>();
+  } else if (ppgMetaData.hasLight<ColorProtobuf>()) {
+    ppgMetaDataJson[PcoreJson::Key::color] = PcoreProtobuf::Convert::colorProtobufToString(*ppgMetaData.getLight<ColorProtobuf>());
+  }
+  return ppgMetaDataJson;
 }

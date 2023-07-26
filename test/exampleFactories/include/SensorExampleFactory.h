@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -37,21 +37,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialTimestampsContainerExampleFactory.h"
 #include "Sensor.h"
 
+#include "Raw.h"
+
+using namespace PCore;
+
 class SensorExampleFactory {
  public:
-  static Sensor normalSensor();
-  static Sensor sensorWithOneUnixAndOneValue();
-  static Sensor sensorWithNUllUnixAndNUllValue();
-  static Sensor sensorWithOneUnixAndOneValueInLastBlock();
-  static Sensor sensorWithEqualTimestampsInterval();
-  static Sensor comparableSensor();
-  static Sensor absoluteJsonDataPpgSensor();
-  static Sensor absoluteJsonDataAccSensor();
-  static Sensor differentialJsonDataPpgSensor();
-  static Sensor differentialJsonDataAccSensor();
+  static Sensor sensorPpgWithTwoChannelsInAbsoluteForm();
+  static Sensor sensorPpgWithOneChannelsInAbsoluteForm();
+  static Sensor sensorAccWithTwoChannelsInAbsoluteForm();
+  static Sensor sensorPpgWithTwoChannelsInDifferentialForm();
+  static Sensor sensorAccWithTwoChannelsInDifferentialForm();
+  static Sensor sensorAccWithZeroChannelsInDifferentialForm();
+  static Sensor sensorNoneWithZeroChannelsInDifferentialForm();
+  static Sensor sensorNoneWithZeroChannelsInAbsoluteForm();
+  static Sensor sensorNoneWithZeroChannelsInNotSetAbsoluteForm();
+  static Sensor sensorNoneWithZeroChannelsInNotSetDifferentialForm();
+  static Sensor sensorNotSet();
+  static Sensor sensorForSwitchDataFromTestInAbsoluteForm();
+  static Sensor sensorForSwitchDataFromTestInDifferentialForm();
 
-  static std::vector<Sensor> normalVectorWithSensors();
-  static std::vector<Sensor> comparableVectorWithSensors();
-  static std::vector<Sensor> vectorWithAbsoluteJsonDataSensor();
-  static std::vector<Sensor> vectorWithDifferentialJsonDataSensor();
+  static SensorJson buildSensorJson(const Sensor& sensor);
+  static SensorsJson buildSensorsJson(const Sensors& sensors);
 };

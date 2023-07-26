@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,19 +32,58 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DataExampleFactory.h"
+#include "PcoreJson.h"
 
-Data DataExampleFactory::normalData() {
-  return Data(RawExampleFactory::normalRaw(), HeaderExampleFactory::normalHeaderWithPositiveTimeZoneOffset_min());
+Data DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetPositive() {
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  return Data(raw, header);
 }
 
-Data DataExampleFactory::comparableData() {
-  return Data(RawExampleFactory::comparableRaw(), HeaderExampleFactory::normalHeaderWithNegativeTimeZoneOffset_min());
+Data DataExampleFactory::dataWithRawWithTwoSensorsPpgAndHeaderWithTimeZoneOffsetNegative() {
+  auto raw = RawExampleFactory::rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetNegativeAndDataFormDifferential();
+  return Data(raw, header);
 }
 
-Data DataExampleFactory::absoluteJsonData() {
-  return Data(RawExampleFactory::absoluteJsonDataRaw(), HeaderExampleFactory::absoluteJsonDataHeader());
+Data DataExampleFactory::dataWithRawWithOneSensorsPpgAndHeaderWithTimeZoneOffsetNegative() {
+  auto raw = RawExampleFactory::rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  return Data(raw, header);
 }
 
-Data DataExampleFactory::differentialJsonData() {
-  return Data(RawExampleFactory::differentialJsonDataRaw(), HeaderExampleFactory::absoluteJsonDataHeader());
+Data DataExampleFactory::dataWithRawWithZeroSensorsInDifferentialFormAndHeaderNotSet() {
+  auto raw = RawExampleFactory::rawWithZeroSensorsInDifferentialForm();
+  auto header = HeaderExampleFactory::headerNotSet();
+  return Data(raw, header);
+}
+
+Data DataExampleFactory::dataNotSet() {
+  return Data();
+}
+
+Data DataExampleFactory::dataWithRawForSwitchDataFormTestInAbsoluteForm() {
+  auto raw = RawExampleFactory::rawForSwitchDataFormTestInAbsoluteForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormAbsolute();
+  return Data(raw, header);
+}
+
+Data DataExampleFactory::dataWithRawForSwitchDataFormTestInDifferentialForm() {
+  auto raw = RawExampleFactory::rawForSwitchDataFormTestInDifferentialForm();
+  auto header = HeaderExampleFactory::headerWithVersionWithMajor2Minor1Patch0AndTimeZoneOffsetPositiveAndDataFormDifferential();
+  return Data(raw, header);
+}
+
+Json::Value DataExampleFactory::buildDataJson(const Data& data) {
+  DataJson dataJson;
+  if (!data.isSet()) {
+    return dataJson;
+  }
+  auto header = data.getHeader();
+  auto raw = data.getRaw();
+  dataJson[PcoreJson::Key::header] = HeaderExampleFactory::buildHeaderJson(header);
+  dataJson[PcoreJson::Key::raw] = RawExampleFactory::buildRawJson(raw);
+  Json::Value json;
+  json[PcoreJson::Key::data] = dataJson;
+  return json;
 }

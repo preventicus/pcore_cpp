@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -34,22 +34,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include "PpgMetaData.h"
 
+using namespace PCore;
+
 class PpgMetaDataExampleFactory {
  public:
-  static uint32_t normalWavelength_nm();
-  static uint32_t comparableWavelength_nm();
-  static uint32_t noWavelength_nm();
-  static uint32_t absoluteJsonDataWavelength_nm1();
-  static uint32_t absoluteJsonDataWavelength_nm2();
-
   static PpgMetaData ppgMetDataWithColorGreen();
   static PpgMetaData ppgMetDataWithColorBlue();
   static PpgMetaData ppgMetDataWithColorRed();
-
-  static PpgMetaData ppgMetDataWithWavelength();
-  static PpgMetaData ppgMetDataWithComparableWavelength();
-  static PpgMetaData absoluteJsonDataPpg1();
-  static PpgMetaData absoluteJsonDataPpg2();
-
+  static PpgMetaData ppgMetaDataWithColorNone();
+  static PpgMetaData ppgMetaDataWithWavelength255();
+  static PpgMetaData ppgMetaDataWithWavelength100();
+  static PpgMetaData ppgMetaDataWithWavelength0();
   static PpgMetaData ppgMetaDataNotSet();
+
+  static PpgMetaDataJson buildPpgMetaDataJson(const PpgMetaData& ppgMetaData);
 };

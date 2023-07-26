@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -30,116 +30,127 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #include "AccMetaData.h"
+#include "Exceptions.h"
+#include "PcoreJson.h"
 
-AccMetaData::AccMetaData(ProtobufCoordinate coordinate) {
-  this->coordinate = coordinate;
-  this->norm = ProtobufNorm::NORM_NONE;
-}
+using namespace PCore;
 
-AccMetaData::AccMetaData(ProtobufNorm norm) {
-  this->norm = norm;
-  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
-}
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+AccMetaData::AccMetaData(CoordinateProtobuf coordinate) noexcept : type(coordinate) {}
 
-AccMetaData::AccMetaData(Json::Value& accMetaData) {
-  if (accMetaData["norm"].asString() != "" && accMetaData["coordinate"].asString() != "") {
-    throw std::invalid_argument("just one enum type of AccMetaData can be initialized");
+AccMetaData::AccMetaData(NormProtobuf norm) noexcept : type(norm) {}
+
+AccMetaData::AccMetaData(const AccMetaDataJson& accMetaDataJson)
+    : type([&]() -> Type {
+        if (accMetaDataJson.isMember(PcoreJson::Key::coordinate)) {
+          return PcoreProtobuf::Convert::coordinateProtobufFromString(accMetaDataJson[PcoreJson::Key::coordinate].asString());
+        } else if (accMetaDataJson.isMember(PcoreJson::Key::norm)) {
+          return PcoreProtobuf::Convert::normProtobufFromString(accMetaDataJson[PcoreJson::Key::norm].asString());
+        } else {
+          return std::nullopt;
+        }
+      }()) {}
+
+AccMetaData::AccMetaData(const AccMetaDataProtobuf& accMetaDataProtobuf) noexcept
+    : type([&]() -> Type {
+        if (accMetaDataProtobuf.has_coordinate()) {
+          return accMetaDataProtobuf.coordinate();
+        } else if (accMetaDataProtobuf.has_norm()) {
+          return accMetaDataProtobuf.norm();
+        } else {
+          return std::nullopt;
+        }
+      }()) {}
+
+AccMetaData::AccMetaData() noexcept : type(std::nullopt) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+template <typename T>
+std::optional<T> AccMetaData::getType() const noexcept {
+  if (!this->type.has_value()) {
+    return std::nullopt;
   }
-  if (accMetaData["norm"].asString() == "NORM_EUCLIDEAN_DIFFERENCES_NORM") {
-    this->norm = ProtobufNorm::NORM_EUCLIDEAN_DIFFERENCES_NORM;
+  if (!std::holds_alternative<T>(*this->type)) {
+    return std::nullopt;
   }
-  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
-  if (accMetaData["coordinate"].asString() != "") {
-    Json::Value coordinate = accMetaData["coordinate"];
-    this->coordinate = this->toEnum(accMetaData["coordinate"]);
-    this->norm = ProtobufNorm::NORM_NONE;
+  return std::get<T>(*this->type);
+}
+
+template <typename T>
+bool AccMetaData::hasType() const noexcept {
+  if (!this->type.has_value()) {
+    return false;
   }
-}
-
-AccMetaData::AccMetaData(const ProtobufAccMetaData& protobufAccMetaData) {
-  this->deserialize(protobufAccMetaData);
-}
-
-AccMetaData::AccMetaData() {
-  this->coordinate = ProtobufCoordinate::COORDINATE_NONE;
-  this->norm = ProtobufNorm::NORM_NONE;
-};
-
-ProtobufCoordinate AccMetaData::getCoordinate() {
-  return this->coordinate;
-}
-
-ProtobufNorm AccMetaData::getNorm() {
-  return this->norm;
-}
-
-bool AccMetaData::isSet() {
-  return !(this->coordinate == ProtobufCoordinate::COORDINATE_NONE && this->norm == ProtobufNorm::NORM_NONE);
-}
-
-bool AccMetaData::isEqual(AccMetaData& AccMetaData) {
-  return this->coordinate == AccMetaData.coordinate && this->norm == AccMetaData.norm;
-}
-
-void AccMetaData::serialize(ProtobufAccMetaData* protobufAccMetaData) {
-  if (protobufAccMetaData == nullptr) {
-    throw std::invalid_argument("protobufAccMetaData is a null pointer");
+  if (!std::holds_alternative<T>(*this->type)) {
+    return false;
   }
-  if (coordinate != ProtobufCoordinate::COORDINATE_NONE && norm != ProtobufNorm::NORM_NONE) {
-    throw std::invalid_argument("one enum type has to be initialized");
-  }
-  if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
-    protobufAccMetaData->set_coordinate(this->coordinate);
-  }
-  if (this->norm != ProtobufNorm::NORM_NONE) {
-    protobufAccMetaData->set_norm(this->norm);
+  if constexpr (std::is_same_v<T, NormProtobuf>) {
+    return std::get<T>(*this->type) != NormProtobuf::NORM_NONE;
+  } else {
+    return std::get<T>(*this->type) != CoordinateProtobuf::COORDINATE_NONE;
   }
 }
 
-Json::Value AccMetaData::toJson() {
-  Json::Value accMetaData;
-  if (this->norm != ProtobufNorm::NORM_NONE) {
-    accMetaData["norm"] = "NORM_EUCLIDEAN_DIFFERENCES_NORM";
-  }
-  if (this->coordinate != ProtobufCoordinate::COORDINATE_NONE) {
-    accMetaData["coordinate"] = this->toString(this->coordinate);
-  }
-  return accMetaData;
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
+bool AccMetaData::isSet() const noexcept {
+  return this->hasType<NormProtobuf>() || this->hasType<CoordinateProtobuf>();
 }
 
-void AccMetaData::deserialize(const ProtobufAccMetaData& protobufAccMetaData) {
-  this->norm = protobufAccMetaData.norm();
-  this->coordinate = protobufAccMetaData.coordinate();
+Json::Value AccMetaData::toJson() const noexcept {
+  AccMetaDataJson accMetaDataJson;
+  if (!this->isSet()) {
+    return accMetaDataJson;
+  }
+  if (this->hasType<NormProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::norm] = PcoreProtobuf::Convert::normProtobufToString(*this->getType<NormProtobuf>());
+  }
+  if (this->hasType<CoordinateProtobuf>()) {
+    accMetaDataJson[PcoreJson::Key::coordinate] = PcoreProtobuf::Convert::coordinateProtobufToString(*this->getType<CoordinateProtobuf>());
+  }
+  return accMetaDataJson;
 }
 
-std::string AccMetaData::toString(ProtobufCoordinate coordinate) {
-  switch (coordinate) {
-    case ProtobufCoordinate::COORDINATE_X: {
-      return "COORDINATE_X";
+void AccMetaData::serialize(AccMetaDataProtobuf* accMetaDataProtobuf) const {
+  if (accMetaDataProtobuf == nullptr) {
+    throw NullPointerException("AccMetaData::serialize", "accMetaDataProtobuf");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  if (this->hasType<CoordinateProtobuf>()) {
+    accMetaDataProtobuf->set_coordinate(*this->getType<CoordinateProtobuf>());
+  }
+  if (this->hasType<NormProtobuf>()) {
+    accMetaDataProtobuf->set_norm(*this->getType<NormProtobuf>());
+  }
+}
+
+void AccMetaData::switchDataForm() {
+  throw ShouldNotBeCalledException("AccMetaData::switchDataForm");
+}
+
+bool AccMetaData::operator==(const IPCore<AccMetaDataProtobuf>& accMetaData) const noexcept {
+  if (const auto* derived = dynamic_cast<const AccMetaData*>(&accMetaData)) {
+    if (this->type.has_value() != derived->type.has_value()) {
+      return false;
     }
-    case ProtobufCoordinate::COORDINATE_Y: {
-      return "COORDINATE_Y";
+    if (!this->type.has_value() && !derived->type.has_value()) {
+      return true;
     }
-    case ProtobufCoordinate::COORDINATE_Z: {
-      return "COORDINATE_Z";
-    }
-    default: {
-      break;
-    }
+    return this->type == derived->type;
   }
+  return false;
 }
 
-ProtobufCoordinate AccMetaData::toEnum(Json::Value jsonCoordinate) {
-  ProtobufCoordinate coordinate;
-  if (jsonCoordinate.asString() == "COORDINATE_X") {
-    coordinate = ProtobufCoordinate::COORDINATE_X;
-  }
-  if (jsonCoordinate.asString() == "COORDINATE_Y") {
-    coordinate = ProtobufCoordinate::COORDINATE_Y;
-  }
-  if (jsonCoordinate.asString() == "COORDINATE_Z") {
-    coordinate = ProtobufCoordinate::COORDINATE_Z;
-  }
-  return coordinate;
+bool AccMetaData::operator!=(const IPCore<AccMetaDataProtobuf>& accMetaData) const noexcept {
+  return !(*this == accMetaData);
 }

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -33,28 +33,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include "AbsoluteBlock.h"
+#include "AbsoluteValuesExampleFactory.h"
+
+using namespace PCore;
 
 class AbsoluteBlockExampleFactory {
  public:
-  static std::vector<int32_t> absoluteValuesNormal();
-  static std::vector<int32_t> absoluteValuesTwoElements();
-  static std::vector<int32_t> absoluteValuesOneElement();
-  static std::vector<int32_t> absoluteValues0Element();
-  static std::vector<int32_t> absoluteValuesEmpty();
-  static std::vector<int32_t> absoluteValues();
-  static std::vector<int32_t> absoluteJsonDataValuesPpg1();
-  static std::vector<int32_t> absoluteJsonDataValuesPpg2();
-  static std::vector<int32_t> absoluteJsonDataValuesAcc();
-  static std::vector<int32_t> absoluteValuesWithOneValueInLastBlock();
+  static AbsoluteBlock absoluteBlockWithThreePositiveAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithThreeMixedAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithThreeNegativeAbsoluteValues();
+  static AbsoluteBlock absoluteBlockWithOneAbsoluteValue();
+  static AbsoluteBlock absoluteBlockNotSet();
+  static AbsoluteBlock absoluteBlockForSwitchDataFormTest();
 
-  static AbsoluteBlock absoluteBlock();
-  static AbsoluteBlock absoluteBlockWithOneValueInLastBlock();
-  static AbsoluteBlock absoluteJsonDataBlockAcc();
-  static AbsoluteBlock absoluteJsonDataBlockPpg1();
-  static AbsoluteBlock absoluteJsonDataBlockPpg2();
-  static AbsoluteBlock absoluteBlockNormal();
-  static AbsoluteBlock absoluteBlockTwoElement();
-  static AbsoluteBlock absoluteBlockOneElement();
-  static AbsoluteBlock absoluteBlock0Element();
-  static AbsoluteBlock absoluteBlockEmpty();
+  static AbsoluteBlockJson buildAbsoluteBlockJson(const AbsoluteBlock& absoluteBlock);
 };

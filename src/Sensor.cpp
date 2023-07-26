@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,276 +32,365 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Sensor.h"
+#include <utility>
+#include "Exceptions.h"
+#include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
-Sensor::Sensor(std::vector<Channel> channels, DifferentialTimestampsContainer differentialTimestampsContainer, ProtobufSensorType protobufSensorType)
-    : protobufSensorType(protobufSensorType), channels(channels), differentialTimestampsContainer(differentialTimestampsContainer) {
-  this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(differentialTimestampsContainer);
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+Sensor::Sensor(Channels channels, DifferentialTimestampsContainer differentialTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf) noexcept
+    : sensorType(sensorTypeProtobuf), channels(std::move(channels)), timestamps(std::move(differentialTimestampsContainer)) {}
+
+Sensor::Sensor(Channels channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, SensorTypeProtobuf sensorTypeProtobuf) noexcept
+    : sensorType(sensorTypeProtobuf), channels(std::move(channels)), timestamps(std::move(absoluteTimestampsContainer)) {}
+
+Sensor::Sensor(const SensorJson& sensorJson, DataForm dataForm)
+    : sensorType(PcoreProtobuf::Convert::senorTypeFromString(sensorJson[PcoreJson::Key::sensor_type].asString())),
+      channels(PcoreJson::Convert::jsonToVector<Channel>(sensorJson, PcoreJson::Key::channels)),
+      timestamps([&]() -> Timestamps {
+        switch (dataForm) {
+          case DataForm::DATA_FORM_ABSOLUTE: {
+            return AbsoluteTimestampsContainer(sensorJson[PcoreJson::Key::absolute_timestamps_container]);
+          }
+          case DataForm::DATA_FORM_DIFFERENTIAL: {
+            return DifferentialTimestampsContainer(sensorJson[PcoreJson::Key::differential_timestamps_container]);
+          }
+          default: {
+            return std::nullopt;
+          }
+        }
+      }()) {}
+
+Sensor::Sensor(const SensorProtobuf& sensorProtobuf) noexcept
+    : sensorType(sensorProtobuf.sensor_type()),
+      channels(PcoreProtobuf::Convert::protobufToVector<Channel>(sensorProtobuf.channels())),
+      timestamps([&]() -> Timestamps {
+        if (sensorProtobuf.has_differential_timestamps_container()) {
+          return DifferentialTimestampsContainer(sensorProtobuf.differential_timestamps_container());
+        }
+        return std::nullopt;
+      }()) {}
+
+Sensor::Sensor() noexcept : sensorType(SensorTypeProtobuf::SENSOR_TYPE_NONE), channels({}), timestamps(std::nullopt) {}
+
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+
+SensorTypeProtobuf Sensor::getSensorType() const noexcept {
+  return this->sensorType;
 }
 
-Sensor::Sensor(std::vector<Channel> channels, AbsoluteTimestampsContainer absoluteTimestampsContainer, ProtobufSensorType protobufSensorType)
-    : protobufSensorType(protobufSensorType), channels(channels), absoluteTimestampsContainer(absoluteTimestampsContainer) {
-  std::vector<size_t> blockIdxs = this->findBlocksIdxs();
-  this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdxs);
-}
-
-Sensor::Sensor(Json::Value& sensor, DataForm dataForm) {
-  Json::Value channelsJson = sensor["channels"];
-  std::vector<Channel> channels;
-  channels.reserve(channelsJson.size());
-  switch (dataForm) {
-    case DataForm::DIFFERENTIAL: {
-      this->protobufSensorType = this->toEnum(sensor["sensor_type"]);
-      for (auto& channelJson : channelsJson) {
-        channels.push_back(Channel(channelJson, this->protobufSensorType));
-      }
-      this->channels = channels;
-
-      DifferentialTimestampsContainer differentialTimestampsContainer = DifferentialTimestampsContainer(sensor["differential_timestamps_container"]);
-      this->differentialTimestampsContainer = differentialTimestampsContainer;
-      this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(differentialTimestampsContainer);
-      break;
-    }
-    case DataForm::ABSOLUTE: {
-      this->protobufSensorType = this->toEnum(sensor["sensor_type"]);
-      AbsoluteTimestampsContainer absoluteTimestampsContainer = AbsoluteTimestampsContainer(sensor["absolute_timestamps_container"]);
-      this->absoluteTimestampsContainer = absoluteTimestampsContainer;
-      std::vector<size_t> blockIdxs = this->findBlocksIdxs();
-      this->differentialTimestampsContainer = this->calculateDifferentialTimestamps(absoluteTimestampsContainer, blockIdxs);
-      for (auto& channelJson : channelsJson) {
-        channels.push_back(Channel(channelJson, this->protobufSensorType, blockIdxs));
-      }
-      this->channels = channels;
-      break;
-    }
-    default: {
-      break;
-    }
-  }
-}
-
-Sensor::Sensor(const ProtobufSensor& protobufSensor) {
-  this->deserialize(protobufSensor);
-}
-
-Sensor::Sensor() {
-  this->channels = std::vector<Channel>{};
-  this->absoluteTimestampsContainer = AbsoluteTimestampsContainer();
-  this->differentialTimestampsContainer = DifferentialTimestampsContainer();
-  this->protobufSensorType = ProtobufSensorType::SENSOR_TYPE_NONE;
-}
-
-ProtobufSensorType Sensor::getSensorType() {
-  return this->protobufSensorType;
-}
-
-std::vector<Channel> Sensor::getChannels() {
+Channels Sensor::getChannels() const noexcept {
   return this->channels;
 }
 
-DifferentialTimestampsContainer Sensor::getDifferentialTimestamps() {
-  return this->differentialTimestampsContainer;
+template <typename T>
+std::optional<T> Sensor::getTimestamps() const noexcept {
+  if (!this->timestamps.has_value()) {
+    return std::nullopt;
+  }
+  if (!std::holds_alternative<T>(*this->timestamps)) {
+    return std::nullopt;
+  }
+  return std::get<T>(*this->timestamps);
 }
 
-AbsoluteTimestampsContainer Sensor::getAbsoluteTimestamps() {
-  return this->absoluteTimestampsContainer;
-}
-
-bool Sensor::isEqual(Sensor& sensor) {
-  if (this->channels.size() != sensor.channels.size()) {
+template <typename T>
+bool Sensor::hasTimestamps() const noexcept {
+  if (!this->timestamps.has_value()) {
     return false;
   }
-  for (size_t i = 0; i < this->channels.size(); i++) {
-    if (!this->channels[i].isEqual(sensor.channels[i])) {
+  if (!std::holds_alternative<T>(*this->timestamps)) {
+    return false;
+  }
+  return std::get<T>(*this->timestamps).isSet();
+}
+
+DataForm Sensor::getDataFrom() const noexcept {
+  if (!this->timestamps.has_value()) {
+    return DataForm::DATA_FORM_NONE;
+  } else if (std::holds_alternative<DifferentialTimestampsContainer>(*this->timestamps)) {
+    return DataForm::DATA_FORM_DIFFERENTIAL;
+  } else {
+    return DataForm::DATA_FORM_ABSOLUTE;
+  }
+}
+
+UnixTimestamp Sensor::getFirstUnixTimestampInMs() const noexcept {
+  switch (this->getDataFrom()) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      return this->getTimestamps<AbsoluteTimestampsContainer>()->getFirstUnixTimestampInMs();
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      return this->getTimestamps<DifferentialTimestampsContainer>()->getFirstUnixTimestampInMs();
+    }
+    case DataForm::DATA_FORM_NONE: {
+      return 0;
+    }
+  }
+}
+
+UnixTimestamp Sensor::getLastUnixTimestampInMs() const noexcept {
+  switch (this->getDataFrom()) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      return this->getTimestamps<AbsoluteTimestampsContainer>()->getLastUnixTimestampInMs();
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      if (this->channels.empty()) {
+        return 0;
+      }
+      const auto differentialBlocksOfFirstChannel = this->channels.front().getValues<DifferentialBlocks>();
+      if (!differentialBlocksOfFirstChannel.has_value()) {
+        return 0;
+      }
+      if (differentialBlocksOfFirstChannel->empty()) {
+        return 0;
+      }
+      const auto numberOfElementsInLastBlock = differentialBlocksOfFirstChannel->back().getDifferentialValues().size();
+      const auto firstUnixTimestampInLastBlock = this->calculateFirstUnixTimestampInLastBlock();
+      return this->getTimestamps<DifferentialTimestampsContainer>()->getLastUnixTimestampInMs(firstUnixTimestampInLastBlock,
+                                                                                              numberOfElementsInLastBlock);
+    }
+    case DataForm::DATA_FORM_NONE: {
+      return 0;
+    }
+  }
+}
+
+Duration Sensor::getDurationInMs() const noexcept {
+  return this->getLastUnixTimestampInMs() - this->getFirstUnixTimestampInMs();
+}
+
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+
+bool Sensor::isSet() const noexcept {
+  for (const auto& channel : this->channels) {
+    if (channel.isSet()) {
+      return true;
+    }
+  }
+  // clang-format off
+  return this->sensorType != SensorTypeProtobuf::SENSOR_TYPE_NONE
+      || this->hasTimestamps<AbsoluteTimestampsContainer>()
+      || this->hasTimestamps<DifferentialTimestampsContainer>();
+  // clang-format on
+}
+
+SensorJson Sensor::toJson() const noexcept {
+  SensorJson sensorJson;
+  if (!this->isSet()) {
+    return sensorJson;
+  }
+  switch (this->getDataFrom()) {
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      sensorJson[PcoreJson::Key::absolute_timestamps_container] = this->getTimestamps<AbsoluteTimestampsContainer>()->toJson();
+      break;
+    }
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      sensorJson[PcoreJson::Key::differential_timestamps_container] = this->getTimestamps<DifferentialTimestampsContainer>()->toJson();
+      break;
+    }
+    default: {
+      return sensorJson;
+    }
+  }
+  sensorJson[PcoreJson::Key::channels] = PcoreJson::Convert::vectorToJson(this->channels);
+  sensorJson[PcoreJson::Key::sensor_type] = PcoreProtobuf::Convert::senorTypeToString(this->sensorType);
+  return sensorJson;
+}
+
+void Sensor::serialize(SensorProtobuf* sensorProtobuf) const {
+  if (sensorProtobuf == nullptr) {
+    throw NullPointerException("Sensor::serialize", "sensorProtobuf");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  if (this->getDataFrom() != DataForm::DATA_FORM_DIFFERENTIAL) {
+    throw WrongDataFormException("Sensor::serialize", "only for differential data form");
+  }
+  for (const auto& channel : this->channels) {
+    auto* channelProtobuf = sensorProtobuf->add_channels();
+    channel.serialize(channelProtobuf);
+  }
+  sensorProtobuf->set_sensor_type(this->sensorType);
+  if (this->hasTimestamps<DifferentialTimestampsContainer>()) {
+    DifferentialTimestampContainerProtobuf differentialTimestampContainerProtobuf;
+    this->getTimestamps<DifferentialTimestampsContainer>()->serialize(&differentialTimestampContainerProtobuf);
+    sensorProtobuf->mutable_differential_timestamps_container()->CopyFrom(differentialTimestampContainerProtobuf);
+  }
+}
+
+void Sensor::switchDataForm() noexcept {
+  if (!this->isSet()) {
+    return;
+  }
+  switch (this->getDataFrom()) {
+    case DataForm::DATA_FORM_DIFFERENTIAL: {
+      this->timestamps = this->calculateAbsoluteTimestamps(*this->getTimestamps<DifferentialTimestampsContainer>());
+      for (auto& channel : this->channels) {
+        channel.switchDataForm();
+      }
+      return;
+    }
+    case DataForm::DATA_FORM_ABSOLUTE: {
+      BlockIdxs blockIdxs = this->findBlockIdxs();
+      this->timestamps = this->calculateDifferentialTimestamps(*this->getTimestamps<AbsoluteTimestampsContainer>(), blockIdxs);
+      for (auto& channel : this->channels) {
+        channel.switchDataForm(blockIdxs);
+      }
+      return;
+    }
+    default: {
+      return;
+    }
+  }
+}
+
+bool Sensor::operator==(const IPCore<SensorProtobuf>& sensor) const noexcept {
+  const auto* derived = dynamic_cast<const Sensor*>(&sensor);
+  if (derived == nullptr) {
+    return false;
+  }
+  const auto numberOfChannels = this->channels.size();
+  if (numberOfChannels != derived->channels.size()) {
+    return false;
+  }
+  for (size_t i = 0; i < numberOfChannels; i++) {
+    if (this->channels[i] != derived->channels[i]) {
       return false;
     }
   }
-  return this->protobufSensorType == sensor.protobufSensorType &&
-         this->differentialTimestampsContainer.isEqual(sensor.differentialTimestampsContainer) &&
-         this->absoluteTimestampsContainer.isEqual(sensor.absoluteTimestampsContainer);
-}
-
-void Sensor::serialize(ProtobufSensor* protobufSensor) {
-  if (protobufSensor == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufSensor is a null pointer");
+  if (this->timestamps.has_value() != timestamps.has_value()) {
+    return false;
   }
-  for (auto& channel : this->channels) {
-    ProtobufChannel* protobufChannel = protobufSensor->add_channels();
-    channel.serialize(protobufChannel);
+  bool isEqualTimestamps = !this->timestamps.has_value() && !derived->timestamps.has_value();
+  if (this->timestamps.has_value() && derived->timestamps.has_value()) {
+    isEqualTimestamps = *this->timestamps == *derived->timestamps;
   }
-  protobufSensor->set_sensor_type(this->protobufSensorType);
-  ProtobufDifferentialTimestampContainer protobufTimestampContainer;
-  this->differentialTimestampsContainer.serialize(&protobufTimestampContainer);
-  protobufSensor->mutable_differential_timestamps_container()->CopyFrom(protobufTimestampContainer);
+  return this->sensorType == derived->sensorType && isEqualTimestamps;
 }
 
-uint64_t Sensor::getFirstTimestamp() {
-  return this->differentialTimestampsContainer.getFirstTimestamp();
+bool Sensor::operator!=(const IPCore<SensorProtobuf>& sensor) const noexcept {
+  return !(*this == sensor);
 }
 
-uint64_t Sensor::getLastTimestamp() {
-  const std::vector<uint32_t> timestampIntervals_ms = this->differentialTimestampsContainer.getTimestampsIntervals();
-  const std::vector<uint32_t> blockIntervals_ms = this->differentialTimestampsContainer.getBlockIntervals();
-  std::vector<DifferentialBlock> firstChannelBlocks = this->channels[0].getDifferentialBlocks();
-  const size_t nLastBlock = firstChannelBlocks[firstChannelBlocks.size() - 1].getDifferentialValues().size();
-  long h = 0;
-  for (auto& BlockIntervals : blockIntervals_ms) {
-    h += BlockIntervals;
+////////////////////////////////////////////////////////////////
+//                     Calculate Methode                      //
+////////////////////////////////////////////////////////////////
+AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(
+    const DifferentialTimestampsContainer& differentialTimestampsContainer) const noexcept {
+  if (this->channels.empty()) {
+    return AbsoluteTimestampsContainer();
   }
-  return this->getFirstTimestamp() + h + timestampIntervals_ms[timestampIntervals_ms.size() - 1] * (nLastBlock - 1);
-}
-
-uint64_t Sensor::getDuration() {
-  return this->getLastTimestamp() - this->getFirstTimestamp();
-}
-
-std::vector<size_t> Sensor::findBlocksIdxs() {
-  std::vector<size_t> blocksIdxs = {};
-  if (this->absoluteTimestampsContainer.getUnixTimestamps().size() == 0) {
-    return blocksIdxs;
+  const auto differentialBlocksOfFirstChannel = this->channels.front().getValues<DifferentialBlocks>();
+  if (!differentialBlocksOfFirstChannel.has_value()) {
+    return AbsoluteTimestampsContainer();
   }
-  uint64_t referenceTimeDifference = 0;
-  bool isNewBlock = true;
-  blocksIdxs.push_back(0);
-  std::vector<uint64_t> absoluteUnixTimestamps = this->absoluteTimestampsContainer.getUnixTimestamps();
-  for (size_t i = 1; i < absoluteUnixTimestamps.size(); i++) {
-    uint64_t timeDifference = absoluteUnixTimestamps[i] - absoluteUnixTimestamps[i - 1];
-    if (isNewBlock) {
-      referenceTimeDifference = timeDifference;
-      isNewBlock = false;
-    }
-    if (timeDifference != referenceTimeDifference) {
-      blocksIdxs.push_back(i);
-      isNewBlock = true;
+  const auto timestampsDifferencesInMs = differentialTimestampsContainer.getTimestampsDifferencesInMs();
+  const auto blocksDifferencesInMs = differentialTimestampsContainer.getBlocksDifferencesInMs();
+  auto absoluteUnixTimestamp = differentialTimestampsContainer.getFirstUnixTimestampInMs();
+
+  size_t numberOfElements = 0;
+  for (const auto& differentialBlockOfFirstChannel : *differentialBlocksOfFirstChannel) {
+    numberOfElements += differentialBlockOfFirstChannel.getDifferentialValues().size();
+  }
+  UnixTimestamps unixTimestampsInMs;
+  unixTimestampsInMs.reserve(numberOfElements);
+
+  const auto numberOfBlocksDifferences = blocksDifferencesInMs.size();
+  for (size_t i = 0; i < numberOfBlocksDifferences; i++) {
+    absoluteUnixTimestamp += blocksDifferencesInMs[i];
+    const auto numberOfDifferentialValues = (*differentialBlocksOfFirstChannel)[i].getDifferentialValues().size();
+    for (size_t j = 0; j < numberOfDifferentialValues; j++) {
+      unixTimestampsInMs.emplace_back(absoluteUnixTimestamp + j * timestampsDifferencesInMs[i]);
     }
   }
-  return blocksIdxs;
+  return AbsoluteTimestampsContainer(unixTimestampsInMs);
 }
 
-AbsoluteTimestampsContainer Sensor::calculateAbsoluteTimestamps(DifferentialTimestampsContainer differentialTimestamps) {
-  std::vector<uint64_t> unixTimestamps_ms = {};
+DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(const AbsoluteTimestampsContainer& absoluteTimestampsContainer,
+                                                                        const BlockIdxs& blockIdxs) const noexcept {
+  const auto numberOfBlocks = blockIdxs.size();
+  BlocksDifferences blocksDifferencesInMs;
+  TimestampsDifferences timestampsDifferencesInMs;
+  UnixTimestamp firstUnixTimestampInMs = 0;
 
-  std::vector<DifferentialBlock> firstChannelBlocks = this->channels[0].getDifferentialBlocks();
-  uint64_t firstTimestamp_ms = differentialTimestamps.getFirstTimestamp();
-  std::vector<uint32_t> timestamps_intervals_ms = differentialTimestamps.getTimestampsIntervals();
-  std::vector<uint32_t> blockIntervals_ms = differentialTimestamps.getBlockIntervals();
-
-  uint64_t sumTimeStampIntervals = 0;
-
-  for (size_t i = 0; i < timestamps_intervals_ms.size(); i++) {
-    sumTimeStampIntervals += blockIntervals_ms[i];
-    for (size_t j = 0; j < firstChannelBlocks[i].getDifferentialValues().size(); j++) {
-      unixTimestamps_ms.push_back(firstTimestamp_ms + sumTimeStampIntervals + j * timestamps_intervals_ms[i]);
-    }
-  }
-  return AbsoluteTimestampsContainer(unixTimestamps_ms);
-}
-
-DifferentialTimestampsContainer Sensor::calculateDifferentialTimestamps(AbsoluteTimestampsContainer absoluteTimestamps,
-                                                                        std::vector<size_t> blocksIdxs) {
-  DifferentialTimestampsContainer differentialTimestampsContainer;
-  size_t numberOfBlocks = blocksIdxs.size();
-  std::vector<uint64_t> absoluteUnixTimestamps_ms = absoluteTimestamps.getUnixTimestamps();
-  std::vector<uint32_t> blockIntervals_ms = {};
-  std::vector<uint32_t> timestampIntervals_ms = {};
   /*
    * blockIdxs.size = 0 -> no timestamps are included
-                            return default Values for emptyBlock
+                            return default Values for not set Block
    * blockIdxs.size = 1 -> case 1 : just one Block with one timestamps
-                            return firstTimestamps, BlockIntervals_ms = {0}, timestampsInterval_ms{0}
-   *                       case 2 : one Block with certain amount of timestmaps with same timedifferences
-                            return firstTimestamps, BlockInterval_ms  = {0}, timetsampsIntervals_ms with one value (BestCase)
+                            return firstTimestamps, BlocksDifferencesInMs = {0}, timestampsDifferenceInMs{0}
+   *                       case 2 : one Block with certain amount of timestamps with same time differences
+                            return firstTimestamps, BlocksDifferenceInMs  = {0}, timestampsDifferencesInMs with one value (BestCase)
    * blockIdxs.size > 1 -> case 1: normal condition (Last block hold at least 2 Timestamps)
                             return calculate differentialTimestamps
    *                       case 2: the last Block hold just one Timestamp
-                            return calculate differentialTimestamps  + last timestampsInterval_ms.pushback(0)
+                            return calculate differentialTimestamps  + last timestampsDifferenceInMs.pushback(0)
   */
   if (numberOfBlocks == 0) {
-    uint64_t firstTimestamp_ms = 0;
-    return DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
+    return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferencesInMs, timestampsDifferencesInMs);
   }
-  uint64_t firstTimestamp_ms = absoluteTimestamps.getUnixTimestamps()[0];
-  blockIntervals_ms.push_back(0);
+
+  const auto absoluteUnixTimestamps = absoluteTimestampsContainer.getUnixTimestampsInMs();
+  firstUnixTimestampInMs = absoluteUnixTimestamps.front();
   if (numberOfBlocks == 1) {
-    int32_t timestampsInterval_ms = absoluteUnixTimestamps_ms[1] - firstTimestamp_ms;
-    timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() == 1 ? 0 : timestampsInterval_ms);
-    differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
-    return differentialTimestampsContainer;
+    TimeDifference timestampsDifference = absoluteUnixTimestamps[1] - firstUnixTimestampInMs;
+    timestampsDifferencesInMs.emplace_back(absoluteUnixTimestamps.size() == 1 ? 0 : timestampsDifference);
+    blocksDifferencesInMs.push_back(0);
+    return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferencesInMs, timestampsDifferencesInMs);
   }
-  timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms[1] - firstTimestamp_ms);
-  for (size_t i = 1; i < blocksIdxs.size() - 1; i++) {
-    const size_t prevIdx = blocksIdxs[i - 1];
-    const size_t idx = blocksIdxs[i];
-    timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms[idx + 1] - absoluteUnixTimestamps_ms[idx]);
-    blockIntervals_ms.push_back(absoluteUnixTimestamps_ms[idx] - absoluteUnixTimestamps_ms[prevIdx]);
+
+  blocksDifferencesInMs.push_back(0);
+  timestampsDifferencesInMs.emplace_back(absoluteUnixTimestamps[1] - firstUnixTimestampInMs);
+  const auto numberOfDifferences = blockIdxs.size() - 1;
+  for (size_t i = 1; i < numberOfDifferences; i++) {
+    const BlockIdx previousBlockIdx = blockIdxs[i - 1];
+    const BlockIdx currentBlockIdx = blockIdxs[i];
+    timestampsDifferencesInMs.emplace_back(absoluteUnixTimestamps[currentBlockIdx + 1] - absoluteUnixTimestamps[currentBlockIdx]);
+    blocksDifferencesInMs.emplace_back(absoluteUnixTimestamps[currentBlockIdx] - absoluteUnixTimestamps[previousBlockIdx]);
   }
-  blockIntervals_ms.push_back(
-      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]] -
-      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 2]]);  // the same blockInterval_ms applies to both of the following conditions
-  int32_t timestampsInterval =
-      absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1] + 1] - absoluteUnixTimestamps_ms[blocksIdxs[numberOfBlocks - 1]];
-  timestampIntervals_ms.push_back(absoluteUnixTimestamps_ms.size() - 1 == blocksIdxs[numberOfBlocks - 1]
-                                      ? 0
-                                      : timestampsInterval);  // if the condition is true, last block hold one timestamp -> Case 2 t
-  differentialTimestampsContainer = DifferentialTimestampsContainer(firstTimestamp_ms, blockIntervals_ms, timestampIntervals_ms);
-  return differentialTimestampsContainer;
+  const auto lastBlockIdx = blockIdxs.back();
+  blocksDifferencesInMs.emplace_back(absoluteUnixTimestamps[lastBlockIdx] - absoluteUnixTimestamps[blockIdxs[numberOfBlocks - 2]]);
+  timestampsDifferencesInMs.emplace_back(
+      absoluteUnixTimestamps.size() - 1 == lastBlockIdx ? 0 : absoluteUnixTimestamps[lastBlockIdx + 1] - absoluteUnixTimestamps[lastBlockIdx]);
+  return DifferentialTimestampsContainer(firstUnixTimestampInMs, blocksDifferencesInMs, timestampsDifferencesInMs);
 }
 
-Json::Value Sensor::toJson(DataForm dataForm) {
-  Json::Value sensor;
-  Json::Value channels(Json::arrayValue);
-  Json::Value sensorType(Json::stringValue);
-  for (auto& channel : this->channels) {
-    channels.append(channel.toJson(dataForm, this->protobufSensorType));
+BlockIdxs Sensor::findBlockIdxs() const noexcept {
+  BlockIdxs blockIdxs;
+  if (!this->hasTimestamps<AbsoluteTimestampsContainer>()) {
+    return blockIdxs;
   }
-  switch (dataForm) {
-    case DataForm::ABSOLUTE: {
-      sensor["absolute_timestamps_container"] = this->absoluteTimestampsContainer.toJson();
-      break;
+  TimeDifference referenceTimeDifferenceInMs = 0;
+  bool isNewBlock = true;
+  blockIdxs.push_back(0);
+  const auto absoluteUnixTimestampsInMs = this->getTimestamps<AbsoluteTimestampsContainer>()->getUnixTimestampsInMs();
+  const auto numberOfElements = absoluteUnixTimestampsInMs.size();
+  for (size_t i = 1; i < numberOfElements; i++) {
+    const TimeDifference timeDifferenceInMs = absoluteUnixTimestampsInMs[i] - absoluteUnixTimestampsInMs[i - 1];
+    if (isNewBlock) {
+      referenceTimeDifferenceInMs = timeDifferenceInMs;
+      isNewBlock = false;
     }
-    case DataForm::DIFFERENTIAL: {
-      sensor["differential_timestamps_container"] = this->differentialTimestampsContainer.toJson();
-    }
-    default: {
-      break;
+    if (timeDifferenceInMs != referenceTimeDifferenceInMs) {
+      blockIdxs.push_back(i);
+      isNewBlock = true;
     }
   }
-  sensor["channels"] = channels;
-  sensor["sensor_type"] = this->toString(this->protobufSensorType);
-  return sensor;
+  return blockIdxs;
 }
 
-void Sensor::deserialize(const ProtobufSensor& protobufSensor) {
-  std::vector<Channel> channels{};
-  for (auto& channel : protobufSensor.channels()) {
-    channels.push_back(Channel(channel));
+UnixTimestamp Sensor::calculateFirstUnixTimestampInLastBlock() const noexcept {
+  const auto blocksDifferencesInMs = this->getTimestamps<DifferentialTimestampsContainer>()->getBlocksDifferencesInMs();
+  auto firstUnixTimestampInLastBlockInMs = this->getFirstUnixTimestampInMs();
+  for (const auto& blocksDifferenceInMs : blocksDifferencesInMs) {
+    firstUnixTimestampInLastBlockInMs += blocksDifferenceInMs;
   }
-  this->channels = channels;
-  this->protobufSensorType = protobufSensor.sensor_type();
-  this->differentialTimestampsContainer = DifferentialTimestampsContainer(protobufSensor.differential_timestamps_container());
-  this->absoluteTimestampsContainer = this->calculateAbsoluteTimestamps(this->differentialTimestampsContainer);
-}
-
-std::string Sensor::toString(ProtobufSensorType protobufSensorType) {
-  switch (protobufSensorType) {
-    case ProtobufSensorType::SENSOR_TYPE_ACC: {
-      return "SENSOR_TYPE_ACC";
-    }
-    case ProtobufSensorType::SENSOR_TYPE_PPG: {
-      return "SENSOR_TYPE_PPG";
-    }
-    default: {
-      break;
-    }
-  }
-}
-
-ProtobufSensorType Sensor::toEnum(Json::Value protobufSensorType) {
-  ProtobufSensorType sensorType;
-  if (protobufSensorType.asString() == "SENSOR_TYPE_PPG") {
-    sensorType = ProtobufSensorType::SENSOR_TYPE_PPG;
-  }
-  if (protobufSensorType.asString() == "SENSOR_TYPE_ACC") {
-    sensorType = ProtobufSensorType::SENSOR_TYPE_ACC;
-  }
-  return sensorType;
+  return firstUnixTimestampInLastBlockInMs;
 }

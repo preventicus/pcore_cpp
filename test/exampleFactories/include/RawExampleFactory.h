@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -35,10 +35,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Raw.h"
 #include "SensorExampleFactory.h"
 
+using namespace PCore;
+
 class RawExampleFactory {
  public:
-  static Raw normalRaw();
-  static Raw comparableRaw();
-  static Raw absoluteJsonDataRaw();
-  static Raw differentialJsonDataRaw();
+  static Raw rawWithOneSensorAccWithTwoChannelsInAbsoluteForm();
+  static Raw rawWithOneSensorsPpgWithTwoChannelsInAbsoluteForm();
+  static Raw rawWithOneSensorAccWithTwoChannelsInDifferentialForm();
+  static Raw rawWithOneSensorsPpgWithTwoChannelsInDifferentialForm();
+  static Raw rawWithTwoSensorsPpgWithTwoChannelsInDifferentialForm();
+  static Raw rawWithZeroSensorsInDifferentialForm();
+  static Raw rawNotSet();
+  static Raw rawForSwitchDataFormTestInAbsoluteForm();
+  static Raw rawForSwitchDataFormTestInDifferentialForm();
+
+  static RawJson buildRawJson(const Raw& raw);
 };

@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Steve Mersche 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -30,6 +30,25 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#pragma once
 
-enum DataForm { NOT_SET, DIFFERENTIAL, ABSOLUTE };
+#pragma once
+#include "DifferentialTimestampsContainer.h"
+
+using namespace PCore;
+
+class DifferencesExampleFactory {
+ public:
+  static BlocksDifferences blocksDifferencesWithThreeMixedDifferences();
+  static TimestampsDifferences timestampsDifferencesWithThreeZeroDifferences();
+  static BlocksDifferences blocksDifferencesNotSet();
+  static TimestampsDifferences timestampsDifferencesNotSet();
+  static BlocksDifferences blocksDifferencesWithTwoMixedDifferences();
+  static TimestampsDifferences timestampsDifferencesWithTwoMixedDifferences();
+  static BlocksDifferences blocksDifferencesWithThreeBigDifferences();
+  static TimestampsDifferences timestampsDifferencesWithThreeBigDifferences();
+  static BlocksDifferences blocksDifferencesForSwitchDataFormTest();
+  static TimestampsDifferences timestampsDifferencesForSwitchDataFromTest();
+
+  static TimestampsDifferencesJson buildTimestampsDifferencesJson(const TimestampsDifferences& timestampsDifferences);
+  static BlocksDifferencesJson buildBlocksDifferencesJson(const BlocksDifferences& blocksDifferences);
+};

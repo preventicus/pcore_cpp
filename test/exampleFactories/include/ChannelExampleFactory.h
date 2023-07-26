@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -38,36 +38,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "DifferentialBlockExampleFactory.h"
 #include "PpgMetaDataExampleFactory.h"
 
+#include "Sensor.h"
+
+using namespace PCore;
+
 class ChannelExampleFactory {
  public:
-  static Channel channelWithAccMetaDataWithCoordinateX();
-  static Channel channelWithAccMetaDataWithCoordinateY();
-  static Channel channelWithAccMetaDataWithNorm();
+  static Channel channelWithAbsoluteValuesForSwitchDataFormTest();
+  static Channel channelWithDifferentialValuesForSwitchDataFormTest();
+  static Channel channelWithAbsoluteBlockForNotEqualTest();
+  static Channel channelWithDifferentialBlocksForNotEqualTest();
+  static Channel channelWithAbsoluteBlockAndPpgMetaData();
+  static Channel channelWithAbsoluteBlockAndAccMetaData();
+  static Channel channelWithDifferentialBlocksAndPpgMetaData();
+  static Channel channelWithDifferentialBlocksAndAccMetaData();
+  static Channel channelWithAbsoluteBlockAndNoSetMetaData();
+  static Channel channelWithNotSetAbsoluteBlockAndNoSetMetaData();
+  static Channel channelNotSet();
 
-  static Channel channelWithPpgMetaDataWithWavelength();
-  static Channel channelWithPpgMetaDataWithColor();
-  static Channel channelWithPpgMetaDataWithComparableWavelength();
-
-  static Channel channelWithAbsoluteBlocks();
-  static Channel channelWithOneValueBlock();
-  static Channel channelWithNUllValueBlock();
-  static Channel channelWithOneValueInLastBlock();
-  static Channel channelWithEqualTimestampIntervals();
-  static Channel channelWithAbsoluteJsonDataPpg1();
-  static Channel channelWithAbsoluteJsonDataPpg2();
-  static Channel channelWithAbsoluteJsonDataAcc();
-  static Channel channelWithDifferentialJsonDataPpg1();
-  static Channel channelWithDifferentialJsonDataPpg2();
-  static Channel channelWithDifferentialJsonDataAcc();
-
-  static std::vector<Channel> normalVectorWithChannel();
-  static std::vector<Channel> comparableVectorWithChannel();
-  static std::vector<Channel> normalVectorWithAbsoluteJsonDataPpgChannel();
-  static std::vector<Channel> normalVectorWithAbsoluteJsonDataAccChannel();
-  static std::vector<Channel> normalVectorWithDifferentialJsonDataPpgChannel();
-  static std::vector<Channel> normalVectorWithDifferentialJsonDataAccChannel();
-  static std::vector<Channel> normalVectorWithOneValueBlock();
-  static std::vector<Channel> normalVectorWithNUllValueBlock();
-  static std::vector<Channel> normalVectorWithOneValueInLastBlock();
-  static std::vector<Channel> normalVectorWithEqualTimestampIntervals();
+  static ChannelJson buildChannelJson(const Channel& channel);
+  static ChannelsJson buildChannelsJson(const Channels& channels);
 };

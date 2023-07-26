@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,80 +32,85 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "Data.h"
+#include <utility>
+#include "Exceptions.h"
+#include "PcoreJson.h"
 
-Data::Data(Raw raw, Header header) : raw(raw), header(header) {}
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+Data::Data(Raw raw, Header header) noexcept : header(std::move(header)), raw(std::move(raw)) {}
 
-Data::Data(const ProtobufData& protobufData) {
-  this->deserialize(protobufData);
-}
+Data::Data(const DataProtobuf& DataProtobuf) noexcept : header(Header(DataProtobuf.header())), raw(Raw(DataProtobuf.raw())) {}
 
-Data::Data(Json::Value& data) {
-  Json::Value headerJson = data["header"];
-  switch (this->toEnum(headerJson["data_form"])) {
-    case DataForm::ABSOLUTE: {
-      this->raw = Raw(data["raw"], this->toEnum(headerJson["data_form"]));
-      this->header = Header(headerJson);
-      break;
-    }
-    case DataForm::DIFFERENTIAL: {
-      this->raw = Raw(data["raw"], this->toEnum(headerJson["data_form"]));
-      this->header = Header(headerJson);
-      break;
-    }
-    default: {
-      break;
-    }
-  }
-}
+Data::Data(const DataJson& dataJson)
+    : header(Header(dataJson[PcoreJson::Key::header])), raw(Raw(dataJson[PcoreJson::Key::raw], header.getDataForm())) {}
 
-Data::Data() {
-  this->raw = Raw();
-  this->header = Header();
-}
+Data::Data() noexcept : header(Header()), raw(Raw()) {}
 
-Raw Data::getRaw() {
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+Raw Data::getRaw() const noexcept {
   return this->raw;
 }
 
-Header Data::getHeader() {
+Header Data::getHeader() const noexcept {
   return this->header;
 }
 
-bool Data::isEqual(Data& data) {
-  return this->header.isEqual(data.header) && this->raw.isEqual(data.raw);
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+bool Data::isSet() const noexcept {
+  return this->raw.isSet() || this->header.isSet();
 }
 
-void Data::serialize(ProtobufData* protobufData) {
-  if (protobufData == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufData is a null pointer");
+Json::Value Data::toJson() const noexcept {
+  DataJson data;
+  if (!this->isSet()) {
+    return data;
   }
-  ProtobufHeader protobufHeader;
-  this->header.serialize(&protobufHeader);
-  protobufData->mutable_header()->CopyFrom(protobufHeader);
-  ProtobufRaw protobufRaw;
-  this->raw.serialize(&protobufRaw);
-  protobufData->mutable_raw()->CopyFrom(protobufRaw);
-}
-
-Json::Value Data::toJson(DataForm dataForm) {
-  Json::Value data;
+  data[PcoreJson::Key::header] = this->header.toJson();
+  data[PcoreJson::Key::raw] = this->raw.toJson();
   Json::Value json;
-  data["header"] = this->header.toJson(dataForm);
-  data["raw"] = this->raw.toJson(dataForm);
-  json["data"] = data;
+  json[PcoreJson::Key::data] = data;
   return json;
 }
 
-void Data::deserialize(const ProtobufData& protobufData) {
-  this->header = Header(protobufData.header());
-  this->raw = Raw(protobufData.raw());
+void Data::serialize(DataProtobuf* dataProtobuf) const {
+  if (dataProtobuf == nullptr) {
+    throw NullPointerException("Data::serialize", "dataProtobuf");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  if (this->getHeader().getDataForm() != DataForm::DATA_FORM_DIFFERENTIAL) {
+    throw WrongDataFormException("Data::serialize", "only for differential data form");
+  }
+  HeaderProtobuf headerProtobuf;
+  this->header.serialize(&headerProtobuf);
+  dataProtobuf->mutable_header()->CopyFrom(headerProtobuf);
+  RawProtobuf rawProtobuf;
+  this->raw.serialize(&rawProtobuf);
+  dataProtobuf->mutable_raw()->CopyFrom(rawProtobuf);
 }
 
-DataForm Data::toEnum(Json::Value string) {
-  if (string.asString() == "ABSOLUTE") {
-    return DataForm::ABSOLUTE;
+void Data::switchDataForm() noexcept {
+  if (!this->isSet()) {
+    return;
   }
-  if (string.asString() == "DIFFERENTIAL") {
-    return DataForm::DIFFERENTIAL;
+  this->raw.switchDataForm();
+  this->header.switchDataForm();
+}
+
+bool Data::operator==(const IPCore<DataProtobuf>& data) const noexcept {
+  if (const auto* derived = dynamic_cast<const Data*>(&data)) {
+    return this->header == derived->header && this->raw == derived->raw;
   }
+  return false;
+}
+
+bool Data::operator!=(const IPCore<DataProtobuf>& data) const noexcept {
+  return !(*this == data);
 }

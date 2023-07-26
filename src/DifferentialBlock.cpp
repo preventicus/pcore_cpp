@@ -1,6 +1,6 @@
 /*
 
-Created by Jakob Glück 2023
+Created by Jakob Glueck, Steve Merschel 2023
 
 Copyright © 2023 PREVENTICUS GmbH
 
@@ -32,56 +32,70 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DifferentialBlock.h"
+#include <utility>
+#include "Exceptions.h"
+#include "PcoreJson.h"
+#include "PcoreProtobuf.h"
 
-DifferentialBlock::DifferentialBlock(std::vector<int32_t>& differentialValues) : differentialValues(differentialValues) {}
+////////////////////////////////////////////////////////////////
+//                       Constructors                         //
+////////////////////////////////////////////////////////////////
+DifferentialBlock::DifferentialBlock(DifferentialValues differentialValues) noexcept : differentialValues(std::move(differentialValues)) {}
 
-DifferentialBlock::DifferentialBlock(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
-  this->deserialize(protobufDifferentialBlock);
-}
+DifferentialBlock::DifferentialBlock(const DifferentialBlockProtobuf& differentialBlockProtobuf) noexcept
+    : differentialValues(PcoreProtobuf::Convert::protobufToVector<DifferentialValue>(differentialBlockProtobuf.differential_values())) {}
 
-DifferentialBlock::DifferentialBlock(Json::Value& differentialBlock) {
-  Json::Value differentialBlockJson = differentialBlock["differential_values"];
-  std::vector<int32_t> differentialValues = {};
-  differentialValues.reserve(differentialBlockJson.size());
-  for (auto& differentialValuesJson : differentialBlockJson) {
-    differentialValues.push_back(differentialValuesJson.asInt());
-  }
-  this->differentialValues = differentialValues;
-}
+DifferentialBlock::DifferentialBlock(const DifferentialBlockJson& differentialBlockJson) noexcept
+    : differentialValues(PcoreJson::Convert::jsonToVector<DifferentialValue>(differentialBlockJson, PcoreJson::Key::differential_values)) {}
 
-DifferentialBlock::DifferentialBlock() {
-  this->differentialValues = {};
-}
+DifferentialBlock::DifferentialBlock() noexcept : differentialValues({}){};
 
-std::vector<int32_t> DifferentialBlock::getDifferentialValues() {
+////////////////////////////////////////////////////////////////
+//                          Getter                            //
+////////////////////////////////////////////////////////////////
+DifferentialValues DifferentialBlock::getDifferentialValues() const noexcept {
   return this->differentialValues;
 }
 
-bool DifferentialBlock::isEqual(DifferentialBlock& differentialBlock) {
-  return this->differentialValues == differentialBlock.differentialValues;
+////////////////////////////////////////////////////////////////
+//                      IPCore Methods                        //
+////////////////////////////////////////////////////////////////
+bool DifferentialBlock::isSet() const noexcept {
+  return !this->differentialValues.empty();
 }
 
-void DifferentialBlock::serialize(ProtobufDifferentialBlock* protobufDifferentialBlock) {
-  if (protobufDifferentialBlock == nullptr) {
-    throw std::invalid_argument("Error in serialize: protobufDifferentialBlock is a null pointer");
+DifferentialBlockJson DifferentialBlock::toJson() const noexcept {
+  DifferentialBlockJson differentialBlockJson;
+  if (!this->isSet()) {
+    return differentialBlockJson;
   }
-  for (auto& differentialValues : this->differentialValues) {
-    protobufDifferentialBlock->add_differential_values(differentialValues);
+  differentialBlockJson[PcoreJson::Key::differential_values] = PcoreJson::Convert::vectorToJson(this->differentialValues);
+  return differentialBlockJson;
+}
+
+void DifferentialBlock::serialize(DifferentialBlockProtobuf* differentialBlockProtobuf) const {
+  if (differentialBlockProtobuf == nullptr) {
+    throw NullPointerException("DifferentialBlock::serialize", "differentialBlockProtobuf");
+  }
+  if (!this->isSet()) {
+    return;
+  }
+  for (const auto& differentialValue : this->differentialValues) {
+    differentialBlockProtobuf->add_differential_values(differentialValue);
   }
 }
 
-Json::Value DifferentialBlock::toJson() {
-  Json::Value differentialBlock;
-  Json::Value differentialValues(Json::arrayValue);
-  for (auto& differentialValue : this->differentialValues) {
-    differentialValues.append(differentialValue);
-  }
-  differentialBlock["differential_values"] = differentialValues;
-  return differentialBlock;
+void DifferentialBlock::switchDataForm() {
+  throw ShouldNotBeCalledException("DifferentialBlock::switchDataForm");
 }
 
-void DifferentialBlock::deserialize(const ProtobufDifferentialBlock& protobufDifferentialBlock) {
-  for (auto& protobufDifferentialValues : protobufDifferentialBlock.differential_values()) {
-    this->differentialValues.push_back(protobufDifferentialValues);
+bool DifferentialBlock::operator==(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const noexcept {
+  if (const auto* derived = dynamic_cast<const DifferentialBlock*>(&differentialBlock)) {
+    return this->differentialValues == derived->differentialValues;
   }
+  return false;
+}
+
+bool DifferentialBlock::operator!=(const IPCore<DifferentialBlockProtobuf>& differentialBlock) const noexcept {
+  return !(*this == differentialBlock);
 }
